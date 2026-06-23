@@ -1,0 +1,61 @@
+<!--
+  templates/index.liquid
+  Crema Italia — Storefront homepage
+  This template renders when password protection is OFF.
+  During the pre-launch period, password protection will remain ON so
+  visitors see templates/password.liquid instead.
+
+  When you are ready to launch:
+    1. Online Store > Preferences > uncheck "Password protect your storefront"
+    2. This template becomes the live homepage.
+    3. Replace this placeholder with your full storefront layout.
+-->
+<section class="ci-section ci-hero" style="text-align:center; padding-top:5rem; padding-bottom:5rem;">
+  <div class="ci-section__inner">
+    <span class="eyebrow">Italian by Nature</span>
+    <h1>Storefront opening soon.</h1>
+    <div class="tricolore-rule" aria-hidden="true"></div>
+    <p style="color:var(--ci-mute); margin-top:1rem;">
+    Crema Italia carefully imports origin‑true Italian roasters directly to the U.S. — never re‑roasted, ground, or repackaged by us. Opening Summer/Fall 2026.
+    </p>
+  </div>
+
+    {% form 'customer', id: 'HomeNewsletter', class: 'ci-newsletter' %}
+      {{ form.errors | default_errors }}
+
+      {% if form.posted_successfully? %}
+        <p class="ci-newsletter__success">
+          Thank you — you’re on the pre‑launch list.
+        </p>
+      {% else %}
+        <input type="hidden" name="contact[tags]" value="prelaunch-crema-italia, prospect, homepage">
+
+        <div class="ci-newsletter__fields">
+          <input
+            type="email"
+            name="contact[email]"
+            required
+            placeholder="Email address"
+            aria-label="Email address"
+            class="ci-newsletter__input"
+          >
+          <button type="submit" class="ci-newsletter__button">
+            Notify me
+          </button>
+        </div>
+      {% endif %}
+    {% endform %}
+
+</section>
+
+<footer class="ci-footer" role="contentinfo">
+  <div class="ci-footer__inner">
+    <div class="tricolore-rule" aria-hidden="true"></div>
+    <p class="ci-footer__line">Crema Italia, LLC · Lutz, Florida, USA</p>
+    <ul class="ci-footer__links">
+      <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
+      <li><a href="mailto:info@cremaitalia.com">Contact</a></li>
+      <li><a href="https://instagram.com/cremaitalia" target="_blank" rel="noopener noreferrer">@cremaitalia</a></li>
+    </ul>
+  </div>
+</footer>
