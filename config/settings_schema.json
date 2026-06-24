@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Crema Italia Coming Soon",
+    "theme_version": "1.1.0",
+    "theme_author": "Crema Italia, LLC",
+    "theme_documentation_url": "https://github.com/marvistaCI/cremaitalia-shopify",
+    "theme_support_url": "https://github.com/marvistaCI/cremaitalia-shopify"
+  }
+]

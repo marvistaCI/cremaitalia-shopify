@@ -1,29 +1,17 @@
 <!--
   templates/404.liquid
-  Crema Italia — Branded 404 page
+  Crema Italia — Branded 404 (page not found)
 -->
-<section class="ci-section ci-hero" style="text-align:center; padding-top:5rem; padding-bottom:5rem;">
+<section class="ci-section ci-hero">
   <div class="ci-section__inner">
-    <span class="eyebrow">PAGINA NON TROVATA</span>
-    <h1 style="font-size:clamp(2rem,4vw,3rem);">That page does not exist.</h1>
+    <span class="eyebrow">Pagina non trovata</span>
+    <h1>That page does not exist.</h1>
     <div class="tricolore-rule" aria-hidden="true"></div>
     <p class="subheading">
       The page you are looking for may have moved or been removed.
     </p>
-    <a href="{{ routes.root_url }}" class="ci-btn" style="display:inline-block; margin-top:1.5rem; text-decoration:none;">
-      Return home
-    </a>
+    <a href="{{ routes.root_url }}" class="ci-btn ci-btn--inline">Return home</a>
   </div>
 </section>
 
-<footer class="ci-footer" role="contentinfo">
-  <div class="ci-footer__inner">
-    <div class="tricolore-rule" aria-hidden="true"></div>
-    <p class="ci-footer__line">Crema Italia, LLC &middot; Lutz, Florida, USA &middot; cremaitalia.com</p>
-    <ul class="ci-footer__links">
-      <li><a href="#">Privacy Policy</a></li>
-      <li><a href="#">Contact</a></li>
-      <li><a href="#">@cremaitalia</a></li>
-    </ul>
-  </div>
-</footer>
+{% render 'ci-footer' %}

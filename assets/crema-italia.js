@@ -1,27 +1,22 @@
 /**
  * Crema Italia — Coming Soon Theme
  * assets/crema-italia.js
- * v1.0 · 2026
+ * v1.1 · 2026
+ *
+ * Progressive enhancement for the pre-launch signup form on
+ * templates/password.liquid. Everything here is optional polish — the
+ * form works fully without JavaScript, because Shopify's
+ * {% form 'customer' %} does a normal server-side POST.
  *
  * Responsibilities:
- *  1. Client-side email validation before Shopify form submit
- *  2. Smooth scroll from hero CTA to signup card
- *  3. Accessibility: announce success/error states to screen readers
+ *   1. Client-side email validation before submit (catches typos early)
+ *   2. Prevent double-submit (disable the button after a valid submit)
+ *   3. Announce the success state to screen readers
  *
- * Note on honeypot: Shopify's native customer form endpoint includes
- * server-side spam protection. A custom honeypot field would require
- * intercepting the form submit and checking the field via JS. This is
- * deferred to v2 — the trade-off is slightly increased spam surface at
- * low-traffic scale, which is acceptable for a pre-launch list of < 10k.
- * Shopify's own CAPTCHA (if enabled in admin) covers most bots.
- *
- * Note on success state: Shopify's {% form 'customer' %} does a full
- * page POST and sets form.posted_successfully? = true on the server side.
- * The Liquid template handles the success render. The JS below handles
- * a secondary client-side enhancement for cases where Shopify returns
- * the page with a success param (ci_success=1 in the URL), which some
- * themes use as a progressive enhancement. The primary success flow is
- * handled entirely by Liquid.
+ * Note on spam: Shopify's customer endpoint has server-side spam
+ * protection, and admin-enabled CAPTCHA covers most bots. A custom
+ * honeypot is deferred to v2 — acceptable for a pre-launch list at low
+ * volume.
  */
 
 (function () {
@@ -31,17 +26,14 @@
 
   /**
    * Returns true if the string looks like a valid email.
-   * Uses a practical RFC-5321 subset — not exhaustive but
-   * catches >99% of typos.
+   * Practical RFC-5321 subset — not exhaustive, but catches >99% of typos.
    */
   function isValidEmail(email) {
-    // Must have exactly one @, a local part, a domain with a dot,
-    // and a TLD of at least two characters.
     var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     return pattern.test(String(email).trim().toLowerCase());
   }
 
-  /* ── Form enhancement ────────────────────────────────── */
+  /* ── Signup form enhancement ──────────────────────────── */
 
   function initSignupForm() {
     var form = document.querySelector('.signup-form');
@@ -51,9 +43,10 @@
     var submitBtn  = form.querySelector('button[type="submit"]');
     var errorEl    = form.querySelector('.form-error');
 
+    // On the success render there is no email input — nothing to enhance.
     if (!emailInput || !submitBtn) return;
 
-    // Clear error on input
+    // Clear the error as soon as the visitor starts fixing it.
     emailInput.addEventListener('input', function () {
       if (errorEl) {
         errorEl.classList.remove('is-visible');
@@ -62,94 +55,55 @@
       emailInput.removeAttribute('aria-invalid');
     });
 
-    // Validate before submit
+    // Validate before allowing the POST; block a bad email client-side.
     form.addEventListener('submit', function (event) {
-      var val = emailInput.value;
-
-      if (!isValidEmail(val)) {
+      if (!isValidEmail(emailInput.value)) {
         event.preventDefault();
-
         if (errorEl) {
           errorEl.classList.add('is-visible');
           errorEl.removeAttribute('aria-hidden');
         }
-
         emailInput.setAttribute('aria-invalid', 'true');
         emailInput.focus();
-        return false;
+        return;
       }
 
-      // Disable button to prevent double-submit
+      // Valid: disable the button so an impatient double-click can't
+      // submit twice.
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending\u2026';
+      submitBtn.textContent = 'Sending…';
     });
   }
 
-  /* ── Hero CTA smooth scroll ──────────────────────────── */
+  /* ── Screen-reader success announcement ──────────────── */
 
-  function initHeroCTA() {
-    var cta = document.querySelector('.hero-cta');
-    if (!cta) return;
+  /**
+   * The success block (.form-success) is rendered by Liquid ONLY after a
+   * successful POST. If it's present, announce it via a visually-hidden
+   * live region so screen-reader users hear the confirmation.
+   */
+  function announceSuccessIfPresent() {
+    if (!document.querySelector('.form-success')) return;
 
-    cta.addEventListener('click', function (event) {
-      var target = document.querySelector('#signup-card');
-      if (!target) return;
-
-      event.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-      // Focus the email input for accessibility
-      var emailInput = target.querySelector('input[type="email"]');
-      if (emailInput) {
-        setTimeout(function () { emailInput.focus(); }, 400);
-      }
-    });
-  }
-
-  /* ── Screen-reader live region ───────────────────────── */
-
-  function initLiveRegion() {
-    var region = document.getElementById('ci-sr-live');
-    if (!region) {
-      region = document.createElement('div');
-      region.id = 'ci-sr-live';
-      region.setAttribute('role', 'status');
-      region.setAttribute('aria-live', 'polite');
-      region.setAttribute('aria-atomic', 'true');
-      // Visually hidden but readable by screen readers
-      region.style.cssText = [
-        'position:absolute',
-        'width:1px',
-        'height:1px',
-        'padding:0',
-        'margin:-1px',
-        'overflow:hidden',
-        'clip:rect(0,0,0,0)',
-        'white-space:nowrap',
-        'border:0'
-      ].join(';');
-      document.body.appendChild(region);
-    }
-    return region;
-  }
-
-  function announceSuccess() {
-    var region = initLiveRegion();
-    region.textContent = 'Grazie. We have your address. We will write when the first pallet lands.';
+    var region = document.createElement('div');
+    region.setAttribute('role', 'status');
+    region.setAttribute('aria-live', 'polite');
+    region.setAttribute('aria-atomic', 'true');
+    region.style.cssText = [
+      'position:absolute', 'width:1px', 'height:1px', 'padding:0',
+      'margin:-1px', 'overflow:hidden', 'clip:rect(0,0,0,0)',
+      'white-space:nowrap', 'border:0'
+    ].join(';');
+    region.textContent =
+      'Grazie. We have your address. We will write when the first pallet lands.';
+    document.body.appendChild(region);
   }
 
   /* ── Init on DOM ready ───────────────────────────────── */
 
   function init() {
     initSignupForm();
-    initHeroCTA();
-
-    // If Shopify returned with a posted_successfully indicator in the
-    // DOM (the success section is visible), announce it to screen readers.
-    var successEl = document.querySelector('.form-success');
-    if (successEl && successEl.style.display !== 'none') {
-      announceSuccess();
-    }
+    announceSuccessIfPresent();
   }
 
   if (document.readyState === 'loading') {

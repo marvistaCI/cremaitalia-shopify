@@ -1,8 +1,8 @@
 /* ============================================================
    Crema Italia — Coming Soon Theme
    assets/crema-italia.css
-   v1.0 · 2026
-   Brand Standards: see Crema_Italia_Brand_Standards.md
+   v1.1 · 2026
+   Brand standards: see CLAUDE.md (§3) and the brand standards PDF.
    ============================================================ */
 
 /* ── 1. CSS Custom Properties (Brand Tokens) ─────────────── */
@@ -67,7 +67,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.01em;
 }
 
-/* H1: large display, Cormorant 400/600 */
+/* H1: large display, Cormorant 600 */
 h1 {
   font-size: clamp(2.4rem, 5vw, 3.6rem);
   font-weight: 600;
@@ -121,25 +121,6 @@ a:focus-visible {
   margin-bottom: 0.75rem;
 }
 
-/* Muted / secondary text */
-.text-mute {
-  color: var(--ci-mute);
-  font-size: 0.875rem;
-}
-
-/* Italic promise lines (Cormorant italic) */
-.promise-line {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.1rem;
-  color: var(--ci-coffee);
-  line-height: 1.5;
-  display: block;
-}
-.promise-line + .promise-line {
-  margin-top: 0.75rem; /* 12px gap between promise lines */
-}
-
 /* ── 4. Layout ───────────────────────────────────────────── */
 
 .page-wrapper {
@@ -160,9 +141,8 @@ a:focus-visible {
 }
 
 /* ── 5. Tricolore Rule ───────────────────────────────────── */
-/* Green (80px) immediately followed by Red (80px),
-   2px tall, centered. Uses flex so the two segments sit
-   adjacent with no gap. */
+/* Green (80px) immediately followed by Red (80px), 2px tall,
+   centered. Decorative thin rule only — never a block fill. */
 
 .tricolore-rule {
   display: flex;
@@ -180,20 +160,8 @@ a:focus-visible {
   width: 80px;
 }
 
-.tricolore-rule::before {
-  background-color: var(--ci-green);
-}
-
-.tricolore-rule::after {
-  background-color: var(--ci-red);
-}
-
-/* Full-width hairline (section separators) */
-.hairline {
-  border: none;
-  border-top: 1px solid var(--ci-hairline);
-  width: 100%;
-}
+.tricolore-rule::before { background-color: var(--ci-green); }
+.tricolore-rule::after  { background-color: var(--ci-red); }
 
 /* ── 6. Hero Section ─────────────────────────────────────── */
 
@@ -222,74 +190,12 @@ a:focus-visible {
   line-height: 1.6;
 }
 
-.ci-hero .hero-cta {
-  font-family: var(--font-body);
-  font-weight: 500;
-  font-size: 0.95rem;
-  color: var(--ci-crema);
-  text-decoration: none;
-  border-bottom: 1px solid var(--ci-crema-light);
-  padding-bottom: 1px;
-  transition: color 150ms ease, border-color 150ms ease;
-}
-.ci-hero .hero-cta:hover {
-  color: var(--ci-crema-hover);
-  border-color: var(--ci-crema-hover);
-}
-
-/* ── 7. Brand Promise Section ────────────────────────────── */
-
-.ci-promise {
-  background-color: var(--ci-cream);
-  border-top: 1px solid var(--ci-hairline);
-  border-bottom: 1px solid var(--ci-hairline);
-  text-align: center;
-}
-
-.ci-promise__body {
-  margin-top: 1.5rem;
-  text-align: left;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.ci-promise__promises {
-  margin-bottom: 1.5rem;
-}
-
-/* ── 8. Who You Will Meet Section ───────────────────────── */
-
-.ci-roasters {
-  background-color: var(--ci-cream);
-  text-align: center;
-}
-
-.ci-roasters__body {
-  max-width: 600px;
-  margin: 1.25rem auto 1rem;
-  text-align: left;
-}
-
-.ci-roasters__caption {
-  font-family: var(--font-body);
-  font-style: italic;
-  font-size: 0.875rem;
-  color: var(--ci-mute);
-  text-align: center;
-  margin-top: 1.25rem;
-  display: block;
-}
-
-/* ── 9. Signup Card Section ──────────────────────────────── */
+/* ── 7. Signup Card Section ──────────────────────────────── */
 
 .ci-signup {
   background-color: var(--ci-cream);
   text-align: center;
-}
-
-.ci-signup > .ci-section__inner > .eyebrow {
-  text-align: center;
+  padding-top: 0;
 }
 
 .signup-card {
@@ -298,7 +204,7 @@ a:focus-visible {
   border-radius: var(--card-radius);
   padding: 2.5rem 2rem;
   max-width: 520px;
-  margin: 1.5rem auto 0;
+  margin: 0 auto;
   text-align: left;
   box-shadow: 0 2px 16px rgba(59, 31, 18, 0.05);
 }
@@ -318,7 +224,7 @@ a:focus-visible {
   line-height: 1.6;
 }
 
-/* ── 10. Form Styling ────────────────────────────────────── */
+/* ── 8. Form Styling ─────────────────────────────────────── */
 
 .signup-form {
   display: flex;
@@ -341,7 +247,7 @@ a:focus-visible {
   border: 1px solid var(--ci-hairline);
   border-radius: 6px;
   padding: 0.7rem 1rem;
-  transition: border-color 150ms ease, outline 150ms ease;
+  transition: border-color 150ms ease;
   width: 100%;
   -webkit-appearance: none;
   appearance: none;
@@ -358,6 +264,7 @@ a:focus-visible {
   border-color: var(--ci-crema);
 }
 
+/* Primary button — shared by the signup form and standalone .ci-btn */
 .signup-form button[type="submit"],
 .ci-btn {
   font-family: var(--font-body);
@@ -370,6 +277,7 @@ a:focus-visible {
   border-radius: 6px;
   padding: 0.7rem 1.4rem;
   cursor: pointer;
+  text-decoration: none;
   transition: background-color 200ms ease;
   white-space: nowrap;
   line-height: 1;
@@ -381,12 +289,23 @@ a:focus-visible {
 .signup-form button[type="submit"]:hover,
 .ci-btn:hover {
   background-color: var(--ci-crema-hover);
+  color: #ffffff;
+}
+
+.signup-form button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 .signup-form button[type="submit"]:focus-visible,
 .ci-btn:focus-visible {
   outline: 2px solid var(--ci-crema);
   outline-offset: 2px;
+}
+
+/* Standalone button used as an inline link (e.g. 404 "Return home") */
+.ci-btn--inline {
+  margin-top: 1.5rem;
 }
 
 .form-microcopy {
@@ -396,15 +315,16 @@ a:focus-visible {
   margin-top: 0.25rem;
 }
 
-/* Success state */
+/* Success state (rendered only after a successful POST) */
 .form-success {
   display: none;
-  padding: 1rem 0 0;
+  padding: 0.25rem 0;
 }
+.form-success.is-visible { display: block; }
 
 .form-success h3 {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 600;
   color: var(--ci-coffee);
   margin-bottom: 0.5rem;
@@ -415,34 +335,73 @@ a:focus-visible {
   color: var(--ci-mute);
 }
 
-/* Error state */
+/* Client-side error message (toggled by JS) */
 .form-error {
   font-size: 0.875rem;
   color: var(--ci-red);
   margin-top: 0.25rem;
   display: none;
 }
+.form-error.is-visible { display: block; }
 
-.form-error.is-visible {
-  display: block;
-}
-
-/* Shopify native form errors */
+/* Shopify's own server-side form errors ({{ form.errors | default_errors }}) */
 .signup-form .errors,
 .signup-form .error-message,
 .signup-form ul.errors {
   list-style: none;
   font-size: 0.875rem;
   color: var(--ci-red);
-  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
-/* ── 11. Footer ──────────────────────────────────────────── */
+/* ── 9. Discreet Password Entry ──────────────────────────── */
+/* Lets people who have the shared store password get in to preview.
+   Collapsed by default so it never competes with the signup card. */
+
+.ci-password-entry {
+  max-width: var(--max-width);
+  margin: 0 auto 2.5rem;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.ci-password-entry summary {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--ci-mute);
+  cursor: pointer;
+  list-style: none;
+  display: inline-block;
+}
+.ci-password-entry summary::-webkit-details-marker { display: none; }
+.ci-password-entry summary:hover { color: var(--ci-crema); }
+
+.ci-password-entry .form-row {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.ci-password-entry input[type="password"] {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--ci-coffee);
+  background-color: var(--ci-ivory);
+  border: 1px solid var(--ci-hairline);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+}
+.ci-password-entry input[type="password"]:focus {
+  outline: 2px solid var(--ci-crema);
+  border-color: var(--ci-crema);
+}
+
+/* ── 10. Footer ──────────────────────────────────────────── */
 
 .ci-footer {
   width: 100%;
   background-color: var(--ci-cream);
-  border-top: none;
   padding: 2rem 1.5rem 3rem;
   margin-top: auto;
 }
@@ -453,7 +412,6 @@ a:focus-visible {
   text-align: center;
 }
 
-/* Tricolore rule above footer */
 .ci-footer .tricolore-rule {
   margin-bottom: 1.5rem;
 }
@@ -481,13 +439,10 @@ a:focus-visible {
   text-decoration: none;
   transition: color 150ms ease;
 }
+.ci-footer__links a:hover { color: var(--ci-crema); }
 
-.ci-footer__links a:hover {
-  color: var(--ci-crema);
-}
-
-/* ── 12. Password Page Chrome ────────────────────────────── */
-/* Hide Shopify's default password page elements if they leak */
+/* ── 11. Password Page Chrome ────────────────────────────── */
+/* Hide Shopify's default password-page elements if they leak in. */
 
 .password-page-form,
 .storefront-password-form,
@@ -497,7 +452,7 @@ a:focus-visible {
   display: none !important;
 }
 
-/* ── 13. Mobile Responsiveness ───────────────────────────── */
+/* ── 12. Mobile Responsiveness ───────────────────────────── */
 
 @media (max-width: 640px) {
   :root {
@@ -508,8 +463,6 @@ a:focus-visible {
     padding-top: 3rem;
     padding-bottom: 2rem;
   }
-
-  /* H1 already uses clamp() — no override needed */
 
   .signup-card {
     padding: 2rem 1.25rem;
@@ -525,16 +478,12 @@ a:focus-visible {
     padding: 0.85rem 1rem;
   }
 
-  .signup-form input[type="email"] {
-    width: 100%;
-  }
-
   .ci-footer__links {
     gap: 1rem;
   }
 }
 
-/* ── 14. Reduced Motion ──────────────────────────────────── */
+/* ── 13. Reduced Motion ──────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -546,29 +495,6 @@ a:focus-visible {
   }
 }
 
-.ci-newsletter {
-  margin-top: 2rem;
-}
-
-.ci-newsletter__fields {
-  display: inline-flex;
-  gap: 0.5rem;
-  align-items: stretch;
-}
-
-.ci-newsletter__input {
-  padding: 0.5rem 0.75rem;
-  min-width: 220px;
-}
-
-.ci-newsletter__button {
-  padding: 0.5rem 1rem;
-}
-
-.ci-newsletter__success {
-  margin-top: 0.5rem;
-  color: var(--ci-mute);
-}
 /* ============================================================
    END assets/crema-italia.css
    ============================================================ */

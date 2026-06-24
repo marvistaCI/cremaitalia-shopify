@@ -228,6 +228,32 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   placements until a true vector exists. Reasoning: hand-coded SVG recreation didn't
   match the original closely enough; raster works for Shopify, OG, favicons, print at
   reasonable sizes.
+- 2026-06-23 — Pulled live theme from Shopify into local repo as baseline commit.
+  Theme name: `crema-italia-coming-soon-theme` (id #150557294761). Live at cremaitalia.com.
+- 2026-06-23 — Local git initialized and pushed to GitHub remote at
+  https://github.com/marvistaCI/cremaitalia-shopify (private). Use `git push` to back up
+  changes after any meaningful edit.
+- 2026-06-23 — Confirmed theme is intentionally minimal: 9 files, ~974 lines total.
+  Active layout is `layout/password.liquid` (renders when password protection is on,
+  which it currently is). `layout/theme.liquid` will activate after launch. No
+  `sections/` or `snippets/` folders exist yet — to be added when building out the full
+  storefront post-launch.
+- 2026-06-23 — `Horizon` theme (id #150473375913) sits unpublished on the store.
+  This is Shopify's 2025 reference theme; useful pattern source when building cart
+  drawers, product cards, and other commerce components post-launch. Do not modify it
+  in-place — pull patterns out, don't edit Horizon itself.
+- 2026-06-24 — Reconciled the coming-soon POC (it was half-wired from the Cowork
+  session). Created the missing `templates/password.liquid` (the page Shopify actually
+  serves while password protection is ON) holding the hero + email signup card. The
+  signup form had been sitting in `templates/index.liquid`, which only renders AFTER
+  launch — so visitors couldn't see it. Aligned markup with the existing CSS/JS
+  (`.signup-form`, `.form-error`, `.form-success`) so the validation/double-submit/
+  screen-reader script is now live instead of dead. Added `snippets/ci-footer.liquid`
+  as the single source of truth for the footer (fixes the missing `cremaitalia.com`
+  line and the dead `#` links on the 404). Trimmed ~150 lines of CSS that styled
+  sections which don't exist yet. Added a discreet collapsible password-entry box so
+  password-holders can preview. Filled in the empty `settings_schema.json` theme_info.
+  `index.liquid` remains a clean placeholder for the future full storefront mockup.
 
 ---
 
