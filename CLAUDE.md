@@ -254,16 +254,55 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   sections which don't exist yet. Added a discreet collapsible password-entry box so
   password-holders can preview. Filled in the empty `settings_schema.json` theme_info.
   `index.liquid` remains a clean placeholder for the future full storefront mockup.
+- 2026-06-27 — Canonical full-storefront specs received and committed to `docs/`:
+  `CremaItalia_ClaudeCode_Brief_v1.md` (HOW: stack, metafields, templates, 10-phase
+  build order), `CremaItalia_ShopifyMagic_Prompt_v1.md` (business logic: shelves,
+  pricing formula, discounts, shipping, the Promise), and `CremaItalia_POC_v2.html`
+  (design/UX source of truth). These SUPERSEDE the earlier v1 draft. Build a CUSTOM
+  Liquid theme (no starter). New since v1: nav = Shop · Trovare · La Bottega · About;
+  3-axis filter (Region × Shelf × Taste Profile); first-visit taste quiz; custom
+  account portal; per-shelf product templates; `crema_italia.*` metafields; pricing
+  formula (EUR×0.60×markup×1.165). See `docs/storefront-plan.md` for the reconciliation
+  and OPEN QUESTIONS (esp. subscription engine: brief says Recharge/Skio, which
+  conflicts with the 2026-06-24 "Shopify Subscriptions free" choice — unresolved).
 
 ---
 
 ## 10. Open questions / TODO
 
-(Steve will populate this in Claude Code with the specific features he wants to add.)
+**CURRENT STATUS (as of 2026-06-27) — read this first when resuming.**
 
-- [ ] (placeholder for missing features Steve wants to add)
-- [ ] (placeholder)
-- [ ] (placeholder)
+We are PLANNING the full storefront build. **No theme code has been written yet**
+and **nothing is built/deployed.** The only live theme work is the coming-soon page
+(commit `18fc2e1`). Last instruction from Steve: he is reviewing decisions in Cowork
+and asked Claude to **stand by** — do NOT start building until he gives the go-ahead.
+
+**To resume, read in this order:** `docs/storefront-plan.md` (reconciliation + open
+questions) → `docs/CremaItalia_ClaudeCode_Brief_v1.md` (HOW) →
+`docs/CremaItalia_ShopifyMagic_Prompt_v1.md` (business logic) →
+`docs/CremaItalia_POC_v2.html` (design/UX, open in browser).
+
+**OPEN DECISIONS — must be resolved before/at the relevant build phase:**
+- [ ] **Subscription engine — UNRESOLVED.** Brief locks Recharge/Skio. Steve prefers
+  **Loop** (better pricing) and is evaluating it. Loop is Shopify-native (selling
+  plans + Shopify Checkout) and meets the subscription-specific requirements; the
+  sitewide subscriber-10%, Founding Member 12%, and Offerta stacking are **Shopify
+  Functions regardless of engine**. PLAN: build the product page/cart subscription UI
+  against Shopify's **native `selling_plan_groups`** (engine-portable), and lock the
+  engine before Phase 8 (account portal). Offered Steve a live pricing/feature matrix
+  (Loop vs Recharge vs Skio vs Shopify free) — not yet run.
+- [ ] **Discounting rules** — Steve is reviewing Magic-Prompt Parts 3–6 in Cowork;
+  rules may change. Do NOT hardcode discount logic until he confirms. Part 6's
+  stacking column is load-bearing (only intended stack: subscriber 10% + Offerta).
+- [ ] **La Bottega vs Supplies/Equipaggiamento** — pick the top-nav label before
+  building nav.
+- [ ] **Quiz + custom account portal** — confirm they are in launch scope (brief
+  Phases 8–9) vs fast-follow.
+
+**NEXT STEP when greenlit:** follow the brief's 10-phase sequence, starting Phase 1
+(Shell): theme file structure, brand CSS/fonts/logo, flag rule + strip, sticky header
+nav (Shop · Trovare · La Bottega · About + Sign In + Start Your Tour), footer, empty
+page templates. Build a CUSTOM Liquid theme (no starter).
 
 ---
 
