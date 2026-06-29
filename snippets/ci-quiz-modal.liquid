@@ -1,0 +1,55 @@
+{%- comment -%} ci-quiz-modal.liquid — first-visit taste quiz (roast / flavor / caffeine). {%- endcomment -%}
+<div class="modal-overlay" id="quiz-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeQuiz()" aria-label="Close">&times;</button>
+    <h2>What do you love in a cup?</h2>
+    <p class="subtitle">Three questions. We will point you to the right roaster.</p>
+    <div class="quiz-progress">
+      <div class="quiz-dot done" id="qdot-1"></div>
+      <div class="quiz-dot" id="qdot-2"></div>
+      <div class="quiz-dot" id="qdot-3"></div>
+    </div>
+
+    <div class="quiz-step active" id="qstep-1">
+      <div class="quiz-q">How do you like your roast?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" onclick="selectOpt(this,1,'light')"><div class="quiz-opt-mark">L</div><div class="quiz-opt-text"><strong>Light &amp; bright</strong><span>Floral, fruity, tea-like. The origin speaks clearly.</span></div></div>
+        <div class="quiz-opt" onclick="selectOpt(this,1,'medium')"><div class="quiz-opt-mark">M</div><div class="quiz-opt-text"><strong>Balanced &amp; smooth</strong><span>Caramel, nuts, gentle sweetness. The classic Italian espresso.</span></div></div>
+        <div class="quiz-opt" onclick="selectOpt(this,1,'dark')"><div class="quiz-opt-mark">D</div><div class="quiz-opt-text"><strong>Rich &amp; bold</strong><span>Dark chocolate, toasted grain, full body. Espresso as Nonna makes it.</span></div></div>
+        <div class="quiz-opt" onclick="selectOpt(this,1,'any')"><div class="quiz-opt-mark">?</div><div class="quiz-opt-text"><strong>Surprise me</strong><span>I trust the curator. Show me what is best right now.</span></div></div>
+      </div>
+      <div class="quiz-nav"><button class="skip-link" onclick="closeQuiz()">Skip — browse everything</button><button class="btn btn-primary" style="font-size:.85rem;padding:.6rem 1.25rem" onclick="nextStep(2)">Next</button></div>
+    </div>
+
+    <div class="quiz-step" id="qstep-2">
+      <div class="quiz-q">What draws you to a coffee?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" onclick="selectOpt(this,2,'fruit')"><div class="quiz-opt-mark">F</div><div class="quiz-opt-text"><strong>Fruit &amp; flowers</strong><span>Peach, jasmine, bergamot, berry. Coffee as a perfume.</span></div></div>
+        <div class="quiz-opt" onclick="selectOpt(this,2,'sweet')"><div class="quiz-opt-mark">S</div><div class="quiz-opt-text"><strong>Sweet &amp; chocolatey</strong><span>Caramel, milk chocolate, hazelnut, brown sugar.</span></div></div>
+        <div class="quiz-opt" onclick="selectOpt(this,2,'terroir')"><div class="quiz-opt-mark">E</div><div class="quiz-opt-text"><strong>Earthy &amp; complex</strong><span>Spice, dried fruit, walnut, a sense of where it came from.</span></div></div>
+      </div>
+      <div class="quiz-nav"><button class="skip-link" onclick="nextStep(1)">Back</button><button class="btn btn-primary" style="font-size:.85rem;padding:.6rem 1.25rem" onclick="nextStep(3)">Next</button></div>
+    </div>
+
+    <div class="quiz-step" id="qstep-3">
+      <div class="quiz-q">Any caffeine considerations?</div>
+      <div class="quiz-options">
+        <div class="quiz-opt" onclick="selectOpt(this,3,'full')"><div class="quiz-opt-mark">C</div><div class="quiz-opt-text"><strong>Full caffeine</strong><span>All day, every day.</span></div></div>
+        <div class="quiz-opt" onclick="selectOpt(this,3,'decaf')"><div class="quiz-opt-mark">D</div><div class="quiz-opt-text"><strong>Decaf</strong><span>The cup that started Crema Italia. Do not underestimate it.</span></div></div>
+        <div class="quiz-opt" onclick="selectOpt(this,3,'both')"><div class="quiz-opt-mark">B</div><div class="quiz-opt-text"><strong>Both — show me everything</strong><span>Morning caffeinated, evening decaf.</span></div></div>
+      </div>
+      <div class="quiz-nav"><button class="skip-link" onclick="nextStep(2)">Back</button><button class="btn btn-primary" style="font-size:.85rem;padding:.6rem 1.25rem" onclick="showQuizResult()">See my matches</button></div>
+    </div>
+
+    <div class="quiz-step" id="qstep-result">
+      <div class="quiz-result">
+        <div class="result-mark">In bocca al lupo</div>
+        <h3 id="result-title">Your Tuscan profile</h3>
+        <p>We have filtered the catalog to show your best matches.</p>
+        <div class="tags" id="result-tags"></div>
+        <button class="btn btn-primary" style="width:100%;margin-bottom:.75rem" onclick="applyProfileAndClose()">Show my matches</button>
+        <button class="btn btn-secondary" style="width:100%;font-size:.85rem" onclick="showSigninFromQuiz()">Save this profile to my account</button>
+      </div>
+    </div>
+  </div>
+</div>

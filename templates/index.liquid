@@ -1,25 +1,364 @@
-<!--
-  templates/index.liquid
-  Crema Italia — Storefront homepage (post-launch).
+{%- comment -%}
+  templates/index.liquid — Crema Italia storefront (POC3)
 
-  This template renders ONLY when password protection is OFF. While the
-  store is in pre-launch, visitors see templates/password.liquid instead.
+  A single-document SPA: every "page" below is a .page block, toggled client-side
+  by showPage() in crema-italia.js. Editorial copy is authored here in Liquid; the
+  catalog grids, roaster profiles, product detail, cart and account views are filled
+  at runtime from assets/ci-catalog.json (the baked-in test dataset).
 
-  This is a placeholder. When you are ready to launch:
-    1. Online Store > Preferences > uncheck "Password protect your storefront"
-    2. Replace the section below with the full storefront layout
-       (the homepage mockup from Cowork).
--->
-<section class="ci-section ci-hero">
-  <div class="ci-section__inner">
-    <span class="eyebrow">Italian by Nature</span>
-    <h1>Storefront opening soon.</h1>
-    <div class="tricolore-rule" aria-hidden="true"></div>
-    <p class="subheading">
-      The full Crema Italia store is on its way. This page becomes the
-      homepage once we open.
-    </p>
-  </div>
-</section>
+  This renders only once Shopify password protection is OFF, or to a password-holder
+  previewing the theme. While pre-launch, visitors still see templates/password.liquid.
 
-{% render 'ci-footer' %}
+  Production note: when the live store is built, the JS-rendered grids are replaced by
+  real Liquid loops over {{ collection.products }} + crema_italia.* metafields, and the
+  Roccia subscription UI binds to native selling_plan_groups (Loop). Integration points
+  are flagged with <!-- LOOP --> / <!-- PROD --> comments.
+{%- endcomment -%}
+
+<!-- ============================== HOME ============================== -->
+<div class="page active" id="page-home">
+  <div class="hero"><div class="hero-inner">
+    <p class="eyebrow" style="color:var(--ci-crema-light)">Italian Artisan Coffee</p>
+    <h1>From a small group<br>of <em>Italian roasters</em>,<br>imported without compromise.</h1>
+    <p class="subhead">Italian Artisan Coffee, Imported Without Compromise.</p>
+    <div class="tricolore"><div></div><div></div></div>
+    <div class="hero-btns">
+      <button class="btn btn-primary" onclick="showPage('sorpresa')">Begin with a Sorpresa Tour</button>
+      <button class="btn btn-outline" onclick="showPage('roccia')">Build a Roccia Subscription</button>
+    </div>
+  </div></div>
+  <main class="ci-main">
+    <div class="tour-hero">
+      <div class="tour-hero-text">
+        <p class="eyebrow" style="color:var(--ci-crema-light)">Featured Tour · Sorpresa</p>
+        <h2>Tour d'Italia 1</h2>
+        <p>Three different 100g bags from three roasters, our choice — assembled on-demand so every bag ships fresh. A printed tasting card names each roaster and their notes.</p>
+        <p style="margin-top:.5rem;color:var(--ci-crema-light);font-style:italic">$77.70 · assembled to order</p>
+        <button class="btn btn-primary" style="margin-top:1rem" onclick="showPage('sorpresa')">See the Tour</button>
+      </div>
+      <div class="tour-bags"><div class="tour-bag">Gardelli<br>Ethiopia</div><div class="tour-bag">La Sosta<br>Guatemala</div><div class="tour-bag">Fusari<br>Colombia</div></div>
+    </div>
+
+    <div class="section-head"><p class="eyebrow">How the catalog is organized</p><h2>The four coffee shelves.</h2></div>
+    <div class="card-grid">
+      <div class="shelf-card" onclick="showPage('roccia')"><h3>Roccia</h3><div class="ss2">The Rock · Subscription</div><p>Our rock-solid subscription plan. Your chosen roaster and SKU, your cadence, 10% off every shipment and free shipping. The anchor of the catalog.</p></div>
+      <div class="shelf-card" onclick="showPage('sorpresa')"><h3>Sorpresa</h3><div class="ss2">Discovery · One-time</div><p>Our curated collection of roasted delights. On-demand 100g Tour bundles — the best way to find the roaster you will subscribe to.</p></div>
+      <div class="shelf-card" onclick="showPage('selezione')"><h3>Selezione</h3><div class="ss2">Premium &amp; Seasonal · One-time</div><p>Roasters' premium and seasonal offerings. Micro-lots and limited imports. When the pallet is gone, it may not return.</p></div>
+      <div class="shelf-card" onclick="showPage('offerta')"><h3>Offerta</h3><div class="ss2">The Opportunity · One-time</div><p>Limited-time offers, on sale while inventory lasts. Good coffee approaching its freshness window, priced honestly. Sold as-is.</p></div>
+    </div>
+
+    <div class="section-head"><p class="eyebrow">Our roasters</p><h2>A small group, each with a profile.</h2></div>
+    <div class="card-grid" id="home-roasters"></div>
+
+    <div class="section-head"><p class="eyebrow">Our model</p><h2>Curated, never aggregated.</h2></div>
+    <div class="prose" style="max-width:72ch">
+      <p>We do not roast, grind, blend, or repackage. We choose a small number of roasters whose work represents the craft of Italian roasting at its best, and we present their coffee exactly as they sealed it — whole bean, in valve bags, shipped unchanged.</p>
+      <p>The first sale is an introduction; the second is the business. A Sorpresa Tour is how most people meet us. A Roccia subscription with the roaster you fell for is what keeps us going.</p>
+      <p>We are the U.S. Agent for FDA food-facility registration on behalf of our roaster partners. We import in small pallets, on the cadence the roasteries can sustain. We never claim to roast.</p>
+    </div>
+
+    <div class="section-head"><p class="eyebrow">The Crema Italia Promise</p><h2>Three things we mean.</h2></div>
+    <ul class="promise-list">
+      <li><div class="pn">1</div><div class="pt"><h3>Curated with love, never aggregated.</h3><p>A small, named group of Italian roasters — chosen, not collected.</p></div></li>
+      <li><div class="pn">2</div><div class="pt"><h3>Love your first bag, or we send a different one — free.</h3><p>On Roccia, Sorpresa, and Selezione. Offerta is sold as-is (see the Promise page).</p></div></li>
+      <li><div class="pn">3</div><div class="pt"><h3>Cancel your subscription anytime in a couple of clicks.</h3><p>Pause, skip, swap, or cancel — all self-service, no minimum, no cancel fee.</p></div></li>
+    </ul>
+
+    <div class="callout" style="margin-top:2.5rem"><strong>Not sure where to start?</strong> Take the three-question taste quiz — we will filter the catalog to your preferences. <button onclick="openQuiz()" style="background:none;border:none;cursor:pointer;color:var(--ci-crema);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-family:var(--ci-font-body)">Take the quiz</button></div>
+  </main>
+</div>
+
+<!-- ============================== SHOP ============================== -->
+<div class="page" id="page-shop">
+  <main class="ci-main">
+    <div class="section-head" style="margin-top:0"><p class="eyebrow">The catalog</p><h2>Shop</h2></div>
+    <p class="pf-hint" id="pf-hint" style="display:none;margin-bottom:1rem">Filtered to your taste profile. <span onclick="clearProfile()">Clear profile</span></p>
+    <div class="filter-bar">
+      <div class="filter-row">
+        <div class="filter-group"><div class="filter-label">Region</div><div class="filter-pills">
+          <span class="pill active" onclick="filterRegion(this,'all')">All Regions</span>
+          <span class="pill" onclick="filterRegion(this,'toscana')">Toscana</span>
+          <span class="pill" onclick="filterRegion(this,'emilia')">Emilia-Romagna</span>
+          <span class="pill disabled">Piemonte</span>
+          <span class="pill disabled">Sicilia</span>
+        </div></div>
+        <div class="filter-group"><div class="filter-label">Shelf</div><div class="filter-pills">
+          <span class="pill active" onclick="filterShelf(this,'all')">All</span>
+          <span class="pill" onclick="filterShelf(this,'roccia')">Roccia</span>
+          <span class="pill" onclick="filterShelf(this,'sorpresa')">Sorpresa</span>
+          <span class="pill" onclick="filterShelf(this,'selezione')">Selezione</span>
+          <span class="pill" onclick="filterShelf(this,'offerta')">Offerta</span>
+        </div></div>
+      </div>
+      <div class="filter-divider"></div>
+      <div class="filter-row">
+        <div class="filter-group"><div class="filter-label">Roast</div><div class="filter-pills">
+          <span class="pill active" onclick="filterTaste(this,'roast','all')">Any</span>
+          <span class="pill" onclick="filterTaste(this,'roast','light')">Light</span>
+          <span class="pill" onclick="filterTaste(this,'roast','medium')">Medium</span>
+          <span class="pill" onclick="filterTaste(this,'roast','dark')">Dark</span>
+        </div></div>
+        <div class="filter-group"><div class="filter-label">Flavor</div><div class="filter-pills">
+          <span class="pill active" onclick="filterTaste(this,'flavor','all')">Any</span>
+          <span class="pill" onclick="filterTaste(this,'flavor','fruit')">Fruit &amp; Floral</span>
+          <span class="pill" onclick="filterTaste(this,'flavor','sweet')">Sweet &amp; Chocolate</span>
+          <span class="pill" onclick="filterTaste(this,'flavor','terroir')">Earthy &amp; Complex</span>
+        </div></div>
+        <div class="filter-group"><div class="filter-label">Caffeine</div><div class="filter-pills">
+          <span class="pill active" onclick="filterTaste(this,'caffeine','all')">Any</span>
+          <span class="pill" onclick="filterTaste(this,'caffeine','full')">Caffeinated</span>
+          <span class="pill" onclick="filterTaste(this,'caffeine','decaf')">Decaf</span>
+        </div></div>
+      </div>
+    </div>
+    <div class="card-grid" id="shop-grid"></div>
+    <div id="no-results" style="display:none;text-align:center;padding:3rem 1rem;color:var(--ci-mute)">
+      <p style="font-weight:600;color:var(--ci-espresso)">No coffees match these filters right now.</p>
+      <p style="font-size:.9rem;margin-top:.25rem">Try widening your taste profile, or <button onclick="clearProfile()" style="background:none;border:none;color:var(--ci-crema);font-weight:600;cursor:pointer;text-decoration:underline">clear filters</button>.</p>
+    </div>
+  </main>
+</div>
+
+<!-- ============================== ROCCIA ============================== -->
+<div class="page" id="page-roccia">
+  <div class="dark-hero"><div class="dark-hero-inner">
+    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="showPage('shop')">Back to shop</button>
+    <p class="eyebrow" style="color:var(--ci-crema-light)">The Rock · Subscription</p>
+    <h1>Roccia</h1>
+    <p class="sub">Our rock-solid subscription plan.</p>
+    <p>Choose a named SKU from a named roaster and receive it on your cadence — every 4, 6, or 8 weeks. Bag sizes 250g, 500g, and 1kg. Subscribers receive 10% off every Roccia shipment and free U.S. shipping on every shipment, no minimum.</p>
+    <div class="cn"><strong>Self-service, always.</strong> Pause anytime, skip anytime, swap roaster or SKU up to 48 hours before the order locks, cancel anytime. No minimum commitment. No cancel fee.</div>
+  </div></div>
+  <main class="ci-main">
+    <div class="callout"><strong>Subscriber benefits across the site.</strong> An active Roccia subscription unlocks 10% off Roccia, Sorpresa, and Selezione (Founding Members — the first 222 subscribers — receive 12% for life). Offerta and Bottega are never discounted. Discounts are final and do not stack, except a one-time first-purchase 5% on your very first order.</div>
+    <div class="section-head"><p class="eyebrow">Available now · Toscana</p><h2>Roccia coffees</h2></div>
+    <div class="card-grid" id="grid-roccia"></div>
+    <div class="afd">Pallets travel from Italy on a six-to-ten-week cadence. If your chosen SKU is between pallets, we notify you at least seven days before your next shipment with two options: wait for restock at no charge, or take a similar bag from the same roaster at no charge. We never substitute from another shelf into a Roccia shipment.</div>
+  </main>
+</div>
+
+<!-- ============================== SORPRESA ============================== -->
+<div class="page" id="page-sorpresa">
+  <div class="dark-hero"><div class="dark-hero-inner">
+    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="showPage('shop')">Back to shop</button>
+    <p class="eyebrow" style="color:var(--ci-crema-light)">Discovery · One-time</p>
+    <h1>Sorpresa</h1>
+    <p class="sub">Our curated collection of roasted delights.</p>
+    <p>Named Tour bundles, our choice — three different 100g bags from three different roasters, assembled on-demand so every bag is fresh at shipment. Every Tour includes a printed tasting card naming each roaster and their notes. The aim of a Tour is simple: to lead you to the roaster you will want on a Roccia subscription.</p>
+  </div></div>
+  <main class="ci-main">
+    <div class="tour-hero">
+      <div class="tour-hero-text">
+        <p class="eyebrow" style="color:var(--ci-crema-light)">Published now</p>
+        <h2>Tour d'Italia 1</h2>
+        <p>A journey across regions: North, Central, South. Three 100g bags — Gardelli Ethiopia, La Sosta Guatemala, Fusari Colombia — boxed with a tasting card.</p>
+        <p style="margin-top:.5rem;color:var(--ci-crema-light);font-style:italic">$77.70 · assembled to order</p>
+        <button class="btn btn-primary" style="margin-top:1rem" onclick="openProduct('tour-ditalia-1')">View Tour</button>
+      </div>
+      <div class="tour-bags"><div class="tour-bag">Gardelli<br>Ethiopia</div><div class="tour-bag">La Sosta<br>Guatemala</div><div class="tour-bag">Fusari<br>Colombia</div></div>
+    </div>
+    <div class="callout"><strong>Freshness-gated availability.</strong> A Tour is offered only while all three components are in stock and within their freshness window. If any component runs low or ages out, the Tour is paused — "This tour is temporarily unavailable. Check back soon." — and returns automatically when stock refreshes. If a component must be swapped after you order, we pair you with a comparable coffee from the same roaster and tell you in your confirmation.</div>
+    <div class="afd">Our choice, never the roaster's choice — because we are the curator. Components are 100g only; Tours are never mixed-size.</div>
+  </main>
+</div>
+
+<!-- ============================== SELEZIONE ============================== -->
+<div class="page" id="page-selezione">
+  <div class="dark-hero"><div class="dark-hero-inner">
+    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="showPage('shop')">Back to shop</button>
+    <p class="eyebrow" style="color:var(--ci-crema-light)">Premium &amp; Seasonal · One-time</p>
+    <h1>Selezione</h1>
+    <p class="sub">Roasters' premium and seasonal offerings.</p>
+    <p>Micro-lots, single-origin specialty bags, and limited-allocation imports. One-time purchase only — never a subscription. Supply is pallet-bound: when a Selezione SKU runs out, it may or may not return depending on the next pallet. We show honest scarcity only — a low-inventory note below twelve units, and a hard cap that prevents overselling. No countdown timers.</p>
+    <div class="cn"><strong>Subscriber early access.</strong> Active Roccia subscribers see new Selezione SKUs 48 hours before the public listing.</div>
+  </div></div>
+  <main class="ci-main">
+    <div class="card-grid" id="grid-selezione"></div>
+  </main>
+</div>
+
+<!-- ============================== OFFERTA ============================== -->
+<div class="page" id="page-offerta">
+  <div class="dark-hero"><div class="dark-hero-inner">
+    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="showPage('shop')">Back to shop</button>
+    <p class="eyebrow" style="color:var(--ci-crema-light)">The Opportunity · One-time</p>
+    <h1>Offerta</h1>
+    <p class="sub">Limited-time offers, on sale while inventory lasts.</p>
+    <p>Coffee lots that have reached their Offerta threshold — still good, still within a real freshness window, priced down honestly. We show the original price struck through, the Offerta price beside it, and the actual remaining freshness window in plain words. No fake urgency, no countdown timers.</p>
+    <div class="cn"><strong>Sold as-is.</strong> Offerta purchases carry a modified guarantee — material defects only. Freshness window is disclosed at purchase; no exchanges for age-related palate preferences. Coffee that falls outside its freshness window is removed from sale entirely and donated to Feeding Tampa Bay.</div>
+  </div></div>
+  <main class="ci-main">
+    <div class="callout">At launch, Offerta is typically empty — coffee only arrives here as a lot ages past its threshold. The example below shows how an Offerta listing reads.</div>
+    <div class="card-grid" id="grid-offerta"></div>
+    <div class="afd">Offerta prices are set by markup tier, not by a percentage-off blast. Offerta items never appear on a roaster's own profile page — we protect each roaster's storefront.</div>
+  </main>
+</div>
+
+<!-- ============================== ROASTERS INDEX ============================== -->
+<div class="page" id="page-roasters">
+  <div class="dark-hero"><div class="dark-hero-inner">
+    <p class="eyebrow" style="color:var(--ci-crema-light)">A small group</p>
+    <h1>Our Roasters</h1>
+    <p>We hold the U.S. consumer channel for each of these roasters, and we present their coffee unchanged. Tuscany first; the rest of Italy as we grow.</p>
+  </div></div>
+  <main class="ci-main">
+    <div id="roaster-list"></div>
+  </main>
+</div>
+
+<!-- ============================== ROASTER PROFILE (dynamic) ============================== -->
+<div class="page" id="page-roaster">
+  <div class="dark-hero"><div class="dark-hero-inner">
+    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="showPage('roasters')">All roasters</button>
+    <p class="eyebrow" style="color:var(--ci-crema-light)" id="roaster-eyebrow"></p>
+    <h1 id="roaster-name"></h1>
+  </div></div>
+  <main class="ci-main">
+    <div class="prose" style="max-width:72ch" id="roaster-bio"></div>
+    <div class="section-head"><p class="eyebrow">The bags we import</p><h2 id="roaster-bags-head"></h2></div>
+    <div class="card-grid" id="roaster-bags"></div>
+    <div class="afd">Roaster profiles show Roccia and Sorpresa coffees only. Selezione and Offerta listings stay off the roaster's page to keep their storefront premium. Bottega items are never roaster-affiliated.</div>
+    <div class="section-head"><p class="eyebrow">Visit them</p><h2>Find this roaster</h2></div>
+    <p class="prose" style="max-width:65ch" id="roaster-find"></p>
+  </main>
+</div>
+
+<!-- ============================== PRODUCT DETAIL (dynamic) ============================== -->
+<div class="page" id="page-product">
+  <main class="ci-main">
+    <button class="back-btn" onclick="showPage('shop')">Back to shop</button>
+    <!-- LOOP: on the production product page, the size selector + subscription toggle bind
+         to product.selling_plan_groups (Roccia cadences 4/6/8 weeks). -->
+    <div id="product-detail"></div>
+  </main>
+</div>
+
+<!-- ============================== BOTTEGA ============================== -->
+<div class="page" id="page-bottega">
+  <div class="dark-hero" style="background:linear-gradient(135deg,#1a1a2a,#3a3a5a)"><div class="dark-hero-inner">
+    <p class="eyebrow" style="color:var(--ci-crema-light)">The shop apart</p>
+    <h1>La Bottega</h1>
+    <p class="sub">Coffee-related items and Crema Italia merch.</p>
+    <p>Equipment, accessories, and branded merchandise — a separate retail section with its own ordering experience. No freshness tracking, no roaster affiliation, no shelf rules. Just the things that make the coffee better.</p>
+  </div></div>
+  <main class="ci-main">
+    <div class="card-grid" id="grid-bottega"></div>
+    <div class="afd">Bottega prices follow their own simple model and are never subscriber-discounted. Some items ship direct from the manufacturer; the rest go through our 3PL.</div>
+  </main>
+</div>
+
+<!-- ============================== JOURNAL ============================== -->
+<div class="page" id="page-journal">
+  <div class="dark-hero"><div class="dark-hero-inner">
+    <p class="eyebrow" style="color:var(--ci-crema-light)">Reading</p>
+    <h1>The Journal</h1>
+    <p>Stories from the roasteries, notes on brewing, and the Italian calendar — written as content, never as a sale.</p>
+  </div></div>
+  <main class="ci-main">
+    <div class="journal-card"><div class="jc-body"><div class="jc-kicker">2 June · La Festa della Repubblica</div><h3>Why the tricolore runs through everything we make</h3><p>On Republic Day, a short note on the green-white-red rule you will see as a thin line across our pages — and why Italy's coffee culture is as regional as its history.</p></div></div>
+    <div class="journal-card"><div class="jc-body"><div class="jc-kicker">15 August · Ferragosto</div><h3>The month Italy closes — and what it means for your pallet</h3><p>Roasteries shut for Ferragosto. Here is how we plan pallets around the Italian summer so your Roccia shipment never skips a beat.</p></div></div>
+    <div class="journal-card"><div class="jc-body"><div class="jc-kicker">December · Natale</div><h3>Panettone in the cup: La Sosta's Christmas edition</h3><p>A seasonal Selezione micro-lot, and a few words on brewing it alongside the holiday table. A story, not a sale.</p></div></div>
+    <div class="journal-card"><div class="jc-body"><div class="jc-kicker">Brewing</div><h3>Whole bean, always — and how to grind it right</h3><p>We sell whole bean because that is what our roasters seal at origin. A practical guide to grinding fresh for moka, filter, and espresso.</p></div></div>
+  </main>
+</div>
+
+<!-- ============================== ABOUT ============================== -->
+<div class="page" id="page-about">
+  <div class="dark-hero"><div class="dark-hero-inner">
+    <p class="eyebrow" style="color:var(--ci-crema-light)">Who we are</p>
+    <h1>About Crema Italia</h1>
+    <p>A Florida importer and curator of specialty Italian coffee. Not a roaster.</p>
+  </div></div>
+  <main class="ci-main">
+    <div class="founder-grid">
+      <div class="founder-portrait">Steve<br>Founder</div>
+      <div class="prose">
+        <p>Crema Italia, LLC imports specialty whole-bean coffee from a small, named group of Italian roasters, stores it in our Florida warehouse, and ships it to American customers unchanged. We are the U.S. Agent for FDA food-facility registration on behalf of our roaster partners.</p>
+        <h3>Curated, never aggregated</h3>
+        <p>We do not roast, grind, blend, or repackage. We choose a small number of roasters whose work represents the craft of Italian roasting at its best, and we present their coffee exactly as they sealed it.</p>
+        <h3>The first sale is an introduction</h3>
+        <p>A Sorpresa Tour is how most people meet us — three roasters in one box, our choice. The second sale is the business: a Roccia subscription with the roaster you fell for.</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ============================== PROMISE ============================== -->
+<div class="page" id="page-promise">
+  <div class="dark-hero"><div class="dark-hero-inner">
+    <p class="eyebrow" style="color:var(--ci-crema-light)">What we mean</p>
+    <h1>The Crema Italia Promise</h1>
+  </div></div>
+  <main class="ci-main">
+    <ul class="promise-list">
+      <li><div class="pn">1</div><div class="pt"><h3>Curated with love, never aggregated.</h3><p>A small, named group of Italian roasters — chosen, not collected.</p></div></li>
+      <li><div class="pn">2</div><div class="pt"><h3>Love your first bag, or we send a different one — free.</h3><p>Applies to Roccia, Sorpresa, and Selezione. Offerta is sold as-is.</p></div></li>
+      <li><div class="pn">3</div><div class="pt"><h3>Cancel your subscription anytime in a couple of clicks.</h3><p>Pause, skip, swap, or cancel — all self-service, no minimum, no cancel fee.</p></div></li>
+    </ul>
+    <div class="prose" style="max-width:72ch">
+      <h3>First-bag satisfaction guarantee</h3>
+      <p>On Roccia, Sorpresa, and Selezione, if your first bag is not right for you, we will send a different one — free. We would rather find your coffee than win an argument.</p>
+      <h3>Offerta is different — sold as-is</h3>
+      <p>Offerta lots are good coffee approaching the edge of their freshness window, priced down honestly. They carry a modified guarantee: material defects only, with the freshness window disclosed at purchase. No exchanges for age-related palate preferences.</p>
+      <h3>Damage replacement</h3>
+      <p>If a bag arrives damaged, tell us and we will replace it.</p>
+      <h3>Freshness window</h3>
+      <p>Best within 60 days of roast date; for peak flavor, brew within 30. We always show the roast date — never a bare "best by."</p>
+      <h3>Our no-waste pledge</h3>
+      <p>Coffee that passes its freshness window is removed from sale and donated to Feeding Tampa Bay. We do not discount our way out of waste; we give it away.</p>
+    </div>
+  </main>
+</div>
+
+<!-- ============================== SHIPPING ============================== -->
+<div class="page" id="page-shipping">
+  <main class="ci-main">
+    <button class="back-btn" onclick="showPage('home')">Back to home</button>
+    <div class="section-head" style="margin-top:0"><p class="eyebrow">Logistics</p><h2>Shipping</h2></div>
+    <div class="prose" style="max-width:72ch">
+      <p>U.S.-only at launch. We do not ship internationally yet.</p>
+      <p><strong>Free</strong> on every Roccia shipment, and free on one-time orders of $55 or more. A flat <strong>$8.50</strong> applies to one-time orders under $55.</p>
+      <p>Carriers: USPS Ground Advantage under 1 lb; UPS Ground at 1 lb and above. Transit times — East and Southeast 2–3 business days, Midwest and Mountain 3–4, West Coast 4–5.</p>
+    </div>
+  </main>
+</div>
+
+<!-- ============================== FAQ ============================== -->
+<div class="page" id="page-faq">
+  <main class="ci-main">
+    <button class="back-btn" onclick="showPage('home')">Back to home</button>
+    <div class="section-head" style="margin-top:0"><p class="eyebrow">Questions</p><h2>FAQ</h2></div>
+    <div class="prose" style="max-width:72ch">
+      <h3>Do you sell ground coffee?</h3>
+      <p>No. Everything is whole bean, because that is what our roasters seal in valve bags at origin. Grind fresh just before you brew.</p>
+      <h3>Do you roast the coffee?</h3>
+      <p>No. We import and curate; the roasters roast. We never roast, blend, or repackage.</p>
+      <h3>How do subscriber discounts work?</h3>
+      <p>An active Roccia subscription gives 10% off Roccia, Sorpresa, and Selezione (Founding Members — the first 222 subscribers at launch — receive 12% for life). Offerta and Bottega are never discounted. On your very first order, a one-time first-purchase 5% stacks on top — so a new subscriber's first order is 15% off eligible shelves.</p>
+      <h3>Is there a promo code box at checkout?</h3>
+      <p>No. Any discount you have earned applies through a personal link or automatically when you are signed in — there is no code field to hunt for.</p>
+      <h3>How fresh is the coffee?</h3>
+      <p>Best within 60 days of the roast date, which we always show. Sorpresa Tours are assembled on-demand so every bag ships fresh.</p>
+    </div>
+  </main>
+</div>
+
+<!-- ============================== CART (mock) ============================== -->
+<div class="page" id="page-cart">
+  <main class="ci-main">
+    <button class="back-btn" onclick="showPage('shop')">Continue shopping</button>
+    <div class="section-head" style="margin-top:0"><p class="eyebrow">Your bag</p><h2>Cart</h2></div>
+    <!-- PROD: replaced by Shopify cart + Shopify Checkout. Subscriber sign-in banner,
+         $55 free-shipping threshold, and Roccia upgrade toggle are spec-locked. -->
+    <div id="cart-view"></div>
+  </main>
+</div>
+
+<!-- ============================== ACCOUNT (mock, Loop portal slot) ============================== -->
+<div class="page" id="page-account">
+  <main class="ci-main">
+    <button class="back-btn" onclick="showPage('home')">Back to home</button>
+    <div class="section-head" style="margin-top:0"><p class="eyebrow">Your account</p><h2 id="account-greeting">Your account</h2></div>
+    <div id="account-view"></div>
+  </main>
+</div>

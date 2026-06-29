@@ -265,44 +265,78 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   formula (EUR×0.60×markup×1.165). See `docs/storefront-plan.md` for the reconciliation
   and OPEN QUESTIONS (esp. subscription engine: brief says Recharge/Skio, which
   conflicts with the 2026-06-24 "Shopify Subscriptions free" choice — unresolved).
+- 2026-06-29 — **v3 specs supersede everything above.** New authoritative sources:
+  `docs/CremaItalia_POC_v3.html` (design/UX source of truth — nav is now
+  **Shop ▾ · Roasters · About · Journal · Bottega**, NOT the v2 Trovare/La Bottega nav),
+  `Operations/In USA/shopify/Initial Site Build Out/Shopify_Magic_Build_Prompt_v3_FINAL.txt`
+  (locked business rules), `00_PROJECT_BRIEF.md` (single source of truth),
+  `Operations/In USA/shopify/Crema_Italia_Commerce_Playbook_v3.docx`. Conflict rule from
+  Steve: **POC v3 + Magic Build Prompt v3 FINAL win.** Resolved by that rule:
+  (a) **custom Liquid theme** (Steve's direct instruction + this file) over the
+  Magic-Prompt/brief "use Dawn" line; (b) **Lora** display font (POC v3's `:root` still
+  names Cormorant Garamond — stale token — but Magic Prompt + brand.css lock Lora);
+  (c) **pricing = `SKU_LAST_COST × Markup[shelf/size]`** with the Magic-Prompt matrix
+  (Commerce Playbook's `EUR×0.60×markup×1.165` + its different matrix and Sorpresa
+  subscription are SUPERSEDED); Sorpresa is one-time-only, 100g-in-Tours-only.
+- 2026-06-29 — **Subscription engine LOCKED: Loop.** Steve is going live with Loop.
+  Loop is Shopify-native (selling plans + Shopify Checkout), so theme-level subscription
+  code = native `selling_plan_groups` (no rewrite risk vs. "engine-agnostic"). What Loop
+  changes: Roccia cadences modelled as 4/6/8-week selling plans; the account
+  subscription-management page is a **Loop-hosted portal slot** (theme app block /
+  passwordless login), NOT a hand-built pause/skip/swap engine. Subscriber 10% /
+  Founding 12% remain Shopify Functions regardless. Recharge/Skip from the brief are off.
+- 2026-06-29 — **Built POC3: the custom Liquid storefront.** Approach = a single-document
+  SPA (`templates/index.liquid`, client-side `showPage`) rendered by `layout/theme.liquid`,
+  with the test catalog **baked into `assets/ci-catalog.json`** (5 roasters, 9 Roccia
+  SKUs, 1 Sorpresa Tour, 2 Selezione, 1 Offerta example, 4 Bottega) and rendered by
+  `assets/ci-storefront.js`. Cart/checkout are **mocked** (no real Shopify cart yet);
+  sign-in/account/Loop portal are **stubs** with `<!-- PROD -->` / `<!-- LOOP -->` seams.
+  New files: `assets/ci-storefront.css|js`, `assets/ci-catalog.json`, `assets/ci-logo*`/
+  favicons, `snippets/ci-header|ci-store-footer|ci-profile-banner|ci-quiz-modal|ci-signin-modal`.
+  Coming-soon page (`layout/password.liquid` + `crema-italia.css|js`) left UNTOUCHED so the
+  pre-launch gate still works. `shopify theme check`: 0 errors (11 warnings: Google-Fonts
+  RemoteAsset + benign orphaned-snippet flags). Committed; NOT pushed to Shopify.
 
 ---
 
 ## 10. Open questions / TODO
 
-**CURRENT STATUS (as of 2026-06-27) — read this first when resuming.**
+**CURRENT STATUS (as of 2026-06-29) — read this first when resuming.**
 
-We are PLANNING the full storefront build. **No theme code has been written yet**
-and **nothing is built/deployed.** The only live theme work is the coming-soon page
-(commit `18fc2e1`). Last instruction from Steve: he is reviewing decisions in Cowork
-and asked Claude to **stand by** — do NOT start building until he gives the go-ahead.
+**POC3 is built.** A custom Liquid storefront (single-document SPA) exists in
+`templates/index.liquid` + `layout/theme.liquid`, driven by `assets/ci-catalog.json`
+(baked-in test data) and `assets/ci-storefront.css|js`. It is **committed to git, NOT
+pushed to Shopify.** The coming-soon gate (`layout/password.liquid`) is untouched and
+still active. Cart/checkout are mocked; sign-in/account/Loop portal are stubs.
 
-**To resume, read in this order:** `docs/storefront-plan.md` (reconciliation + open
-questions) → `docs/CremaItalia_ClaudeCode_Brief_v1.md` (HOW) →
-`docs/CremaItalia_ShopifyMagic_Prompt_v1.md` (business logic) →
-`docs/CremaItalia_POC_v2.html` (design/UX, open in browser).
+**Steve's plan:** vet POC3 thoroughly, iron out kinks, THEN build the real production
+store on the validated structure (real products + `crema_italia.*` metafields, real
+Shopify cart + Checkout, Loop selling plans + hosted portal, Shopify Functions discounts).
 
-**OPEN DECISIONS — must be resolved before/at the relevant build phase:**
-- [ ] **Subscription engine — UNRESOLVED.** Brief locks Recharge/Skio. Steve prefers
-  **Loop** (better pricing) and is evaluating it. Loop is Shopify-native (selling
-  plans + Shopify Checkout) and meets the subscription-specific requirements; the
-  sitewide subscriber-10%, Founding Member 12%, and Offerta stacking are **Shopify
-  Functions regardless of engine**. PLAN: build the product page/cart subscription UI
-  against Shopify's **native `selling_plan_groups`** (engine-portable), and lock the
-  engine before Phase 8 (account portal). Offered Steve a live pricing/feature matrix
-  (Loop vs Recharge vs Skio vs Shopify free) — not yet run.
-- [ ] **Discounting rules** — Steve is reviewing Magic-Prompt Parts 3–6 in Cowork;
-  rules may change. Do NOT hardcode discount logic until he confirms. Part 6's
-  stacking column is load-bearing (only intended stack: subscriber 10% + Offerta).
-- [ ] **La Bottega vs Supplies/Equipaggiamento** — pick the top-nav label before
-  building nav.
-- [ ] **Quiz + custom account portal** — confirm they are in launch scope (brief
-  Phases 8–9) vs fast-follow.
+**To preview POC3:** it must stay behind a login (store not live). Options —
+`shopify theme dev` (local, auth-gated) or `shopify theme push --unpublished` (hidden
+preview theme). **Do not push to Shopify without asking Steve first.**
 
-**NEXT STEP when greenlit:** follow the brief's 10-phase sequence, starting Phase 1
-(Shell): theme file structure, brand CSS/fonts/logo, flag rule + strip, sticky header
-nav (Shop · Trovare · La Bottega · About + Sign In + Start Your Tour), footer, empty
-page templates. Build a CUSTOM Liquid theme (no starter).
+**To resume, read in this order:** `docs/CremaItalia_POC_v3.html` (design/UX source of
+truth) → `Shopify_Magic_Build_Prompt_v3_FINAL.txt` (locked rules) → `00_PROJECT_BRIEF.md`
+(single source of truth) → this decision log (2026-06-29 entries).
+
+**RESOLVED decisions:** subscription engine = **Loop** (locked); theme = **custom
+Liquid**; display font = **Lora**; pricing = Magic-Prompt markup matrix; nav =
+**Shop ▾ · Roasters · About · Journal · Bottega**; quiz + taste profile = in scope.
+
+**OPEN / TO VET on POC3:**
+- [ ] Walk every page + interaction; collect kink list (Steve + Claude).
+- [ ] Confirm catalog test data (names, prices, copy) reads right.
+- [ ] **Discounting rules** — display logic in cart matches Magic-Prompt v3 (subscriber
+  10% / Founding 12% on Roccia·Sorpresa·Selezione only; +5% first-order stack; never
+  Offerta/Bottega). Verify before hardcoding anything in production.
+- [ ] Decide preview delivery (local dev vs unpublished theme) and whether to push.
+
+**NEXT STEP (production build, after POC3 is vetted):** follow the brief's phase
+sequence — real product/collection/metafield data model, per-shelf product templates,
+native selling_plan_groups (Loop) on Roccia, Shopify Functions for discounts, real cart
++ Checkout. Reuse POC3's CSS/JS/markup as the design system.
 
 ---
 

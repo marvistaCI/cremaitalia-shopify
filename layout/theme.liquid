@@ -7,7 +7,7 @@
 
   <title>
     {%- if template.name == 'index' -%}
-      {{ shop.name }} &mdash; {{ page_title }}
+      {{ shop.name }} &mdash; Italian Artisan Coffee, Imported Without Compromise
     {%- elsif page_title == blank -%}
       {{ shop.name }}
     {%- else -%}
@@ -19,24 +19,41 @@
     <meta name="description" content="{{ page_description | escape }}">
   {%- endif -%}
 
-  <!-- Google Fonts: Cormorant Garamond + Inter -->
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ 'ci-favicon-32.png' | asset_url }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ 'ci-favicon-16.png' | asset_url }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ 'ci-apple-touch-icon.png' | asset_url }}">
+
+  <!-- Google Fonts: Lora (display) + Inter (body). Display font reverted Cormorant -> Lora 2026-06-22. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@400;500;600&display=swap"
     rel="stylesheet"
   >
 
   {{ content_for_header }}
 
-  {{ 'crema-italia.css' | asset_url | stylesheet_tag }}
+  {{ 'ci-storefront.css' | asset_url | stylesheet_tag }}
+
+  <!-- POC3: baked-in test dataset location for the storefront JS. -->
+  <script>window.CI_CATALOG_URL = {{ 'ci-catalog.json' | asset_url | json }};</script>
 </head>
 
 <body>
-  <div class="page-wrapper">
-    {{ content_for_layout }}
-  </div>
+  <div class="flag-rule" aria-hidden="true"></div>
 
-  <script src="{{ 'crema-italia.js' | asset_url }}" defer></script>
+  {% render 'ci-header' %}
+  {% render 'ci-profile-banner' %}
+
+  {{ content_for_layout }}
+
+  {% render 'ci-store-footer' %}
+  <div class="flag-strip" aria-hidden="true"><div></div><div></div><div></div></div>
+
+  {% render 'ci-quiz-modal' %}
+  {% render 'ci-signin-modal' %}
+  <div class="toast" id="ci-toast" role="status" aria-live="polite"></div>
+
+  <script src="{{ 'ci-storefront.js' | asset_url }}" defer></script>
 </body>
 </html>

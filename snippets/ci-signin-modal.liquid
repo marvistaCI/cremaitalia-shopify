@@ -1,0 +1,28 @@
+{%- comment -%}
+  ci-signin-modal.liquid — POC sign-in / create-account.
+  In production this is replaced by Shopify customer accounts; subscriber/Founding-Member
+  status drives the discount display. Loop hosts the subscription portal (see account page).
+{%- endcomment -%}
+<div class="modal-overlay" id="signin-modal">
+  <div class="signin-modal">
+    <button class="modal-close" onclick="closeSignin()" aria-label="Close">&times;</button>
+    <h2>Your Account</h2>
+    <p class="subtitle">Sign in or create a profile.</p>
+    <div class="signin-tabs">
+      <button class="signin-tab active" onclick="switchTab('in')">Sign In</button>
+      <button class="signin-tab" onclick="switchTab('up')">Create Account</button>
+    </div>
+    <div id="tab-in">
+      <div class="form-field"><label>Email</label><input type="email" placeholder="you@example.com"></div>
+      <div class="form-field"><label>Password</label><input type="password" placeholder="Your password"></div>
+      <button class="btn btn-primary" style="width:100%" onclick="simulateSignIn()">Sign In</button>
+      <p class="note">Subscribers see their 10% benefit (12% for Founding Members) applied automatically across Roccia, Sorpresa, and Selezione once signed in.</p>
+    </div>
+    <div id="tab-up" style="display:none">
+      <div class="form-field"><label>Name</label><input type="text" placeholder="Your name"></div>
+      <div class="form-field"><label>Email</label><input type="email" placeholder="you@example.com"></div>
+      <div class="form-field"><label>Password</label><input type="password" placeholder="Choose a password"></div>
+      <button class="btn btn-primary" style="width:100%" onclick="simulateSignIn()">Create Account &amp; Save Profile</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<svg viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Lora:wght@500;600&family=Inter:wght@400;500&display=swap');
+
+      .wordmark {
+        font-family: 'Lora', 'Garamond', 'Georgia', serif;
+        font-size: 56px;
+        font-weight: 600;
+        fill: #3B1F12;
+        text-anchor: middle;
+        letter-spacing: 2px;
+      }
+
+      .tagline {
+        font-family: 'Inter', 'Helvetica Neue', 'Arial', sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        fill: #C46A1F;
+        text-anchor: middle;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+    </style>
+
+    <!-- Cup icon with tricolore arcs -->
+    <g id="cup-icon">
+      <!-- Cup body (cream/ivory) -->
+      <path d="M 200 120 Q 180 140 180 180 L 180 240 Q 180 260 200 260 L 300 260 Q 320 260 320 240 L 320 180 Q 320 140 300 120 Z"
+            fill="#FBF8F1" stroke="#3B1F12" stroke-width="2"/>
+
+      <!-- Crema swirl inside cup (espresso brown) -->
+      <circle cx="250" cy="180" r="45" fill="#6B4A38" opacity="0.7"/>
+      <path d="M 230 160 Q 250 150 270 165" stroke="#C46A1F" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+      <!-- Tricolore arcs (top-left to bottom-right) -->
+      <!-- Green arc (top-left) -->
+      <path d="M 240 100 A 80 80 0 0 1 280 105"
+            stroke="#0E7A3A" stroke-width="8" fill="none" stroke-linecap="round"/>
+
+      <!-- Red/Terracotta arc (right side) -->
+      <path d="M 310 160 A 70 70 0 0 1 305 250"
+            stroke="#C8342B" stroke-width="8" fill="none" stroke-linecap="round"/>
+
+      <!-- Cream/ivory accent arc (bottom) -->
+      <path d="M 200 270 A 60 60 0 0 1 270 275"
+            stroke="#FBF8F1" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.8"/>
+
+      <!-- Handle -->
+      <path d="M 320 160 Q 360 160 360 200 Q 360 240 320 240"
+            stroke="#3B1F12" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </g>
+  </defs>
+
+  <!-- Background -->
+  <rect width="500" height="600" fill="#FFFFFF"/>
+
+  <!-- Cup icon -->
+  <use href="#cup-icon" x="0" y="0"/>
+
+  <!-- Wordmark -->
+  <text x="250" y="340" class="wordmark">CREMA ITALIA</text>
+
+  <!-- Decorative line under wordmark -->
+  <line x1="180" y1="355" x2="320" y2="355" stroke="#3B1F12" stroke-width="1"/>
+
+  <!-- Tagline -->
+  <text x="250" y="385" class="tagline">Italian Artisan Coffee</text>
+</svg>
