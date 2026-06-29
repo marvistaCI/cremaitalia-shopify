@@ -439,7 +439,12 @@
       var eligibleSum = cart.reduce(function (s, it) { return s + (eligibleForSubscriberDiscount(it.shelf) ? it.price : 0); }, 0);
       discount = eligibleSum * rate;
       discountLabel = (session.foundingMember ? 'Founding Member 12%' : 'Subscriber 10%') + ' (Roccia · Sorpresa · Selezione)';
-      if (session.firstTime) { discount += subtotal * 0.05; discountLabel += ' + first-order 5%'; }
+      if (session.firstTime) {
+        // First-order +5% stacks on the first order only, on all shelves EXCEPT Bottega.
+        var firstTimeBase = cart.reduce(function (s, it) { return s + (it.shelf === 'bottega' ? 0 : it.price); }, 0);
+        discount += firstTimeBase * 0.05;
+        discountLabel += ' + first-order 5%';
+      }
     }
     // free shipping progress (one-time orders; subscriptions always free)
     var allSub = cart.every(function (it) { return it.sub; });
