@@ -296,6 +296,14 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   Coming-soon page (`layout/password.liquid` + `crema-italia.css|js`) left UNTOUCHED so the
   pre-launch gate still works. `shopify theme check`: 0 errors (11 warnings: Google-Fonts
   RemoteAsset + benign orphaned-snippet flags). Committed; NOT pushed to Shopify.
+- 2026-06-29 — **POC3 pushed to an UNPUBLISHED preview theme** (Steve approved a
+  login-gated preview). Theme: **"Crema Italia POC3 Preview"** id **151277174953** on
+  `crema-italia.myshopify.com`. Live `crema-italia-coming-soon-theme` (#150557294761)
+  is untouched and still the published theme. Preview is gated behind the store
+  password (storefront protection ON) and/or the Shopify admin login.
+  Preview URL: `https://crema-italia.myshopify.com?preview_theme_id=151277174953`
+  Editor: `https://crema-italia.myshopify.com/admin/themes/151277174953/editor`
+  To refresh the preview after edits: `shopify theme push --theme 151277174953`.
 
 ---
 
