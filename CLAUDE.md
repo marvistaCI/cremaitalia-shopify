@@ -62,10 +62,10 @@ artisans." When in doubt: fewer elements, more whitespace, smaller logo, larger 
 |------------------|----------|-----------------------------------------------|
 | Background — Cream    | `#FBF8F1` | Page background, hero sections, document body |
 | Surface — Ivory       | `#FFFFFF` | Tables, callouts, web cards on cream          |
-| Coffee — Deep Brown   | `#3B1F12` | Body text, H1, wordmark                       |
-| Espresso — Soft Brown | `#6B4A38` | Muted/secondary body, captions                |
-| Crema — Terracotta    | `#C46A1F` | H2, accents, links, key numbers, button fills |
-| Crema Light           | `#E8A86A` | Hover states, light fills, chart shades       |
+| Espresso — Brown      | `#55331B` | Body text, H1, wordmark (artist palette 2026-07-01) |
+| Espresso — Soft Brown | `#6B4A38` | Muted/secondary body, captions (interim; re-derive) |
+| Crema — Gold          | `#B88348` | H2, accents, links, key numbers, button fills (artist palette 2026-07-01) |
+| Crema Light           | `#E8A86A` | Hover states, light fills, chart shades (interim; re-derive from Crema Gold) |
 | Tricolore Green       | `#0E7A3A` | Thin rules only (top-left page rule, etc.)    |
 | Tricolore Red         | `#C8342B` | Thin rules only (top-right page rule, etc.)   |
 | Hairline (neutral)    | `#D9D2C2` | Dividers, table borders                       |
@@ -74,20 +74,36 @@ artisans." When in doubt: fewer elements, more whitespace, smaller logo, larger 
 
 **Tricolore colors are decorative rules, NEVER large fills.** Think: a pencil-thick
 rule across the top of the page, a 6mm strip at the foot of the cover. Never block
-colors. Crema Terracotta is for headings >= 14pt/18px and short bold-weight runs only —
-never run paragraph body copy in terracotta.
+colors. Crema Gold is for headings >= 14pt/18px and short bold-weight runs only —
+never run paragraph body copy in gold.
 
 Do not introduce new colors. If a chart or feature seems to need a new hue, derive it
 from Crema Light, Espresso, or a desaturated Tricolore Green.
 
+> **Palette revised 2026-07-01 (artist rebrand).** The finalized logo's spec sheet
+> (`Logo Assets/Art Files/CI Artwork Details.pdf`) sets Espresso Brown `#55331B` and
+> Crema Gold `#B88348` as the two hero tones (replacing the old `#3B1F12` / `#C46A1F`).
+> Green, Red, Cream unchanged. The muted `#6B4A38`, light `#E8A86A`, and hover `#9C6E3C`
+> tokens are interim harmonizations — re-derive from the new hero tones when the Brand
+> Standards PDF is rebuilt.
+
 ### 3.3 Typography
 | Role                | Family                  | Weights         | Use                              |
 |---------------------|-------------------------|-----------------|----------------------------------|
-| Display & Headings  | Cormorant Garamond      | 500/600 + italic 500/600 | Cover title, H1, H2 (Italian), wordmark |
-| Body & UI           | Inter                   | 400/500/600     | All body, tables, captions, UI, buttons |
+| Logo wordmark       | Montecatini Pro (Normale Semi-Bold) | — | Logo artwork ONLY — outlined in the files; commercial font, license unconfirmed |
+| Display & Headings  | Marcellus               | 400 (Regular)   | Cover title, H1, H2, web/doc headings (Google Font stand-in for Montecatini) |
+| Body & UI           | Inter                   | 400/500/600     | All body, tables, captions, UI, buttons, tagline |
 
 Load from Google Fonts. Web sizes: Hero 72px, H1 40px, H2 18px, H3 16px, Body 17px,
 Small/caption 14px, Eyebrow 12px (tracked +0.12em, uppercase).
+
+> **Type revised 2026-07-01 (artist rebrand).** The wordmark is set in **Montecatini Pro
+> (Normale Semi-Bold)** — a *commercial* font, already converted to outlines in the logo
+> files, so the artwork needs no font install. This supersedes the old Cormorant-Garamond
+> and the interim Lora display choice entirely. For live web/document headings use
+> **Marcellus** (free Google Font, the artist's recommended stand-in). Body stays Inter.
+> **TODO:** confirm Montecatini Pro licensing before using it for any live text beyond
+> the outlined logo. Marcellus has a single 400 weight — headings rely on size, not bold.
 
 Italic on display = Italian-language headings (English left, Italian right convention).
 **Italics carry meaning** — don't italicize for emphasis. Use bold for emphasis.
@@ -115,13 +131,17 @@ customary (8.82 oz).
 
 The mark is `Crema Italia(TM)`. We applied the TM mark today (June 2026) — Steve has not
 yet filed with USPTO but intends to. TM goes after the final "A" in "ITALIA" as a small
-superscript at cap-height. The `Logo Assets/` folder has all variants with TM already
-applied. **NEVER use the (R) symbol** until/unless USPTO registration issues.
+superscript at cap-height. The `Logo Assets/` folder (restructured 2026-07-01) holds the
+finalized artist mark with TM applied: master `.ai` in `Art Files/`, plus `EPS/`, `PDF/`,
+`SVG/`, `PNG/`, and generated `Web/` derivatives — in main / horizontal / favicon lockups,
+each in light and dark-background versions. **NEVER use the (R) symbol** until/unless
+USPTO registration issues.
 
 **Logo rules** (from brand standards):
 - Clear space: at least the height of the wordmark "C" on every side
 - Minimum size: 25mm print, 120px screen (favicon-only crop OK below 120px)
-- On dark backgrounds: use the knockout variant (`primary_knockout.png`)
+- On dark backgrounds: use the **dark-background lockup** (e.g. `PNG/CI Logo for Dark
+  Background - Transparent.png`), not the light mark recolored
 - Never stretch, rotate, drop-shadow, recolor the cup, or re-typeset the wordmark
 
 ---
@@ -304,6 +324,26 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   Preview URL: `https://crema-italia.myshopify.com?preview_theme_id=151277174953`
   Editor: `https://crema-italia.myshopify.com/admin/themes/151277174953/editor`
   To refresh the preview after edits: `shopify theme push --theme 151277174953`.
+- 2026-07-01 — **Artist rebrand: finalized logo + revised palette/type adopted.** A human
+  graphic artist delivered the finished mark (`Crema Italia Logo Files.zip`) — the durable
+  vector master (`.ai`) + matched EPS/PDF/SVG/PNG in main/horizontal/favicon lockups,
+  light + dark, ready for the USPTO TM filing. Actions: (a) archived the prior artwork to
+  `Brand and Marketing/_Archive/Pre-Artist_2026-07/` (provenance MANIFEST); (b) restructured
+  `Brand and Marketing/Logo Assets/` to the artist's layout (Art Files/EPS/PDF/SVG/PNG/Web)
+  with a canonical README — new set fully supersedes old; removed old flat logos, TM
+  Placement Options, Standard Company Logo (all archived). **Palette revised:** Espresso
+  Brown `#3B1F12`→`#55331B`, Crema Gold `#C46A1F`→`#B88348` (Green/Red/Cream unchanged).
+  **Type revised:** wordmark = Montecatini Pro (commercial, outlined in art); web/doc
+  display = **Marcellus** (Google) — supersedes the Cormorant→Lora saga entirely; body =
+  Inter. Propagated tokens through both theme worlds: `assets/ci-storefront.css`,
+  `assets/crema-italia.css` (live coming-soon), `assets/ci-catalog.json`, and the Google
+  Fonts loads in `layout/theme.liquid` + `layout/password.liquid`; swapped theme logo
+  images (`ci-logo.png`=horizontal, `ci-logo-knockout.png`=dark main, favicons, apple-touch,
+  `ci-og-image.png`, orphaned `ci-logo.svg`=new horizontal vector). Updated canonical
+  `Brand and Marketing/Crema Italia Brand CSS.css` (v1.1→v1.2). **NOT pushed to Shopify**
+  (live coming-soon page tokens changed but not deployed — needs Steve's push approval).
+  **Follow-ups:** (1) verify Montecatini Pro licensing; (2) rebuild Brand Standards PDF on
+  the new palette/type; (3) re-derive interim tints `#6B4A38`/`#E8A86A`/hover `#9C6E3C`.
 
 ---
 
@@ -352,8 +392,8 @@ native selling_plan_groups (Loop) on Roccia, Shopify Functions for discounts, re
 
 - **Brand standards PDF:** `<OneDrive>/CremaItalia LLC/Brand and Marketing/Crema_Italia_Brand_Standards.pdf`
 - **Brand CSS:** `<OneDrive>/CremaItalia LLC/Brand and Marketing/Crema Italia Brand CSS.css`
-- **Logo files (production):** `<OneDrive>/CremaItalia LLC/Brand and Marketing/Logo Assets/`
-- **TM placement reference:** `<OneDrive>/CremaItalia LLC/Brand and Marketing/TM Placement Options/`
+- **Logo files (production, finalized artist mark 2026-07-01):** `<OneDrive>/CremaItalia LLC/Brand and Marketing/Logo Assets/` — master `.ai` in `Art Files/`; EPS/PDF/SVG/PNG/Web lockups; see `Logo Assets/README.md`.
+- **Prior artwork (archived provenance):** `<OneDrive>/CremaItalia LLC/Brand and Marketing/_Archive/Pre-Artist_2026-07/` (includes the old TM Placement Options).
 - **Original coming-soon theme zip + spec:** `<OneDrive>/CremaItalia LLC/Operations/In USA/shopify/Initial Site Build Out/`
 - **Operations docs (FDA, banking, roaster prospects):** `<OneDrive>/CremaItalia LLC/Operations/`
 - **Legal (LLC formation):** `<OneDrive>/CremaItalia LLC/Legal/`

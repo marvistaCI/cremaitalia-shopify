@@ -5,7 +5,7 @@
 {%- endcomment -%}
 <header class="ci-header">
   <div class="header-inner">
-    <img class="ci-logo" src="{{ 'ci-logo.png' | asset_url }}" alt="Crema Italia" width="160" height="44"
+    <img class="ci-logo" src="{{ 'ci-logo.png' | asset_url }}" alt="Crema Italia" width="146" height="44"
          onclick="showPage('home')">
     <div class="header-right">
       <nav aria-label="Primary">
@@ -18,10 +18,10 @@
             <a role="menuitem" tabindex="0" onclick="showPage('offerta')"><span class="ita">Offerta</span><span class="men">Limited-time offers, on sale while inventory lasts.</span></a>
           </div>
         </div>
-        <button onclick="showPage('roasters')" id="nav-roasters">Roasters</button>
-        <button onclick="showPage('about')" id="nav-about">About</button>
-        <button onclick="showPage('journal')" id="nav-journal">Journal</button>
         <button onclick="showPage('bottega')" id="nav-bottega">Bottega</button>
+        <button onclick="showPage('roasters')" id="nav-roasters">Roasters</button>
+        <button onclick="showPage('journal')" id="nav-journal">Journal</button>
+        <button onclick="showPage('about')" id="nav-about">About</button>
       </nav>
       <button class="icon-btn" title="Search" aria-label="Search" onclick="showPage('shop')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
@@ -30,7 +30,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M6 6 5 3H2"></path></svg>
         <span class="cart-count" id="cart-count">0</span>
       </button>
-      <button class="sign-in-btn" id="signin-btn" onclick="handleAccountClick()"><span id="signin-label">Sign In</span></button>
+      <div class="account-wrap" id="account-wrap">
+        <button class="sign-in-btn" id="signin-btn" onclick="handleAccountClick()"><span id="signin-label">Sign In</span></button>
+        <div class="account-menu" role="menu">
+          <a role="menuitem" tabindex="0" onclick="showPage('account')">Account</a>
+          <a role="menuitem" tabindex="0" onclick="showSubscriptions()">Subscriptions</a>
+          <a role="menuitem" tabindex="0" onclick="signOut()">Sign out</a>
+        </div>
+      </div>
     </div>
   </div>
 </header>

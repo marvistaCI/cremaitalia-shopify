@@ -2,14 +2,14 @@
    Crema Italia — Storefront (POC3)
    Custom Liquid theme stylesheet. Brand tokens locked to
    Crema_Italia_Brand_Standards + brand.css v1.1.
-   Display font: Lora (font reversion 2026-06-22). Body: Inter.
+   Display font: Marcellus (2026-07-01 artist rebrand; wordmark art = Montecatini Pro, outlined). Body: Inter.
    Adapted from CremaItalia_POC_v3.html (design source of truth).
    ============================================================ */
 :root{
-  --ci-cream:#FBF8F1;--ci-ivory:#FFFFFF;--ci-coffee:#3B1F12;--ci-espresso:#6B4A38;
-  --ci-crema:#C46A1F;--ci-crema-hover:#A85715;--ci-crema-light:#E8A86A;
+  --ci-cream:#FBF8F1;--ci-ivory:#FFFFFF;--ci-coffee:#55331B;--ci-espresso:#6B4A38;
+  --ci-crema:#B88348;--ci-crema-hover:#9C6E3C;--ci-crema-light:#E8A86A;
   --ci-green:#0E7A3A;--ci-red:#C8342B;--ci-hairline:#D9D2C2;--ci-mute:#8C7E6A;--ci-ink-soft:#5A4A3F;
-  --ci-font-display:"Lora","Georgia","Garamond",serif;
+  --ci-font-display:"Marcellus","Georgia",serif;
   --ci-font-body:"Inter","Helvetica Neue","Arial",sans-serif;
   --ci-radius:8px;--ci-page-max:1120px;
 }
@@ -113,8 +113,10 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .section-head h2{font-family:var(--ci-font-display);font-weight:600;font-size:2rem;color:var(--ci-coffee)}
 
 /* ---- hero ---- */
-.hero{background:var(--ci-coffee);color:var(--ci-cream);padding:4rem 1.5rem;text-align:center}
+.hero{background:var(--ci-coffee);color:var(--ci-cream);padding:3.5rem 1.5rem 4rem;text-align:center}
 .hero-inner{max-width:720px;margin:0 auto}
+.hero-logo{display:block;height:96px;width:auto;margin:0 auto 1.5rem;max-width:80%}
+@media(max-width:640px){.hero-logo{height:72px;margin-bottom:1rem}}
 .hero h1{font-family:var(--ci-font-display);font-size:clamp(2.2rem,6vw,3.6rem);font-weight:600;color:var(--ci-cream);line-height:1.1;margin-bottom:.5rem}
 .hero h1 em{font-style:italic;color:var(--ci-crema-light)}
 .hero .subhead{font-family:var(--ci-font-display);font-style:italic;font-size:clamp(1.1rem,2.5vw,1.4rem);color:var(--ci-crema-light);margin:.75rem auto 1rem;max-width:560px}
@@ -140,12 +142,12 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .card.nh:hover{box-shadow:none}
 .card-img{width:100%;aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;font-family:var(--ci-font-display);font-style:italic;font-size:1.1rem;flex-direction:column;gap:.25rem;text-align:center;padding:1rem;background:var(--ci-hairline);color:var(--ci-espresso)}
 .r{background:linear-gradient(135deg,#2a1a0e,#6B4A38);color:var(--ci-crema-light)}
-.p{background:linear-gradient(135deg,#3B1F12,#8B5E3C);color:var(--ci-crema-light)}
+.p{background:linear-gradient(135deg,#55331B,#8B5E3C);color:var(--ci-crema-light)}
 .g{background:linear-gradient(135deg,#1a3a2a,#0E7A3A,#4a7a3a);color:#d4f0d4}
 .b{background:linear-gradient(135deg,#1a1a2a,#3a3a5a);color:#c8c8d8}
 .card-body{padding:1.25rem}
 .cs{display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .5rem;border-radius:3px;margin-bottom:.5rem}
-.sr{background:#3B1F12;color:var(--ci-cream)}
+.sr{background:#55331B;color:var(--ci-cream)}
 .ss{background:var(--ci-crema);color:var(--ci-cream)}
 .sl{background:#6B4A38;color:var(--ci-cream)}
 .so{background:#8C7E6A;color:var(--ci-cream)}
@@ -261,6 +263,31 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .badge-founding{display:inline-flex;align-items:center;gap:.4rem;background:var(--ci-coffee);color:var(--ci-cream);font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.25rem .65rem;border-radius:3px}
 .loop-slot{border:1.5px dashed var(--ci-crema);border-radius:var(--ci-radius);background:rgba(196,106,31,.05);padding:1.25rem;margin-top:1rem;font-size:.85rem;color:var(--ci-espresso)}
 .loop-slot strong{color:var(--ci-coffee)}
+.acct-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.85rem}
+.acct-actions .btn{font-size:.82rem;padding:.5rem 1rem}
+
+/* ---- inline text link (button styled as link) ---- */
+.inline-link{background:none;border:none;padding:0;cursor:pointer;font-family:var(--ci-font-body);font-weight:600;font-size:inherit;color:var(--ci-crema);text-decoration:underline;text-underline-offset:2px}
+.inline-link:hover{color:var(--ci-crema-hover)}
+
+/* ---- founding-member reverse banner ---- */
+.founding-banner{background:var(--ci-coffee);color:var(--ci-cream);border-radius:var(--ci-radius);padding:.9rem 1.25rem;margin:1.25rem 0;font-size:.9rem;line-height:1.5;border-top:2px solid var(--ci-crema)}
+.founding-banner strong{color:var(--ci-crema-light)}
+
+/* ---- flavor descriptor (info only, shown under selected flavor) ---- */
+.flavor-desc{display:none;font-size:.8rem;font-style:italic;color:var(--ci-espresso);margin-top:.5rem;max-width:46ch}
+.flavor-desc.show{display:block}
+
+/* ---- save-to-profile ---- */
+.save-profile{display:none;padding-top:.6rem;border-top:1px solid var(--ci-hairline);font-size:.85rem}
+.save-profile.show{display:block}
+
+/* ---- account dropdown (signed-in) ---- */
+.account-wrap{position:relative}
+.account-menu{display:none;position:absolute;top:100%;right:0;background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);box-shadow:0 8px 24px rgba(59,31,18,.12);min-width:170px;padding:.4rem;z-index:200;margin-top:.35rem}
+.account-wrap.is-signed-in:hover .account-menu,.account-wrap.is-signed-in:focus-within .account-menu{display:block}
+.account-menu a{display:block;padding:.5rem .7rem;border-radius:6px;cursor:pointer;text-decoration:none;font-size:.85rem;color:var(--ci-espresso)}
+.account-menu a:hover{background:var(--ci-cream);color:var(--ci-crema)}
 
 /* ---- cart ---- */
 .cart-banner{background:var(--ci-coffee);color:var(--ci-cream);border-radius:var(--ci-radius);padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.9rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
@@ -273,31 +300,4 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .cart-line h4{font-family:var(--ci-font-display);font-size:1.05rem;font-weight:600;color:var(--ci-coffee)}
 .cart-empty{text-align:center;padding:3rem 1rem;color:var(--ci-mute)}
 .cart-summary{background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);padding:1.25rem;margin-top:1rem}
-.cart-summary .row{display:flex;justify-content:space-between;font-size:.9rem;padding:.3rem 0;color:var(--ci-espresso)}
-.cart-summary .row.total{border-top:1px solid var(--ci-hairline);margin-top:.5rem;padding-top:.65rem;font-weight:600;font-size:1.05rem;color:var(--ci-coffee)}
-.tag-pill{display:inline-block;font-size:.72rem;background:rgba(196,106,31,.1);color:var(--ci-crema-hover);border:1px solid var(--ci-crema-light);padding:.15rem .5rem;border-radius:20px;margin:.15rem .15rem 0 0}
-
-/* ---- footer ---- */
-.ci-footer{border-top:1px solid var(--ci-hairline);padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.8rem;color:var(--ci-mute);background:var(--ci-cream)}
-.footer-links{display:flex;gap:1rem;flex-wrap:wrap}
-.footer-links button{background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--ci-mute);text-decoration:underline;text-underline-offset:2px;font-family:var(--ci-font-body)}
-.footer-links button:hover{color:var(--ci-crema)}
-
-/* ---- toast ---- */
-.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(120%);background:var(--ci-coffee);color:var(--ci-cream);padding:.75rem 1.25rem;border-radius:var(--ci-radius);font-size:.85rem;z-index:600;transition:transform 300ms;box-shadow:0 8px 24px rgba(59,31,18,.25)}
-.toast.show{transform:translateX(-50%) translateY(0)}
-
-/* ---- responsive ---- */
-@media(max-width:760px){.pd-grid{grid-template-columns:1fr}.founder-grid{grid-template-columns:1fr}}
-@media(max-width:640px){
-  .header-inner{padding:.5rem 1rem}
-  nav button{font-size:.75rem;padding:.3rem .45rem}
-  .ci-main{padding:1.5rem 1rem 3rem}
-  .roaster-row{grid-template-columns:1fr}
-  .roaster-portrait{width:100%}
-  .dark-hero{padding:2rem 1rem 1.5rem}
-  .tour-hero{padding:1.5rem}
-  .shop-menu{position:static;box-shadow:none;min-width:0}
-  .cart-line{grid-template-columns:48px 1fr}
-}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.cart-summary .row{display:flex;justify

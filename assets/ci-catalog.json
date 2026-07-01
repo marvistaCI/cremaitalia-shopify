@@ -317,7 +317,7 @@
       "subscription": false,
       "sizes": [{"size": "3 × 100g", "price": 77.70}],
       "price_unit": "/3×100g",
-      "img": {"cls": "p", "style": "background:linear-gradient(135deg,#5a3a18,#C46A1F)", "label": "Tour d'Italia 1"},
+      "img": {"cls": "p", "style": "background:linear-gradient(135deg,#5a3a18,#B88348)", "label": "Tour d'Italia 1"},
       "freshness_note": "Freshness-gated · assembled to order",
       "blurb": "Three 100g bags, three roasters, assembled on-demand. Printed tasting card included.",
       "long": "A journey across regions: North, Central, South. Three 100g bags — Gardelli Ethiopia, La Sosta Guatemala, Fusari Colombia — boxed with a tasting card and assembled to order so every bag ships fresh.",
