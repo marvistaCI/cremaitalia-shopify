@@ -424,42 +424,72 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 
 ## 10. Open questions / TODO
 
-**CURRENT STATUS (as of 2026-06-29) — read this first when resuming.**
+**POC3 — CURRENT STATE (as of 2026-07-02) — read this first when resuming.**
 
-**POC3 is built.** A custom Liquid storefront (single-document SPA) exists in
-`templates/index.liquid` + `layout/theme.liquid`, driven by `assets/ci-catalog.json`
-(baked-in test data) and `assets/ci-storefront.css|js`. It is **committed to git, NOT
-pushed to Shopify.** The coming-soon gate (`layout/password.liquid`) is untouched and
-still active. Cart/checkout are mocked; sign-in/account/Loop portal are stubs.
+**What POC3 is.** A custom Liquid storefront built as a single-document SPA:
+`templates/index.liquid` (every page is a `.page` block toggled by `showPage()`) +
+`layout/theme.liquid` (chrome), styled by `assets/ci-storefront.css`, behavior in
+`assets/ci-storefront.js`, and driven by a **baked-in test catalog** in
+`assets/ci-catalog.json` (5 roasters, 9 Roccia SKUs, 1 Sorpresa Tour, 2 Selezione,
+1 Offerta example, 4 Bottega). Chrome/header/footer/modals are in `snippets/ci-*`.
+The coming-soon gate (`layout/password.liquid` + `assets/crema-italia.css|js`) is
+**untouched** and still what the public sees.
 
-**Steve's plan:** vet POC3 thoroughly, iron out kinks, THEN build the real production
-store on the validated structure (real products + `crema_italia.*` metafields, real
-Shopify cart + Checkout, Loop selling plans + hosted portal, Shopify Functions discounts).
+**Where it's deployed.** Pushed to an **unpublished** preview theme
+**"Crema Italia POC3 Preview" id `151277174953`** on `crema-italia.myshopify.com`.
+The **live** `crema-italia-coming-soon-theme` (#150557294761) is untouched. Preview is
+gated behind the store password / admin login. Latest work is committed to git and
+pushed to GitHub (`origin/main`). **Ask Steve before any Shopify push.**
+- Preview: `https://crema-italia.myshopify.com?preview_theme_id=151277174953`
+- Editor: `https://crema-italia.myshopify.com/admin/themes/151277174953/editor`
+- Refresh after edits: `shopify theme push --theme 151277174953`
 
-**To preview POC3:** it must stay behind a login (store not live). Options —
-`shopify theme dev` (local, auth-gated) or `shopify theme push --unpublished` (hidden
-preview theme). **Do not push to Shopify without asking Steve first.**
+**Brand (current — Brand Standards v2.0, artist rebrand 2026-07-01).** Palette:
+Espresso `#55331B`, Crema Gold `#B88348`, hover `#9C6E3C`, green/red/cream unchanged.
+Display font **Marcellus** (Google Font stand-in for the outlined Montecatini wordmark);
+body **Inter**. Finalized artist logo in `assets/ci-logo*.png|svg` (hero uses the
+knockout). No retired `#3B1F12`/`#C46A1F` or Cormorant/Lora tokens anywhere.
 
-**To resume, read in this order:** `docs/CremaItalia_POC_v3.html` (design/UX source of
-truth) → `Shopify_Magic_Build_Prompt_v3_FINAL.txt` (locked rules) → `00_PROJECT_BRIEF.md`
-(single source of truth) → this decision log (2026-06-29 entries).
+**What's REAL vs MOCKED (the production seams).**
+- REAL: full page set, brand system, 3-axis Shop filter, taste quiz (first-visit
+  auto-launch), roaster profiles, product detail, all copy, responsive layout.
+- MOCKED: cart is client-side (merges identical lines, −/qty/+ stepper, discount +
+  free-ship math for display only); checkout is a toast; sign-in is simulated
+  (assumes a Founding-Member subscriber); account "Manage subscription" is a **Loop
+  portal stub**. Search `<!-- PROD -->` / `<!-- LOOP -->` and `PROD:` / `LOOP:` in the
+  code for every swap-point.
 
-**RESOLVED decisions:** subscription engine = **Loop** (locked); theme = **custom
-Liquid**; display font = **Lora**; pricing = Magic-Prompt markup matrix; nav =
-**Shop ▾ · Roasters · About · Journal · Bottega**; quiz + taste profile = in scope.
+**Done so far:** POC3 build → feedback-batch #1 (nav reorder, hero logo + headline,
+section reorder, shelf/Model/Promise copy, Bold & Spiced + flavor descriptors,
+save-to-profile, profile-persists-to-shelves, account taste card + dropdown, Founding
+banner, cart guest 5% nudge) → cart quantity/stepper + dollars.cents everywhere →
+hero logo enlarged + green-white-red tricolore. All on the v2.0 brand. `theme-check`: 0
+errors. (See §9 decision log 2026-06-29 → 2026-07-02, and git log.)
 
-**OPEN / TO VET on POC3:**
-- [ ] Walk every page + interaction; collect kink list (Steve + Claude).
-- [ ] Confirm catalog test data (names, prices, copy) reads right.
-- [ ] **Discounting rules** — display logic in cart matches Magic-Prompt v3 (subscriber
-  10% / Founding 12% on Roccia·Sorpresa·Selezione only; +5% first-order stack; never
-  Offerta/Bottega). Verify before hardcoding anything in production.
-- [ ] Decide preview delivery (local dev vs unpublished theme) and whether to push.
+**RESOLVED decisions (locked):** subscription engine = **Loop**; theme = **custom
+Liquid** (no starter); display font = **Marcellus**; pricing = Magic-Prompt markup
+matrix; nav = **Shop ▾ · Bottega · Roasters · Journal · About**; quiz + taste profile =
+in scope; kept per Steve: no exclamation marks, Sorpresa 100g wording, subscription
+toggle default-unchecked.
 
-**NEXT STEP (production build, after POC3 is vetted):** follow the brief's phase
-sequence — real product/collection/metafield data model, per-shelf product templates,
-native selling_plan_groups (Loop) on Roccia, Shopify Functions for discounts, real cart
-+ Checkout. Reuse POC3's CSS/JS/markup as the design system.
+**Coordination (2026-07-02).** Code owns this repo; Cowork must check with Code and
+Code takes precedence (see the callout near the top of this file). The **cross-surface
+decision log** lives in OneDrive `CremaItalia LLC\Coordination\DECISIONS_LOG.md` —
+read it when resuming.
+
+**OPEN / TO VET:**
+- [ ] Steve reviewing POC3; collect the next kink/change batch.
+- [ ] Deferred: no-waste copy rewrite on the Promise page (pending 3PL-city research).
+- [ ] Optional: `git tag poc3` to mark this milestone before POC4.
+
+**NEXT (production build, after POC3 is vetted):** real product/collection/metafield
+data model (`crema_italia.*`), per-shelf product templates, native
+`selling_plan_groups` (Loop) on Roccia, Shopify Functions for discounts, real Shopify
+cart + Checkout. Reuse POC3's CSS/JS/markup as the design system.
+
+**To resume, read in this order:** this block → `docs/CremaItalia_POC_v3.html` (design
+source, now on v2.0 brand) → `Shopify_Magic_Build_Prompt_v3_FINAL.txt` (locked rules) →
+`00_PROJECT_BRIEF.md` (single source of truth) → `Coordination\DECISIONS_LOG.md`.
 
 ---
 
