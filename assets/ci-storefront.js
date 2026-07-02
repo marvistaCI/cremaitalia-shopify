@@ -44,7 +44,7 @@
   // ---------- helpers ----------
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  function money(n) { return '$' + (Number(n) % 1 === 0 ? Number(n).toFixed(0) : Number(n).toFixed(2)); }
+  function money(n) { return '$' + Number(n).toFixed(2); }
   function imgStyle(img) { return img && img.style ? ' style="' + img.style + '"' : ''; }
   function imgCls(img) { return img && img.cls ? img.cls : ''; }
 
@@ -499,17 +499,33 @@
     var p = byHandle[handle];
     if (!p) return;
     var s = (p.sizes || []).filter(function (x) { return x.size === size; })[0] || p.sizes[0];
-    cart.push({ handle: handle, title: p.display_title, shelf: p.shelf, size: s.size, price: s.price, img: p.img, sub: !!isSub, cadence: cadence });
+    // Merge into an existing line only when variant AND selling plan match — a one-time
+    // bag and a subscription of the same bag stay separate rows (different selling plans),
+    // exactly as Shopify treats them.
+    var existing = cart.filter(function (it) {
+      return it.handle === handle && it.size === s.size && it.sub === !!isSub && (it.cadence || null) === (cadence || null);
+    })[0];
+    if (existing) { existing.qty += 1; }
+    else { cart.push({ handle: handle, title: p.display_title, shelf: p.shelf, size: s.size, price: s.price, img: p.img, sub: !!isSub, cadence: cadence, qty: 1 }); }
     updateCartCount();
     renderCart();
     toast(isSub ? 'Added — Roccia subscription, every ' + cadence + ' weeks.' : 'Added to your bag.');
   };
   window.removeFromCart = function (idx) { cart.splice(idx, 1); updateCartCount(); renderCart(); };
+  window.changeQty = function (idx, delta) {
+    var it = cart[idx]; if (!it) return;
+    it.qty = (it.qty || 1) + delta;
+    if (it.qty < 1) cart.splice(idx, 1);
+    updateCartCount();
+    renderCart();
+  };
+  function cartUnits() { return cart.reduce(function (n, it) { return n + (it.qty || 1); }, 0); }
   function updateCartCount() {
     var el = $('cart-count');
     if (!el) return;
-    el.textContent = cart.length;
-    el.classList.toggle('show', cart.length > 0);
+    var units = cartUnits();
+    el.textContent = units;
+    el.classList.toggle('show', units > 0);
   }
   function eligibleForSubscriberDiscount(shelf) { return shelf === 'roccia' || shelf === 'sorpresa' || shelf === 'selezione'; }
   function renderCart() {
@@ -526,18 +542,17 @@
     if (!session.signedIn) {
       html += '<div class="cart-banner"><span>Create an account or sign in to unlock your one-time 5% first-purchase discount — plus subscriber benefits of 10% off Roccia, Sorpresa, and Selezione.</span><button onclick="openSignin()">Sign in</button></div>';
     }
-    // discount math
-    var subtotal = 0, hasOneTimeRoccia = false;
-    cart.forEach(function (it) { subtotal += it.price; if (it.shelf === 'roccia' && !it.sub) hasOneTimeRoccia = true; });
+    // discount math (line total = unit price × quantity)
+    var subtotal = cart.reduce(function (s, it) { return s + it.price * (it.qty || 1); }, 0);
     var discount = 0, discountLabel = '';
     if (session.signedIn && session.subscriber) {
       var rate = session.foundingMember ? 0.12 : 0.10;
-      var eligibleSum = cart.reduce(function (s, it) { return s + (eligibleForSubscriberDiscount(it.shelf) ? it.price : 0); }, 0);
+      var eligibleSum = cart.reduce(function (s, it) { return s + (eligibleForSubscriberDiscount(it.shelf) ? it.price * (it.qty || 1) : 0); }, 0);
       discount = eligibleSum * rate;
       discountLabel = (session.foundingMember ? 'Founding Member 12%' : 'Subscriber 10%') + ' (Roccia · Sorpresa · Selezione)';
       if (session.firstTime) {
         // First-order +5% stacks on the first order only, on all shelves EXCEPT Bottega.
-        var firstTimeBase = cart.reduce(function (s, it) { return s + (it.shelf === 'bottega' ? 0 : it.price); }, 0);
+        var firstTimeBase = cart.reduce(function (s, it) { return s + (it.shelf === 'bottega' ? 0 : it.price * (it.qty || 1)); }, 0);
         discount += firstTimeBase * 0.05;
         discountLabel += ' + first-order 5%';
       }
@@ -553,11 +568,17 @@
 
     // lines
     cart.forEach(function (it, i) {
+      var qty = it.qty || 1;
       html += '<div class="cart-line">' +
         '<div class="cart-line-img card-img ' + imgCls(it.img) + '"' + imgStyle(it.img) + '>' + esc(it.img ? it.img.label.split(' · ')[0] : '') + '</div>' +
         '<div><h4>' + esc(it.title) + '</h4>' +
-        '<div class="rn">' + esc(it.size) + (it.sub ? ' · <span class="tag-pill">Roccia subscription · every ' + esc(it.cadence) + ' weeks</span>' : ' · One-time') + '</div></div>' +
-        '<div style="text-align:right"><div class="cp">' + money(it.price) + '</div>' +
+        '<div class="rn">' + esc(it.size) + (it.sub ? ' · <span class="tag-pill">Roccia subscription · every ' + esc(it.cadence) + ' weeks</span>' : ' · One-time') + '</div>' +
+        '<div class="qty-stepper"><button onclick="changeQty(' + i + ',-1)" aria-label="Decrease quantity">&minus;</button>' +
+        '<span class="qty-n">' + qty + '</span>' +
+        '<button onclick="changeQty(' + i + ',1)" aria-label="Increase quantity">+</button></div>' +
+        '</div>' +
+        '<div style="text-align:right"><div class="cp">' + money(it.price * qty) + '</div>' +
+        (qty > 1 ? '<div class="csz">' + money(it.price) + ' each</div>' : '') +
         '<button class="skip-link" onclick="removeFromCart(' + i + ')">Remove</button></div>' +
         '</div>';
     });
