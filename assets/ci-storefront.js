@@ -556,4 +556,94 @@
       html += '<div class="cart-line">' +
         '<div class="cart-line-img card-img ' + imgCls(it.img) + '"' + imgStyle(it.img) + '>' + esc(it.img ? it.img.label.split(' · ')[0] : '') + '</div>' +
         '<div><h4>' + esc(it.title) + '</h4>' +
-        
+        '<div class="rn">' + esc(it.size) + (it.sub ? ' · <span class="tag-pill">Roccia subscription · every ' + esc(it.cadence) + ' weeks</span>' : ' · One-time') + '</div></div>' +
+        '<div style="text-align:right"><div class="cp">' + money(it.price) + '</div>' +
+        '<button class="skip-link" onclick="removeFromCart(' + i + ')">Remove</button></div>' +
+        '</div>';
+    });
+
+    // summary
+    // PROD: Bottega ships from a separate source (not the coffee 3PL), so in production it gets
+    // its own Shopify shipping profile/rate and Shopify sums each source. This POC uses one
+    // unified estimate. Sales tax is calculated by Shopify Tax at checkout (nexus + address).
+    var shipping = (allSub || subtotal >= FREE_SHIP_THRESHOLD) ? 0 : 8.5;
+    var total = subtotal - discount + shipping;
+    html += '<div class="cart-summary">' +
+      '<div class="row"><span>Subtotal</span><span>' + money(subtotal) + '</span></div>' +
+      (discount > 0 ? '<div class="row"><span>' + esc(discountLabel) + '</span><span>-' + money(discount) + '</span></div>' : '') +
+      '<div class="row"><span>Estimated shipping</span><span>' + (shipping === 0 ? 'Free' : money(shipping)) + '</span></div>' +
+      '<div class="row"><span>Estimated tax</span><span>calculated at checkout</span></div>' +
+      '<div class="row total"><span>Total</span><span>' + money(total) + '</span></div>' +
+      '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="toast(\'This is a preview — checkout is Shopify Checkout on the live store.\')">Checkout</button>' +
+      (!session.signedIn ? '<p class="note" style="text-align:center;margin-top:.6rem">You can check out as a guest, or create an account to keep your 5% and manage subscriptions.</p>' : '') +
+      '<p class="note" style="text-align:center">No promo code field — earned discounts apply automatically when signed in or via a personal link.</p>' +
+      '</div>';
+    el.innerHTML = html;
+  }
+
+  // ---------- account (mock; Loop portal slot) ----------
+  function renderAccount() {
+    var el = $('account-view');
+    if (!el) return;
+    if (!session.signedIn) { el.innerHTML = '<p class="prose">Please <button class="back-btn" style="margin:0" onclick="openSignin()">sign in</button> to view your account.</p>'; return; }
+    $('account-greeting').textContent = 'Buongiorno, ' + session.name;
+    var profHtml = (profileActive || savedTaste) ? tasteTagsHtml(savedTaste || activeTaste) : '';
+    el.innerHTML =
+      '<div class="acct-grid">' +
+        '<div class="acct-card"><h3>Membership</h3>' +
+          (session.foundingMember ? '<span class="badge-founding">Founding Member · No. 087</span>' : '<span class="tag-pill">Active subscriber</span>') +
+          '<p class="prose" style="margin-top:.75rem">Your ' + (session.foundingMember ? '12%' : '10%') + ' benefit applies automatically across Roccia, Sorpresa, and Selezione. Offerta and Bottega are never discounted.</p></div>' +
+        '<div class="acct-card"><h3>Taste profile</h3>' +
+          (profHtml
+            ? '<div class="tags" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.25rem">' + profHtml + '</div>' +
+              '<div class="acct-actions"><button class="btn btn-primary" onclick="applySavedProfile()">Apply to Shop</button><button class="btn btn-secondary" onclick="openQuiz()">Change</button></div>'
+            : '<p class="prose">Take the taste quiz to set your profile. <button class="inline-link" onclick="openQuiz()">Start</button></p>') +
+          '<p class="note">Stored to your account and used to pre-filter the Shop.</p></div>' +
+        '<div class="acct-card"><h3>Recent orders</h3>' +
+          '<p class="prose" style="margin:0">Tour d\'Italia 1 — shipped 2026-06-12</p>' +
+          '<p class="prose" style="margin:.25rem 0 0">Gardelli Ethiopia Bombe 250g — delivered 2026-05-28</p></div>' +
+      '</div>' +
+      '<div class="section-head" id="acct-subs"><p class="eyebrow">Roccia subscription</p><h2>Manage your subscription</h2></div>' +
+      '<div class="loop-slot"><strong>Loop customer portal mounts here.</strong> Pause, skip, swap roaster / SKU / bag-size (up to 48 hours before lock), change cadence, or cancel — all self-service, no fee. ' +
+      'On the live store this is Loop\'s hosted portal (passwordless login) embedded as a theme app block. ' +
+      '<!-- LOOP: replace this slot with the Loop customer-portal app block / link. --></div>';
+  }
+
+  // ---------- toast ----------
+  window.toast = function (msg) {
+    var t = $('ci-toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(window.__ciToast);
+    window.__ciToast = setTimeout(function () { t.classList.remove('show'); }, 2600);
+  };
+
+  // ---------- boot ----------
+  function boot() {
+    // close any modal on overlay click
+    var overlays = document.querySelectorAll('.modal-overlay');
+    for (var i = 0; i < overlays.length; i++) {
+      overlays[i].addEventListener('click', function (e) { if (e.target === this) this.classList.remove('active'); });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { closeQuiz(); closeSignin(); }
+    });
+
+    // First-visit taste quiz — auto-launch once, then remember dismissal.
+    try { if (!localStorage.getItem('ci_quiz_seen')) openQuiz(); } catch (e) {}
+
+    var url = window.CI_CATALOG_URL;
+    if (!url) { console.warn('CI_CATALOG_URL missing'); return; }
+    fetch(url).then(function (r) { return r.json(); }).then(function (data) {
+      CATALOG = data;
+      (CATALOG.products || []).forEach(function (p) { byHandle[p.handle] = p; });
+      (CATALOG.roasters || []).forEach(function (r) { roasterByHandle[r.handle] = r; });
+      renderAll();
+      renderCart();
+    }).catch(function (err) { console.error('Catalog load failed', err); });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();

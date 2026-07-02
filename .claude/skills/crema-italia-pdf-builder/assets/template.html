@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Crema Italia — Document Title</title>
+
+  <!-- 1) Local brand fonts (Marcellus + Inter). Bundled in this skill's assets/.
+          Copy fonts.css and the fonts/ folder next to your HTML, or adjust
+          the href to point at them. -->
+  <link rel="stylesheet" href="fonts.css">
+
+  <!-- 2) The project brand stylesheet = single source of truth for palette,
+          type scale, and components. Link it; never copy/duplicate it.
+          Adjust the relative path to wherever your HTML sits in the project. -->
+  <link rel="stylesheet" href="../../Brand and Marketing/Crema Italia Brand CSS.css">
+
+  <style>
+    /* Page-level print setup (WeasyPrint reads @page). Document-specific
+       overrides go here; structural styling comes from the brand stylesheet. */
+    @page {
+      size: Letter;
+      margin: 18mm 16mm 16mm 16mm;
+    }
+    body { background: var(--ci-ivory); }   /* white paper for print */
+    /* Marcellus has one weight; hierarchy is by size. Body is Inter. */
+    h1, h2, h3 { font-family: var(--ci-font-display); font-weight: 400; }
+    h2 { font-family: var(--ci-font-body); font-weight: 600; color: var(--ci-crema); }
+  </style>
+</head>
+<body>
+
+  <header class="ci-header">
+    <!-- Current logo (horizontal lockup). Dark ground? use the dark-background PNG. -->
+    <img class="ci-logo" src="../../Brand and Marketing/Logo Assets/PNG/CI Horizontal Logo - Transparent.png" alt="Crema Italia">
+    <span class="eyebrow">Document Type</span>
+  </header>
+  <div class="flag-rule"><span></span><span></span><span></span></div>
+
+  <main class="ci-page">
+    <h1 class="ci-hero">Document Title</h1>
+    <p class="ci-hero-subtitle">A short subtitle in Marcellus.</p>
+
+    <h2>Section heading</h2>
+    <p>Body copy in Inter. Replace this with real content. Use the brand
+      components — callouts, tables, cards — instead of bespoke styling.</p>
+
+    <div class="callout">
+      <p>Use callouts for key notes. Pull styling from the brand stylesheet.</p>
+    </div>
+
+    <table class="ci-table">
+      <thead><tr><th>Column</th><th>Column</th></tr></thead>
+      <tbody>
+        <tr><td>Cell</td><td>Cell</td></tr>
+        <tr><td>Cell</td><td>Cell</td></tr>
+      </tbody>
+    </table>
+  </main>
+
+  <div class="flag-strip"><span></span><span></span><span></span></div>
+  <footer class="ci-footer">
+    <span>Crema Italia, LLC</span>
+    <!-- Brand-version stamp: update when built against a newer Brand Standards. -->
+    <span class="muted">v1 · Built to Brand Standards v2.0</span>
+  </footer>
+
+</body>
+</html>

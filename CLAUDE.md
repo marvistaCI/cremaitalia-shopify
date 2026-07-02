@@ -173,6 +173,41 @@ lowercase-with-hyphens for CSS classes (`.hero-section__title`), camelCase for J
 - **Never** use "hand-picked," "world-class," "exclusive," or other e-commerce-loud
   language in brand copy
 - **Never** italicize for emphasis (use bold); italics are reserved for Italian-language
+- **Never** ship an edited Crema Italia document still on an old brand version (see §6.1)
+
+---
+
+## 6.1 Brand-current-on-edit (mandatory best practice)
+
+**Rule:** any time we materially edit a Crema Italia artifact — brand doc, vendor
+sheet, roaster guide, deck, PDF, letterhead, web page, email template — we bring it
+fully up to the **current** brand standards *in the same pass*, before saving. Never
+leave a document you just touched on a superseded palette, font, or logo.
+
+"Current" is defined by exactly two files, named in the §11 reference index:
+1. **Brand Standards** — the greatest-version `Crema_Italia_Brand_Standards_vX.Y.pdf`
+   (today: **v2.0**).
+2. **Brand CSS** — `Crema Italia Brand CSS.css` (today: **v1.2**).
+
+**The refresh checklist (run on every edited doc):**
+- Palette hexes match current (today Espresso `#55331B`, Crema Gold `#B88348`; green/
+  red/cream unchanged). No retired hexes (`#3B1F12`, `#C46A1F`).
+- Fonts: display = Marcellus, body = Inter; wordmark art = Montecatini (logo only).
+  No Cormorant/Lora.
+- Logo: current lockup from `Logo Assets/` (right light/dark version), ™ not ®.
+- Footer line + contrast rules (gold large-only) honored.
+
+**How we keep it honest — the brand-version stamp.** Every generated doc carries, in
+its footer or metadata, the brand version it was built against, e.g.
+`Built to Brand Standards v2.0`. On the next edit, compare that stamp to the current
+version in §11: if it's behind, refresh before doing anything else. The stamp turns
+"did anyone remember?" into a one-line check anyone (or any agent) can verify.
+
+**If a full refresh is genuinely out of scope** for a given edit, do NOT silently
+leave it stale — call out the drift to Steve and log it as a follow-up.
+
+> When the Brand Standards or Brand CSS version changes, bump the "today:" values in
+> this section and the §11 reference index so "current" always points somewhere real.
 
 ---
 
@@ -344,6 +379,34 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   (live coming-soon page tokens changed but not deployed — needs Steve's push approval).
   **Follow-ups:** (1) verify Montecatini Pro licensing; (2) rebuild Brand Standards PDF on
   the new palette/type; (3) re-derive interim tints `#6B4A38`/`#E8A86A`/hover `#9C6E3C`.
+- 2026-07-01 — **Brand Standards rebuilt → v2.0** (follow-up #2 above, DONE). Rebuilt the
+  Brand & Document Standards from the v1.0 PDF (which had no editable source) as an editable
+  HTML/CSS master + WeasyPrint PDF, per the crema-italia-pdf-builder skill. New palette
+  (#55331B/#B88348), Marcellus display (Montecatini for wordmark art only), corrected
+  contrast guidance (**Crema Gold is 3.1:1 on cream — large-display/accent only**, stricter
+  than the old terracotta), and the note that **Marcellus is roman-only** so the EN/IT cue is
+  now the eyebrow label, not italic display type. Files in `Brand and Marketing/`:
+  `Crema_Italia_Brand_Standards_v2.0.pdf` + `.html` source + `fonts.css` + local Marcellus/
+  Inter `.ttf` in `assets/fonts/`. v1.0 archived. Font licensing verdict: Montecatini Pro is
+  a Tipofili/Louise Fili commercial face — logo art is outlined so no license needed; only a
+  desktop+webfont license (Adobe Fonts/CC easiest) is required to set live Montecatini text,
+  which we avoid by using Marcellus. **Still open:** re-derive interim tints; refresh the
+  Vendor Intro Sheets + Roaster Guides onto the new brand.
+- 2026-07-02 — **Feedback-batch #1 executed on POC3 and reconciled with the 2026-07-01
+  brand refresh.** Applied Steve's agreed change list: nav reorder (Shop · Bottega ·
+  Roasters · Journal · About); hero logo (new knockout art) + new headline; home section
+  reorder (four shelves → Featured Tour); shelf/Model/Promise copy; flavor "Earthy &
+  Complex" → "Bold & Spiced" + on-select italic descriptors; Save-to-profile link; taste
+  profile persists onto shelf pages; account taste-profile card (Apply/Change) + account
+  dropdown (Account/Subscriptions/Sign out); Roccia "(and one-time ordering)", benefits
+  restate, reverse-color Founding-Member banner ("172 of 222"); Promise freshness text +
+  "help you find"; cart guest first-purchase-5% nudge; quiz first-visit auto-launch w/
+  localStorage guard. Kept (per Steve): no exclamation marks, Sorpresa 100g wording,
+  subscription toggle default-unchecked. Deferred: no-waste rewrite (3PL-city research).
+  All classes/copy inherit the new Espresso/Gold palette + Marcellus; theme-check 0 errors.
+  NOTE: Cowork's commit `3a21d11` captured a partial (truncated) `index.liquid` + partial
+  JS; this state completes them. Preview theme (151277174953) NOT yet re-pushed — awaiting
+  Steve's OK.
 
 ---
 
@@ -390,7 +453,7 @@ native selling_plan_groups (Loop) on Roccia, Shopify Functions for discounts, re
 
 ## 11. Reference index — where things live
 
-- **Brand standards PDF:** `<OneDrive>/CremaItalia LLC/Brand and Marketing/Crema_Italia_Brand_Standards.pdf`
+- **Brand standards PDF (current, v2.0):** `<OneDrive>/CremaItalia LLC/Brand and Marketing/Crema_Italia_Brand_Standards_v2.0.pdf` — editable source alongside it: `Crema_Italia_Brand_Standards_v2.0.html` (+ `fonts.css`). Built on the new palette/type. (v1.0 archived in `_Archive/Pre-Artist_2026-07/`.)
 - **Brand CSS:** `<OneDrive>/CremaItalia LLC/Brand and Marketing/Crema Italia Brand CSS.css`
 - **Logo files (production, finalized artist mark 2026-07-01):** `<OneDrive>/CremaItalia LLC/Brand and Marketing/Logo Assets/` — master `.ai` in `Art Files/`; EPS/PDF/SVG/PNG/Web lockups; see `Logo Assets/README.md`.
 - **Prior artwork (archived provenance):** `<OneDrive>/CremaItalia LLC/Brand and Marketing/_Archive/Pre-Artist_2026-07/` (includes the old TM Placement Options).

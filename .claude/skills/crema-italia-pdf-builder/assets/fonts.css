@@ -1,0 +1,25 @@
+/* ============================================================
+   Crema Italia — local font embedding for PDF rendering
+   Link this from your document HTML *in addition to* the project
+   brand stylesheet (Brand and Marketing/Crema Italia Brand CSS.css).
+
+   Rebrand 2026-07-01: display = Marcellus (free Google Font, the web/
+   document stand-in for the logo font Montecatini Pro). Body = Inter.
+   .ttf files are bundled beside this file so WeasyPrint renders offline
+   and identically every time. Paths resolve relative to the HTML that
+   links this file — copy assets/fonts/ next to your source, or adjust href.
+   ============================================================ */
+
+/* ---- Marcellus (display / headings) — single 400 weight, roman only ---- */
+@font-face { font-family:"Marcellus"; font-style:normal; font-weight:400;
+  src:url("fonts/Marcellus-Regular.ttf") format("truetype"); }
+
+/* ---- Inter (body / UI) ---- */
+@font-face { font-family:"Inter"; font-style:normal; font-weight:400;
+  src:url("fonts/Inter-Regular.ttf") format("truetype"); }
+@font-face { font-family:"Inter"; font-style:normal; font-weight:500;
+  src:url("fonts/Inter-Medium.ttf") format("truetype"); }
+@font-face { font-family:"Inter"; font-style:normal; font-weight:600;
+  src:url("fonts/Inter-SemiBold.ttf") format("truetype"); }
+@font-face { font-family:"Inter"; font-style:italic; font-weight:400;
+  src:url("fonts/Inter-Italic.ttf") format("truetype"); }
