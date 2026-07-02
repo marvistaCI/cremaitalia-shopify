@@ -8,6 +8,15 @@ This `CLAUDE.md` is loaded into every Claude Code session in this directory. It 
 agent's persistent project memory. Update it whenever a meaningful decision is made;
 treat it as the source of truth for "how we do things here."
 
+> **Agent coordination — Code owns this repo (Steve, 2026-07-02).** Claude **Code**
+> (this CLI, in `~/code/cremaitalia-shopify`) is the authority for the Shopify theme.
+> Claude **Cowork** (the OneDrive/desktop agent) must **check with Code before editing
+> or committing anything in this repo, and Code takes precedence** in any conflict. This
+> exists because parallel mid-write edits by Cowork produced truncated commits (a cut-off
+> `index.liquid`, then a cut-off `ci-storefront.css`). Cowork's lane is the OneDrive
+> `CremaItalia LLC` ops/brand folder; Code's lane is this theme repo. Brand assets flow
+> Cowork → Code (Code copies finalized assets in), not the other way.
+
 ---
 
 ## 1. Stage & posture
