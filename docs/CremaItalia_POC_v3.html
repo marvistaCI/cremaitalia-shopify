@@ -4,11 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Crema Italia — POC v3</title>
+<!-- Brand tokens refreshed 2026-07-02 to Brand Standards v2.0: Espresso #55331B, Crema Gold #B88348, hover #9C6E3C, Marcellus display (was Cormorant Garamond). Layout/copy unchanged; this remains the frozen v3 design reference. -->
+<meta name="brand-version" content="Brand Standards v2.0">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--ci-cream:#FBF8F1;--ci-ivory:#FFFFFF;--ci-coffee:#3B1F12;--ci-espresso:#6B4A38;--ci-crema:#C46A1F;--ci-crema-hover:#A85715;--ci-crema-light:#E8A86A;--ci-green:#0E7A3A;--ci-red:#C8342B;--ci-hairline:#D9D2C2;--ci-mute:#8C7E6A;--ci-ink-soft:#5A4A3F;--ci-font-display:"Cormorant Garamond","Garamond","Georgia",serif;--ci-font-body:"Inter","Helvetica Neue","Arial",sans-serif;--ci-radius:8px;--ci-page-max:1120px}
+:root{--ci-cream:#FBF8F1;--ci-ivory:#FFFFFF;--ci-coffee:#55331B;--ci-espresso:#6B4A38;--ci-crema:#B88348;--ci-crema-hover:#9C6E3C;--ci-crema-light:#E8A86A;--ci-green:#0E7A3A;--ci-red:#C8342B;--ci-hairline:#D9D2C2;--ci-mute:#8C7E6A;--ci-ink-soft:#5A4A3F;--ci-font-display:"Marcellus","Georgia","Garamond",serif;--ci-font-body:"Inter","Helvetica Neue","Arial",sans-serif;--ci-radius:8px;--ci-page-max:1120px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
 body{background:var(--ci-cream);color:var(--ci-coffee);font-family:var(--ci-font-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -108,12 +111,12 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .card.nh:hover{box-shadow:none}
 .card-img{width:100%;aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;font-family:var(--ci-font-display);font-style:italic;font-size:1.1rem;flex-direction:column;gap:.25rem;text-align:center;padding:1rem;background:var(--ci-hairline);color:var(--ci-espresso)}
 .r{background:linear-gradient(135deg,#2a1a0e,#6B4A38);color:var(--ci-crema-light)}
-.p{background:linear-gradient(135deg,#3B1F12,#8B5E3C);color:var(--ci-crema-light)}
+.p{background:linear-gradient(135deg,#55331B,#8B5E3C);color:var(--ci-crema-light)}
 .g{background:linear-gradient(135deg,#1a3a2a,#0E7A3A,#4a7a3a);color:#d4f0d4}
 .b{background:linear-gradient(135deg,#1a1a2a,#3a3a5a);color:#c8c8d8}
 .card-body{padding:1.25rem}
 .cs{display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .5rem;border-radius:3px;margin-bottom:.5rem}
-.sr{background:#3B1F12;color:var(--ci-cream)}
+.sr{background:#55331B;color:var(--ci-cream)}
 .ss{background:var(--ci-crema);color:var(--ci-cream)}
 .sl{background:#6B4A38;color:var(--ci-cream)}
 .so{background:#8C7E6A;color:var(--ci-cream)}
@@ -437,7 +440,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
       <div class="card-footer"><span class="cp">From $38 <span style="font-size:.78rem;font-weight:400;color:var(--ci-mute)">/250g</span></span><span class="csz">250g · 500g</span></div>
     </div>
     <div class="card product-card" data-region="toscana" data-shelf="sorpresa" data-roast="any" data-flavor="any" data-caffeine="any" onclick="showPage('sorpresa')">
-      <div class="card-img p" style="background:linear-gradient(135deg,#5a3a18,#C46A1F)">Tour d'Italia 1</div><div class="card-body"><span class="cs ss">Sorpresa · Discovery</span><h3>Tour d'Italia 1</h3><div class="rn">Crema Italia curated selection</div><p>Three 100g bags, three roasters, assembled on-demand. Printed tasting card included.</p><div class="freshness">Freshness-gated · assembled to order</div></div>
+      <div class="card-img p" style="background:linear-gradient(135deg,#5a3a18,#B88348)">Tour d'Italia 1</div><div class="card-body"><span class="cs ss">Sorpresa · Discovery</span><h3>Tour d'Italia 1</h3><div class="rn">Crema Italia curated selection</div><p>Three 100g bags, three roasters, assembled on-demand. Printed tasting card included.</p><div class="freshness">Freshness-gated · assembled to order</div></div>
       <div class="card-footer"><span class="cp">$77.70 <span style="font-size:.78rem;font-weight:400;color:var(--ci-mute)">/3×100g</span></span><span class="csz">One-time</span></div>
     </div>
     <div class="card product-card" data-region="toscana" data-shelf="selezione" data-roast="light" data-flavor="fruit" data-caffeine="full" onclick="showPage('selezione')">

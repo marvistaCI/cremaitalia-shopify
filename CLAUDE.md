@@ -15,7 +15,10 @@ treat it as the source of truth for "how we do things here."
 > exists because parallel mid-write edits by Cowork produced truncated commits (a cut-off
 > `index.liquid`, then a cut-off `ci-storefront.css`). Cowork's lane is the OneDrive
 > `CremaItalia LLC` ops/brand folder; Code's lane is this theme repo. Brand assets flow
-> Cowork → Code (Code copies finalized assets in), not the other way.
+> Cowork → Code (Code copies finalized assets in), not the other way. The **cross-surface
+> decision log** + daily coordinator live in OneDrive `CremaItalia LLC\Coordination\`
+> (`DECISIONS_LOG.md`, `coordinator_routine_prompt.md`, dated `sync-report-*.md`) — the
+> shared ledger of decisions across chat, Cowork, and Code; read it when resuming.
 
 ---
 
