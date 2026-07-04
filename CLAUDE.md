@@ -20,6 +20,24 @@ treat it as the source of truth for "how we do things here."
 > (`DECISIONS_LOG.md`, `coordinator_routine_prompt.md`, dated `sync-report-*.md`) — the
 > shared ledger of decisions across chat, Cowork, and Code; read it when resuming.
 
+> **Two Code sessions, one repo (Steve, 2026-07-04).** The "Code owns this repo" rule
+> above covers Code vs. Cowork — it does NOT cover two **Claude Code** threads running
+> concurrently in this same checkout (e.g. Steve running a storefront/POC session and a
+> coming-soon-page session at once). This happened on 2026-07-04: one thread built the
+> POC4 batch while another independently edited the coming-soon page
+> (`assets/crema-italia.css`, `layout/password.liquid`, `templates/password.liquid`).
+> It worked out because the file sets happened not to overlap, but that's luck, not a
+> guarantee — the same failure mode that produced the truncated Cowork commits (above)
+> can happen between two Code sessions just as easily. **Rule:** if two Code sessions
+> will be active on this repo at the same time, each should either (a) work in its own
+> `git worktree` for true isolation, or (b) if sharing one checkout, commit its own
+> changes promptly at a natural stopping point — never leave work uncommitted while
+> another session might also be writing — and never run broad commands (`git add -A`,
+> `git checkout .`, `git reset --hard`) that could touch files the other session owns.
+> If you (Steve) need to redirect a running session for this reason, don't tell it to
+> stop mid-edit — ask it to finish its current edit, review `git status`/`git diff`,
+> commit just its own files, and then pause, so nothing is left half-written.
+
 > **Connectivity check — use the `reconnect-check` skill first (Steve, 2026-07-04).**
 > If a session opens after a reboot, or GitHub/Shopify CLI access to this repo seems
 > off, run the `reconnect-check` skill (`.claude/skills/reconnect-check/`) before doing
@@ -513,8 +531,22 @@ Add a one-line note here whenever a meaningful decision is made. Format:
     third key once Q3's content is defined.
   - Full per-item detail, code locations, and exact copy for every change above live
     in `docs/POC_v4_change_list.md` — that file remains the working ledger; this
-    entry is the durable summary. **Not committed to git and not pushed to any
-    Shopify theme yet** — working tree only, awaiting Steve's review.
+    entry is the durable summary. **Committed** (commit `3256143`) — **not yet pushed**
+    to GitHub or to the preview theme; both still need Steve's go-ahead.
+- 2026-07-04 — **Two-Code-sessions coordination rule added.** While the POC4 batch was
+  being built in one Code session, Steve had a second Code session independently
+  editing the coming-soon page (`assets/crema-italia.css`, `layout/password.liquid`,
+  `templates/password.liquid`) in the same checkout, believing the POC was fully
+  independent from the coming-soon page. It worked out only because the two sessions'
+  file sets happened not to overlap — the existing "Code owns this repo" coordination
+  rule (top of this file) only covered Code vs. Cowork, not two Code threads sharing
+  one working tree, which is the same failure mode that produced the earlier Cowork
+  truncated-commit incident. Added an explicit callout (top of file) covering this:
+  use `git worktree` for true isolation, or commit-and-pause at natural stopping
+  points if sharing one checkout; never leave work uncommitted while another session
+  might also be writing. The POC4 commit (`3256143`) was scoped to only the files that
+  session actually touched, deliberately excluding the coming-soon-page changes so
+  they could be reviewed and committed independently.
 
 ---
 
