@@ -172,6 +172,16 @@ a:focus-visible {
   padding-bottom: 3rem;
 }
 
+.ci-hero__logo-wrap {
+  margin-bottom: 1.75rem;
+}
+
+.ci-hero__logo {
+  height: 54px;
+  width: auto;
+  max-width: 100%;
+}
+
 .ci-hero h1 {
   max-width: 680px;
   margin: 0 auto 0.25rem;
@@ -207,6 +217,25 @@ a:focus-visible {
   margin: 0 auto;
   text-align: left;
   box-shadow: 0 2px 16px rgba(59, 31, 18, 0.05);
+}
+
+/* Founding-Member callout — reverse color, gold top rule, matches the
+   treatment used for the same offer on the full storefront. */
+.founding-banner {
+  background-color: var(--ci-coffee);
+  color: var(--ci-cream);
+  border-top: 3px solid var(--ci-crema);
+  border-radius: var(--card-radius);
+  padding: 1.1rem 1.5rem;
+  max-width: 520px;
+  margin: 0 auto 1.5rem;
+  text-align: left;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.founding-banner strong {
+  color: var(--ci-crema-light);
 }
 
 .signup-card h3 {
