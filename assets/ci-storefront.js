@@ -23,6 +23,7 @@
   var session = { signedIn: false, subscriber: false, foundingMember: false, firstTime: true, name: 'Steve R.' };
   var cart = [];
   var profileActive = false, savedTaste = null, pendingSaveProfile = false;
+  var pendingQuizAction = null; // null | 'matches' | 'everything' — set by the quiz result buttons
 
   var FREE_SHIP_THRESHOLD = 55;
 
@@ -40,6 +41,70 @@
     offerta:   { cls: 'so', tag: 'Offerta · Opportunity',  shelfTag: 'Offerta' },
     bottega:   { cls: 'sb', tag: 'Bottega',                shelfTag: 'Bottega' }
   };
+
+  // Quiz-outcome persona matrix — single source of truth for result-screen naming.
+  // Keyed by tuple (Q1 roast: light/medium/dark/any, Q2 flavor-or-'skip') so a future
+  // Q3 can fold in as a third key without restructuring. "any" is "Surprise me" on
+  // Q1 — a real declaration of no roast preference, not an exception, so it's a full
+  // row rather than a special-cased branch (see docs/POC_v4_change_list.md). "sparse"
+  // cells are chemically implausible roast/flavor pairings — still named, but the
+  // matching logic relaxes to roast-only (see isSparseCombo/applyProfileAndClose) and
+  // the subhead is swapped for SUBHEAD_SPARSE.
+  var PERSONA_MATRIX = {
+    light:  {
+      skip:    { persona: 'The Minimalist' },
+      fruit:   { persona: 'The Purist' },
+      sweet:   { persona: 'The Gentle Sweet' },
+      terroir: { persona: 'The Maverick', sparse: true }
+    },
+    medium: {
+      skip:    { persona: 'The Steady Hand' },
+      fruit:   { persona: 'The Romantic' },
+      sweet:   { persona: 'The Classicist' },
+      terroir: { persona: 'The Old Soul' }
+    },
+    dark:   {
+      skip:    { persona: 'The Traditionalist' },
+      fruit:   { persona: 'The Contrarian', sparse: true },
+      sweet:   { persona: 'The Indulgent' },
+      terroir: { persona: 'The Devotee' }
+    },
+    // No roast preference declared ("Surprise me"). Names aren't part of Steve's
+    // original spec — picked to echo each flavor card's own descriptor copy
+    // (Fruit & Flowers: "coffee as a perfume"; Bold & Spiced: "a sense of where it
+    // came from") so they read as a family with the rest. Flag if you want these
+    // renamed.
+    any: {
+      skip:    { persona: 'The Open Palate' },
+      fruit:   { persona: 'The Perfumer' },
+      sweet:   { persona: 'The Sweet Tooth' },
+      terroir: { persona: 'The Wanderer' }
+    }
+  };
+  var SUBHEAD_ROAST_ONLY = "You know your roast; we'll help you find your flavor.";
+  var SUBHEAD_DEFAULT = 'We have filtered the catalog to show your best matches.';
+  var SUBHEAD_SPARSE = 'This is a rarer combination — here are the closest matches in our current catalog.';
+  var SUBHEAD_NONE = "You're open to anything — we'll show you the full range, curator's choice first.";
+
+  function isSparseCombo(roast, flavor) {
+    var cell = roast && flavor && PERSONA_MATRIX[roast] && PERSONA_MATRIX[roast][flavor];
+    return !!(cell && cell.sparse);
+  }
+  function getQuizResult() {
+    var roastKey = PERSONA_MATRIX.hasOwnProperty(quizAnswers.roast) ? quizAnswers.roast : 'any';
+    var flavorKey = quizAnswers.flavor || 'skip';
+    var cell = PERSONA_MATRIX[roastKey][flavorKey];
+    var persona = cell.persona;
+    var subhead;
+    if (roastKey === 'any' && flavorKey === 'skip') subhead = SUBHEAD_NONE;
+    else if (flavorKey === 'skip') subhead = SUBHEAD_ROAST_ONLY;
+    else if (cell.sparse) subhead = SUBHEAD_SPARSE;
+    else subhead = SUBHEAD_DEFAULT;
+    // Decaf is a strong, specific declaration Steve wants surfaced by name regardless
+    // of roast/flavor — overrides the persona label only, not the matching logic.
+    if (quizAnswers.caffeine === 'decaf') persona = 'The Decaf Discoverer';
+    return { persona: persona, subhead: subhead, sparse: !!cell.sparse };
+  }
 
   // ---------- helpers ----------
   function $(id) { return document.getElementById(id); }
@@ -85,12 +150,33 @@
   }
 
   // ---------- card renderers ----------
+  // Placeholder multi-angle photo slides for a product tile — stands in for real
+  // photography (front/back/label-closeup) until roasters supply it. See
+  // docs/POC_v4_change_list.md item 9.
+  function cardImgSlidesHtml(p) {
+    var slides = [p.img ? p.img.label : p.title, 'Back of bag', 'Label close-up'];
+    var slidesHtml = slides.map(function (s, i) {
+      return '<div class="card-img-slide' + (i === 0 ? ' active' : '') + '">' + esc(s) + '</div>';
+    }).join('');
+    var dotsHtml = slides.length > 1 ? '<div class="card-img-dots">' + slides.map(function (_, i) {
+      return '<button class="card-img-dot' + (i === 0 ? ' active' : '') + '" onclick="event.stopPropagation();cycleCardImg(this,' + i + ')" aria-label="Photo ' + (i + 1) + ' of ' + slides.length + '"></button>';
+    }).join('') + '</div>' : '';
+    return slidesHtml + dotsHtml;
+  }
+  window.cycleCardImg = function (dotEl, idx) {
+    var tile = dotEl.closest('.card-img');
+    if (!tile) return;
+    var slides = tile.querySelectorAll('.card-img-slide');
+    var dots = tile.querySelectorAll('.card-img-dot');
+    for (var i = 0; i < slides.length; i++) slides[i].classList.toggle('active', i === idx);
+    for (var j = 0; j < dots.length; j++) dots[j].classList.toggle('active', j === idx);
+  };
   function productCard(p) {
     var badge = SHELF_BADGE[p.shelf] || { cls: '', tag: '' };
     return '<div class="card product-card" data-region="' + esc(p.region) + '" data-shelf="' + esc(p.shelf) +
       '" data-roast="' + esc(p.roast) + '" data-flavor="' + esc(p.flavor) + '" data-caffeine="' + esc(p.caffeine) +
       '" onclick="openProduct(\'' + p.handle + '\')">' +
-      '<div class="card-img ' + imgCls(p.img) + '"' + imgStyle(p.img) + '>' + esc(p.img ? p.img.label : p.title) + '</div>' +
+      '<div class="card-img ' + imgCls(p.img) + '"' + imgStyle(p.img) + '>' + cardImgSlidesHtml(p) + '</div>' +
       '<div class="card-body">' +
         '<span class="cs ' + badge.cls + '">' + esc(badge.tag) + '</span>' +
         '<h3>' + esc(p.display_title) + '</h3>' +
@@ -157,12 +243,33 @@
     if (!r) return;
     $('roaster-eyebrow').textContent = r.region_label + ' · founded ' + r.founded;
     $('roaster-name').textContent = r.name;
+    var logo = $('roaster-logo');
+    if (logo) {
+      logo.className = 'roaster-portrait ' + (r.portrait_cls || '');
+      logo.setAttribute('style', r.portrait_style || '');
+      logo.textContent = r.label;
+    }
     $('roaster-bio').innerHTML = (r.bio || []).map(function (para) { return '<p>' + esc(para) + '</p>'; }).join('');
     $('roaster-bags-head').textContent = 'Available from ' + r.name.split(' ')[0];
-    var bags = CATALOG.products.filter(function (p) { return p.roaster === handle && (p.shelf === 'roccia' || p.shelf === 'sorpresa'); });
+    // Show this roaster's coffee from all four shelves — including bundle/Tour
+    // products that name this roaster via the structured `roasters` array rather
+    // than the single `roaster` field. Bottega has no `roaster` field, so it's
+    // naturally excluded without a shelf allowlist. See docs/POC_v4_change_list.md
+    // item 12.
+    var bags = CATALOG.products.filter(function (p) {
+      return p.roaster === handle || (Array.isArray(p.roasters) && p.roasters.indexOf(handle) !== -1);
+    });
     $('roaster-bags').innerHTML = bags.length ? bags.map(productCard).join('') :
       '<p class="prose" style="max-width:65ch">New bags from this roaster are on the way.</p>';
-    $('roaster-find').textContent = r.find;
+    var findEl = $('roaster-find');
+    if (findEl) {
+      var mapsHref = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(r.address || r.find || r.name);
+      findEl.innerHTML =
+        (r.address ? '<a href="' + mapsHref + '" target="_blank" rel="noopener">' + esc(r.address) + '</a><br>' : '') +
+        (r.website ? esc(r.website) : '') +
+        (r.website && r.phone ? ' · ' : '') +
+        (r.phone ? esc(r.phone) : '');
+    }
     showPage('roaster');
   };
 
@@ -305,7 +412,7 @@
     applyFilters();
   }
   function tasteTagsHtml(t) {
-    var lbl = { roast: { light: 'Light & Bright', medium: 'Balanced', dark: 'Rich & Bold' }, flavor: FLAVOR_LABEL, caffeine: { full: 'Caffeinated', decaf: 'Decaf' } };
+    var lbl = { roast: { light: 'Light Roast', medium: 'Medium Roast', dark: 'Dark Roast' }, flavor: FLAVOR_LABEL, caffeine: { full: 'Caffeinated', decaf: 'Decaf' } };
     var tags = [];
     if (t && t.roast && t.roast !== 'all') tags.push(lbl.roast[t.roast]);
     if (t && t.flavor && t.flavor !== 'all') tags.push(lbl.flavor[t.flavor]);
@@ -370,6 +477,12 @@
     el.classList.add('selected');
     quizAnswers[['roast', 'flavor', 'caffeine'][step - 1]] = val;
   };
+  window.skipTasteQuestion = function () {
+    var opts = document.querySelectorAll('#qstep-2 .quiz-opt');
+    for (var i = 0; i < opts.length; i++) opts[i].classList.remove('selected');
+    quizAnswers.flavor = null;
+    nextStep(3);
+  };
   window.nextStep = function (step) {
     var steps = document.querySelectorAll('.quiz-step');
     for (var i = 0; i < steps.length; i++) steps[i].classList.remove('active');
@@ -380,7 +493,7 @@
   };
   window.showQuizResult = function () {
     var lbl = {
-      roast: { light: 'Light & Bright', medium: 'Balanced', dark: 'Rich & Bold', any: 'Any Roast' },
+      roast: { light: 'Light Roast', medium: 'Medium Roast', dark: 'Dark Roast', any: 'Any Roast' },
       flavor: { fruit: 'Fruit & Floral', sweet: 'Sweet & Chocolate', terroir: 'Bold & Spiced' },
       caffeine: { full: 'Caffeinated', decaf: 'Decaf', both: 'Both' }
     };
@@ -389,19 +502,18 @@
     if (quizAnswers.flavor) tags.push(lbl.flavor[quizAnswers.flavor]);
     if (quizAnswers.caffeine && quizAnswers.caffeine !== 'both') tags.push(lbl.caffeine[quizAnswers.caffeine]);
     $('result-tags').innerHTML = tags.map(function (t) { return '<span class="profile-tag">' + esc(t) + '</span>'; }).join('');
-    var title = 'Your Tuscan profile';
-    if (quizAnswers.roast === 'light' && quizAnswers.flavor === 'fruit') title = 'The Naturalist';
-    else if (quizAnswers.roast === 'medium' && quizAnswers.flavor === 'sweet') title = 'The Classicist';
-    else if (quizAnswers.roast === 'dark') title = 'The Traditionalist';
-    else if (quizAnswers.caffeine === 'decaf') title = 'The Decaf Discoverer';
-    $('result-title').textContent = title;
+    var result = getQuizResult();
+    $('result-title').textContent = result.persona;
+    var sh = $('result-subhead'); if (sh) sh.textContent = result.subhead;
     nextStep(4);
     var dots = document.querySelectorAll('.quiz-dot');
     for (var i = 0; i < dots.length; i++) dots[i].classList.add('done');
   };
   window.applyProfileAndClose = function () {
     if (quizAnswers.roast && quizAnswers.roast !== 'any') activeTaste.roast = quizAnswers.roast;
-    if (quizAnswers.flavor) activeTaste.flavor = quizAnswers.flavor;
+    // Sparse (near-implausible) roast/flavor pairings relax to roast-only matching so
+    // the customer isn't shown a thin or empty result set — see PERSONA_MATRIX comment.
+    if (quizAnswers.flavor && !isSparseCombo(quizAnswers.roast, quizAnswers.flavor)) activeTaste.flavor = quizAnswers.flavor;
     if (quizAnswers.caffeine && quizAnswers.caffeine !== 'both') activeTaste.caffeine = quizAnswers.caffeine;
     savedTaste = { roast: activeTaste.roast, flavor: activeTaste.flavor, caffeine: activeTaste.caffeine };
     profileActive = true;
@@ -415,6 +527,33 @@
     applyFilters();
     applyProfileToShelves();
   };
+  // Saves the quiz answers as the customer's taste profile without applying them as
+  // the current Shop filter — used by "Show me everything" so we still capture
+  // signal even when the customer wants an unfiltered browse.
+  function captureQuizProfile() {
+    savedTaste = {
+      roast: (quizAnswers.roast && quizAnswers.roast !== 'any') ? quizAnswers.roast : 'all',
+      flavor: quizAnswers.flavor || 'all',
+      caffeine: (quizAnswers.caffeine && quizAnswers.caffeine !== 'both') ? quizAnswers.caffeine : 'all'
+    };
+    profileActive = true;
+    renderProfileTags();
+    $('profile-banner').classList.add('active');
+    var h = $('pf-hint'); if (h) h.style.display = 'block';
+  }
+  function showEverythingFromQuiz() {
+    activeTaste = { roast: 'all', flavor: 'all', caffeine: 'all' };
+    syncFilterPills();
+    updateFlavorDesc();
+    closeQuiz();
+    showPage('shop');
+    applyFilters();
+  }
+  // Both quiz-result choices route through sign-in first — we want to capture the
+  // customer's taste profile into their account whenever possible, regardless of
+  // which browsing option they pick. See docs/POC_v4_change_list.md.
+  window.chooseQuizMatches = function () { pendingQuizAction = 'matches'; closeQuiz(); openSignin(); };
+  window.chooseQuizEverything = function () { pendingQuizAction = 'everything'; closeQuiz(); openSignin(); };
   window.clearProfile = function () {
     activeTaste = { roast: 'all', flavor: 'all', caffeine: 'all' };
     activeRegion = 'all'; activeShelf = 'all';
@@ -449,9 +588,37 @@
 
   // ---------- sign-in ----------
   window.handleAccountClick = function () { if (session.signedIn) showPage('account'); else openSignin(); };
+  // Hover-menu dropdowns (Shop, Account) reopen on :hover/:focus-within, which stays
+  // true after a click if the cursor hasn't moved off the trigger — so selecting an
+  // item didn't close the menu. Force-close on selection, then re-arm on mouseleave
+  // so normal hover behavior resumes next time. See docs/POC_v4_change_list.md item 2.
+  function forceCloseDropdown(container) {
+    if (!container) return;
+    container.classList.add('menu-force-closed');
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    container.addEventListener('mouseleave', function reopen() {
+      container.classList.remove('menu-force-closed');
+      container.removeEventListener('mouseleave', reopen);
+    });
+  }
+  window.closeShopMenu = function () {
+    var trigger = $('nav-shop');
+    forceCloseDropdown(trigger && trigger.closest('.nav-item'));
+  };
+  window.closeAccountMenu = function () {
+    forceCloseDropdown($('account-wrap'));
+  };
   window.openSignin = function () { $('signin-modal').classList.add('active'); };
-  window.closeSignin = function () { $('signin-modal').classList.remove('active'); };
-  window.showSigninFromQuiz = function () { closeQuiz(); openSignin(); };
+  window.closeSignin = function () {
+    $('signin-modal').classList.remove('active');
+    // Dismissed without signing in: still let the customer see the coffee — carry
+    // out their quiz choice as a guest instead of stranding them. See item on
+    // "capture the user in a profile, if at all possible" in the change list.
+    if (pendingQuizAction) {
+      var action = pendingQuizAction; pendingQuizAction = null;
+      if (action === 'matches') applyProfileAndClose(); else showEverythingFromQuiz();
+    }
+  };
   window.switchTab = function (tab) {
     var tabs = document.querySelectorAll('.signin-tab');
     tabs[0].classList.toggle('active', tab === 'in');
@@ -465,8 +632,16 @@
     $('signin-btn').classList.add('signed-in');
     $('signin-label').textContent = session.name;
     var w = $('account-wrap'); if (w) w.classList.add('is-signed-in');
+    // Clear the pending quiz action before closeSignin() runs, so its guest-fallback
+    // branch doesn't also fire now that sign-in succeeded.
+    var quizAction = pendingQuizAction; pendingQuizAction = null;
     closeSignin();
     renderCart();
+    if (quizAction) {
+      if (quizAction === 'matches') applyProfileAndClose(); else { captureQuizProfile(); showEverythingFromQuiz(); }
+      renderAccount();
+      return;
+    }
     if (pendingSaveProfile) { pendingSaveProfile = false; commitProfile(); toast('Saved to your taste profile.'); renderAccount(); showPage('shop'); return; }
     if (quizAnswers.roast || quizAnswers.flavor || quizAnswers.caffeine) { applyProfileAndClose(); renderAccount(); }
     else { renderAccount(); showPage('account'); }
@@ -623,9 +798,15 @@
         '<div class="acct-card"><h3>Recent orders</h3>' +
           '<p class="prose" style="margin:0">Tour d\'Italia 1 — shipped 2026-06-12</p>' +
           '<p class="prose" style="margin:.25rem 0 0">Gardelli Ethiopia Bombe 250g — delivered 2026-05-28</p></div>' +
+        // PROD: name/email/password and the shipping address book for one-time orders
+        // (Sorpresa/Selezione/Offerta/Bottega) are native Shopify customer-account
+        // territory, separate from Loop — see docs/POC_v4_change_list.md item 3.
+        '<div class="acct-card"><h3>Profile &amp; addresses</h3>' +
+          '<p class="prose" style="margin:0">Name, email, password, and your shipping address book for one-time orders.</p>' +
+          '<p class="note">Managed via native Shopify customer accounts on the live store — not built in this POC.</p></div>' +
       '</div>' +
       '<div class="section-head" id="acct-subs"><p class="eyebrow">Roccia subscription</p><h2>Manage your subscription</h2></div>' +
-      '<div class="loop-slot"><strong>Loop customer portal mounts here.</strong> Pause, skip, swap roaster / SKU / bag-size (up to 48 hours before lock), change cadence, or cancel — all self-service, no fee. ' +
+      '<div class="loop-slot"><strong>Loop customer portal mounts here.</strong> Pause, skip, swap roaster / SKU / bag-size (up to 48 hours before lock), change cadence, or cancel, and manage this subscription\'s ship-to address and payment method — all self-service, no fee. ' +
       'On the live store this is Loop\'s hosted portal (passwordless login) embedded as a theme app block. ' +
       '<!-- LOOP: replace this slot with the Loop customer-portal app block / link. --></div>';
   }
@@ -642,10 +823,17 @@
 
   // ---------- boot ----------
   function boot() {
-    // close any modal on overlay click
+    // Close any modal on overlay click — routed through each modal's own close
+    // function (rather than just toggling the class) so e.g. closeSignin()'s
+    // guest-fallback for a pending quiz action still fires on this dismissal path.
     var overlays = document.querySelectorAll('.modal-overlay');
     for (var i = 0; i < overlays.length; i++) {
-      overlays[i].addEventListener('click', function (e) { if (e.target === this) this.classList.remove('active'); });
+      overlays[i].addEventListener('click', function (e) {
+        if (e.target !== this) return;
+        if (this.id === 'signin-modal') closeSignin();
+        else if (this.id === 'quiz-modal') closeQuiz();
+        else this.classList.remove('active');
+      });
     }
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') { closeQuiz(); closeSignin(); }

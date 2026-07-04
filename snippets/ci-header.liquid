@@ -12,10 +12,10 @@
         <div class="nav-item">
           <button onclick="showPage('shop')" id="nav-shop" aria-haspopup="true">Shop</button>
           <div class="shop-menu" role="menu">
-            <a role="menuitem" tabindex="0" onclick="showPage('roccia')"><span class="ita">Roccia</span><span class="men">The Rock — our rock-solid subscription plan.</span></a>
-            <a role="menuitem" tabindex="0" onclick="showPage('sorpresa')"><span class="ita">Sorpresa</span><span class="men">Surprises — our curated collection of roasted delights.</span></a>
-            <a role="menuitem" tabindex="0" onclick="showPage('selezione')"><span class="ita">Selezione</span><span class="men">Roasters' premium and seasonal offerings.</span></a>
-            <a role="menuitem" tabindex="0" onclick="showPage('offerta')"><span class="ita">Offerta</span><span class="men">Limited-time offers, on sale while inventory lasts.</span></a>
+            <a role="menuitem" tabindex="0" onclick="showPage('roccia');closeShopMenu()"><span class="ita">Roccia</span><span class="men">The Rock — our rock-solid subscription plan.</span></a>
+            <a role="menuitem" tabindex="0" onclick="showPage('sorpresa');closeShopMenu()"><span class="ita">Sorpresa</span><span class="men">Surprises — our curated collection of roasted delights.</span></a>
+            <a role="menuitem" tabindex="0" onclick="showPage('selezione');closeShopMenu()"><span class="ita">Selezione</span><span class="men">Roasters' premium and seasonal offerings.</span></a>
+            <a role="menuitem" tabindex="0" onclick="showPage('offerta');closeShopMenu()"><span class="ita">Offerta</span><span class="men">Limited-time offers, on sale while inventory lasts.</span></a>
           </div>
         </div>
         <button onclick="showPage('bottega')" id="nav-bottega">Bottega</button>
@@ -33,9 +33,9 @@
       <div class="account-wrap" id="account-wrap">
         <button class="sign-in-btn" id="signin-btn" onclick="handleAccountClick()"><span id="signin-label">Sign In</span></button>
         <div class="account-menu" role="menu">
-          <a role="menuitem" tabindex="0" onclick="showPage('account')">Account</a>
-          <a role="menuitem" tabindex="0" onclick="showSubscriptions()">Subscriptions</a>
-          <a role="menuitem" tabindex="0" onclick="signOut()">Sign out</a>
+          <a role="menuitem" tabindex="0" onclick="showPage('account');closeAccountMenu()">Account</a>
+          <a role="menuitem" tabindex="0" onclick="showSubscriptions();closeAccountMenu()">Subscriptions</a>
+          <a role="menuitem" tabindex="0" onclick="signOut();closeAccountMenu()">Sign out</a>
         </div>
       </div>
     </div>

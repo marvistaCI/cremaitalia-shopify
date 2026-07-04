@@ -200,9 +200,9 @@
 <!-- ============================== ROASTERS INDEX ============================== -->
 <div class="page" id="page-roasters">
   <div class="dark-hero"><div class="dark-hero-inner">
-    <p class="eyebrow" style="color:var(--ci-crema-light)">A small group</p>
+    <p class="eyebrow" style="color:var(--ci-crema-light)">GRUPPO D'ECCELLENZA</p>
     <h1>Our Roasters</h1>
-    <p>We hold the U.S. consumer channel for each of these roasters, and we present their coffee unchanged. Tuscany first; the rest of Italy as we grow.</p>
+    <p>We are the premier consumer channel for each of these roasters, and we offer their coffee just as they offer it in Italy.</p>
   </div></div>
   <main class="ci-main">
     <div id="roaster-list"></div>
@@ -212,15 +212,20 @@
 <!-- ============================== ROASTER PROFILE (dynamic) ============================== -->
 <div class="page" id="page-roaster">
   <div class="dark-hero"><div class="dark-hero-inner">
-    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="showPage('roasters')">All roasters</button>
-    <p class="eyebrow" style="color:var(--ci-crema-light)" id="roaster-eyebrow"></p>
-    <h1 id="roaster-name"></h1>
+    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="showPage('roasters')">Show all roasters</button>
+    <div class="roaster-hero-row">
+      <div class="roaster-portrait" id="roaster-logo"></div>
+      <div>
+        <p class="eyebrow" style="color:var(--ci-crema-light)" id="roaster-eyebrow"></p>
+        <h1 id="roaster-name"></h1>
+      </div>
+    </div>
   </div></div>
   <main class="ci-main">
     <div class="prose" style="max-width:72ch" id="roaster-bio"></div>
     <div class="section-head"><p class="eyebrow">The bags we import</p><h2 id="roaster-bags-head"></h2></div>
     <div class="card-grid" id="roaster-bags"></div>
-    <div class="afd">Roaster profiles show Roccia and Sorpresa coffees only. Selezione and Offerta listings stay off the roaster's page to keep their storefront premium. Bottega items are never roaster-affiliated.</div>
+    <div class="afd">This represents the entire offering currently available for this roaster. In Sorpresa offerings, this roaster is represented, but may not be the exclusive roaster in the product offering.</div>
     <div class="section-head"><p class="eyebrow">Visit them</p><h2>Find this roaster</h2></div>
     <p class="prose" style="max-width:65ch" id="roaster-find"></p>
   </main>
@@ -270,11 +275,13 @@
   <div class="dark-hero"><div class="dark-hero-inner">
     <p class="eyebrow" style="color:var(--ci-crema-light)">Who we are</p>
     <h1>About Crema Italia</h1>
-    <p>A Florida importer and curator of specialty Italian coffee. Not a roaster.</p>
+    <p>A Florida based importer and curator of specialty Italian coffee. Not a roaster.</p>
   </div></div>
   <main class="ci-main">
+    <!-- PROD: copy below is provisional — Steve to provide final language for each tile. -->
+    <div class="section-head" style="margin-top:0"><p class="eyebrow">Chi siamo</p><h2>Our company</h2></div>
     <div class="founder-grid">
-      <div class="founder-portrait">Steve<br>Founder</div>
+      <div class="founder-portrait">Our Company<br>Photo</div>
       <div class="prose">
         <p>Crema Italia, LLC imports specialty whole-bean coffee from a small, named group of Italian roasters, stores it in our Florida warehouse, and ships it to American customers unchanged. We are the U.S. Agent for FDA food-facility registration on behalf of our roaster partners.</p>
         <h3>Curated, never aggregated</h3>
@@ -282,6 +289,28 @@
         <h3>The first sale is an introduction</h3>
         <p>A Sorpresa Tour is how most people meet us — three roasters in one box, our choice. The second sale is the business: a Roccia subscription with the roaster you fell for.</p>
       </div>
+    </div>
+
+    <div class="section-head"><p class="eyebrow">Il nostro fondatore</p><h2>Our founder</h2></div>
+    <div class="founder-grid">
+      <div class="founder-portrait">Steve<br>Founder</div>
+      <div class="prose">
+        <p><em>Founder bio — copy pending.</em></p>
+      </div>
+    </div>
+
+    <div class="section-head"><p class="eyebrow">La nostra squadra eccellente</p><h2>Our excellent team members</h2></div>
+    <!-- PROD: static list below — becomes an admin-managed collection/metafield (photo, name, role, bio) once real team data exists. -->
+    <div class="people-grid">
+      <div class="person-card"><div class="person-photo">Lucia<br>Calo'</div><h4>Lucia Calo'</h4></div>
+      <div class="person-card"><div class="person-photo">Asia<br>Chirdo</div><h4>Asia Chirdo</h4></div>
+      <div class="person-card"><div class="person-photo">Lauren<br>Roberts</div><h4>Lauren Roberts</h4></div>
+    </div>
+
+    <div class="section-head"><p class="eyebrow">I nostri partner</p><h2>Our partners</h2></div>
+    <!-- PROD: static list below — becomes an admin-managed collection/metafield once real partner data exists. -->
+    <div class="people-grid">
+      <div class="person-card"><div class="person-photo">Partner 1</div><h4>Partner 1</h4></div>
     </div>
   </main>
 </div>

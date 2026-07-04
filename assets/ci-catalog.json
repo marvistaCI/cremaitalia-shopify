@@ -20,7 +20,10 @@
         "Rubens Gardelli built his reputation on competition tables before he built a roastery. The house style is light, clean, and unmistakably origin-forward — coffees chosen for what the farm and the process can say on their own.",
         "We import a small selection of Gardelli's bags. They reach you exactly as Gardelli sealed them: whole bean, in valve bags, nothing repackaged."
       ],
-      "find": "Forlì, Emilia-Romagna · gardellicoffee.com"
+      "find": "Forlì, Emilia-Romagna · gardellicoffee.com",
+      "address": "Via Machiavelli 12, 47121 Forlì (FC), Italy",
+      "phone": "+39 0543 123456",
+      "website": "gardellicoffee.com"
     },
     {
       "handle": "lasosta",
@@ -36,7 +39,10 @@
         "A Florentine roastery in the classic mold — the cup the city actually drinks. La Sosta roasts for balance and sweetness, the everyday espresso that rewards a good machine and a steady hand.",
         "We import their Guatemala year-round and a seasonal Christmas edition. Whole bean, valve-sealed, unchanged."
       ],
-      "find": "Firenze, Toscana · lasosta.example.it"
+      "find": "Firenze, Toscana · lasosta.example.it",
+      "address": "Via de' Neri 76, 50122 Firenze (FI), Italy",
+      "phone": "+39 055 234567",
+      "website": "lasosta.example.it"
     },
     {
       "handle": "fusari",
@@ -53,7 +59,10 @@
         "Caffè Fusari roasts the Tuscan bar cup: dark, round, and sweet, built for the moka pot and the espresso machine. A family roastery that has changed very little, on purpose.",
         "We import their Colombia year-round and a monsooned Indian lot for the winter. Whole bean, valve-sealed, unchanged."
       ],
-      "find": "Toscana · fusari.example.it"
+      "find": "Toscana · fusari.example.it",
+      "address": "Via Guido Monaco 22, 52100 Arezzo (AR), Italy",
+      "phone": "+39 0575 345678",
+      "website": "fusari.example.it"
     },
     {
       "handle": "gcb",
@@ -70,7 +79,10 @@
         "Two brothers who started in a garage in Prato and never lost the experimental streak. Garage Coffee Bros chase character — the cup that makes you stop and ask what it is.",
         "We import a rotating single-origin and a Brazilian for the subscription shelf. Whole bean, valve-sealed, unchanged."
       ],
-      "find": "Prato, Toscana · garagecoffeebros.example.it"
+      "find": "Prato, Toscana · garagecoffeebros.example.it",
+      "address": "Via Pistoiese 90, 59100 Prato (PO), Italy",
+      "phone": "+39 0574 456789",
+      "website": "garagecoffeebros.example.it"
     },
     {
       "handle": "valdorcia",
@@ -87,7 +99,10 @@
         "A small Sienese roastery in the Val d'Orcia, as much a part of the landscape as the cypress rows. Their decaf is the cup that started Crema Italia — proof that decaffeinated need not mean diminished.",
         "We import their sugarcane-decaf year-round and a house blend. Whole bean, valve-sealed, unchanged."
       ],
-      "find": "Siena, Toscana · valdorcia.example.it"
+      "find": "Siena, Toscana · valdorcia.example.it",
+      "address": "Via di Città 15, 53100 Siena (SI), Italy",
+      "phone": "+39 0577 567890",
+      "website": "valdorcia.example.it"
     }
   ],
   "products": [
@@ -303,6 +318,7 @@
       "title": "Tour d'Italia 1",
       "display_title": "Tour d'Italia 1",
       "roaster": null,
+      "roasters": ["gardelli", "lasosta", "fusari"],
       "roaster_label": "Crema Italia curated selection",
       "shelf": "sorpresa",
       "region": "toscana",

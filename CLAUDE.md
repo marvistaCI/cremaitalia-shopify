@@ -20,6 +20,16 @@ treat it as the source of truth for "how we do things here."
 > (`DECISIONS_LOG.md`, `coordinator_routine_prompt.md`, dated `sync-report-*.md`) — the
 > shared ledger of decisions across chat, Cowork, and Code; read it when resuming.
 
+> **Connectivity check — use the `reconnect-check` skill first (Steve, 2026-07-04).**
+> If a session opens after a reboot, or GitHub/Shopify CLI access to this repo seems
+> off, run the `reconnect-check` skill (`.claude/skills/reconnect-check/`) before doing
+> any manual git/Shopify troubleshooting. It verifies `git ls-remote` and
+> `shopify theme list` connectivity and gives the exact fix if either is actually down.
+> This is Code's skill to run directly. Cowork does not run git or the Shopify CLI (see
+> the lane rule above) — if Cowork suspects a connectivity problem in this repo, it
+> should flag it to Steve/Code rather than attempt its own fix. See `DECISIONS_LOG.md`
+> 2026-07-04.
+
 ---
 
 ## 1. Stage & posture
@@ -419,77 +429,207 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   NOTE: Cowork's commit `3a21d11` captured a partial (truncated) `index.liquid` + partial
   JS; this state completes them. Preview theme (151277174953) NOT yet re-pushed — awaiting
   Steve's OK.
+- 2026-07-04 — **POC4 change batch built on the POC3 baseline.** Working process this
+  round: Steve flagged defects/changes incrementally in `docs/POC_v4_change_list.md`
+  (the running to-do ledger — kept as the detailed record; this entry is the durable
+  summary), then reviewed a compiled list of all 18 items plus 8 open decisions before
+  authorizing the build. Landed:
+  - **Home:** fixed the Offerta-shelf-card-to-Featured-Tour gap (`.tour-hero` now has
+    a deliberate, symmetric `margin-top`, not an accidental collapse value).
+  - **Nav:** Shop and Account dropdowns now close on selection. They're pure-CSS
+    `:hover`/`:focus-within` menus, so a blur-only fix wasn't enough — `:hover` stays
+    true while the cursor sits on the just-clicked link. Added a `menu-force-closed`
+    class toggled by JS that re-arms itself on `mouseleave`.
+  - **Roasters index:** eyebrow → **"GRUPPO D'ECCELLENZA"**; intro line rewritten to
+    "We are the premier consumer channel for each of these roasters, and we offer
+    their coffee just as they offer it in Italy."; dropped "Tuscany first; the rest
+    of Italy as we grow." (better suited to the Journal). An **Italian roasting
+    regions filter** was requested but is **deferred to POC5** pending Steve's filter
+    spec.
+  - **Roaster profile page:** back-link now reads "Show all roasters" (was briefly
+    going to be "Meet our roaster" before Steve caught that it's a back-link, not a
+    forward action); added the roaster brand-logo tile to the hero (same
+    `.roaster-portrait` component used on the index); **the roaster page now shows a
+    roaster's coffee from all four shelves**, including Sorpresa Tour bundles — this
+    required a data-model fix, since bundle products (e.g. `tour-ditalia-1`) only
+    named their component roasters in free text, not by handle. Added a structured
+    `roasters: [...]` array to bundle products for this. The stale
+    "Roccia-and-Sorpresa-only" disclaimer was replaced with copy reflecting the new
+    all-shelves reality. Product tiles (`productCard()`, used site-wide, not just
+    here) gained a 3-slide placeholder photo carousel (front/back/label-closeup) with
+    dot controls — mechanism only; real per-SKU photography still needed. Added
+    structured `address`/`phone`/`website` fields per roaster (**invented test data**,
+    consistent with the rest of `ci-catalog.json`) and the "Visit them" address now
+    links out to Google Maps in a new tab.
+  - **Account page:** locked the Loop-vs-native split — **Loop's hosted portal owns
+    the active subscription's ship-to address and payment method; native Shopify
+    customer accounts own the general address book and profile settings** (name,
+    email, password) for one-time orders. Added a "Profile & addresses" stub card
+    reflecting this and expanded the Loop-slot copy to name what it covers.
+  - **Taste quiz — Q1:** subtitle → "Three questions. We'll point you to the right
+    roasts."; added a one-time no-flavoring disclaimer above the roast cards; card
+    titles simplified to "Light/Medium/Dark roast" with "Tasting hints at ___"
+    descriptions (all industry-standard roasting-science terms, chosen to match the
+    §11A flavor-lexicon already in use).
+  - **Taste quiz — Q2:** headline → "Which tasting notes appeal to you most?"; added
+    a framing sentence disclosing that roast, origin, and blend ratio jointly produce
+    these flavor buckets (they're correlated with Q1's roast axis, not independent —
+    see the open item logged below); added a low-emphasis "Not sure yet — skip this
+    one" link (deliberately not a fourth equal-weight card, to avoid it becoming the
+    path of least resistance for undecided users); a skipped Q2 correctly falls back
+    to roast-only matching with no hidden default flavor.
+  - **Taste quiz — results screen:** replaced ad hoc if/else title logic with a single
+    persona lookup matrix keyed on (Q1 roast, Q2 flavor-or-skip), built so a future Q3
+    can fold in as a third key without restructuring. Full Light/Medium/Dark × Fruit
+    & Flowers/Sweet & Chocolatey/Bold & Spiced/skip grid per Steve's spec; two
+    "sparse" cells (Light+Bold & Spiced, Dark+Fruit & Flowers — chemically rare
+    combinations) still show a named persona but relax matching to roast-only and
+    swap in a "rarer combination" subhead. "Surprise me" (Q1 skipped) was originally
+    special-cased outside the matrix, but Steve correctly identified that as an
+    unnecessary exception — it's simply "no roast preference," the same shape as
+    skipping Q2 — so it's now a full fourth matrix row (`any`) with its own four
+    personas (The Open Palate/Perfumer/Sweet Tooth/Wanderer — names are mine, not
+    Steve's spec, flagged for his review). "The Decaf Discoverer" persona was kept
+    per Steve's explicit request, now firing consistently on every decaf answer
+    (an improvement — the old version only showed in gaps left by an `elseif` chain).
+    Buttons became **"Show my matches"** / **"Show me everything"**, both routing
+    through sign-in first to try to capture the taste profile into the account either
+    way; a dismissed sign-in (✕ **or the overlay-click, which was found to bypass the
+    same guest-fallback and was fixed**) still lets the customer browse as a guest.
+    Added a "Back" link to regress to Q3. "In bocca al lupo" stays fixed across every
+    outcome, per Steve.
+  - **About page:** hero line → "A Florida based importer..."; split the single
+    "Steve — Founder" tile into **"Our company"** (kept the existing company copy)
+    and **"Our founder"** (new photo tile, copy pending — Steve is writing new
+    language for both); added a **team section** ("La nostra squadra eccellente" /
+    "Our excellent team members" — Italian-as-eyebrow, English-as-h2, matching the
+    Roasters-page pattern and confirmed by Steve) with three placeholder cards
+    (Lucia Calo', Asia Chirdo, Lauren Roberts); added a **partners section** ("I
+    nostri partner" / "Our partners") with one holding card, "Partner 1". Both new
+    sections are marked as future admin-managed collections.
+  - **Deferred to a later batch, logged as open items:** the Italian regions filter
+    (POC5, see above), the roast-level-vs-taste-profile correlation question (revisit
+    once real SKUs are tagged with both axes), and expanding the persona matrix to a
+    third key once Q3's content is defined.
+  - Full per-item detail, code locations, and exact copy for every change above live
+    in `docs/POC_v4_change_list.md` — that file remains the working ledger; this
+    entry is the durable summary. **Not committed to git and not pushed to any
+    Shopify theme yet** — working tree only, awaiting Steve's review.
 
 ---
 
 ## 10. Open questions / TODO
 
-**POC3 — CURRENT STATE (as of 2026-07-02) — read this first when resuming.**
+**POC4 — CURRENT STATE (as of 2026-07-04) — read this first when resuming.**
 
-**What POC3 is.** A custom Liquid storefront built as a single-document SPA:
+**What POC4 is.** The same custom-Liquid SPA architecture as POC3 — no structural
+change — with a batch of copy, layout, and behavior fixes applied on top (see §9's
+2026-07-04 entry for the full list; `docs/POC_v4_change_list.md` has per-item detail).
 `templates/index.liquid` (every page is a `.page` block toggled by `showPage()`) +
 `layout/theme.liquid` (chrome), styled by `assets/ci-storefront.css`, behavior in
-`assets/ci-storefront.js`, and driven by a **baked-in test catalog** in
-`assets/ci-catalog.json` (5 roasters, 9 Roccia SKUs, 1 Sorpresa Tour, 2 Selezione,
-1 Offerta example, 4 Bottega). Chrome/header/footer/modals are in `snippets/ci-*`.
-The coming-soon gate (`layout/password.liquid` + `assets/crema-italia.css|js`) is
-**untouched** and still what the public sees.
+`assets/ci-storefront.js`, driven by the **baked-in test catalog** in
+`assets/ci-catalog.json` (now with per-roaster `address`/`phone`/`website` fields and
+a structured `roasters` array on the Sorpresa Tour bundle — both new this batch).
+Chrome/header/footer/modals are in `snippets/ci-*`. The coming-soon gate
+(`layout/password.liquid` + `assets/crema-italia.css|js`) is **untouched** and still
+what the public sees.
 
-**Where it's deployed.** Pushed to an **unpublished** preview theme
-**"Crema Italia POC3 Preview" id `151277174953`** on `crema-italia.myshopify.com`.
-The **live** `crema-italia-coming-soon-theme` (#150557294761) is untouched. Preview is
-gated behind the store password / admin login. Latest work is committed to git and
-pushed to GitHub (`origin/main`). **Ask Steve before any Shopify push.**
-- Preview: `https://crema-italia.myshopify.com?preview_theme_id=151277174953`
+**Deployment status — NOT yet pushed anywhere.** This batch exists only in the local
+working tree: **not committed to git, not pushed to GitHub, not pushed to the preview
+theme.** The last committed/pushed state is still POC3 as of commit `36ce378`. The
+preview theme **"Crema Italia POC3 Preview" id `151277174953`** on
+`crema-italia.myshopify.com` still serves that POC3 state. **Ask Steve before
+committing, pushing to GitHub, or pushing to the preview theme.**
+- Preview (still POC3 until re-pushed): `https://crema-italia.myshopify.com?preview_theme_id=151277174953`
 - Editor: `https://crema-italia.myshopify.com/admin/themes/151277174953/editor`
-- Refresh after edits: `shopify theme push --theme 151277174953`
+- Refresh after a push is approved: `shopify theme push --theme 151277174953`
+
+**Not verified in a browser.** None of this batch's changes have been run through
+`shopify theme dev` or checked in a live preview — Steve asked mid-session not to spin
+up a dev server unprompted, so every item was implemented by reading/writing code and
+checked with `node -c` / `JSON.parse` for syntax only. **Visual/functional QA in an
+actual preview is still outstanding** before this ships anywhere.
 
 **Brand (current — Brand Standards v2.0, artist rebrand 2026-07-01).** Palette:
 Espresso `#55331B`, Crema Gold `#B88348`, hover `#9C6E3C`, green/red/cream unchanged.
 Display font **Marcellus** (Google Font stand-in for the outlined Montecatini wordmark);
 body **Inter**. Finalized artist logo in `assets/ci-logo*.png|svg` (hero uses the
-knockout). No retired `#3B1F12`/`#C46A1F` or Cormorant/Lora tokens anywhere.
+knockout). No retired `#3B1F12`/`#C46A1F` or Cormorant/Lora tokens anywhere. This
+batch's new copy/markup was checked against this palette/type — no deviations
+introduced.
 
 **What's REAL vs MOCKED (the production seams).**
 - REAL: full page set, brand system, 3-axis Shop filter, taste quiz (first-visit
-  auto-launch), roaster profiles, product detail, all copy, responsive layout.
+  auto-launch, now with the persona matrix), roaster profiles (now all-four-shelves +
+  address/phone/website + Google Maps link), product detail, all copy, responsive
+  layout.
 - MOCKED: cart is client-side (merges identical lines, −/qty/+ stepper, discount +
   free-ship math for display only); checkout is a toast; sign-in is simulated
   (assumes a Founding-Member subscriber); account "Manage subscription" is a **Loop
-  portal stub**. Search `<!-- PROD -->` / `<!-- LOOP -->` and `PROD:` / `LOOP:` in the
-  code for every swap-point.
+  portal stub** (now explicitly scoped to ship-to + payment for the subscription,
+  with a separate "Profile & addresses" stub card for native-Shopify territory).
+  Roaster `address`/`phone`/`website` fields are **invented test data**. Product-tile
+  photo carousel (item 9) cycles placeholder labels, not real photography. Search
+  `<!-- PROD -->` / `<!-- LOOP -->` and `PROD:` / `LOOP:` in the code for every
+  swap-point.
 
-**Done so far:** POC3 build → feedback-batch #1 (nav reorder, hero logo + headline,
-section reorder, shelf/Model/Promise copy, Bold & Spiced + flavor descriptors,
-save-to-profile, profile-persists-to-shelves, account taste card + dropdown, Founding
-banner, cart guest 5% nudge) → cart quantity/stepper + dollars.cents everywhere →
-hero logo enlarged + green-white-red tricolore. All on the v2.0 brand. `theme-check`: 0
-errors. (See §9 decision log 2026-06-29 → 2026-07-02, and git log.)
+**Done so far:** POC3 build → feedback-batch #1 → cart/hero polish (see prior §9
+entries) → **POC4 batch** (2026-07-04): home/nav fixes, Roasters index copy, roaster
+profile enhancements + all-four-shelves fix, account Loop/native split, full taste-quiz
+rework (Q1/Q2/results persona matrix), About page restructure. `node -c` / `JSON.parse`
+clean; `shopify theme check` not yet re-run against this batch.
 
 **RESOLVED decisions (locked):** subscription engine = **Loop**; theme = **custom
 Liquid** (no starter); display font = **Marcellus**; pricing = Magic-Prompt markup
 matrix; nav = **Shop ▾ · Bottega · Roasters · Journal · About**; quiz + taste profile =
 in scope; kept per Steve: no exclamation marks, Sorpresa 100g wording, subscription
-toggle default-unchecked.
+toggle default-unchecked; **account split** = Loop owns subscription ship-to/payment,
+native Shopify owns address book/profile settings (2026-07-04); **persona matrix** =
+single lookup table keyed on roast × flavor-or-skip, four full rows including "any"
+(2026-07-04).
 
-**Coordination (2026-07-02).** Code owns this repo; Cowork must check with Code and
-Code takes precedence (see the callout near the top of this file). The **cross-surface
-decision log** lives in OneDrive `CremaItalia LLC\Coordination\DECISIONS_LOG.md` —
-read it when resuming.
+**Coordination.** Code owns this repo; Cowork must check with Code and Code takes
+precedence (see the callout near the top of this file). The **cross-surface decision
+log** lives in OneDrive `CremaItalia LLC\Coordination\DECISIONS_LOG.md` — read it when
+resuming; the POC4 batch's cross-surface-relevant decisions (account data-model split,
+catalog schema additions) should be logged there too.
 
 **OPEN / TO VET:**
-- [ ] Steve reviewing POC3; collect the next kink/change batch.
+- [ ] Steve to visually QA the POC4 batch in an actual browser/preview — nothing in
+  it has been run yet.
+- [ ] Approve committing this batch to git and re-pushing the preview theme
+  (`151277174953`).
+- [ ] Postponed to POC5: Italian roasting-regions filter on the Roasters page (spec
+  still pending from Steve).
+- [ ] Deferred: whether Q2 (taste-profile) is carrying real analytical weight over Q1
+  (roast) — revisit once real SKUs are tagged with both `roast_level` and
+  `taste_profile` (see `docs/POC_v4_change_list.md` item 15).
+- [ ] Deferred: expand the quiz persona matrix to a three-key lookup once Q3's content
+  is defined (item 17).
+- [ ] Four new "Surprise me" persona names (The Open Palate/Perfumer/Sweet
+  Tooth/Wanderer) were invented this session, not specified by Steve — flagged for
+  his review/rename.
+- [ ] "Our company" and "Our founder" About-page tile copy is placeholder — Steve is
+  writing the real language.
+- [ ] Team/partner section photos and roaster/product-tile photos are all text
+  placeholders pending real photography and logo assets.
 - [ ] Deferred: no-waste copy rewrite on the Promise page (pending 3PL-city research).
-- [ ] Optional: `git tag poc3` to mark this milestone before POC4.
+- [ ] Optional: `git tag poc3` to mark the POC3 milestone (still not done — consider
+  before this POC4 batch is committed on top).
 
-**NEXT (production build, after POC3 is vetted):** real product/collection/metafield
-data model (`crema_italia.*`), per-shelf product templates, native
-`selling_plan_groups` (Loop) on Roccia, Shopify Functions for discounts, real Shopify
-cart + Checkout. Reuse POC3's CSS/JS/markup as the design system.
+**NEXT (production build, after POC4 is vetted):** real product/collection/metafield
+data model (`crema_italia.*`) — note the POC4 batch already added a precedent for this
+(`roasters` array on bundle products, structured roaster contact fields) that the real
+metafield schema should account for; per-shelf product templates; native
+`selling_plan_groups` (Loop) on Roccia; Shopify Functions for discounts; real Shopify
+cart + Checkout; native Shopify customer accounts for the address-book/profile split
+locked 2026-07-04. Reuse POC3/POC4's CSS/JS/markup as the design system.
 
-**To resume, read in this order:** this block → `docs/CremaItalia_POC_v3.html` (design
-source, now on v2.0 brand) → `Shopify_Magic_Build_Prompt_v3_FINAL.txt` (locked rules) →
-`00_PROJECT_BRIEF.md` (single source of truth) → `Coordination\DECISIONS_LOG.md`.
+**To resume, read in this order:** this block → `docs/POC_v4_change_list.md` (POC4's
+detailed working ledger) → `docs/CremaItalia_POC_v3.html` (design source — now stale
+relative to POC4's live copy in several places; treat the repo as source of truth over
+this frozen doc) → `00_PROJECT_BRIEF.md` (single source of truth) →
+`Coordination\DECISIONS_LOG.md`.
 
 ---
 
