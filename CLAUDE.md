@@ -547,6 +547,17 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   might also be writing. The POC4 commit (`3256143`) was scoped to only the files that
   session actually touched, deliberately excluding the coming-soon-page changes so
   they could be reviewed and committed independently.
+- 2026-07-05 — Refreshed `config/settings_data.json` per §6.1 brand-current-on-edit:
+  `color_text` `#3B1F12`→`#55331B` (Espresso), `color_accent` `#C46A1F`→`#B88348`
+  (Crema Gold), `font_heading` `cormorant_garamond_n6`→`marcellus_n4`.
+  `color_background` (`#FBF8F1`, Cream) was already current. Confirmed via grep for
+  `settings.color_` / `settings.font_heading` across all Liquid/CSS that none of these
+  keys are referenced anywhere — `settings_schema.json` doesn't even declare them as
+  theme settings (only `theme_info` exists there). This is dead config left over from
+  Shopify's default theme-editor scaffold; Marcellus/Inter and the Espresso/Gold
+  palette are loaded independently via `@font-face`/`<link>` tags in `layout/theme.liquid`
+  and hand-authored CSS custom properties in `assets/*.css`. Cosmetic-only cleanup, no
+  rendering change, so no flag to Steve was needed.
 
 ---
 
