@@ -10,11 +10,11 @@
 {
   "current": {
     "color_background": "#FBF8F1",
-    "color_text": "#3B1F12",
-    "color_accent": "#C46A1F",
-    "font_heading": "cormorant_garamond_n6",
+    "color_text": "#55331B",
+    "color_accent": "#B88348",
+    "font_heading": "marcellus_n4",
     "font_body": "inter_n4",
-    "social_instagram": "cremaitalia"
+    "social_instagram": "cremaitaliaco"
   },
   "presets": {}
 }
