@@ -38,6 +38,31 @@ treat it as the source of truth for "how we do things here."
 > stop mid-edit — ask it to finish its current edit, review `git status`/`git diff`,
 > commit just its own files, and then pause, so nothing is left half-written.
 
+> ⚠️ **Storefront password protection is currently OFF (Steve, 2026-07-05/06) — turn
+> it back ON when friend-testing is done.** Online Store > Preferences >
+> "Restrict access to visitors with the password" is unchecked right now, on purpose,
+> so friends can open the POC4 preview link without hitting the storefront password
+> gate first (see the 2026-07-06 entry in §9 for the full why). This is a deliberate,
+> temporary exception to the pre-launch posture in §1 — while it's off, anyone who
+> stumbles onto cremaitalia.com directly sees the live theme's old placeholder
+> homepage (harmless, not the POC, not final copy), and the POC4 preview link
+> (`https://crema-italia.myshopify.com/?preview_theme_id=151277174953`) works with
+> zero friction for anyone who has it. **Re-enable the password before treating the
+> site as properly pre-launch-gated again** — check this box first if you're picking
+> this project back up and aren't sure of current state.
+>
+> **Draft-theme naming — version the Shopify draft to match what it holds (Steve,
+> 2026-07-05).** Whenever a new POC batch is pushed into an existing (or new)
+> unpublished/draft theme on Shopify, rename that theme in Shopify so its name
+> matches the POC version actually deployed there — e.g. when the POC4 batch was
+> pushed in-place into the theme still named "Crema Italia POC3 Preview"
+> (id `151277174953`), it should have been renamed to "Crema Italia POC4 Preview"
+> at that time. `shopify theme rename --theme <id> --name "Crema Italia POCx
+> Preview"` does this without touching any files. Do this at the same time the
+> batch is pushed, not later — a stale name is what made Steve think POC4 was
+> missing entirely (see 2026-07-05 entry in §9). Same id, new name each time the
+> POC version it holds changes.
+>
 > **Connectivity check — use the `reconnect-check` skill first (Steve, 2026-07-04).**
 > If a session opens after a reboot, or GitHub/Shopify CLI access to this repo seems
 > off, run the `reconnect-check` skill (`.claude/skills/reconnect-check/`) before doing
@@ -561,9 +586,85 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 
 ---
 
+- 2026-07-05 — **Diagnosed Steve's "POC dropped me into the landing page" report — false
+  alarm caused by the storefront password gate, not code corruption.** Steve completed
+  the taste quiz + simulated sign-in on POC4 and landed on the coming-soon marketing copy
+  (with the POC header/nav and taste-profile banner on top of it) instead of the Shop
+  page; nav clicks did nothing. Pulled the deployed preview theme (`151277174953`) and
+  byte-diffed every relevant file against the repo — `layout/theme.liquid`,
+  `layout/password.liquid`, `templates/index.liquid`, `templates/password.liquid`,
+  `ci-header`, `ci-profile-banner` — all identical, nothing corrupted. Root cause: the
+  store's separate storefront-password gate (confirmed via `shopify theme dev` itself
+  refusing to start non-interactively and asking for the store password) got triggered
+  after a cache clear wiped the browser's unlock cookie; the draft-theme preview link
+  still showed the theme's own chrome (header/quiz auto-launch) but rendered
+  `templates/password.liquid`'s content into it instead of the real SPA, so `showPage()`
+  calls silently failed (no matching `#page-*` div in that markup). Confirmed the actual
+  POC storefront and nav routing work correctly once the password gate isn't interfering
+  — reproduced the full quiz → sign-in → Shop-page-with-taste-profile flow via a local
+  `shopify theme dev` session and it worked end-to-end.
+  **Separately found while investigating "View Store" showing an old, plain coming-soon
+  page:** that was also a false alarm — a true logged-out fetch (`curl`, no cookies)
+  confirmed the actual public page at cremaitalia.com is already current (new logo,
+  "Italian coffee, brought over whole.", Founding Members copy). Steve's admin session
+  was bypassing the password gate on the **live** theme and hitting its dormant, never-
+  finished `templates/index.liquid`/`layout/theme.liquid` placeholder instead — a page
+  real visitors can't reach (password protection redirects every route, confirmed even
+  for a 404, to `/password`). **Important repo hazard identified:** the local repo's
+  `templates/index.liquid` and `layout/theme.liquid` are now the POC4 SPA files (POC3
+  overwrote what used to be the live theme's own placeholder) — they no longer represent
+  what should ever be pushed to the live theme id (`150557294761`). A blanket
+  `shopify theme push --theme 150557294761` (no `--only`) would replace the dormant
+  coming-soon placeholder with the entire mocked POC storefront. **Fix applied:** pushed
+  only the one file that was genuinely stale on the live theme's safe-to-touch set —
+  `templates/404.liquid` (brand/copy refresh, still coming-soon-family, not POC) — via
+  `--only templates/404.liquid --allow-live`. Nothing else was pushed live.
+  **Also renamed** the draft theme `151277174953` from "Crema Italia POC3 Preview" to
+  "**Crema Italia POC4 Preview**" (see the new draft-naming callout at the top of this
+  file) and set up a local dev-server path for testing (`dev.cmd`, gitignored, carries
+  the storefront password) so future QA passes use `shopify theme dev` instead of the
+  raw `preview_theme_id` link, sidestepping this whole class of password-gate fragility.
+  **Follow-ups:** none blocking — POC4 is confirmed working end-to-end. Whenever the
+  real production storefront is eventually built, the live theme's `templates/index.liquid`
+  will need to be authored fresh (not copied from this repo's current `index.liquid`,
+  which is the POC SPA).
+
+- 2026-07-06 — **Found the real friend-testing link, then found a real-browser flaw in
+  it, then fixed it properly.** Follow-on to the 2026-07-05 diagnosis above. Gave Steve
+  the raw `?preview_theme_id=151277174953` link + the storefront password ("Doppio") as
+  the friend-testing recipe, and verified the recipe with `curl` — which falsely looked
+  fine. Steve tried it in an actual incognito window and still got the coming-soon page.
+  Root cause of the gap: `curl`'s cookie handling isn't a faithful stand-in for a real
+  browser's cross-domain cookie behavior, so the `curl`-based verification wasn't real
+  proof. Steve's screenshot confirmed the same hybrid password/POC-chrome page as the
+  original bug, this time genuinely in incognito, with a barely-visible "Enter using
+  password" link at the bottom — technically usable, but not a reasonable ask for a
+  "send this to friends" link. **Actual fix:** the friction is inherent to
+  "Password protect your storefront" being a store-wide gate independent of theme
+  preview — no link can skip it while that setting is on. Turned it OFF instead
+  (Online Store > Preferences), which is safe right now because the live theme's own
+  homepage (what's exposed while the gate is off) is just the old harmless placeholder,
+  not the POC and not final copy. Confirmed working: Steve reopened a fresh incognito
+  window and the plain preview link now loads the POC with zero friction. **This is a
+  live, currently-active state change** — see the new ⚠️ callout at the top of this file;
+  turn the password back on once friend-testing is done.
+  **Separately diagnosed:** the taste quiz not auto-launching on a later visit. Not a
+  bug — `ci_quiz_seen` in `localStorage` gets set the moment the quiz modal is closed
+  for any reason (×, outside click, or Escape — see `assets/ci-storefront.js` `closeQuiz()`
+  and the global Escape handler), and it had been set earlier in the same incognito
+  session while poking at the broken hybrid page (which still loads the real quiz modal
+  underneath). Incognito only wipes storage when **every** incognito window from that
+  session is closed — reloading, or opening new tabs in the same session, does not
+  reset it, which is a common misconception worth remembering for future testing/QA
+  instructions. Confirmed fixed by fully closing all incognito windows and reopening a
+  fresh one.
+  **Follow-ups:** turn storefront password protection back on when Steve's friend round
+  is finished (see the top-of-file callout — this is the one open action item from the
+  whole investigation).
+
 ## 10. Open questions / TODO
 
-**POC4 — CURRENT STATE (as of 2026-07-04) — read this first when resuming.**
+**POC4 — CURRENT STATE (as of 2026-07-05) — read this first when resuming.**
 
 **What POC4 is.** The same custom-Liquid SPA architecture as POC3 — no structural
 change — with a batch of copy, layout, and behavior fixes applied on top (see §9's
@@ -577,21 +678,25 @@ Chrome/header/footer/modals are in `snippets/ci-*`. The coming-soon gate
 (`layout/password.liquid` + `assets/crema-italia.css|js`) is **untouched** and still
 what the public sees.
 
-**Deployment status — NOT yet pushed anywhere.** This batch exists only in the local
-working tree: **not committed to git, not pushed to GitHub, not pushed to the preview
-theme.** The last committed/pushed state is still POC3 as of commit `36ce378`. The
-preview theme **"Crema Italia POC3 Preview" id `151277174953`** on
-`crema-italia.myshopify.com` still serves that POC3 state. **Ask Steve before
-committing, pushing to GitHub, or pushing to the preview theme.**
-- Preview (still POC3 until re-pushed): `https://crema-italia.myshopify.com?preview_theme_id=151277174953`
+**Deployment status — DEPLOYED to the preview theme, renamed, and QA'd working
+(2026-07-05).** The POC4 batch is committed to git (`3256143` + follow-on commits) and
+pushed to GitHub. It is live on the draft theme, now named **"Crema Italia POC4
+Preview"** (same id, `151277174953` — renamed from "POC3 Preview" 2026-07-05; see the
+draft-naming callout near the top of this file and the §9 2026-07-05 entry).
 - Editor: `https://crema-italia.myshopify.com/admin/themes/151277174953/editor`
-- Refresh after a push is approved: `shopify theme push --theme 151277174953`
+- Storefront password protection is ON store-wide, and it is a **separate gate from
+  Shopify staff/admin login** — being signed into the admin does not by itself bypass
+  it. The raw `?preview_theme_id=151277174953` link is fragile against this (a cache
+  clear or lost cookie makes it render the password page's content inside the theme's
+  own chrome — see the §9 2026-07-05 entry for the full diagnosis). **Preferred way to
+  test now:** `dev.cmd` in the repo root (gitignored — it embeds the storefront
+  password via `--store-password`) runs `shopify theme dev --theme 151277174953`, which
+  sidesteps the gate entirely.
+- To push any further local edits to this draft: `shopify theme push --theme 151277174953`
 
-**Not verified in a browser.** None of this batch's changes have been run through
-`shopify theme dev` or checked in a live preview — Steve asked mid-session not to spin
-up a dev server unprompted, so every item was implemented by reading/writing code and
-checked with `node -c` / `JSON.parse` for syntax only. **Visual/functional QA in an
-actual preview is still outstanding** before this ships anywhere.
+**QA'd working end-to-end (2026-07-05).** Drove the full quiz → sign-in → Shop flow via
+`shopify theme dev` and confirmed it lands correctly: taste-profile banner active with
+the right tags, Shop page filtered to matches, nav fully clickable. The batch is vetted.
 
 **Brand (current — Brand Standards v2.0, artist rebrand 2026-07-01).** Palette:
 Espresso `#55331B`, Crema Gold `#B88348`, hover `#9C6E3C`, green/red/cream unchanged.
@@ -638,10 +743,15 @@ resuming; the POC4 batch's cross-surface-relevant decisions (account data-model 
 catalog schema additions) should be logged there too.
 
 **OPEN / TO VET:**
-- [ ] Steve to visually QA the POC4 batch in an actual browser/preview — nothing in
-  it has been run yet.
-- [ ] Approve committing this batch to git and re-pushing the preview theme
-  (`151277174953`).
+- [ ] **Turn storefront password protection back ON** (Online Store > Preferences)
+  once Steve's friend-testing round is done — see the ⚠️ callout at the top of this
+  file. This is the one open item from the whole 2026-07-05/06 investigation.
+- [x] ~~Steve to visually QA the POC4 batch in an actual browser.~~ Done 2026-07-05 —
+  quiz → sign-in → Shop flow confirmed working via `shopify theme dev` (see Deployment
+  status above).
+- [x] ~~Approve committing this batch to git and re-pushing the preview theme
+  (`151277174953`).~~ Done — committed, pushed to GitHub, and confirmed live on the
+  preview theme as of 2026-07-05.
 - [ ] Postponed to POC5: Italian roasting-regions filter on the Roasters page (spec
   still pending from Steve).
 - [ ] Deferred: whether Q2 (taste-profile) is carrying real analytical weight over Q1

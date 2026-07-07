@@ -24,6 +24,9 @@ build/
 *.key
 *.p12
 
+# Local dev-server launch script — carries the storefront password, never commit
+dev.cmd
+
 # IDE / editor noise
 .vscode/
 .idea/
