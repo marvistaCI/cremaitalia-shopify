@@ -1,0 +1,72 @@
+<!--
+  live-theme/layout/theme.liquid
+  Source of truth for the LIVE theme's (crema-italia-coming-soon-theme,
+  id 150557294761) general-purpose layout — used for the homepage when
+  password protection is OFF, and for any other Shopify-generated page
+  (policies, contact, 404) at all times.
+
+  This lives in live-theme/ instead of the main layout/ folder because
+  layout/theme.liquid in the main tree is the POC4 SPA's chrome — a
+  completely different file that must never be pushed to the live theme.
+  See CLAUDE.md §9, 2026-07-07 entry, and the repo-hazard note in the
+  2026-07-05 entry for the full why.
+
+  Deploy with:
+    shopify theme push --theme 150557294761 --path live-theme \
+      --only layout/theme.liquid --only templates/index.liquid --allow-live
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#FBF8F1">
+
+  <title>
+    {%- if template.name == 'index' -%}
+      {{ shop.name }}
+    {%- elsif page_title == blank -%}
+      {{ shop.name }}
+    {%- else -%}
+      {{ page_title }} &mdash; {{ shop.name }}
+    {%- endif -%}
+  </title>
+
+  {%- if template.name == 'index' -%}
+  <meta name="description" content="Italian coffee, brought over whole. Opening late Summer/Fall 2026.">
+
+  <!-- Open Graph / social share preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Crema Italia &mdash; Italian coffee, brought over whole.">
+  <meta property="og:description" content="A small group of artisan Italian roasters, brought to the U.S. Opening late Summer/Fall 2026. Sign up for advance notice.">
+  <meta property="og:image" content="{{ 'ci-og-image.png' | asset_url }}">
+  <meta property="og:url" content="{{ shop.url }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Crema Italia &mdash; Italian coffee, brought over whole.">
+  <meta name="twitter:description" content="A small group of artisan Italian roasters, brought to the U.S. Opening late Summer/Fall 2026. Sign up for advance notice.">
+  <meta name="twitter:image" content="{{ 'ci-og-image.png' | asset_url }}">
+  {%- elsif page_description -%}
+  <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  <!-- Google Fonts: Marcellus + Inter (rebrand 2026-07-01) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  {{ content_for_header }}
+
+  {{ 'crema-italia.css' | asset_url | stylesheet_tag }}
+</head>
+
+<body>
+  <div class="page-wrapper">
+    {{ content_for_layout }}
+  </div>
+
+  <script src="{{ 'crema-italia.js' | asset_url }}" defer></script>
+</body>
+</html>

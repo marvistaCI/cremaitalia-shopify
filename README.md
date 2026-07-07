@@ -65,6 +65,9 @@ After running `shopify theme pull`, the Shopify-standard structure appears:
 ├── sections/       # Reusable page sections (hero, footer, etc.)
 ├── snippets/       # Smaller reusable bits of Liquid
 ├── templates/      # Page templates (index.json, product.json, page.coming-soon.json)
+├── live-theme/     # Source for the LIVE theme's own homepage/layout (separate from
+│                   #   templates/index.liquid + layout/theme.liquid above, which are
+│                   #   the POC's SPA files — see CLAUDE.md §9, 2026-07-07 entry)
 ├── CLAUDE.md       # Project memory — read by Claude Code on every session
 ├── README.md       # This file
 └── .gitignore

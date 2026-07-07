@@ -42,14 +42,17 @@ treat it as the source of truth for "how we do things here."
 > it back ON when friend-testing is done.** Online Store > Preferences >
 > "Restrict access to visitors with the password" is unchecked right now, on purpose,
 > so friends can open the POC4 preview link without hitting the storefront password
-> gate first (see the 2026-07-06 entry in §9 for the full why). This is a deliberate,
-> temporary exception to the pre-launch posture in §1 — while it's off, anyone who
-> stumbles onto cremaitalia.com directly sees the live theme's old placeholder
-> homepage (harmless, not the POC, not final copy), and the POC4 preview link
-> (`https://crema-italia.myshopify.com/?preview_theme_id=151277174953`) works with
-> zero friction for anyone who has it. **Re-enable the password before treating the
-> site as properly pre-launch-gated again** — check this box first if you're picking
-> this project back up and aren't sure of current state.
+> gate first (see the 2026-07-06 entry in §9 for the full why). While it's off, anyone
+> who visits cremaitalia.com directly now sees the **current, on-brand coming-soon
+> homepage** (`live-theme/templates/index.liquid` + `live-theme/layout/theme.liquid`,
+> pushed 2026-07-07 — see that day's §9 entry) rather than the old stale placeholder,
+> so this is lower-stakes than it was — but it should still go back ON once
+> friend-testing wraps up, because the password is the only thing standing between a
+> stray click on the POC4 preview link
+> (`https://crema-italia.myshopify.com/?preview_theme_id=151277174953`) and the mocked
+> storefront (fake checkout, invented roaster contact info, simulated sign-in) being
+> casually discoverable by the public. Check this box first if you're picking this
+> project back up and aren't sure of current state.
 >
 > **Draft-theme naming — version the Shopify draft to match what it holds (Steve,
 > 2026-07-05).** Whenever a new POC batch is pushed into an existing (or new)
@@ -661,6 +664,34 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   **Follow-ups:** turn storefront password protection back on when Steve's friend round
   is finished (see the top-of-file callout — this is the one open action item from the
   whole investigation).
+- 2026-07-07 — **Updated the live theme's own homepage to match the current coming-soon
+  design, resolving the repo hazard flagged in the 2026-07-05 entry.** Steve asked (after
+  weighing the tradeoff — see that conversation) to fix the live theme's homepage
+  properly rather than rely on the password gate to always be on. Problem: the main
+  repo's `templates/index.liquid` / `layout/theme.liquid` are the POC4 SPA files, so
+  they can never be pushed to the live theme (`150557294761`) — doing so would replace
+  the coming-soon page with the entire mocked storefront. Solution: added a new
+  **`live-theme/`** folder (`live-theme/templates/index.liquid`,
+  `live-theme/layout/theme.liquid`) as the dedicated, version-controlled source for the
+  live theme's own homepage + general layout — deliberately kept separate from the main
+  `templates/`/`layout/` folders so the two theme deployments' files can never collide.
+  Content mirrors `templates/password.liquid` (logo, "Italian coffee, brought over
+  whole.", Founding Members offer, Open Graph/Twitter social-share tags) minus the
+  password-entry box, which doesn't apply once you're already viewing the unprotected
+  page; `layout/theme.liquid` also keeps its pre-existing generic title logic (needed
+  for policy pages, 404, etc.) rather than copying `layout/password.liquid` verbatim.
+  Deployed with `shopify theme push --theme 150557294761 --path live-theme --only
+  layout/theme.liquid --only templates/index.liquid --allow-live` (a scoped push,
+  same pattern as the earlier `templates/404.liquid` fix). Verified with a clean,
+  cookie-less `curl` fetch of the real homepage and the 404 page post-push — correct
+  copy, working Open Graph tags, no Liquid errors on either template.
+  **Practical effect:** the "which fallback is worse" tradeoff from the password-gate
+  discussion is gone — the live homepage is now the current design either way, so the
+  password toggle only matters for keeping the POC4 preview link from being casually
+  discoverable, not for copy quality. See the revised ⚠️ callout at the top of this file.
+  **Follow-ups:** none for this change. When the real storefront eventually replaces the
+  coming-soon page at launch, replace `live-theme/templates/index.liquid`'s content
+  entirely (it says so in its own header comment) rather than reusing it.
 
 ## 10. Open questions / TODO
 

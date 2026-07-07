@@ -1,0 +1,106 @@
+<!--
+  live-theme/templates/index.liquid
+  Source of truth for the LIVE theme's (crema-italia-coming-soon-theme,
+  id 150557294761) homepage — renders when password protection is OFF.
+
+  Deliberately kept in sync with the main repo's templates/password.liquid
+  (the page shown while protection is ON), minus the password-entry box,
+  so visitors see the same current design regardless of whether the gate
+  is on. See CLAUDE.md §9, 2026-07-07 entry.
+
+  This lives in live-theme/ instead of the main templates/ folder because
+  templates/index.liquid in the main tree is the POC4 SPA's homepage — a
+  completely different file that must never be pushed to the live theme.
+
+  When the real storefront eventually launches, replace this file's
+  content entirely with the production homepage — this is a pre-launch
+  stand-in, not the final design.
+
+  Deploy with:
+    shopify theme push --theme 150557294761 --path live-theme \
+      --only layout/theme.liquid --only templates/index.liquid --allow-live
+-->
+<section class="ci-section ci-hero">
+  <div class="ci-section__inner">
+    <div class="ci-hero__logo-wrap">
+      <img
+        class="ci-hero__logo"
+        src="{{ 'ci-logo.png' | asset_url }}"
+        alt="Crema Italia"
+        width="180"
+        height="54"
+        loading="eager"
+      >
+    </div>
+    <span class="eyebrow">Italian by Nature</span>
+    <h1>Italian coffee, brought over whole.</h1>
+    <div class="tricolore-rule" aria-hidden="true"></div>
+    <p class="subheading">
+      We are selecting a small group of artisan Italian roasters to bring
+      their coffee to the U.S. &mdash; origin&#8209;true, never re&#8209;roasted,
+      ground, or repackaged by us. If you love all things Italy, a great
+      espresso, or the ritual of the Italian bar, you will feel at home here.
+      Opening late Summer/Fall 2026.
+    </p>
+  </div>
+</section>
+
+<section class="ci-section ci-signup">
+  <div class="ci-section__inner">
+    <div class="founding-banner">
+      <strong>Founding Members.</strong> The first 222 subscribers receive
+      12% off for life, as active subscribers &mdash; instead of the standard
+      10%. The offer closes at 222.
+    </div>
+    <div class="signup-card" id="signup-card">
+      {%- comment -%}
+        Shopify's {% form 'customer' %} does a normal server-side POST and
+        sets form.posted_successfully? on the way back. The JS in
+        assets/crema-italia.js is optional polish on top (typo check,
+        double-submit guard, screen-reader announce).
+      {%- endcomment -%}
+      {% form 'customer', id: 'PreLaunchSignup', class: 'signup-form' %}
+        {% if form.posted_successfully? %}
+          <div class="form-success is-visible" role="status">
+            <h3>Grazie.</h3>
+            <p>We have your address. We will write when the first pallet lands.</p>
+          </div>
+        {% else %}
+          <h3>Be the first to know.</h3>
+          <p class="card-body">
+            Sign up now for advance notice of our grand opening &mdash; we
+            will write to you once, when the store opens. No noise in
+            between.
+          </p>
+
+          {{ form.errors | default_errors }}
+
+          <input type="hidden" name="contact[tags]" value="prelaunch-crema-italia, prospect, homepage">
+
+          <div class="form-row">
+            <input
+              type="email"
+              name="contact[email]"
+              required
+              placeholder="Email address"
+              aria-label="Email address"
+              autocomplete="email"
+            >
+            <button type="submit">Notify me</button>
+          </div>
+
+          <p class="form-error" role="alert" aria-hidden="true">
+            That does not look like a valid email &mdash; try again?
+          </p>
+
+          <p class="form-microcopy">
+            We use your address only for the pre&#8209;launch announcement.
+            Unsubscribe anytime.
+          </p>
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+</section>
+
+{% render 'ci-footer' %}
