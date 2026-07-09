@@ -106,28 +106,25 @@ mocks — INSTRUCT (descriptive stub copy + `PROD:`/`LOOP:` seams), like the Loo
   have rotated out, sold out, or changed price; production "Order again" needs a graceful
   "no longer available — here's a similar one" path.
 
-### 5. Multi-photo across all shelves incl. Bottega + detail-page gallery (finger-first)
-Agreed: ALL shelf photos, INCLUDING Bottega, support multi-photo. Supersedes the earlier
-informal "move the carousel onto the detail page" note.
-- Current: roast-shelf tiles (`productCard` → `cardImgSlidesHtml`) have 3 placeholder
-  slides + ••• dots, whole tile navigates (`openProduct`), dots carve out via
-  `event.stopPropagation()`. This navigation model (Option B) is correct. Bottega tiles
-  (`bottegaCard`) and the detail page (`productDetail`, `pd-img`) are SINGLE image — need
-  parity.
-- **Key UX problem:** the ••• dots are far too small/precise to tap — unhittable with a
-  thumb on mobile, which is why Steve never realized photos could change. "Too refined."
-- **Interaction to build — TILES:** enlarge the photo-changer into a big forgiving tap
-  target — a full-width band (~40px+ tall) across the bottom of the image; tap anywhere in
-  the band → advance to NEXT photo, LOOPING first→…→last→first. Keep dots as a position
-  indicator (mouse users can still click a specific dot to jump). Band + dots both
-  `stopPropagation` (don't navigate). Add SWIPE left/right on the image (touch). Everywhere
-  else on the image/tile still navigates to detail. Do NOT make a plain image tap advance
-  the photo on tiles (conflicts with navigate-to-detail).
-- **Interaction to build — DETAIL PAGE gallery** (richer, no navigate conflict): larger
-  main image with swipe + tap left/right halves for prev/next + dots and/or thumbnail
-  strip + arrows. This is where deep visual exploration happens.
-- Mind ~44px min touch targets; no hover on mobile. Slides are still placeholders
-  (front / "Back of bag" / "Label close-up") pending real per-SKU photography.
+### 5. Multi-photo ONLY on the detail page (tiles are single-photo) — DECISION REVISED 2026-07-09
+**Revised decision (Steve, 2026-07-09):** multi-photo browsing lives ONLY on the product
+detail page. Top-level tiles — EVERY shelf, roast shelves AND Bottega — show a single,
+clean photo with NO dots and NO carousel. The detail-page gallery is the same for every
+product regardless of which shelf/surface led there (Shop, shelf page, roaster page,
+Bottega). This supersedes the earlier plan of a finger-first carousel ON the tiles — the
+••• dots were too small to hit, and even enlarged they add ambiguity (change photo vs open
+product) on a browsing surface. Tiles are teasers; deep visual exploration happens in one
+consistent place, the PDP.
+- **REMOVE from tiles:** the existing tile carousel — `cardImgSlidesHtml()` and its dots
+  (`.card-img-slide` / `.card-img-dots` / `.card-img-dot`, `window.cycleCardImg`) — so
+  `productCard()` renders a single image like `bottegaCard()` already does. Whole tile still
+  navigates to detail (Option B). No photo-changer of any kind on tiles.
+- **BUILD on the detail page only** (`productDetail`, replacing the single `pd-img`): a real
+  gallery for ALL shelves — larger main image with SWIPE + tap left/right halves for
+  prev/next + dots and/or a thumbnail strip + arrows. Finger-first targets (~44px min), no
+  hover dependency (mobile). This is the one place multi-photo exists.
+- Photos are still placeholders (front / "Back of bag" / "Label close-up") pending real
+  per-SKU photography.
 
 ---
 
