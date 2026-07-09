@@ -249,6 +249,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .people-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.5rem;margin-bottom:1rem}
 .person-photo{width:100%;aspect-ratio:1;background:linear-gradient(135deg,var(--ci-espresso),var(--ci-coffee));border-radius:var(--ci-radius);border:1px solid var(--ci-hairline);display:flex;align-items:center;justify-content:center;font-family:var(--ci-font-display);font-style:italic;font-size:.9rem;color:var(--ci-crema-light);text-align:center;padding:.75rem;margin-bottom:.65rem}
 .person-card h4{font-family:var(--ci-font-display);font-weight:600;font-size:1rem;color:var(--ci-coffee);margin:0}
+.person-card .person-role{font-size:.8rem;color:var(--ci-mute);margin:.15rem 0 0}
 
 /* ---- back button ---- */
 .back-btn{display:inline-flex;align-items:center;gap:.3rem;background:none;border:none;cursor:pointer;font-family:var(--ci-font-body);font-size:.85rem;color:var(--ci-espresso);padding:0;margin-bottom:1.5rem;transition:color 200ms}
@@ -338,8 +339,8 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .footer-links button:hover{color:var(--ci-crema)}
 
 /* ---- toast ---- */
-.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(120%);background:var(--ci-coffee);color:var(--ci-cream);padding:.75rem 1.25rem;border-radius:var(--ci-radius);font-size:.85rem;z-index:600;transition:transform 300ms;box-shadow:0 8px 24px rgba(59,31,18,.25)}
-.toast.show{transform:translateX(-50%) translateY(0)}
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(120%);opacity:0;visibility:hidden;background:var(--ci-coffee);color:var(--ci-cream);padding:.75rem 1.25rem;border-radius:var(--ci-radius);font-size:.85rem;z-index:600;transition:transform 300ms,opacity 300ms,visibility 300ms;box-shadow:0 8px 24px rgba(59,31,18,.25)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;visibility:visible}
 
 /* ---- responsive ---- */
 @media(max-width:760px){.pd-grid{grid-template-columns:1fr}.founder-grid{grid-template-columns:1fr}}

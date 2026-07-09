@@ -692,6 +692,33 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   **Follow-ups:** none for this change. When the real storefront eventually replaces the
   coming-soon page at launch, replace `live-theme/templates/index.liquid`'s content
   entirely (it says so in its own header comment) rather than reusing it.
+- 2026-07-09 — **POC4 review session with Steve → two small POC edits applied + a POC5
+  backlog and a production build spec captured.** Steve walked the POC4 preview
+  (via `dev.cmd` → `shopify theme dev`) and flagged a batch of account-page, About-page,
+  photo, and information-architecture items. **Applied this session (committed):**
+  (a) **toast sliver fix** — `.toast` in `assets/ci-storefront.css` now uses
+  `opacity:0;visibility:hidden` at rest so the empty notification pill no longer peeks a
+  ~15px brown sliver at the bottom-center of every page (its `translateY(120%)` hide
+  didn't clear the `bottom:1.5rem` offset); still slides + fades in on a real message.
+  (b) **About team/partner roles** — added a `.person-role` line (photo · name · role) to
+  each Team/Partners card: Lucia Calo' = Italian Operations Manager, Asia Chirdo = Italian
+  Board Advisor, Lauren Roberts = US Operations Manager, Partner 1 (placeholder name) =
+  Italian Freight Forwarder. **Captured as backlog (NOT yet built):** a **POC5 backlog** in
+  `docs/POC5_change_list.md` — notification-preferences stub (Option 1, instruct-not-model);
+  Membership tile identity-vs-Active/Lapsed split (decide "Founding Member"+status chip vs
+  "Founding Subscriber"); a Subscriptions tile + cancellation/entitlement flow with a POC
+  mock; Recent Orders tile redesign + instruct-not-model reorder/subscribe/discount-nudge;
+  and finger-first multi-photo across all shelves incl. Bottega + a real detail-page gallery
+  (tap-band + swipe, dots as indicator, Option B navigation). **Production design prompts**
+  in `docs/production_build_spec.md` — the data-driven-content umbrella rule; About content
+  architecture (static Founder/Company, sections+blocks for Team/Partners, metaobjects if it
+  grows); Journal = native Blog/Articles; footer relationship pages (Affiliates/Wholesale/
+  Careers/Press/Contact, post-launch, needs an affiliate app, distinct from About→Partners);
+  and the Loop-vs-native-vs-Functions account/entitlement split. **Also:** hit a Shopify CLI
+  hot-reload bug on Windows (temp files rejected — "Must have a .liquid file extension") that
+  broke `shopify theme dev`'s live-reload of `.liquid` files (assets/CSS unaffected); the
+  POC4 preview theme `151277174953` was untouched (dev syncs to a throwaway Development
+  theme). Updated the Shopify CLI to 4.4.0 (`npm install -g @shopify/cli@latest`) to fix it.
 
 ## 10. Open questions / TODO
 
@@ -807,13 +834,18 @@ data model (`crema_italia.*`) — note the POC4 batch already added a precedent 
 metafield schema should account for; per-shelf product templates; native
 `selling_plan_groups` (Loop) on Roccia; Shopify Functions for discounts; real Shopify
 cart + Checkout; native Shopify customer accounts for the address-book/profile split
-locked 2026-07-04. Reuse POC3/POC4's CSS/JS/markup as the design system.
+locked 2026-07-04. Reuse POC3/POC4's CSS/JS/markup as the design system. **The
+production design prompts and a ready-to-use build prompt live in
+`docs/production_build_spec.md`** (data-driven content rule, About/Journal architecture,
+footer relationship pages, Loop/native/Functions account split) — read it first when the
+production build starts.
 
-**To resume, read in this order:** this block → `docs/POC_v4_change_list.md` (POC4's
-detailed working ledger) → `docs/CremaItalia_POC_v3.html` (design source — now stale
-relative to POC4's live copy in several places; treat the repo as source of truth over
-this frozen doc) → `00_PROJECT_BRIEF.md` (single source of truth) →
-`Coordination\DECISIONS_LOG.md`.
+**To resume, read in this order:** this block → `docs/POC5_change_list.md` (current POC
+backlog + what was applied 2026-07-09) → `docs/production_build_spec.md` (production design
+prompts + ready build prompt) → `docs/POC_v4_change_list.md` (POC4's detailed working
+ledger) → `docs/CremaItalia_POC_v3.html` (design source — now stale relative to POC4/POC5
+live copy in several places; treat the repo as source of truth over this frozen doc) →
+`00_PROJECT_BRIEF.md` (single source of truth) → `Coordination\DECISIONS_LOG.md`.
 
 ---
 
