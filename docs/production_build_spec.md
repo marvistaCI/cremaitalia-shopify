@@ -102,3 +102,22 @@ merchant-editable with **no developer and no build**. Only rarely-changing conte
 - Carry the POC's data-model precedents into the real `crema_italia.*` schema: roaster
   contact fields, and a structured roaster-linkage field on bundle/composite products (not
   just the single `roaster` reference on standalone SKUs).
+
+## 6. Trust signals + photography (from the 2026-07-09 consumer review)
+
+The 2026-07-09 consumer-centric site review (full findings in `docs/POC5_change_list.md`
+item 6) surfaced two items that are **asset-dependent, not POC copy/layout** — they belong
+in the production build, not the mock:
+
+- **Tasteful trust signals.** A new brand asking for a subscription benefits from one or two
+  quiet credibility markers — a real customer voice, a roaster's pedigree (e.g. Gardelli's
+  world-championship palates), press. Must stay on-brand (editorial, NOT star-rating clutter
+  or "as seen in" loudness). Add when real proof exists.
+- **Real photography.** The entire emotional verdict on the site is partly gated on real
+  imagery (Tuscan light, roasting drums, espresso) replacing today's gradient placeholders.
+  Per brand standards §3.5: natural light, low saturation, narrow depth of field; never
+  generic barista stock. This is the single biggest lever on "is it compelling" and it can't
+  be judged or delivered from the mock.
+
+The POC-actionable half of that review (hero rewrite, home resequence, surface founder
+story, quiz prominence, early value, nav order) is POC5 work — see POC5 change list item 6.

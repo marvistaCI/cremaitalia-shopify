@@ -7,8 +7,21 @@ detailed record; the durable summary lives in `CLAUDE.md` §9 (2026-07-09 entry)
 Architecture is unchanged from POC3/POC4 — the custom-Liquid SPA (`templates/index.liquid`
 + `layout/theme.liquid`, `assets/ci-storefront.css|js`, baked-in `assets/ci-catalog.json`).
 
-**Two items were already applied this session** (committed 2026-07-09), the rest are the
+**Three items were already applied this session** (committed 2026-07-09), the rest are the
 POC5 backlog.
+
+---
+
+## ▶ NEXT SESSION — START HERE (Steve, evening of 2026-07-09)
+
+Steve paused for the evening and will pick up **tomorrow (2026-07-10)**. His stated
+priority for the next session: **tackle the home-page "make it compelling + resequence"
+findings — see item 6 below.** He wants to draft the new hero copy together first (it's
+his voice, not the agent's), since the hero is the linchpin. Everything from the 2026-07-09
+consumer-centric site review is captured in **item 6**; the production-dependent findings
+(real trust signals, photography) are in `docs/production_build_spec.md` §6.
+
+Resume order: this file → `docs/production_build_spec.md` → `CLAUDE.md` §9/§10.
 
 ---
 
@@ -125,6 +138,46 @@ consistent place, the PDP.
   hover dependency (mobile). This is the one place multi-photo exists.
 - Photos are still placeholders (front / "Back of bag" / "Label close-up") pending real
   per-SKU photography.
+
+### 6. Home page — make it compelling + resequence (consumer review 2026-07-09) — TOMORROW'S PRIORITY
+From a first-time-visitor site comb. **Overall:** the brand voice + business model are the
+site's biggest asset (honesty / anti-dark-pattern stance, the Tour→subscription journey,
+Italian authenticity, characterful roaster bios, freshness rigor — PRESERVE these). The gap
+is the **first screen** and **home-page sequence**: it front-loads the four-shelf taxonomy
+before the emotional "why," and the hero leads with brand jargon over visitor benefit.
+Note: a full "is it compelling" verdict is partly gated on real photography (all images are
+gradient placeholders today).
+
+POC5-actionable copy/layout fixes (ranked):
+1. **Rewrite the hero to lead with benefit + plain language.** Today: H1 "Meet our curated
+   group of Italian Roasters and their roasts" (about us, not about the visitor); CTAs
+   "Begin with a Sorpresa Tour" / "Build a Roccia Subscription" (invented jargon before
+   it's defined). Lead instead with the real hook — e.g. "The coffee Italians actually
+   drink — imported whole-bean from a handful of Italy's best small roasters, exactly as
+   they seal it." Keep one primary CTA plain ("Find your coffee" / "Take the 3-question
+   quiz"); let branded shelf names appear once explained. **Draft the new hero copy WITH
+   Steve first — it's his voice; this is the linchpin.**
+2. **Reorder the home page: story before taxonomy.** Current: Hero → Four Shelves → Tour →
+   Roasters → Model → Promise → Quiz. Suggested: Hero → the model/why (curated, unchanged,
+   the Italians-drink-it hook) → meet the roasters → how it works (shelves + Tour→
+   subscription path) → Promise → Quiz.
+3. **Surface the founder / origin story.** "The decaf that started Crema Italia" (Val
+   d'Orcia) is a strong origin hook currently buried in a roaster blurb; the founder tile is
+   literally "copy pending." Write an honest, specific founder/origin story as the emotional
+   anchor. (Depends on Steve's real founder copy — already tracked as an open item.)
+4. **Make the quiz reachable for returning visitors.** Auto-launches once for first-timers
+   (good), but the on-page entry is buried at the very bottom and anyone who dismissed it
+   has no easy way back. Pull the entry point up; it doubles as the plain-language hero CTA
+   in #1.
+5. **Early value/pricing reassurance.** The strong value story (subscriber 10% + free
+   shipping, 15% on a first order, no minimum, cancel anytime) is only discovered deep in.
+   A light touch belongs near the top.
+6. **Nav priority:** nav is Shop · Bottega · Roasters · Journal · About — merch sits ahead
+   of the roasters who are the brand's soul. Consider Shop · Roasters · Journal · About ·
+   Bottega.
+
+Deferred to production (not POC copy/layout): tasteful trust signals (real customer voices,
+credibility markers) and real photography — see `docs/production_build_spec.md` §6.
 
 ---
 

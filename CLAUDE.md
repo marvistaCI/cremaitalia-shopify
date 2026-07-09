@@ -719,6 +719,17 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   broke `shopify theme dev`'s live-reload of `.liquid` files (assets/CSS unaffected); the
   POC4 preview theme `151277174953` was untouched (dev syncs to a throwaway Development
   theme). Updated the Shopify CLI to 4.4.0 (`npm install -g @shopify/cli@latest`) to fix it.
+  **Later in the same session:** also applied + committed a **home "See the Tour" fix**
+  (`templates/index.liquid` — the Featured Tour button now `openProduct('tour-ditalia-1')`
+  straight to the tour detail instead of dead-ending on the Sorpresa shelf); **revised the
+  POC5 photo plan** (Steve) — multi-photo is now **detail-page-only**, tiles go single-photo
+  on ALL shelves incl. Bottega (removes the tile carousel/dots entirely, builds one gallery
+  on the PDP); and ran a **consumer-centric site review** whose findings are logged as POC5
+  change-list item 6 (POC-actionable: hero rewrite, home resequence, surface founder story,
+  quiz prominence, early value, nav order) and production_build_spec.md §6 (trust signals,
+  photography). **Steve paused for the evening 2026-07-09; NEXT SESSION priority (2026-07-10)
+  is the home-page compelling/resequence work — draft the new hero copy WITH Steve first.**
+  See the "▶ NEXT SESSION — START HERE" banner atop `docs/POC5_change_list.md`.
 
 ## 10. Open questions / TODO
 
