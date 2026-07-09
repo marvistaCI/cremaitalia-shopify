@@ -24,6 +24,10 @@ POC5 backlog.
   Manager; Asia Chirdo — Italian Board Advisor; Lauren Roberts — US Operations Manager;
   Partner 1 (placeholder name) — Italian Freight Forwarder. New `.person-card .person-role`
   CSS rule. Names/roles are real; photos + the partner name remain placeholders.
+- **Home "See the Tour" now goes straight to the tour detail.** The home Featured Tour
+  button (`templates/index.liquid`) pointed at `showPage('sorpresa')`, landing the user on
+  the Sorpresa shelf where a second "View Tour" button was needed — a redundant step. Now
+  `openProduct('tour-ditalia-1')`, going directly to the Tour d'Italia 1 detail page.
 
 ---
 
