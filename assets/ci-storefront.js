@@ -237,7 +237,13 @@
   }
 
   // ---------- SPA navigation ----------
-  window.showPage = function (name) {
+  // SPA navigation history — a simple stack so "Back" returns to the ACTUAL previous page
+  // (not a fixed parent). Forward navigations push; goBack pops. Falls back to home.
+  var navStack = [], navCurrent = 'home';
+  window.goBack = function () { showPage(navStack.length ? navStack.pop() : 'home', true); };
+  window.showPage = function (name, isBack) {
+    if (!isBack && name !== navCurrent) navStack.push(navCurrent);
+    navCurrent = name;
     var pages = document.querySelectorAll('.page');
     for (var i = 0; i < pages.length; i++) pages[i].classList.remove('active');
     var t = $('page-' + name);
