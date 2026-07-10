@@ -154,33 +154,16 @@
   }
 
   // ---------- card renderers ----------
-  // Placeholder multi-angle photo slides for a product tile — stands in for real
-  // photography (front/back/label-closeup) until roasters supply it. See
-  // docs/POC_v4_change_list.md item 9.
-  function cardImgSlidesHtml(p) {
-    var slides = [p.img ? p.img.label : p.title, 'Back of bag', 'Label close-up'];
-    var slidesHtml = slides.map(function (s, i) {
-      return '<div class="card-img-slide' + (i === 0 ? ' active' : '') + '">' + esc(s) + '</div>';
-    }).join('');
-    var dotsHtml = slides.length > 1 ? '<div class="card-img-dots">' + slides.map(function (_, i) {
-      return '<button class="card-img-dot' + (i === 0 ? ' active' : '') + '" onclick="event.stopPropagation();cycleCardImg(this,' + i + ')" aria-label="Photo ' + (i + 1) + ' of ' + slides.length + '"></button>';
-    }).join('') + '</div>' : '';
-    return slidesHtml + dotsHtml;
-  }
-  window.cycleCardImg = function (dotEl, idx) {
-    var tile = dotEl.closest('.card-img');
-    if (!tile) return;
-    var slides = tile.querySelectorAll('.card-img-slide');
-    var dots = tile.querySelectorAll('.card-img-dot');
-    for (var i = 0; i < slides.length; i++) slides[i].classList.toggle('active', i === idx);
-    for (var j = 0; j < dots.length; j++) dots[j].classList.toggle('active', j === idx);
-  };
+  // Tiles show a SINGLE placeholder image on every shelf (POC5 decision 2026-07-10):
+  // multi-photo browsing lives ONLY on the product detail page (see the pd-gallery in
+  // productDetail). Clicking a tile just opens the product (Option B navigation) — no
+  // photo-changer on tiles.
   function productCard(p) {
     var badge = SHELF_BADGE[p.shelf] || { cls: '', tag: '' };
     return '<div class="card product-card" data-region="' + esc(p.region) + '" data-shelf="' + esc(p.shelf) +
       '" data-roast="' + esc(p.roast) + '" data-flavor="' + esc(p.flavor) + '" data-caffeine="' + esc(p.caffeine) +
       '" onclick="openProduct(\'' + p.handle + '\')">' +
-      '<div class="card-img ' + imgCls(p.img) + '"' + imgStyle(p.img) + '>' + cardImgSlidesHtml(p) + '</div>' +
+      '<div class="card-img ' + imgCls(p.img) + '"' + imgStyle(p.img) + '>' + esc(p.img ? p.img.label : p.title) + '</div>' +
       '<div class="card-body">' +
         '<span class="cs ' + badge.cls + '">' + esc(badge.tag) + '</span>' +
         '<h3>' + esc(p.display_title) + '</h3>' +
@@ -287,12 +270,59 @@
     var p = byHandle[handle];
     if (!p) return;
     $('product-detail').innerHTML = productDetail(p);
+    initPdGallery();
     showPage('product');
   };
 
+  // ---------- product-detail photo gallery (POC5) ----------
+  // The one place multi-photo lives. Placeholder slides (front / back / label close-up)
+  // until real per-SKU photography exists. Finger-first: swipe, tap the left/right half of
+  // the image, arrows, and a thumbnail strip — all drive the same main image, looping.
+  var pdSlides = [], pdIdx = 0;
+  function pdGalleryHtml(p) {
+    pdSlides = [p.img ? p.img.label : p.title, 'Back of bag', 'Label close-up'];
+    pdIdx = 0;
+    var thumbs = pdSlides.map(function (s, i) {
+      return '<button class="pd-gthumb' + (i === 0 ? ' active' : '') + '" onclick="pdGalleryTo(' + i + ')" aria-label="Photo ' + (i + 1) + '">' + esc(s) + '</button>';
+    }).join('');
+    return '<div class="pd-gallery" id="pd-gallery">' +
+      '<div class="pd-img card-img ' + imgCls(p.img) + '" id="pd-gmain"' + imgStyle(p.img) + ' onclick="pdGalleryTap(event)">' +
+        '<button class="pd-gnav pd-gprev" onclick="pdGallery(-1)" aria-label="Previous photo">&#8249;</button>' +
+        '<span class="pd-gslide" id="pd-gslide">' + esc(pdSlides[0]) + '</span>' +
+        '<button class="pd-gnav pd-gnext" onclick="pdGallery(1)" aria-label="Next photo">&#8250;</button>' +
+      '</div>' +
+      '<div class="pd-gthumbs">' + thumbs + '</div>' +
+    '</div>';
+  }
+  window.pdGalleryTo = function (i) {
+    if (!pdSlides.length) return;
+    pdIdx = (i + pdSlides.length) % pdSlides.length;
+    var slide = document.getElementById('pd-gslide');
+    if (slide) slide.textContent = pdSlides[pdIdx];
+    var thumbs = document.querySelectorAll('.pd-gthumb');
+    for (var t = 0; t < thumbs.length; t++) thumbs[t].classList.toggle('active', t === pdIdx);
+  };
+  window.pdGallery = function (dir) { pdGalleryTo(pdIdx + dir); };
+  window.pdGalleryTap = function (e) {
+    if (e.target.closest('.pd-gnav') || e.target.closest('.pd-gthumb')) return;
+    var rect = e.currentTarget.getBoundingClientRect();
+    pdGallery((e.clientX - rect.left) < rect.width / 2 ? -1 : 1);
+  };
+  function initPdGallery() {
+    var area = document.getElementById('pd-gmain');
+    if (!area) return;
+    var sx = 0, on = false;
+    area.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; on = true; }, { passive: true });
+    area.addEventListener('touchend', function (e) {
+      if (!on) return; on = false;
+      var dx = e.changedTouches[0].clientX - sx;
+      if (Math.abs(dx) > 40) pdGallery(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
+
   function productDetail(p) {
     var badge = SHELF_BADGE[p.shelf] || { cls: '', tag: '' };
-    var img = '<div class="pd-img card-img ' + imgCls(p.img) + '"' + imgStyle(p.img) + '>' + esc(p.img ? p.img.label : p.title) + '</div>';
+    var img = pdGalleryHtml(p);
 
     // Bottega: simple detail.
     if (p.shelf === 'bottega') {

@@ -160,7 +160,16 @@ mocks — INSTRUCT (descriptive stub copy + `PROD:`/`LOOP:` seams), like the Loo
   have rotated out, sold out, or changed price; production "Order again" needs a graceful
   "no longer available — here's a similar one" path.
 
-### 5. Multi-photo ONLY on the detail page (tiles are single-photo) — DECISION REVISED 2026-07-09
+### 5. Multi-photo ONLY on the detail page — BUILT & LOCKED 2026-07-10 (tiles single-photo)
+**BUILT 2026-07-10:** removed the tile carousel entirely (`cardImgSlidesHtml` + `cycleCardImg`
++ the `.card-img-slide/-dots/-dot` CSS) so `productCard()` renders a single image on every
+shelf like `bottegaCard()` — clicking a tile just opens the product (Option B). Built the
+detail-page gallery (`pdGalleryHtml`/`pdGallery`/`pdGalleryTo`/`pdGalleryTap`/`initPdGallery`,
+replacing `productDetail`'s single `pd-img`): a main image with prev/next **arrows**, **tap the
+left/right half** to change, **swipe** on touch, and a **thumbnail strip** (active thumb
+gold-outlined), all looping. Same gallery for ALL shelves incl. Bottega. Slides are still
+placeholders (front / "Back of bag" / "Label close-up") pending real per-SKU photography.
+
 **Revised decision (Steve, 2026-07-09):** multi-photo browsing lives ONLY on the product
 detail page. Top-level tiles — EVERY shelf, roast shelves AND Bottega — show a single,
 clean photo with NO dots and NO carousel. The detail-page gallery is the same for every

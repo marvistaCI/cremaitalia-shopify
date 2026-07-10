@@ -146,11 +146,15 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .card.nh{cursor:default}
 .card.nh:hover{box-shadow:none}
 .card-img{width:100%;aspect-ratio:3/2;position:relative;display:flex;align-items:center;justify-content:center;font-family:var(--ci-font-display);font-style:italic;font-size:1.1rem;flex-direction:column;gap:.25rem;text-align:center;padding:1rem;background:var(--ci-hairline);color:var(--ci-espresso)}
-.card-img-slide{display:none;position:absolute;inset:0;align-items:center;justify-content:center;padding:1rem;text-align:center}
-.card-img-slide.active{display:flex}
-.card-img-dots{position:absolute;bottom:.5rem;left:50%;transform:translateX(-50%);display:flex;gap:.4rem;z-index:2}
-.card-img-dot{width:6px;height:6px;border-radius:50%;border:none;padding:0;cursor:pointer;background:rgba(255,255,255,.55);box-shadow:0 0 0 1px rgba(0,0,0,.18)}
-.card-img-dot.active{background:var(--ci-ivory)}
+/* Product-detail photo gallery (POC5) — the only place multi-photo lives. */
+#pd-gmain{position:relative;cursor:pointer;user-select:none}
+.pd-gnav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:none;background:rgba(251,248,241,.85);color:var(--ci-coffee);font-size:1.5rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;padding:0;transition:background 150ms}
+.pd-gnav:hover{background:var(--ci-cream)}
+.pd-gprev{left:.6rem}
+.pd-gnext{right:.6rem}
+.pd-gthumbs{display:flex;gap:.5rem;margin-top:.6rem}
+.pd-gthumb{flex:1;aspect-ratio:1;border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);cursor:pointer;font-size:.6rem;color:var(--ci-crema-light);background:linear-gradient(135deg,var(--ci-espresso),var(--ci-coffee));display:flex;align-items:center;justify-content:center;text-align:center;padding:.25rem;line-height:1.15;font-family:var(--ci-font-display);font-style:italic}
+.pd-gthumb.active{border-color:var(--ci-crema);box-shadow:0 0 0 2px var(--ci-crema)}
 .r{background:linear-gradient(135deg,#2a1a0e,#6B4A38);color:var(--ci-crema-light)}
 .p{background:linear-gradient(135deg,#55331B,#8B5E3C);color:var(--ci-crema-light)}
 .g{background:linear-gradient(135deg,#1a3a2a,#0E7A3A,#4a7a3a);color:#d4f0d4}

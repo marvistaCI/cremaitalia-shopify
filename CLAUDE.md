@@ -769,6 +769,20 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   `docs/POC5_change_list.md` items 2–3. Committed + pushed. **POC5 backlog remaining: notification
   stub, Recent Orders redesign, detail-page photo gallery** (change-list items 1, 4, 5).
 
+- 2026-07-10 — **Detail-page photo gallery built — POC5 build backlog COMPLETE.** Per the
+  2026-07-09 decision: removed the tile photo carousel (all shelves now single-image like
+  Bottega; clicking a tile just opens the product), and built the multi-photo gallery in ONE
+  place — the product detail page — for every shelf: main image with prev/next arrows, tap the
+  left/right half, swipe on touch, and a thumbnail strip (active thumb gold-outlined), all
+  looping. Slides remain placeholders (front / back / label close-up) pending real SKU
+  photography. Detail in `docs/POC5_change_list.md` item 5. **All six POC5 build items are now
+  done** (landing page; Founding Member mechanic + account tile states; notification stub;
+  Recent Orders redesign; detail-page gallery). **NEXT: deploy the POC5 batch to a renamed
+  "Crema Italia POC5 Preview" theme** (needs Steve's go-ahead) per the draft-theme naming rule
+  — it is committed to git + viewable on the local `shopify theme dev` but not yet pushed to a
+  Shopify preview theme. Remaining open items are production design prompts (About/Journal/
+  footer IA), not POC builds.
+
 ## 10. Open questions / TODO
 
 **POC4 — CURRENT STATE (as of 2026-07-05) — read this first when resuming.**
