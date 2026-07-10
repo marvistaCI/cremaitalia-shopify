@@ -16,55 +16,67 @@
 {%- endcomment -%}
 
 <!-- ============================== HOME ============================== -->
+<!-- POC5 MODEL (2026-07-10, pending Steve's sign-off): story-first landing.
+     Hero = questions -> payoff + single quiz CTA; sticky jump-chips; founder
+     confession; model; shelves + contextual Sorpresa CTA; roasters; promise.
+     Featured Tour removed from home; quiz is invitation-only (no auto-launch). -->
 <div class="page active" id="page-home">
   <div class="hero"><div class="hero-inner">
     <img class="hero-logo" src="{{ 'ci-logo-knockout.png' | asset_url }}" alt="Crema Italia">
-    <h1>Meet our curated group of Italian Roasters and their roasts.</h1>
-    <p class="subhead">Italian Artisan Coffee, Imported Without Compromise.</p>
+    <p class="subhead" style="max-width:58ch;margin:0 auto .35rem">Do you love Espresso, Italy, and the Italian Bar (Caf&eacute;) culture? Or are you simply looking for delicious, fresh coffee beans?</p>
+    <h1>Benvenuto &mdash; welcome in.</h1>
     <div class="tricolore" aria-hidden="true"><div></div><div></div><div></div></div>
-    <div class="hero-btns">
-      <button class="btn btn-primary" onclick="showPage('sorpresa')">Begin with a Sorpresa Tour</button>
-      <button class="btn btn-outline" onclick="showPage('roccia')">Build a Roccia Subscription</button>
-    </div>
   </div></div>
+
+  <nav class="home-jump" aria-label="On this page">
+    <button onclick="jumpHome('sec-story')">Our story</button>
+    <button onclick="jumpHome('sec-roasters')">Roasters</button>
+    <button onclick="jumpHome('sec-shelves')">Shelves</button>
+    <button onclick="jumpHome('sec-promise')">Promise</button>
+    <button class="hj-quiz" onclick="openQuiz()">Tasting Quiz</button>
+  </nav>
+
   <main class="ci-main">
-    <div class="section-head" style="margin-top:0"><p class="eyebrow">How the catalog is organized</p><h2>The four coffee shelves.</h2></div>
+    <!-- Our story / founder confession -->
+    <div class="section-head" id="sec-story" style="margin-top:0"><p class="eyebrow">Our story</p><h2>A full confession.</h2></div>
+    <div class="prose" style="max-width:72ch">
+      <p>I&rsquo;ve fallen in love. With Italy, and all things Italian &mdash; especially the caff&egrave; culture built around delicious, roasted beans. On a recent trip to Tuscany, a friend gave me, as a parting gift, a bag of decaf beans. When I got home I ground exactly 17g and pulled an espresso shot (<span class="ita">un caff&egrave;</span>) &mdash; and was blown away by the taste. So I looked for the roaster online to order more, and was surprised to find they didn&rsquo;t ship. That was the inspiration. Crema Italia was born to give the US market access to these excellent producers and their products.</p>
+      <img class="founder-signature" src="{{ 'ci-signature.png' | asset_url }}" alt="Steve Roberts" width="184">
+      <p class="founder-sign">Steve Roberts, Founder</p>
+    </div>
+
+    <!-- Our model -->
+    <div class="section-head"><p class="eyebrow">Our model</p><h2>Curated, never aggregated.</h2></div>
+    <div class="prose" style="max-width:72ch">
+      <p>We have carefully hand-selected a small number of roasters whose work represents Italian roasting at its finest. We do not roast, grind, blend, or alter the roasters&rsquo; packaging &mdash; instead, shortly after the roaster seals the whole-bean coffee into valve bags, we air-freight it directly into our US fulfillment facility, exactly as they produced and sealed it &mdash; fresh and ready to consume.</p>
+      <p>Scroll down to meet our roasters. Do you have a roaster you&rsquo;d like us to consider? <a class="inline-link" href="mailto:roasters@cremaitalia.com">Email me here.</a></p>
+    </div>
+
+    <!-- Shelves -->
+    <div class="section-head" id="sec-shelves"><p class="eyebrow">How the catalog is organized</p><h2>The four coffee shelves.</h2></div>
+    <p class="prose" style="max-width:72ch">One shelf for subscriptions and larger formats (<span class="ita">Roccia</span>), one for discovery and gifting (<span class="ita">Sorpresa</span>), one for rare or seasonal roasts (<span class="ita">Selezione</span>), and one for value (<span class="ita">Offerta</span>).</p>
     <div class="card-grid">
       <div class="shelf-card" onclick="showPage('roccia')"><h3>Roccia</h3><div class="ss2">The Rock · Subscription (and one-time ordering)</div><p>Your preferred coffee, size, and cadence — free shipping and a 10% discount.</p></div>
       <div class="shelf-card" onclick="showPage('sorpresa')"><h3>Sorpresa</h3><div class="ss2">Discovery · One-time</div><p>Our curated collection of roasted delights. On-demand 100g Tour bundles — the best way to find your favorite roast subscription.</p></div>
       <div class="shelf-card" onclick="showPage('selezione')"><h3>Selezione</h3><div class="ss2">Premium &amp; Seasonal · One-time</div><p>Roasters' premium and seasonal offerings. Micro-lots and limited imports. When a product sells out, it may not return — once it's gone, it's gone.</p></div>
       <div class="shelf-card" onclick="showPage('offerta')"><h3>Offerta</h3><div class="ss2">The Opportunity · One-time</div><p>Limited-time offers, on sale while inventory lasts. Good coffee approaching its freshness window, priced honestly. Sold as-is.</p></div>
     </div>
+    <div class="callout" style="margin-top:1.75rem"><strong>Your first purchase is our introduction.</strong> You may already know the roaster by reputation and are ready to subscribe. If not, try Sorpresa — we&rsquo;ll introduce you to a roaster you&rsquo;ll fall in love with, and hope that a Roccia subscription will soon follow.</div>
+    <div class="hero-btns" style="margin-top:1.25rem"><button class="btn btn-primary" onclick="showPage('sorpresa')">Begin with a Sorpresa Tour</button></div>
 
-    <div class="tour-hero">
-      <div class="tour-hero-text">
-        <p class="eyebrow" style="color:var(--ci-crema-light)">Featured Tour · Sorpresa</p>
-        <h2>Tour d'Italia 1</h2>
-        <p>Three different 100g bags from three roasters, our choice — assembled on-demand so every bag ships fresh. A printed tasting card names each roaster and their notes.</p>
-        <p style="margin-top:.5rem;color:var(--ci-crema-light);font-style:italic">$77.70 · assembled to order</p>
-        <button class="btn btn-primary" style="margin-top:1rem" onclick="openProduct('tour-ditalia-1')">See the Tour</button>
-      </div>
-      <div class="tour-bags"><div class="tour-bag">Gardelli<br>Ethiopia</div><div class="tour-bag">La Sosta<br>Guatemala</div><div class="tour-bag">Fusari<br>Colombia</div></div>
-    </div>
+    <div class="callout" style="margin-top:2rem"><strong>Still unsure?</strong> Take our simple <button class="inline-link" onclick="openQuiz()">three-question quiz</button> to narrow the selection to the coffees matching your tastes.</div>
 
-    <div class="section-head"><p class="eyebrow">Our roasters</p><h2>A small group, each with a big story.</h2></div>
+    <!-- Roasters -->
+    <div class="section-head" id="sec-roasters"><p class="eyebrow">Our roasters</p><h2>A small group, each with a big story.</h2></div>
     <div class="card-grid" id="home-roasters"></div>
 
-    <div class="section-head"><p class="eyebrow">Our model</p><h2>Curated, never aggregated.</h2></div>
-    <div class="prose" style="max-width:72ch">
-      <p>We do not roast, grind, blend, or alter the roasters' packaging. Instead, we carefully choose a small number of roasters whose work represents the craft of Italian roasting at its finest, and we present their coffee exactly as they produced and sealed it — whole bean, in valve bags, fresh and ready to consume.</p>
-      <p>Your first purchase is our introduction. You may already know the roaster by reputation and are ready to subscribe, but if not, try Sorpresa — we'll introduce you to a roaster you'll fall in love with, and hope that a Roccia subscription will soon follow.</p>
-      <p>We are the U.S. Agent for FDA food-facility registration on behalf of our roaster partners. We import and airfreight a limited supply of pallets, matching the cadence of our customers and roasters to maximize the fresh-roasted flavor you deserve.</p>
-    </div>
-
-    <div class="section-head"><p class="eyebrow">The Crema Italia Promise</p><h2>Three things we mean.</h2></div>
+    <!-- Promise -->
+    <div class="section-head" id="sec-promise"><p class="eyebrow">The Crema Italia Promise</p><h2>Three things we mean.</h2></div>
     <ul class="promise-list">
       <li><div class="pn">1</div><div class="pt"><h3>Curated with love, never aggregated.</h3><p>A small group of Italian roasters — carefully chosen, not collected.</p></div></li>
       <li><div class="pn">2</div><div class="pt"><h3>Love your first bag, or we send a different one — free.</h3><p>On Roccia, Sorpresa, and Selezione. Offerta is sold as-is (see <button class="inline-link" onclick="showPage('promise')">the Promise page</button>).</p></div></li>
       <li><div class="pn">3</div><div class="pt"><h3>Cancel your subscription anytime in a couple of clicks.</h3><p>Pause, skip, swap, or cancel — all self-service, no minimum, no cancel fee.</p></div></li>
     </ul>
-
-    <div class="callout" style="margin-top:2.5rem"><strong>Not sure where to start?</strong> Take the three-question taste quiz — we will filter the catalog to your preferences. <button onclick="openQuiz()" style="background:none;border:none;cursor:pointer;color:var(--ci-crema);font-weight:600;text-decoration:underline;text-underline-offset:2px;font-family:var(--ci-font-body)">Take the quiz</button></div>
   </main>
 </div>
 

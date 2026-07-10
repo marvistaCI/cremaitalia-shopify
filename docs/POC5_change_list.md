@@ -12,14 +12,15 @@ POC5 backlog.
 
 ---
 
-## ▶ NEXT SESSION — START HERE (Steve, evening of 2026-07-09)
+## ▶ NEXT SESSION — START HERE (updated 2026-07-10)
 
-Steve paused for the evening and will pick up **tomorrow (2026-07-10)**. His stated
-priority for the next session: **tackle the home-page "make it compelling + resequence"
-findings — see item 6 below.** He wants to draft the new hero copy together first (it's
-his voice, not the agent's), since the hero is the linchpin. Everything from the 2026-07-09
-consumer-centric site review is captured in **item 6**; the production-dependent findings
-(real trust signals, photography) are in `docs/production_build_spec.md` §6.
+**Landing page: LOCKED & BUILT (2026-07-10, Steve's sign-off).** The home-page rework
+(item 6) was built as a live model in the POC and blessed by Steve — item 6 now holds the
+final landing spec. **Remaining POC5 backlog = items 1–5:** account page (notification
+stub, Membership identity/status, Subscriptions + cancellation mock, Recent Orders
+redesign) and the detail-page-only photo gallery. Those are the next things to build.
+Production-dependent findings (real trust signals, photography) remain in
+`docs/production_build_spec.md` §6.
 
 Resume order: this file → `docs/production_build_spec.md` → `CLAUDE.md` §9/§10.
 
@@ -139,7 +140,40 @@ consistent place, the PDP.
 - Photos are still placeholders (front / "Back of bag" / "Label close-up") pending real
   per-SKU photography.
 
-### 6. Home page — make it compelling + resequence (consumer review 2026-07-09) — TOMORROW'S PRIORITY
+### 6. Home page / landing — LOCKED & BUILT 2026-07-10 (from consumer review 2026-07-09)
+
+**BUILT & LOCKED (2026-07-10, Steve's sign-off) — this is the POC5 landing spec.** New
+`#page-home` in `templates/index.liquid` (+ styles in `assets/ci-storefront.css`,
+`jumpHome()` in `assets/ci-storefront.js`, new asset `assets/ci-signature.png`):
+- **Hero:** Steve's two questions ("Do you love Espresso, Italy, and the Italian Bar
+  (Café) culture? Or are you simply looking for delicious, fresh coffee beans?") as the
+  lead, then the payoff H1 **"Benvenuto — welcome in."** No CTA button in the hero. Logo
+  enlarged (~264px desktop / 176px mobile), top gap trimmed, words given air, balanced
+  top-to-bottom.
+- **Sticky jump-chips** under the header: Our story · Roasters · Shelves · Promise ·
+  **Tasting Quiz** (smooth-scroll; the quiz chip opens the quiz modal).
+- **Story-first sequence:** hero → **"A full confession"** (Steve's first-person founder/
+  decaf origin story) with his **espresso-recolored signature** + "Steve Roberts,
+  Founder" → **"Curated, never aggregated"** model + "Email me here" (mailto
+  `roasters@cremaitalia.com`) → **"The four coffee shelves"** (intro sentence + cards) →
+  "Your first purchase is our introduction" callout → single **Begin with a Sorpresa
+  Tour** button → **"Still unsure?"** with an inline **three-question quiz** text link →
+  **Roasters** → **Promise**.
+- **Featured Tour block removed** from home.
+- **QUIZ AUTO-LAUNCH REMOVED (brand decision, locked):** the first-visit auto-popping quiz
+  modal was judged a mild gimmick inconsistent with the anti-dark-pattern brand. The quiz
+  is now invitation-only (sticky "Tasting Quiz" chip + the "Still unsure?" inline link);
+  the `ci_quiz_seen` auto-launch in `boot()` was removed.
+- **CTA hierarchy (locked):** primary path = Sorpresa (one gold button); quiz = quiet
+  inline link. **Roccia gets NO home CTA** — it is the second sale, earned on roaster/shelf
+  pages.
+- Copy edits applied: **Selezione** spelling, *un caffè* italicised (Italian), gift-sentence
+  grammar, "Italian roasting at its finest," em-dashes. Signature is the ONLY handwritten
+  element on the site (kept scarce for impact); it's a soft phone-photo — a flat scan could
+  sharpen it later if wanted.
+
+Rationale — the consumer review that drove it — below.
+
 From a first-time-visitor site comb. **Overall:** the brand voice + business model are the
 site's biggest asset (honesty / anti-dark-pattern stance, the Tour→subscription journey,
 Italian authenticity, characterful roaster bios, freshness rigor — PRESERVE these). The gap

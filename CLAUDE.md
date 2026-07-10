@@ -731,6 +731,27 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   is the home-page compelling/resequence work — draft the new hero copy WITH Steve first.**
   See the "▶ NEXT SESSION — START HERE" banner atop `docs/POC5_change_list.md`.
 
+- 2026-07-10 — **POC5 landing page designed, modeled live, and LOCKED with Steve.** Worked
+  the home page interactively in the running `shopify theme dev` preview (build-model → Steve
+  reacts → iterate → sign-off), then locked it. Final `#page-home` (`templates/index.liquid`
+  + `assets/ci-storefront.css` + `jumpHome()` in `assets/ci-storefront.js` + new asset
+  `assets/ci-signature.png`): **hero** = Steve's two questions as lead → payoff H1
+  **"Benvenuto — welcome in."**, no hero button, logo enlarged (~264px/176px) with trimmed
+  top gap and balanced spacing; **sticky jump-chips** (Our story · Roasters · Shelves ·
+  Promise · Tasting Quiz); **story-first sequence** — confession (Steve's first-person
+  founder/decaf origin story) with his **espresso-recolored handwritten signature** +
+  "Steve Roberts, Founder" → model + "Email me here" → four shelves → single **Begin with a
+  Sorpresa Tour** button → **"Still unsure?"** inline **three-question quiz** link → roasters
+  → promise. **Featured Tour removed from home.** **Locked brand/UX decisions:** (1) the
+  first-visit **quiz auto-launch was removed** as a mild gimmick inconsistent with the
+  anti-dark-pattern brand — quiz is now invitation-only; (2) **CTA hierarchy** — Sorpresa is
+  the one primary button, quiz is a quiet inline link, **Roccia gets no home CTA** (second
+  sale, earned later). Signature processed from a phone photo (Pillow: paper knocked out,
+  recolored to Espresso `#55331B`, tight-cropped transparent PNG) and kept as the ONLY
+  handwritten element on the site. Copy edits applied (Selezione spelling, *un caffè* italic,
+  grammar). Full spec in `docs/POC5_change_list.md` item 6. Committed + pushed. **Remaining
+  POC5 backlog = account-page items + detail-page photo gallery** (change-list items 1–5).
+
 ## 10. Open questions / TODO
 
 **POC4 — CURRENT STATE (as of 2026-07-05) — read this first when resuming.**

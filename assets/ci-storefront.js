@@ -238,6 +238,12 @@
     if (['roccia', 'selezione', 'offerta'].indexOf(name) !== -1) applyTasteToGrid('grid-' + name);
   };
 
+  // Smooth in-page scroll for the home-page sticky jump-chips.
+  window.jumpHome = function (id) {
+    var e = document.getElementById(id);
+    if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   window.openRoaster = function (handle) {
     var r = roasterByHandle[handle];
     if (!r) return;
@@ -839,8 +845,9 @@
       if (e.key === 'Escape') { closeQuiz(); closeSignin(); }
     });
 
-    // First-visit taste quiz — auto-launch once, then remember dismissal.
-    try { if (!localStorage.getItem('ci_quiz_seen')) openQuiz(); } catch (e) {}
+    // Quiz is invitation-only (brand decision 2026-07-10): it launches from the hero
+    // CTA and the sticky "Take the quiz" chip, never as an unbidden first-visit modal.
+    // The auto-launch was removed as a mild gimmick inconsistent with the brand.
 
     var url = window.CI_CATALOG_URL;
     if (!url) { console.warn('CI_CATALOG_URL missing'); return; }
