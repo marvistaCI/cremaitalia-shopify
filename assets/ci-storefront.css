@@ -115,11 +115,11 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .section-head h2{font-family:var(--ci-font-display);font-weight:600;font-size:2rem;color:var(--ci-coffee)}
 
 /* ---- hero ---- */
-.hero{background:var(--ci-coffee);color:var(--ci-cream);padding:1.75rem 1.5rem 2.4rem;text-align:center}
-.hero-inner{max-width:720px;margin:0 auto}
-.hero-logo{display:block;height:264px;width:auto;margin:0 auto 0.35rem;max-width:96%}
-@media(max-width:640px){.hero-logo{height:176px;margin-bottom:0.25rem}}
-.hero h1{font-family:var(--ci-font-display);font-size:clamp(2.2rem,6vw,3.6rem);font-weight:600;color:var(--ci-cream);line-height:1.1;margin-bottom:.5rem}
+.hero{background:var(--ci-coffee);color:var(--ci-cream);padding:2.25rem 1.5rem 3rem;text-align:center}
+.hero-inner{max-width:760px;margin:0 auto}
+.hero-logo{display:block;height:300px;width:auto;margin:0 auto 0.5rem;max-width:98%}
+@media(max-width:640px){.hero-logo{height:196px;margin-bottom:0.35rem}}
+.hero h1{font-family:var(--ci-font-display);font-size:clamp(2.5rem,7vw,4.3rem);font-weight:600;color:var(--ci-cream);line-height:1.08;margin-bottom:0}
 .hero h1 em{font-style:italic;color:var(--ci-crema-light)}
 .hero .subhead{font-family:var(--ci-font-display);font-style:italic;font-size:clamp(1.1rem,2.5vw,1.4rem);color:var(--ci-crema-light);margin:.75rem auto 1rem;max-width:560px}
 /* Green-white-red tricolore divider: 3 equal segments, aligned, on dark panels. */
