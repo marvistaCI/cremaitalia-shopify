@@ -99,6 +99,16 @@ merchant-editable with **no developer and no build**. Only rarely-changing conte
   webhooks. Both the cart discount and the account Membership tile read that tag. This is
   the authoritative downgrade path (a customer can cancel via an email link, never seeing
   any theme UI), so it must be server-side, not session-scoped.
+  - **Founding-rate rule (LOCKED 2026-07-10):** a one-way `founding_rate_forfeited` customer
+    tag, set ONLY on a deliberate full cancel — NEVER by pause or by dunning. Rule:
+    `founding && !forfeited && (active | paused | in-dunning)` → **12%**; any other active/
+    paused subscriber → **10%**; else 0%. **Pause and Loop's dunning window both preserve the
+    rate**; only a full cancel forfeits, and forfeiture is **permanent** (return is 10%, never
+    12% again). The "Founding Member · No. 087" honorific is permanent regardless. Exactly two
+    customer-facing states — **Active** and **Forfeited** — no grace/at-risk state (an earlier
+    grace-period idea was dropped; Pause covers it). Rationale: the 12-vs-10 delta is tiny
+    (~$10/yr), so it's a pride good, not an economic one — and Pause + always-welcome-back +
+    up-front disclosure are what keep the mechanic from angering a founder into permanent exit.
 - Carry the POC's data-model precedents into the real `crema_italia.*` schema: roaster
   contact fields, and a structured roaster-linkage field on bundle/composite products (not
   just the single `roaster` reference on standalone SKUs).

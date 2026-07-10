@@ -752,6 +752,23 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   grammar). Full spec in `docs/POC5_change_list.md` item 6. Committed + pushed. **Remaining
   POC5 backlog = account-page items + detail-page photo gallery** (change-list items 1–5).
 
+- 2026-07-10 — **Founding Member mechanic LOCKED + account tile states mocked.** Decided the
+  Founding-rate model with Steve: "Founding Member" is a permanent honorific (No. 087); the
+  12% is an *Active Subscriber Discount* tied to holding a subscription. **Two states, no grace
+  period:** Active Founder (12%) / Forfeited (10%). **Pause preserves the rate** (indefinitely)
+  and **Loop dunning protects failed cards** — the only way to forfeit is a deliberate full
+  cancel after being offered Pause; forfeiture is permanent (return at 10%, never 12%), and the
+  No. 087 honorific is kept forever (muted). Rationale: the 12-vs-10 delta is tiny (~$10/yr) so
+  it's a pride good; Pause + tiny stakes + always-welcome-back + disclosure prevent the "angry
+  founder exits forever" failure mode Steve worried about. An earlier grace-period idea was
+  dropped (Pause does it better). **Mocked in the POC** (`assets/ci-storefront.js` + `.css`):
+  Membership tile renders Active vs Forfeited; the "Manage your subscription" area has a
+  pause-first cancel flow (Pause and keep 12% / Cancel anyway → forfeit) + Resubscribe; the cart
+  discount honors forfeiture (12%→10%). Delivered quietly per brand (hairline box, gold accent,
+  no alarm colour). Production entitlement rule in `docs/production_build_spec.md` §5; detail in
+  `docs/POC5_change_list.md` items 2–3. Committed + pushed. **POC5 backlog remaining: notification
+  stub, Recent Orders redesign, detail-page photo gallery** (change-list items 1, 4, 5).
+
 ## 10. Open questions / TODO
 
 **POC4 — CURRENT STATE (as of 2026-07-05) — read this first when resuming.**

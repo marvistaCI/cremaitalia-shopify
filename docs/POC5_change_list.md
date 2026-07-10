@@ -60,8 +60,23 @@ store-level and not customer-configurable. Add:
 Use the existing `PROD:` / `LOOP:` comment seams. Verify Loop's exact customer-facing
 notification toggles against current Loop docs before naming specific controls.
 
-### 2. Membership tile — separate identity from status
-Current code conflates two independent things and has no lapsed state:
+### 2. Membership tile — BUILT & LOCKED 2026-07-10 (two states: Active / Forfeited)
+**LOCKED — the Founding Member mechanic (Steve, 2026-07-10):** "Founding Member" is the
+PERMANENT honorific (No. 087, never lost). The 12% is the *Active Subscriber Discount* —
+active only while subscribed. **Two states, no grace period:** Active Founder (12%) /
+Forfeited (10%). **Pause preserves the rate** (indefinitely, no charge) and **Loop dunning
+protects failed cards** — so the ONLY way to forfeit is a deliberate full cancel after being
+offered Pause. Forfeiture is **permanent** (return at 10%, never 12% again); the No. 087
+honorific is kept forever, muted, as the quiet pride/regret cue. Why it won't anger founders
+into permanent exit (Steve's worry): the 12-vs-10 delta is tiny (~$10/yr) so it's a *pride*
+good, and Pause + tiny stakes + always-welcome-back + up-front disclosure remove every
+"surprise / punished-for-nothing" failure mode. The earlier grace-period/at-risk idea was
+**dropped** — Pause does that job better and simpler. Naming: kept **"Founding Member" +
+status chip** (NOT "Founding Subscriber").
+**BUILT (POC mock):** Membership tile renders both states, driven by `session.foundingForfeited`;
+cart entitlement honors it (`foundingRate = foundingMember && !foundingForfeited` → 12% else 10%).
+
+Original rationale — current code conflated two independent things and had no lapsed state:
 `(session.foundingMember ? 'Founding Member · No. 087' : 'Active subscriber')`.
 - **Founding cohort membership** = permanent honorific (No. 087 of 222), never lost.
 - **Subscription status** = Active / Lapsed — this is what gates the discount.
@@ -72,9 +87,21 @@ Founding 12%." (badge muted). **Decision pending (Steve):** keep "Founding Membe
 status chip (recommended) vs rename to "Founding Subscriber." The real entitlement
 (who currently gets 12/10/0%) is server-side — see item 3.
 
-### 3. Subscriptions tile + cancellation / entitlement flow (WITH POC mock)
-No Subscriptions tile today; sign-in hardcodes `subscriber=true; foundingMember=true`;
-Loop slot is static.
+### 3. Subscriptions tile + cancellation / entitlement flow — BUILT & LOCKED 2026-07-10
+**BUILT (POC mock):** the account "Manage your subscription" area renders a subscription
+summary (Gardelli — Ethiopia Bombe · 250g · every 4 weeks · next ships 2026-07-20) with
+**Pause** / **Cancel subscription**. Cancel opens the **pause-first warning** ("As a Founding
+Member, your 12% is active only while you subscribe. Pause instead and keep it… Cancel and
+return at 10%") offering **Pause and keep my 12%** / **Cancel anyway**. Pause → paused state,
+rate preserved (12%). Cancel anyway → `confirmForfeit()` sets `foundingForfeited`, Membership
+tile flips to Forfeited (10%), cart discount follows. No active sub → **Resubscribe** (returns
+at 10% while forfeited). Delivered quietly per brand (hairline box, gold accent, no alarm
+colour). `PROD`/`LOOP` seams note that in production this whole area is Loop's hosted portal
+and the entitlement is a Shopify Function reading a one-way customer tag flipped by Loop
+webhooks — see `docs/production_build_spec.md` §5 for the locked entitlement rule.
+
+Original spec — no Subscriptions tile existed; sign-in hardcoded `subscriber=true; foundingMember=true`;
+Loop slot was static.
 - **Subscriptions tile** (native theme): summary of active subscriptions (e.g. "1 active
   — Gardelli Ethiopia, every 4 weeks, next ships 2026-07-20") + a "Manage" button into
   the Loop portal slot. Tile is native; the subscription DATA is Loop-sourced.
