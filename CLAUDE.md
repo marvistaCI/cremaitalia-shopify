@@ -833,6 +833,18 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   OneDrive source `07_Region_Map.svg` + `06_Region_Reference.docx` to the same Italian labels
   so the source and the theme's inlined copy don't drift.
 
+- 2026-07-10 — **POC5 deployed to a new preview theme.** Pushed the accumulated POC5 batch
+  (commit `6bbd906`) to a NEW unpublished theme **"Crema Italia POC5 Preview" (id `151420207273`)**
+  via `shopify theme push --unpublished --theme "Crema Italia POC5 Preview" --json`. **POC4
+  Preview (`151277174953`) and the live coming-soon theme (`150557294761`) were untouched** —
+  new theme, not an in-place overwrite. Verified rendering on the real store via the preview
+  link (storefront password still OFF from friend-testing). Preview:
+  `https://crema-italia.myshopify.com?preview_theme_id=151420207273` · Editor:
+  `https://crema-italia.myshopify.com/admin/themes/151420207273/editor`. To refresh after
+  further edits: `shopify theme push --theme 151420207273`. Still open: turn storefront
+  password back ON when friend-testing wraps; align Cowork's OneDrive region source to the
+  Italian vocabulary.
+
 ## 10. Open questions / TODO
 
 **POC4 — CURRENT STATE (as of 2026-07-05) — read this first when resuming.**
