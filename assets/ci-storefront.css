@@ -396,6 +396,15 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .order-sub{font-size:.78rem;color:var(--ci-mute);margin-top:.12rem}
 .order-again{font-size:.76rem;margin-top:.35rem;display:inline-block}
 .bom-cue{color:var(--ci-crema);font-weight:600;font-size:.72rem;letter-spacing:.02em;margin-top:.15rem}
+/* ---- roasting regions page (POC5+) ---- */
+.region-map{display:block;width:100%;max-width:640px;margin:0 auto 1.75rem;height:auto}
+.region-list{display:flex;flex-direction:column;gap:1.05rem;max-width:72ch}
+.region-row.is-here{border-left:3px solid var(--ci-crema);padding-left:1rem}
+.region-row h3{font-family:var(--ci-font-display);font-weight:600;font-size:1.12rem;color:var(--ci-coffee);margin:0 0 .1rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.region-meta{font-size:.78rem;color:var(--ci-crema);font-weight:600;letter-spacing:.02em;margin:0 0 .25rem}
+.region-desc{color:var(--ci-ink-soft);margin:0}
+.region-here{font-size:.66rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ci-cream);background:var(--ci-crema);border-radius:999px;padding:.12rem .5rem}
+
 .founder-lives,.beats{margin:.6rem 0}
 .founder-lives p,.beats p{margin:.4rem 0}
 .founder-lives strong,.beats strong{color:var(--ci-crema)}

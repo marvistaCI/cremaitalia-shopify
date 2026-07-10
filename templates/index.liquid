@@ -267,6 +267,103 @@
   </main>
 </div>
 
+<!-- ============================== ROASTING REGIONS ============================== -->
+<!-- Editorial map page: always shows all nine roasting cultures (teaching + roadmap),
+     independent of which regions have active roasters. Current presence (Tuscany)
+     highlighted. Reachable from the Shop region line's "Learn more" link (POC5+). -->
+<div class="page" id="page-regions">
+  <div class="dark-hero"><div class="dark-hero-inner">
+    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="showPage('shop')">Back to shop</button>
+    <p class="eyebrow" style="color:var(--ci-crema-light)">Where it&rsquo;s roasted</p>
+    <h1>Roasting Regions of Italy</h1>
+    <p>Italy doesn&rsquo;t roast one way. From the light, aromatic cups of the north to the dark, bold espresso of the south, each region carries its own centuries-old roasting tradition. We choose roasters from these traditions and bring their coffee to you unchanged. We are in Tuscany now &mdash; and reaching, carefully, toward the rest.</p>
+  </div></div>
+  <main class="ci-main">
+    <svg class="region-map" id="region-map-svg" viewBox="0 0 640 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of Italy's nine coffee-roasting regions, from the light arabica-led north to the dark robusta-heavy south">
+      <title>Map of Italian coffee-roasting regions and their signature espresso styles</title>
+      <style>
+        #region-map-svg .country{fill:#f3efe9;stroke:#c9beae;stroke-width:1.75;stroke-linejoin:round}
+        #region-map-svg .region-dot{stroke:#fff;stroke-width:2.25}
+        #region-map-svg .region-label{font-family:Inter,Arial,sans-serif;font-size:14px;font-weight:700;fill:#2a2018}
+        #region-map-svg .region-sub{font-family:Inter,Arial,sans-serif;font-size:11px;fill:#6b5d4d}
+        #region-map-svg .leader{stroke:#b8a894;stroke-width:1.1;fill:none}
+        #region-map-svg .legend-text{font-family:Inter,Arial,sans-serif;font-size:12px;fill:#6b5d4d}
+        #region-map-svg .legend-title{font-family:Inter,Arial,sans-serif;font-size:13px;font-weight:700;fill:#2a2018}
+      </style>
+      <path class="country" d="M 206.8 112.6 L 256.2 103.3 L 267.2 119.8 L 272.1 138.3 L 300.5 163.5 L 311.5 174.3 L 340.1 189.5 L 355.8 200.6 L 367.0 205.7 L 386.2 224.0 L 392.3 265.6 L 386.5 286.5 L 400.3 278.7 L 419.8 253.6 L 404.6 233.5 L 412.4 214.7 L 422.3 212.0 L 439.0 224.5 L 447.3 232.0 L 450.0 221.6 L 438.1 206.9 L 414.0 192.5 L 400.8 186.5 L 398.8 172.2 L 392.3 169.2 L 371.9 166.2 L 354.5 152.4 L 339.0 117.7 L 317.8 104.5 L 309.5 93.8 L 311.7 79.4 L 312.4 63.2 L 344.6 56.9 L 340.4 31.5 L 290.5 30.0 L 249.1 37.5 L 239.7 47.1 L 190.0 51.6 L 199.8 85.4 L 206.8 112.6 Z"/>
+      <path class="country" d="M 384.4 279.0 L 374.4 300.9 L 378.6 313.7 L 375.5 322.1 L 366.5 325.1 L 317.8 297.9 L 314.9 285.3 L 331.0 279.9 L 384.4 279.0 Z"/>
+      <path class="country" d="M 242.6 189.8 L 253.8 209.6 L 253.1 229.9 L 249.7 250.9 L 225.4 251.8 L 226.0 229.9 L 221.1 209.0 L 242.1 192.2 L 242.6 189.8 Z"/>
+      <circle class="region-dot" cx="242.1" cy="62.6" r="7" fill="#7A9E7E"/>
+      <path class="leader" d="M 242.1 62.6 L 26.0 44.0"/>
+      <text class="region-label" x="32.0" y="40.0" text-anchor="start">Milan &amp; the North</text>
+      <text class="region-sub" x="32.0" y="56.0" text-anchor="start">Lightest of all — clean,</text>
+      <text class="region-sub" x="32.0" y="70.0" text-anchor="start">aromatic, high arabica</text>
+      <circle class="region-dot" cx="208.6" cy="74.3" r="7" fill="#7A9E7E"/>
+      <path class="leader" d="M 208.6 74.3 L 26.0 136.0"/>
+      <text class="region-label" x="32.0" y="132.0" text-anchor="start">Turin &amp; Piedmont</text>
+      <text class="region-sub" x="32.0" y="148.0" text-anchor="start">Milk &amp; cocoa house — arabica-led,</text>
+      <text class="region-sub" x="32.0" y="162.0" text-anchor="start">bicerin tradition</text>
+      <circle class="region-dot" cx="288.2" cy="113.2" r="7" fill="#B88348"/>
+      <path class="leader" d="M 288.2 113.2 L 26.0 228.0"/>
+      <text class="region-label" x="32.0" y="224.0" text-anchor="start">Tuscany</text>
+      <text class="region-sub" x="32.0" y="240.0" text-anchor="start">Balanced medium roast — artisan</text>
+      <text class="region-sub" x="32.0" y="254.0" text-anchor="start">family torrefazioni</text>
+      <circle class="region-dot" cx="316.2" cy="169.2" r="7" fill="#B88348"/>
+      <path class="leader" d="M 316.2 169.2 L 26.0 320.0"/>
+      <text class="region-label" x="32.0" y="316.0" text-anchor="start">Rome &amp; Lazio</text>
+      <text class="region-sub" x="32.0" y="332.0" text-anchor="start">Arabica-robusta, pulled</text>
+      <text class="region-sub" x="32.0" y="346.0" text-anchor="start">ristretto, spiced-nutty</text>
+      <circle class="region-dot" cx="344.6" cy="56.9" r="7" fill="#C9A24B"/>
+      <path class="leader" d="M 344.6 56.9 L 614.0 30.0"/>
+      <text class="region-label" x="608.0" y="26.0" text-anchor="end">Trieste</text>
+      <text class="region-sub" x="608.0" y="42.0" text-anchor="end">Mitteleuropean import hub —</text>
+      <text class="region-sub" x="608.0" y="56.0" text-anchor="end">gentle roast, arabica-led</text>
+      <circle class="region-dot" cx="414.0" cy="192.5" r="7" fill="#55331B"/>
+      <path class="leader" d="M 414.0 192.5 L 614.0 108.0"/>
+      <text class="region-label" x="608.0" y="104.0" text-anchor="end">Puglia</text>
+      <text class="region-sub" x="608.0" y="120.0" text-anchor="end">Dark, robusta-heavy, very strong,</text>
+      <text class="region-sub" x="608.0" y="134.0" text-anchor="end">low acidity</text>
+      <circle class="region-dot" cx="355.8" cy="200.6" r="7" fill="#55331B"/>
+      <path class="leader" d="M 355.8 200.6 L 614.0 186.0"/>
+      <text class="region-label" x="608.0" y="182.0" text-anchor="end">Naples &amp; Campania</text>
+      <text class="region-sub" x="608.0" y="198.0" text-anchor="end">Dark roast, high robusta — thick</text>
+      <text class="region-sub" x="608.0" y="212.0" text-anchor="end">crema, bold &amp; bitter</text>
+      <circle class="region-dot" cx="400.1" cy="246.7" r="7" fill="#55331B"/>
+      <path class="leader" d="M 400.1 246.7 L 614.0 264.0"/>
+      <text class="region-label" x="608.0" y="260.0" text-anchor="end">Calabria</text>
+      <text class="region-sub" x="608.0" y="276.0" text-anchor="end">Darkest of the south —</text>
+      <text class="region-sub" x="608.0" y="290.0" text-anchor="end">robusta-forward, intense</text>
+      <circle class="region-dot" cx="335.4" cy="282.3" r="7" fill="#55331B"/>
+      <path class="leader" d="M 335.4 282.3 L 614.0 342.0"/>
+      <text class="region-label" x="608.0" y="338.0" text-anchor="end">Sicily</text>
+      <text class="region-sub" x="608.0" y="354.0" text-anchor="end">Dark but sweet — almond &amp; granita</text>
+      <text class="region-sub" x="608.0" y="368.0" text-anchor="end">coffee culture</text>
+      <text class="legend-title" x="230" y="404">Roast intensity, north &#8594; south</text>
+      <circle cx="230" cy="422" r="5.5" fill="#7A9E7E"/>
+      <text class="legend-text" x="242" y="426">Light–medium (Arabica-led)</text>
+      <circle cx="420" cy="422" r="5.5" fill="#C9A24B"/>
+      <text class="legend-text" x="432" y="426">Medium (Trieste import blend)</text>
+      <circle cx="230" cy="440" r="5.5" fill="#B88348"/>
+      <text class="legend-text" x="242" y="444">Medium-dark (balanced)</text>
+      <circle cx="420" cy="440" r="5.5" fill="#55331B"/>
+      <text class="legend-text" x="432" y="444">Dark–very dark (Robusta-heavy)</text>
+    </svg>
+    <div class="section-head"><p class="eyebrow">Nine traditions, north to south</p><h2>The regions</h2></div>
+    <div class="region-list">
+      <div class="region-row"><h3>Milan &amp; the North</h3><p class="region-meta">Light&ndash;medium &middot; Fruit &amp; Floral</p><p class="region-desc">Italy&rsquo;s lightest, most aromatic style &mdash; smooth, with minimal bitterness.</p></div>
+      <div class="region-row"><h3>Turin &amp; Piedmont</h3><p class="region-meta">Light&ndash;medium &middot; Sweet &amp; Chocolate</p><p class="region-desc">A milk-and-cocoa culture; the <span class="ita">bicerin</span> &mdash; espresso, chocolate, cream &mdash; began here in the 18th century.</p></div>
+      <div class="region-row"><h3>Trieste</h3><p class="region-meta">Medium &middot; Fruit &amp; Floral / Sweet &amp; Chocolate</p><p class="region-desc">Italy&rsquo;s historic coffee port and a Mitteleuropean roasting tradition &mdash; gentler than the south.</p></div>
+      <div class="region-row is-here"><h3>Tuscany <span class="region-here">Where we are now</span></h3><p class="region-meta">Medium &middot; Sweet &amp; Chocolate</p><p class="region-desc">Family <span class="ita">torrefazioni</span> and the balanced middle of the national spectrum. Our founding region.</p></div>
+      <div class="region-row"><h3>Rome &amp; Lazio</h3><p class="region-meta">Medium-dark &middot; Bold &amp; Spiced</p><p class="region-desc">Pulled <span class="ita">ristretto</span> &mdash; toasty, dark-caramel, with a spice note from centuries of trade.</p></div>
+      <div class="region-row"><h3>Naples &amp; Campania</h3><p class="region-meta">Dark &middot; Bold &amp; Spiced</p><p class="region-desc">The archetype of &ldquo;strong Italian coffee&rdquo; &mdash; thick crema, bold and bitter, served very hot.</p></div>
+      <div class="region-row"><h3>Puglia</h3><p class="region-meta">Dark &middot; Bold &amp; Spiced</p><p class="region-desc">Strong, low-acidity, and robusta-forward.</p></div>
+      <div class="region-row"><h3>Calabria</h3><p class="region-meta">Very dark &middot; Bold &amp; Spiced</p><p class="region-desc">The darkest, most intense style on the mainland.</p></div>
+      <div class="region-row"><h3>Sicily</h3><p class="region-meta">Dark &middot; Bold &amp; Spiced / Sweet &amp; Chocolate</p><p class="region-desc">A dark roast tied to almond and <span class="ita">granita</span> coffee culture &mdash; it reads sweeter than the Calabrian and Neapolitan extreme.</p></div>
+    </div>
+    <p class="afd">Region describes where a coffee is <strong>roasted</strong> &mdash; a Crema Italia curatorial choice &mdash; not where the bean was <strong>grown</strong>. Our catalog grows one region at a time; today, that is Tuscany.</p>
+  </main>
+</div>
+
 <!-- ============================== JOURNAL ============================== -->
 <div class="page" id="page-journal">
   <div class="dark-hero"><div class="dark-hero-inner">

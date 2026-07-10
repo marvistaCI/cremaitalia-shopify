@@ -798,6 +798,26 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   stock/freshness, and the BOM drives 3PL assembly (box + coffees + card) with per-order
   packing slips. Committed + pushed.
 
+- 2026-07-10 — **Roasting-regions: §8 decisions settled with Steve + editorial Regions page
+  built.** Cowork researched Italy's roasting regions (OneDrive `Operations/In USA/shopify/
+  06_Region_Reference.docx` + `07_Region_Map.svg`, logged *proposed* in DECISIONS_LOG). Steve's
+  calls on the doc's §8 open questions: (1) region tagging is **roaster-level** (SKUs inherit;
+  composes with the Tour BOM region-union already built); (2) **no region quiz question**, and
+  Region is **not saved to the taste profile** — it's an ephemeral navigation/provenance filter
+  only (**Taste is the only saved profile axis**); (3) **decouple the two surfaces** — the
+  catalog Region *filter* grows one region at a time (Tuscany first; empty regions shown as a
+  quiet "as we grow", never dead ends) while the editorial *map page* always shows all nine;
+  (4) the map **is** customer-facing. Built the **Roasting Regions of Italy** page
+  (`#page-regions`): brown hero + Cowork's map **inlined** (scoped `#region-map-svg` styles,
+  Inter labels) + all nine traditions north→south with Tuscany carrying a "Where we are now"
+  badge; source map kept at `assets/ci-region-map.svg`. Note: the nine-culture map deliberately
+  omits **Emilia-Romagna** (Gardelli's region — not a classic espresso culture); the filter will
+  name it separately + "Other" for outliers (map ≠ filter list, by design). **NEXT: Shop
+  restructure** — move Taste (roast/flavor/caffeine) into a brown hero "taste console" with
+  save-to-profile; keep Shelf + Region as ephemeral body filters; Region on its own line (active
+  regions + "as we grow" + Other + "Learn more about regions" → this page). The DECISIONS_LOG
+  region entry can move *proposed → locked* once the Shop restructure lands (Cowork's lane).
+
 ## 10. Open questions / TODO
 
 **POC4 — CURRENT STATE (as of 2026-07-05) — read this first when resuming.**
