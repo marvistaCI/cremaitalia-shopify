@@ -131,3 +131,36 @@ in the production build, not the mock:
 
 The POC-actionable half of that review (hero rewrite, home resequence, surface founder
 story, quiz prominence, early value, nav order) is POC5 work — see POC5 change list item 6.
+
+## 7. Bundles / Tours — administrable BOM builder (REQUIRED — Steve, 2026-07-10)
+
+Tours (and any future bundle) are **Bill-of-Materials SKUs**: a Tour = the box + N component
+coffee SKUs + the printed tasting card. The production storefront MUST include an
+**admin-managed** way to build these — no developer, no code deploy — so Steve can create a
+new Tour by naming it and selecting its component SKUs, and the warehouse can assemble it.
+
+Requirements:
+- **Author a Tour by defining its BOM.** Admin picks the component product SKUs (e.g. Gardelli
+  Ethiopia + La Sosta Guatemala + Fusari Colombia), the box, and the tasting card. The BOM is
+  the single source of truth for the Tour.
+- **Browse facets are DERIVED from the components, never hand-entered.** A Tour's Region /
+  Roast / Flavor / Caffeine filter values are the **union** of its component SKUs' facets, so
+  the Tour is "positive" to a filter when ANY component matches (per-axis; AND across axes —
+  the Option A rule modelled in the POC via `component_handles` + `productFacets()`). This keeps
+  filtering correct automatically as components rotate — nobody has to remember to re-tag a Tour.
+- **Availability is gated by the components.** A Tour is offered only while ALL its components
+  are in stock and within their freshness window (the existing Sorpresa freshness-gated rule);
+  if a component runs low or ages out, the Tour auto-pauses and returns when stock refreshes.
+  This falls out of the BOM automatically.
+- **The BOM drives 3PL fulfilment.** Each Tour order must generate an assembly / pick-pack
+  instruction for the 3PL: box + each component coffee (by SKU) + tasting card. The component
+  SKUs feed BOTH the storefront (facets, availability) AND the warehouse (what to physically
+  assemble), and component inventory decrements per Tour sold.
+- **Shopify implementation:** model via native Shopify Bundles / a bundle app that supports
+  component SKUs + component-inventory tracking, so each component's stock gates the bundle and
+  the 3PL receives a per-order BOM packing slip. Bundle facets map to `crema_italia.*`
+  metafields derived from the components (or computed in Liquid at render).
+
+Generalises beyond Sorpresa Tours to any composite product. Ties to the POC4 precedent already
+logged (a structured roaster-linkage field on bundle/composite products) — extend it to a full
+component-SKU BOM.

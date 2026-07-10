@@ -158,16 +158,44 @@
   // multi-photo browsing lives ONLY on the product detail page (see the pd-gallery in
   // productDetail). Clicking a tile just opens the product (Option B navigation) — no
   // photo-changer on tiles.
+  // Region display labels (filter value -> label).
+  var REGION_LABEL = { toscana: 'Toscana', emilia: 'Emilia-Romagna', piemonte: 'Piemonte', sicilia: 'Sicilia' };
+  function uniq(a) { var seen = {}, out = []; for (var i = 0; i < a.length; i++) { var v = a[i]; if (v && !seen[v]) { seen[v] = 1; out.push(v); } } return out; }
+  // A product's filter facets. A bundle/Tour is a BOM SKU (box + component coffees + card):
+  // it inherits the UNION of its components' facets, so it is "positive" to a filter if ANY
+  // component matches (per-axis; AND across axes). See docs/production_build_spec.md for the
+  // administrable BOM-builder requirement this stands in for. A single product carries its
+  // own single value.
+  function productFacets(p) {
+    if (Array.isArray(p.component_handles) && p.component_handles.length) {
+      var comps = p.component_handles.map(function (h) { return byHandle[h]; }).filter(Boolean);
+      return {
+        region: uniq(comps.map(function (c) { return c.region; })),
+        roast: uniq(comps.map(function (c) { return c.roast; })),
+        flavor: uniq(comps.map(function (c) { return c.flavor; })),
+        caffeine: uniq(comps.map(function (c) { return c.caffeine; }))
+      };
+    }
+    return { region: [p.region], roast: [p.roast], flavor: [p.flavor], caffeine: [p.caffeine] };
+  }
+  // Membership test for a comma-joined data-attribute (multi-value facet).
+  function inFacet(csv, val) { return !!csv && csv.split(',').indexOf(val) !== -1; }
   function productCard(p) {
     var badge = SHELF_BADGE[p.shelf] || { cls: '', tag: '' };
-    return '<div class="card product-card" data-region="' + esc(p.region) + '" data-shelf="' + esc(p.shelf) +
-      '" data-roast="' + esc(p.roast) + '" data-flavor="' + esc(p.flavor) + '" data-caffeine="' + esc(p.caffeine) +
+    var f = productFacets(p);
+    var isBom = Array.isArray(p.component_handles) && p.component_handles.length;
+    var bomCue = isBom
+      ? '<div class="rn bom-cue">Includes ' + f.region.map(function (r) { return REGION_LABEL[r] || r; }).join(' · ') + '</div>'
+      : '';
+    return '<div class="card product-card" data-region="' + esc(f.region.join(',')) + '" data-shelf="' + esc(p.shelf) +
+      '" data-roast="' + esc(f.roast.join(',')) + '" data-flavor="' + esc(f.flavor.join(',')) + '" data-caffeine="' + esc(f.caffeine.join(',')) +
       '" onclick="openProduct(\'' + p.handle + '\')">' +
       '<div class="card-img ' + imgCls(p.img) + '"' + imgStyle(p.img) + '>' + esc(p.img ? p.img.label : p.title) + '</div>' +
       '<div class="card-body">' +
         '<span class="cs ' + badge.cls + '">' + esc(badge.tag) + '</span>' +
         '<h3>' + esc(p.display_title) + '</h3>' +
         (rnLine(p) ? '<div class="rn">' + rnLine(p) + '</div>' : '') +
+        bomCue +
         '<p>' + esc(p.blurb) + '</p>' +
         freshnessCell(p) +
       '</div>' +
@@ -470,9 +498,9 @@
     for (var i = 0; i < cards.length; i++) {
       var d = cards[i].dataset;
       var show = !profileActive || (
-        (activeTaste.roast === 'all' || d.roast === activeTaste.roast || d.roast === 'any') &&
-        (activeTaste.flavor === 'all' || d.flavor === activeTaste.flavor || d.flavor === 'any') &&
-        (activeTaste.caffeine === 'all' || d.caffeine === activeTaste.caffeine || d.caffeine === 'any'));
+        (activeTaste.roast === 'all' || inFacet(d.roast, activeTaste.roast)) &&
+        (activeTaste.flavor === 'all' || inFacet(d.flavor, activeTaste.flavor)) &&
+        (activeTaste.caffeine === 'all' || inFacet(d.caffeine, activeTaste.caffeine)));
       cards[i].style.display = show ? '' : 'none';
     }
   }
@@ -493,11 +521,11 @@
     for (var i = 0; i < cards.length; i++) {
       var c = cards[i], d = c.dataset;
       var show =
-        (activeRegion === 'all' || d.region === activeRegion) &&
+        (activeRegion === 'all' || inFacet(d.region, activeRegion)) &&
         (activeShelf === 'all' || d.shelf === activeShelf) &&
-        (activeTaste.roast === 'all' || d.roast === activeTaste.roast || d.roast === 'any') &&
-        (activeTaste.flavor === 'all' || d.flavor === activeTaste.flavor || d.flavor === 'any') &&
-        (activeTaste.caffeine === 'all' || d.caffeine === activeTaste.caffeine || d.caffeine === 'any');
+        (activeTaste.roast === 'all' || inFacet(d.roast, activeTaste.roast)) &&
+        (activeTaste.flavor === 'all' || inFacet(d.flavor, activeTaste.flavor)) &&
+        (activeTaste.caffeine === 'all' || inFacet(d.caffeine, activeTaste.caffeine));
       c.style.display = show ? '' : 'none';
       if (show) visible++;
     }

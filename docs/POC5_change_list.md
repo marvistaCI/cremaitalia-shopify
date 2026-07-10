@@ -264,7 +264,20 @@ credibility markers) and real photography — see `docs/production_build_spec.md
 
 ---
 
+### 7. Tour / bundle BOM filtering — BUILT 2026-07-10 (Option A: union of components)
+**BUILT:** a Tour is a Bill-of-Materials SKU (box + component coffees + card). Added
+`component_handles` to the Sorpresa Tour in `ci-catalog.json` and `productFacets()` in
+`assets/ci-storefront.js`: a bundle's Region / Roast / Flavor / Caffeine facets are the UNION
+of its component coffees' facets, so the Tour is "positive" to a filter if ANY component
+matches (per-axis; AND across axes — **Option A**, Steve 2026-07-10). Filter logic now uses
+membership (`inFacet`) on comma-joined multi-value data-attributes; the old `any` wildcard
+tags were dropped. The Tour card shows an "Includes Emilia-Romagna · Toscana" cue. Verified
+live: the Tour appears under **Emilia-Romagna** (contains a Gardelli) and is correctly hidden
+under **Decaf** (no decaf component). **Production requirement:** an administrable BOM builder
+— see `docs/production_build_spec.md` §7.
+
 ## Deployment note
-POC5 is not yet built beyond the two DONE items. When the POC5 batch is ready to deploy,
-follow the draft-theme naming rule (CLAUDE.md top callout): push to the preview theme
-and rename it to "Crema Italia POC5 Preview" at the same time.
+**All POC5 build items are complete (2026-07-10).** When ready to deploy, follow the
+draft-theme naming rule (CLAUDE.md top callout): push to a draft theme and rename it
+"Crema Italia POC5 Preview" at the same time. Currently committed to git + local dev only;
+not yet pushed to a Shopify preview theme.

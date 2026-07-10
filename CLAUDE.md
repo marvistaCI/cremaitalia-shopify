@@ -783,6 +783,21 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   Shopify preview theme. Remaining open items are production design prompts (About/Journal/
   footer IA), not POC builds.
 
+- 2026-07-10 — **Tour/bundle BOM filtering built (Option A) + administrable-BOM production
+  requirement documented.** Steve's model: a Tour is a Bill-of-Materials SKU (box + component
+  coffees + card), and it should be "positive" to a filter if ANY of its component coffees
+  matches. Built it: added `component_handles` to the Sorpresa Tour (`ci-catalog.json`) and
+  `productFacets()` (`ci-storefront.js`) so a bundle's Region/Roast/Flavor/Caffeine facets are
+  the UNION of its components; filtering uses membership (`inFacet`) on comma-joined
+  data-attributes (dropped the old `any` wildcard). **Option A** (per-axis union; AND across
+  axes) chosen over requiring one component to satisfy all filters. Card shows an "Includes …"
+  cue. Verified live: Tour now shows under Emilia-Romagna (has a Gardelli) and is hidden under
+  Decaf (no decaf component) — more honest than the old always-show. **Documented a REQUIRED
+  production feature** (`docs/production_build_spec.md` §7): an admin-managed BOM builder — add
+  a Tour, define its component SKUs, facets auto-derive, availability auto-gates on component
+  stock/freshness, and the BOM drives 3PL assembly (box + coffees + card) with per-order
+  packing slips. Committed + pushed.
+
 ## 10. Open questions / TODO
 
 **POC4 — CURRENT STATE (as of 2026-07-05) — read this first when resuming.**
