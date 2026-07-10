@@ -817,6 +817,21 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   save-to-profile; keep Shelf + Region as ephemeral body filters; Region on its own line (active
   regions + "as we grow" + Other + "Learn more about regions" → this page). The DECISIONS_LOG
   region entry can move *proposed → locked* once the Shop restructure lands (Cowork's lane).
+- 2026-07-10 — **Shop restructure built + region vocabulary standardized.** Reworked the Shop
+  page on the identity-vs-navigation split Steve diagnosed: **Taste (roast/flavor/caffeine)
+  moved into a brown hero "taste console"** styled for the dark band, with save-to-profile —
+  it's the ONLY axis saved to the profile; **Shelf + Region are ephemeral body filters**.
+  "Shop the Catalog" framing + the four shelves named (fixes the "invisible catalog").
+  **Region on its own line**: active (Toscana, Emilia-Romagna) + the rest greyed "as we grow"
+  + an "Other" note + a "Learn about the regions →" link to the Regions page (the page is
+  reachable ONLY from here — Steve wants it as a discovery surprise, not in nav/footer).
+  Filters verified working post-move (taste console drives the grid; region membership +
+  Tour BOM union intact). **Vocabulary standardized on Italian region names** — Piemonte,
+  Lombardia, Trieste, Toscana, Emilia-Romagna, Lazio, Campania, Puglia, Calabria, Sicilia —
+  across the filter, the inlined map, and the Regions page list (hub cities Milan/Turin/Rome/
+  Naples/Friuli kept as locators in the page meta lines). **Cowork follow-up:** update the
+  OneDrive source `07_Region_Map.svg` + `06_Region_Reference.docx` to the same Italian labels
+  so the source and the theme's inlined copy don't drift.
 
 ## 10. Open questions / TODO
 

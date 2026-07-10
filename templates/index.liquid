@@ -82,28 +82,15 @@
 
 <!-- ============================== SHOP ============================== -->
 <div class="page" id="page-shop">
-  <main class="ci-main">
-    <div class="section-head" style="margin-top:0"><p class="eyebrow">The catalog</p><h2>Shop</h2></div>
-    <p class="pf-hint" id="pf-hint" style="display:none;margin-bottom:1rem">Filtered to your taste profile. <span onclick="clearProfile()">Clear profile</span></p>
-    <div class="filter-bar">
-      <div class="filter-row">
-        <div class="filter-group"><div class="filter-label">Region</div><div class="filter-pills">
-          <span class="pill active" onclick="filterRegion(this,'all')">All Regions</span>
-          <span class="pill" onclick="filterRegion(this,'toscana')">Toscana</span>
-          <span class="pill" onclick="filterRegion(this,'emilia')">Emilia-Romagna</span>
-          <span class="pill disabled">Piemonte</span>
-          <span class="pill disabled">Sicilia</span>
-        </div></div>
-        <div class="filter-group"><div class="filter-label">Shelf</div><div class="filter-pills">
-          <span class="pill active" onclick="filterShelf(this,'all')">All</span>
-          <span class="pill" onclick="filterShelf(this,'roccia')">Roccia</span>
-          <span class="pill" onclick="filterShelf(this,'sorpresa')">Sorpresa</span>
-          <span class="pill" onclick="filterShelf(this,'selezione')">Selezione</span>
-          <span class="pill" onclick="filterShelf(this,'offerta')">Offerta</span>
-        </div></div>
-      </div>
-      <div class="filter-divider"></div>
-      <div class="filter-row">
+  <!-- Brown hero: catalog framing + the SAVABLE taste console (identity). Taste is the only
+       axis saved to the profile; Shelf + Region below are ephemeral navigation. -->
+  <div class="dark-hero"><div class="dark-hero-inner">
+    <p class="eyebrow" style="color:var(--ci-crema-light)">The catalog</p>
+    <h1>Shop the Catalog</h1>
+    <p>Organized into four shelves &mdash; <span class="ita">Roccia</span> &middot; <span class="ita">Sorpresa</span> &middot; <span class="ita">Selezione</span> &middot; <span class="ita">Offerta</span>.</p>
+    <div class="taste-console">
+      <div class="tc-head"><span class="tc-label">Your taste</span><span class="tc-note">saved to your profile</span></div>
+      <div class="tc-groups">
         <div class="filter-group"><div class="filter-label">Roast</div><div class="filter-pills">
           <span class="pill active" onclick="filterTaste(this,'roast','all')">Any</span>
           <span class="pill" onclick="filterTaste(this,'roast','light')">Light</span>
@@ -115,15 +102,47 @@
           <span class="pill" onclick="filterTaste(this,'flavor','fruit')">Fruit &amp; Floral</span>
           <span class="pill" onclick="filterTaste(this,'flavor','sweet')">Sweet &amp; Chocolate</span>
           <span class="pill" onclick="filterTaste(this,'flavor','terroir')">Bold &amp; Spiced</span>
-        </div>
-        <div class="flavor-desc" id="flavor-desc"></div></div>
+        </div><div class="flavor-desc" id="flavor-desc"></div></div>
         <div class="filter-group"><div class="filter-label">Caffeine</div><div class="filter-pills">
           <span class="pill active" onclick="filterTaste(this,'caffeine','all')">Any</span>
           <span class="pill" onclick="filterTaste(this,'caffeine','full')">Caffeinated</span>
           <span class="pill" onclick="filterTaste(this,'caffeine','decaf')">Decaf</span>
         </div></div>
       </div>
-      <div class="save-profile" id="save-profile"><button class="inline-link" onclick="saveToProfile()">Save these preferences to my taste profile</button></div>
+      <div class="tc-foot">
+        <div class="save-profile" id="save-profile"><button class="inline-link" onclick="saveToProfile()">Save to my taste profile</button></div>
+        <p class="pf-hint" id="pf-hint" style="display:none">Taste profile on. <span onclick="clearProfile()">Clear</span></p>
+      </div>
+    </div>
+  </div></div>
+  <!-- Cream body: EPHEMERAL navigation (shelf + region) + the grid. -->
+  <main class="ci-main">
+    <div class="filter-bar">
+      <div class="filter-group"><div class="filter-label">Shelf</div><div class="filter-pills">
+        <span class="pill active" onclick="filterShelf(this,'all')">All</span>
+        <span class="pill" onclick="filterShelf(this,'roccia')">Roccia</span>
+        <span class="pill" onclick="filterShelf(this,'sorpresa')">Sorpresa</span>
+        <span class="pill" onclick="filterShelf(this,'selezione')">Selezione</span>
+        <span class="pill" onclick="filterShelf(this,'offerta')">Offerta</span>
+      </div></div>
+      <div class="filter-divider"></div>
+      <div class="filter-group filter-region">
+        <div class="filter-label">Region <button class="region-learn" onclick="showPage('regions')">Learn about the regions &rarr;</button></div>
+        <div class="filter-pills">
+          <span class="pill active" onclick="filterRegion(this,'all')">All Regions</span>
+          <span class="pill" onclick="filterRegion(this,'toscana')">Toscana</span>
+          <span class="pill" onclick="filterRegion(this,'emilia')">Emilia-Romagna</span>
+          <span class="pill disabled">Piemonte</span>
+          <span class="pill disabled">Lombardia</span>
+          <span class="pill disabled">Trieste</span>
+          <span class="pill disabled">Lazio</span>
+          <span class="pill disabled">Campania</span>
+          <span class="pill disabled">Puglia</span>
+          <span class="pill disabled">Calabria</span>
+          <span class="pill disabled">Sicilia</span>
+        </div>
+        <p class="region-note">Greyed regions are on the way as we grow &mdash; and great roasters sometimes appear in regions not shown here. <button class="inline-link" onclick="showPage('regions')">See the map</button>.</p>
+      </div>
     </div>
     <div class="card-grid" id="shop-grid"></div>
     <div id="no-results" style="display:none;text-align:center;padding:3rem 1rem;color:var(--ci-mute)">
@@ -295,22 +314,22 @@
       <path class="country" d="M 242.6 189.8 L 253.8 209.6 L 253.1 229.9 L 249.7 250.9 L 225.4 251.8 L 226.0 229.9 L 221.1 209.0 L 242.1 192.2 L 242.6 189.8 Z"/>
       <circle class="region-dot" cx="242.1" cy="62.6" r="7" fill="#7A9E7E"/>
       <path class="leader" d="M 242.1 62.6 L 26.0 44.0"/>
-      <text class="region-label" x="32.0" y="40.0" text-anchor="start">Milan &amp; the North</text>
+      <text class="region-label" x="32.0" y="40.0" text-anchor="start">Lombardia</text>
       <text class="region-sub" x="32.0" y="56.0" text-anchor="start">Lightest of all — clean,</text>
       <text class="region-sub" x="32.0" y="70.0" text-anchor="start">aromatic, high arabica</text>
       <circle class="region-dot" cx="208.6" cy="74.3" r="7" fill="#7A9E7E"/>
       <path class="leader" d="M 208.6 74.3 L 26.0 136.0"/>
-      <text class="region-label" x="32.0" y="132.0" text-anchor="start">Turin &amp; Piedmont</text>
+      <text class="region-label" x="32.0" y="132.0" text-anchor="start">Piemonte</text>
       <text class="region-sub" x="32.0" y="148.0" text-anchor="start">Milk &amp; cocoa house — arabica-led,</text>
       <text class="region-sub" x="32.0" y="162.0" text-anchor="start">bicerin tradition</text>
       <circle class="region-dot" cx="288.2" cy="113.2" r="7" fill="#B88348"/>
       <path class="leader" d="M 288.2 113.2 L 26.0 228.0"/>
-      <text class="region-label" x="32.0" y="224.0" text-anchor="start">Tuscany</text>
+      <text class="region-label" x="32.0" y="224.0" text-anchor="start">Toscana</text>
       <text class="region-sub" x="32.0" y="240.0" text-anchor="start">Balanced medium roast — artisan</text>
       <text class="region-sub" x="32.0" y="254.0" text-anchor="start">family torrefazioni</text>
       <circle class="region-dot" cx="316.2" cy="169.2" r="7" fill="#B88348"/>
       <path class="leader" d="M 316.2 169.2 L 26.0 320.0"/>
-      <text class="region-label" x="32.0" y="316.0" text-anchor="start">Rome &amp; Lazio</text>
+      <text class="region-label" x="32.0" y="316.0" text-anchor="start">Lazio</text>
       <text class="region-sub" x="32.0" y="332.0" text-anchor="start">Arabica-robusta, pulled</text>
       <text class="region-sub" x="32.0" y="346.0" text-anchor="start">ristretto, spiced-nutty</text>
       <circle class="region-dot" cx="344.6" cy="56.9" r="7" fill="#C9A24B"/>
@@ -325,7 +344,7 @@
       <text class="region-sub" x="608.0" y="134.0" text-anchor="end">low acidity</text>
       <circle class="region-dot" cx="355.8" cy="200.6" r="7" fill="#55331B"/>
       <path class="leader" d="M 355.8 200.6 L 614.0 186.0"/>
-      <text class="region-label" x="608.0" y="182.0" text-anchor="end">Naples &amp; Campania</text>
+      <text class="region-label" x="608.0" y="182.0" text-anchor="end">Campania</text>
       <text class="region-sub" x="608.0" y="198.0" text-anchor="end">Dark roast, high robusta — thick</text>
       <text class="region-sub" x="608.0" y="212.0" text-anchor="end">crema, bold &amp; bitter</text>
       <circle class="region-dot" cx="400.1" cy="246.7" r="7" fill="#55331B"/>
@@ -335,7 +354,7 @@
       <text class="region-sub" x="608.0" y="290.0" text-anchor="end">robusta-forward, intense</text>
       <circle class="region-dot" cx="335.4" cy="282.3" r="7" fill="#55331B"/>
       <path class="leader" d="M 335.4 282.3 L 614.0 342.0"/>
-      <text class="region-label" x="608.0" y="338.0" text-anchor="end">Sicily</text>
+      <text class="region-label" x="608.0" y="338.0" text-anchor="end">Sicilia</text>
       <text class="region-sub" x="608.0" y="354.0" text-anchor="end">Dark but sweet — almond &amp; granita</text>
       <text class="region-sub" x="608.0" y="368.0" text-anchor="end">coffee culture</text>
       <text class="legend-title" x="230" y="404">Roast intensity, north &#8594; south</text>
@@ -350,15 +369,15 @@
     </svg>
     <div class="section-head"><p class="eyebrow">Nine traditions, north to south</p><h2>The regions</h2></div>
     <div class="region-list">
-      <div class="region-row"><h3>Milan &amp; the North</h3><p class="region-meta">Light&ndash;medium &middot; Fruit &amp; Floral</p><p class="region-desc">Italy&rsquo;s lightest, most aromatic style &mdash; smooth, with minimal bitterness.</p></div>
-      <div class="region-row"><h3>Turin &amp; Piedmont</h3><p class="region-meta">Light&ndash;medium &middot; Sweet &amp; Chocolate</p><p class="region-desc">A milk-and-cocoa culture; the <span class="ita">bicerin</span> &mdash; espresso, chocolate, cream &mdash; began here in the 18th century.</p></div>
-      <div class="region-row"><h3>Trieste</h3><p class="region-meta">Medium &middot; Fruit &amp; Floral / Sweet &amp; Chocolate</p><p class="region-desc">Italy&rsquo;s historic coffee port and a Mitteleuropean roasting tradition &mdash; gentler than the south.</p></div>
-      <div class="region-row is-here"><h3>Tuscany <span class="region-here">Where we are now</span></h3><p class="region-meta">Medium &middot; Sweet &amp; Chocolate</p><p class="region-desc">Family <span class="ita">torrefazioni</span> and the balanced middle of the national spectrum. Our founding region.</p></div>
-      <div class="region-row"><h3>Rome &amp; Lazio</h3><p class="region-meta">Medium-dark &middot; Bold &amp; Spiced</p><p class="region-desc">Pulled <span class="ita">ristretto</span> &mdash; toasty, dark-caramel, with a spice note from centuries of trade.</p></div>
-      <div class="region-row"><h3>Naples &amp; Campania</h3><p class="region-meta">Dark &middot; Bold &amp; Spiced</p><p class="region-desc">The archetype of &ldquo;strong Italian coffee&rdquo; &mdash; thick crema, bold and bitter, served very hot.</p></div>
+      <div class="region-row"><h3>Lombardia</h3><p class="region-meta">Milan &middot; Light&ndash;medium &middot; Fruit &amp; Floral</p><p class="region-desc">Italy&rsquo;s lightest, most aromatic style &mdash; smooth, with minimal bitterness.</p></div>
+      <div class="region-row"><h3>Piemonte</h3><p class="region-meta">Turin &middot; Light&ndash;medium &middot; Sweet &amp; Chocolate</p><p class="region-desc">A milk-and-cocoa culture; the <span class="ita">bicerin</span> &mdash; espresso, chocolate, cream &mdash; began here in the 18th century.</p></div>
+      <div class="region-row"><h3>Trieste</h3><p class="region-meta">Friuli &middot; Medium &middot; Fruit &amp; Floral / Sweet &amp; Chocolate</p><p class="region-desc">Italy&rsquo;s historic coffee port and a Mitteleuropean roasting tradition &mdash; gentler than the south.</p></div>
+      <div class="region-row is-here"><h3>Toscana <span class="region-here">Where we are now</span></h3><p class="region-meta">Medium &middot; Sweet &amp; Chocolate</p><p class="region-desc">Family <span class="ita">torrefazioni</span> and the balanced middle of the national spectrum. Our founding region.</p></div>
+      <div class="region-row"><h3>Lazio</h3><p class="region-meta">Rome &middot; Medium-dark &middot; Bold &amp; Spiced</p><p class="region-desc">Pulled <span class="ita">ristretto</span> &mdash; toasty, dark-caramel, with a spice note from centuries of trade.</p></div>
+      <div class="region-row"><h3>Campania</h3><p class="region-meta">Naples &middot; Dark &middot; Bold &amp; Spiced</p><p class="region-desc">The archetype of &ldquo;strong Italian coffee&rdquo; &mdash; thick crema, bold and bitter, served very hot.</p></div>
       <div class="region-row"><h3>Puglia</h3><p class="region-meta">Dark &middot; Bold &amp; Spiced</p><p class="region-desc">Strong, low-acidity, and robusta-forward.</p></div>
       <div class="region-row"><h3>Calabria</h3><p class="region-meta">Very dark &middot; Bold &amp; Spiced</p><p class="region-desc">The darkest, most intense style on the mainland.</p></div>
-      <div class="region-row"><h3>Sicily</h3><p class="region-meta">Dark &middot; Bold &amp; Spiced / Sweet &amp; Chocolate</p><p class="region-desc">A dark roast tied to almond and <span class="ita">granita</span> coffee culture &mdash; it reads sweeter than the Calabrian and Neapolitan extreme.</p></div>
+      <div class="region-row"><h3>Sicilia</h3><p class="region-meta">Dark &middot; Bold &amp; Spiced / Sweet &amp; Chocolate</p><p class="region-desc">A dark roast tied to almond and <span class="ita">granita</span> coffee culture &mdash; it reads sweeter than the Calabrian and Neapolitan extreme.</p></div>
     </div>
     <p class="afd">Region describes where a coffee is <strong>roasted</strong> &mdash; a Crema Italia curatorial choice &mdash; not where the bean was <strong>grown</strong>. Our catalog grows one region at a time; today, that is Tuscany.</p>
   </main>
