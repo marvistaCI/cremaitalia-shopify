@@ -901,8 +901,11 @@ catalog schema additions) should be logged there too.
 - [x] ~~"Our founder" About tile~~ DONE 2026-07-10 — Steve's founder bio (the "nine lives"
   story, in tight gold-marked beats), his real photo (`assets/ci-founder.jpg`, cropped to a
   square headshot + highlights tamed), titled "Steve Roberts / Founder" like the team tiles.
-- [ ] "Our company" About-page tile copy is still placeholder — Steve is writing the real
-  language.
+- [x] ~~"Our company" About tile~~ DONE 2026-07-10 — Steve's copy (imports/unchanged intro +
+  "The Three P's": Place/Product/People as gold beats), a real Tuscany photo
+  (`assets/ci-company.jpg`), de-duped against the home "Our model" section. About page now has
+  no placeholder copy left (only the company/founder photos are real; team/partner photos are
+  still placeholders).
 - [ ] Team/partner section photos and roaster/product-tile photos are all text
   placeholders pending real photography and logo assets.
 - [ ] Deferred: no-waste copy rewrite on the Promise page (pending 3PL-city research).

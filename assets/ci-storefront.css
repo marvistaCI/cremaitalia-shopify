@@ -396,6 +396,6 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .order-sub{font-size:.78rem;color:var(--ci-mute);margin-top:.12rem}
 .order-again{font-size:.76rem;margin-top:.35rem;display:inline-block}
 .bom-cue{color:var(--ci-crema);font-weight:600;font-size:.72rem;letter-spacing:.02em;margin-top:.15rem}
-.founder-lives{margin:.6rem 0}
-.founder-lives p{margin:.4rem 0}
-.founder-lives strong{color:var(--ci-crema)}
+.founder-lives,.beats{margin:.6rem 0}
+.founder-lives p,.beats p{margin:.4rem 0}
+.founder-lives strong,.beats strong{color:var(--ci-crema)}
