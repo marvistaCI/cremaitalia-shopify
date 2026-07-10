@@ -898,8 +898,11 @@ catalog schema additions) should be logged there too.
 - [ ] Four new "Surprise me" persona names (The Open Palate/Perfumer/Sweet
   Tooth/Wanderer) were invented this session, not specified by Steve — flagged for
   his review/rename.
-- [ ] "Our company" and "Our founder" About-page tile copy is placeholder — Steve is
-  writing the real language.
+- [x] ~~"Our founder" About tile~~ DONE 2026-07-10 — Steve's founder bio (the "nine lives"
+  story, in tight gold-marked beats), his real photo (`assets/ci-founder.jpg`, cropped to a
+  square headshot + highlights tamed), titled "Steve Roberts / Founder" like the team tiles.
+- [ ] "Our company" About-page tile copy is still placeholder — Steve is writing the real
+  language.
 - [ ] Team/partner section photos and roaster/product-tile photos are all text
   placeholders pending real photography and logo assets.
 - [ ] Deferred: no-waste copy rewrite on the Promise page (pending 3PL-city research).
