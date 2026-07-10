@@ -812,18 +812,28 @@
             : '<p class="prose">Take the taste quiz to set your profile. <button class="inline-link" onclick="openQuiz()">Start</button></p>') +
           '<p class="note">Stored to your account and used to pre-filter the Shop.</p></div>' +
         '<div class="acct-card"><h3>Recent orders</h3>' +
-          '<p class="prose" style="margin:0">Tour d\'Italia 1 — shipped 2026-06-12</p>' +
-          '<p class="prose" style="margin:.25rem 0 0">Gardelli Ethiopia Bombe 250g — delivered 2026-05-28</p></div>' +
+          '<div class="order-list">' +
+            orderRow('1042', 'Tour d\'Italia 1', '2026-06-12', '$77.70') +
+            orderRow('1031', 'Gardelli — Ethiopia Bombe · 250g', '2026-05-28', '$38.00') +
+          '</div>' +
+          '<button class="inline-link" style="margin-top:.7rem" onclick="mockAllOrders()">Show all orders</button>' +
+          '<!-- PROD: rows link to the native Shopify ORDER DETAIL page (an order may hold multiple line items); "Order again" re-adds that order\'s line items to the native cart, and for Roccia items can convert to a selling_plan (Loop) subscription with a "you\'re leaving 10-12% + free shipping behind" nudge; "Show all orders" -> native Shopify order-history page. Use "Order #" (Shopify order number), NOT "invoice". Reorder is not 1:1 — production needs a graceful "no longer available, here\'s a similar one" path. -->' +
+        '</div>' +
         // PROD: name/email/password and the shipping address book for one-time orders
         // (Sorpresa/Selezione/Offerta/Bottega) are native Shopify customer-account
         // territory, separate from Loop — see docs/POC_v4_change_list.md item 3.
         '<div class="acct-card"><h3>Profile &amp; addresses</h3>' +
           '<p class="prose" style="margin:0">Name, email, password, and your shipping address book for one-time orders.</p>' +
-          '<p class="note">Managed via native Shopify customer accounts on the live store — not built in this POC.</p></div>' +
+          '<p class="prose" style="margin:.4rem 0 0">Email &amp; SMS marketing preferences are managed here too.</p>' +
+          // PROD: profile/address book = native Shopify customer accounts; email/SMS marketing
+          // consent = native Shopify + the email platform (Shopify Email / Klaviyo) preference
+          // centre. Not built in this POC. Transactional order emails are store-level (not a
+          // customer toggle). Subscription reminders live in the Loop slot below.
+          '<p class="note">Managed via native Shopify customer accounts + our email platform on the live store — not built in this POC.</p></div>' +
       '</div>' +
       '<div class="section-head" id="acct-subs"><p class="eyebrow">Roccia subscription</p><h2>Manage your subscription</h2></div>' +
       subscriptionBlock() +
-      '<div class="loop-slot" style="margin-top:1.25rem"><strong>On the live store, this is Loop\'s hosted portal.</strong> Pause, skip, swap roaster / SKU / bag-size (up to 48 h before lock), change cadence, or cancel, and manage ship-to + payment — self-service, no fee. Passwordless login, embedded as a theme app block. ' +
+      '<div class="loop-slot" style="margin-top:1.25rem"><strong>On the live store, this is Loop\'s hosted portal.</strong> Pause, skip, swap roaster / SKU / bag-size (up to 48 h before lock), change cadence, or cancel, and manage ship-to + payment, plus your subscription reminders and delivery notifications — self-service, no fee. Passwordless login, embedded as a theme app block. ' +
       '<!-- LOOP: replace this slot with the Loop customer-portal app block / link. -->' +
       '<!-- PROD: the Founding-rate entitlement (12% while subscribed, 10% once forfeited) is a Shopify Function reading a one-way customer tag flipped by Loop cancel/create webhooks — NOT theme state. This POC fakes it client-side to demonstrate the two Membership states. --></div>';
   }
@@ -871,6 +881,22 @@
     session.subscriber = true; session.paused = false; renderCart(); renderAccount();
     toast(session.foundingForfeited ? 'Welcome back — subscribed at the standard 10%.' : 'Subscribed.');
   };
+
+  // Recent-orders rows (visual redesign). Reorder/detail behaviors are INSTRUCTED, not
+  // modeled — clicking fires a preview toast; the PROD comment in the card documents the
+  // real native-Shopify flow.
+  function orderRow(no, item, date, amt) {
+    return '<div class="order-row">' +
+      '<div class="order-open" onclick="mockOrderDetail(\'' + no + '\')">' +
+        '<div class="order-top"><span class="order-no">Order #' + no + '</span><span class="order-amt">' + amt + '</span></div>' +
+        '<div class="order-sub">' + esc(item) + ' · ' + date + '</div>' +
+      '</div>' +
+      '<button class="inline-link order-again" onclick="mockOrderAgain(\'' + no + '\')">Order again</button>' +
+      '</div>';
+  }
+  window.mockOrderDetail = function (no) { toast('Preview — Order #' + no + ' opens on the live store (Shopify order detail).'); };
+  window.mockOrderAgain = function (no) { toast('Preview — "Order again" re-adds Order #' + no + ' to your cart on the live store.'); };
+  window.mockAllOrders = function () { toast('Preview — your full order history lives in your account on the live store.'); };
 
   // ---------- toast ----------
   window.toast = function (msg) {

@@ -49,8 +49,14 @@ Resume order: this file → `docs/production_build_spec.md` → `CLAUDE.md` §9/
 
 All account-page items are in `renderAccount()` in `assets/ci-storefront.js`.
 
-### 1. Notification-preferences stub lines (Option 1 — minimal, instruct not model)
-No functional preferences UI. Notification prefs are owned by Loop (subscription
+### 1. Notification-preferences stub lines — BUILT 2026-07-10 (Option 1, instruct not model)
+**BUILT:** added to the account "Profile & addresses" card — "Email & SMS marketing
+preferences are managed here too." (+ PROD comment: native Shopify + email platform;
+transactional order emails are store-level, not a customer toggle) — and to the Loop slot
+copy — "…plus your subscription reminders and delivery notifications…". No functional
+preferences UI, per plan.
+
+Original spec — No functional preferences UI. Notification prefs are owned by Loop (subscription
 lifecycle) + native Shopify/ESP (marketing consent); transactional order emails are
 store-level and not customer-configurable. Add:
 - one line to the existing "Profile & addresses" card — email & SMS marketing
@@ -123,8 +129,15 @@ Loop slot was static.
   muted/Lapsed state — to demonstrate the intended production Loop+Functions behavior
   without a real Loop portal. Label clearly with `PROD:` / `LOOP:` seams.
 
-### 4. Recent Orders tile — redesign + instruct (not model) reorder/subscribe
-Current rows are prose that wrap badly. Steve's directive: DO NOT build interactive
+### 4. Recent Orders tile — BUILT 2026-07-10 (redesign + instruct, not model)
+**BUILT:** replaced the wrapping prose lines with clean rows via `orderRow()` — "Order #1042"
+(left) · "$77.70" (right, non-wrapping) · "Tour d'Italia 1 · 2026-06-12" muted subtitle ·
+per-row "Order again" link · a "Show all orders" footer link. Row-click / Order again / Show
+all orders fire instructional preview toasts (instruct-not-model); a PROD comment in the card
+documents the real native-Shopify flow (order detail, reorder, Roccia→selling_plan/Loop nudge,
+order history) and the not-1:1 reorder caveat. Uses "Order #", not "invoice".
+
+Original spec — current rows are prose that wrap badly. Steve's directive: DO NOT build interactive
 mocks — INSTRUCT (descriptive stub copy + `PROD:`/`LOOP:` seams), like the Loop slot.
 - **BUILD (visual):** clean non-wrapping rows — `Order #1042 · 2026-06-12 · $48.00`,
   order number left, amount right-aligned, item/roaster a compact subtitle; each row a
