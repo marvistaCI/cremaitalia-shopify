@@ -457,5 +457,29 @@
       "img": {"cls": "b", "label": "Tote"},
       "blurb": "Heavy cotton canvas, tricolore stitch."
     }
+  ],
+  "people": [
+    {
+      "id": "lucia-calo",
+      "name": "Lucia Calò",
+      "role": "Operations Manager - Italy",
+      "group": "team",
+      "photo": "ci-lucia.jpg",
+      "bio": [
+        "My connection to the world of hospitality runs deep, starting within my own family of restaurateurs. When my parents opened a café, my summer school breaks became a hands-on introduction to the art of coffee, where I proudly brewed my very first espressos.",
+        "At 28, my journey led me to Australia, where I lived for four unforgettable years. It was during this time that my passion for coffee truly came full circle: working as a barista in a country where coffee culture is taken to an elite level — and where the craft is highly respected — not only connected me to the local scene but beautifully funded my studies.",
+        "This experience allowed me to later transition back to my chosen path as a professional massage therapist. Fueled by a lifelong love for high-quality coffee, I still turn every trip around the globe into a quest for the perfect cup — always searching for excellence, one bean at a time."
+      ]
+    },
+    {
+      "id": "asia-chirdo",
+      "name": "Asia Chirdo",
+      "role": "Board Advisor - Italy",
+      "group": "team",
+      "photo": "ci-asia.jpg",
+      "bio": [
+        "Silvia Asia Chirdo is a restaurant and hospitality consultant with 25 years of experience across the Italian food and HORECA industry. Since 2008, she has advised restaurants, food retail concepts, and hospitality brands in Italy and across Europe, with projects in Rome, Milan, and beyond. Her core strength lies in brand creation, launch, and development — building concepts from the ground up, defining identity and positioning, and guiding them through startup into sustainable growth."
+      ]
+    }
   ]
 }

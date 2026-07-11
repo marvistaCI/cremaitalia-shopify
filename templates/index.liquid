@@ -53,7 +53,7 @@
 
     <!-- Shelves -->
     <div class="section-head" id="sec-shelves"><p class="eyebrow">How the catalog is organized</p><h2>The four coffee shelves.</h2></div>
-    <p class="prose" style="max-width:72ch">One shelf for subscriptions and larger formats (<span class="ita">Roccia</span>), one for discovery and gifting (<span class="ita">Sorpresa</span>), one for rare or seasonal roasts (<span class="ita">Selezione</span>), and one for value (<span class="ita">Offerta</span>).</p>
+    <p class="prose" style="max-width:72ch">One shelf for subscriptions and larger formats (<span class="ita">Roccia</span>), one for discovery and gifting (<span class="ita">Sorpresa</span>), one for rare or seasonal roasts (<span class="ita">Selezione</span>), and one for last-chance lots at an honest markdown (<span class="ita">Offerta</span>).</p>
     <div class="card-grid">
       <div class="shelf-card" onclick="showPage('roccia')"><h3>Roccia</h3><div class="ss2">The Rock · Subscription (and one-time ordering)</div><p>Your preferred coffee, size, and cadence — free shipping and a 10% discount.</p></div>
       <div class="shelf-card" onclick="showPage('sorpresa')"><h3>Sorpresa</h3><div class="ss2">Discovery · One-time</div><p>Our curated collection of roasted delights. On-demand 100g Tour bundles — the best way to find your favorite roast subscription.</p></div>
@@ -84,8 +84,8 @@
   <!-- Brown hero: catalog framing + the SAVABLE taste console (identity). Taste is the only
        axis saved to the profile; Shelf + Region below are ephemeral navigation. -->
   <div class="dark-hero"><div class="dark-hero-inner">
-    <p class="eyebrow" style="color:var(--ci-crema-light)">The catalog</p>
-    <h1>Shop the Catalog</h1>
+    <p class="eyebrow" style="color:var(--ci-crema-light)">All shelves</p>
+    <h1>Shop all our Coffee</h1>
     <p>Organized into four shelves &mdash; <span class="ita">Roccia</span> &middot; <span class="ita">Sorpresa</span> &middot; <span class="ita">Selezione</span> &middot; <span class="ita">Offerta</span>.</p>
     <div class="taste-console">
       <div class="tc-head"><span class="tc-label">Your taste</span><span class="tc-note">saved to your profile</span></div>
@@ -411,6 +411,10 @@
       <div class="founder-col">
         <img class="founder-photo" src="{{ 'ci-company.jpg' | asset_url }}" alt="A view of Tuscany" width="200" height="200">
         <p class="person-role">Tuscany</p>
+        <figure class="story-photo founder-stack">
+          <img src="{{ 'ci-company-door.jpg' | asset_url }}" alt="A weathered caff&egrave; door in Sarteano, Tuscany" width="640" height="901" loading="lazy">
+          <figcaption>A <span class="ita">caff&egrave;</span> door &mdash; Sarteano.</figcaption>
+        </figure>
       </div>
       <div class="prose">
         <p>Crema Italia, LLC imports curated whole-bean coffee from a small, named group of artisan Italian roasters, stores it in our Florida warehouse, and ships it to American customers&hellip; unchanged. We bring their coffee to you just as if you were there, in Italy.</p>
@@ -431,6 +435,10 @@
         <img class="founder-photo" src="{{ 'ci-founder.jpg' | asset_url }}" alt="Steve Roberts, Founder" width="200" height="200">
         <h4 class="founder-name">Steve Roberts</h4>
         <p class="person-role">Founder</p>
+        <figure class="story-photo founder-stack">
+          <img src="{{ 'ci-founder-dog.jpg' | asset_url }}" alt="Steve at a caf&eacute; in Campiglia, a local dog nuzzling him" width="900" height="845" loading="lazy">
+          <figcaption>Campiglia caf&eacute; dog-person test.</figcaption>
+        </figure>
       </div>
       <div class="prose">
         <p>Steve Roberts is the founder of Crema Italia. His road to Italy is a long one &mdash; here is a brief recap, in his words:</p>
@@ -450,15 +458,37 @@
     <div class="section-head"><p class="eyebrow">La nostra squadra eccellente</p><h2>Our excellent team members</h2></div>
     <!-- PROD: static list below — becomes an admin-managed collection/metafield (photo, name, role, bio) once real team data exists. Names/roles are real; photos are placeholders. -->
     <div class="people-grid">
-      <div class="person-card"><div class="person-photo">Lucia<br>Calo'</div><h4>Lucia Calo'</h4><p class="person-role">Italian Operations Manager</p></div>
-      <div class="person-card"><div class="person-photo">Asia<br>Chirdo</div><h4>Asia Chirdo</h4><p class="person-role">Italian Board Advisor</p></div>
-      <div class="person-card"><div class="person-photo">Lauren<br>Roberts</div><h4>Lauren Roberts</h4><p class="person-role">US Operations Manager</p></div>
+      <div class="person-card is-link" onclick="openPerson('lucia-calo')"><div class="person-photo" style="background:center/cover no-repeat url('{{ 'ci-lucia.jpg' | asset_url }}')"></div><h4>Lucia Calò</h4><p class="person-role">Operations Manager - Italy</p></div>
+      <div class="person-card is-link" onclick="openPerson('asia-chirdo')"><div class="person-photo" style="background:center/cover no-repeat url('{{ 'ci-asia.jpg' | asset_url }}')"></div><h4>Asia Chirdo</h4><p class="person-role">Board Advisor - Italy</p></div>
+      <div class="person-card"><div class="person-photo">Lauren<br>Roberts</div><h4>Lauren Roberts</h4><p class="person-role">Operations Manager - US</p></div>
     </div>
 
     <div class="section-head"><p class="eyebrow">I nostri partner</p><h2>Our partners</h2></div>
     <!-- PROD: static list below — becomes an admin-managed collection/metafield (photo/logo, name, type, blurb) once real partner data exists. Partner name is a placeholder; type is the partner's role/category. -->
     <div class="people-grid">
-      <div class="person-card"><div class="person-photo">Partner 1</div><h4>Partner 1</h4><p class="person-role">Italian Freight Forwarder</p></div>
+      <div class="person-card"><div class="person-photo">Partner 1</div><h4>Partner 1</h4><p class="person-role">Freight Forwarder - Italy</p></div>
+    </div>
+  </main>
+</div>
+
+<!-- ============================== PERSON (dynamic: team / partner) ============================== -->
+<!-- Reusable container: one page renders whichever team member or partner was clicked,
+     populated by openPerson(id) from ci-catalog.json `people`. In production this becomes
+     a single Liquid template rendering an admin-managed Team/Partner record (see
+     docs/production_build_spec.md §2) — the container is code, the people are data. -->
+<div class="page" id="page-person">
+  <div class="dark-hero"><div class="dark-hero-inner">
+    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="showPage('about')">Back to About</button>
+    <p class="eyebrow" style="color:var(--ci-crema-light)" id="person-group"></p>
+    <h1 id="person-name"></h1>
+    <p id="person-role-hero" style="color:var(--ci-crema-light);margin:.35rem 0 0"></p>
+  </div></div>
+  <main class="ci-main">
+    <div class="founder-grid">
+      <div class="founder-col">
+        <div class="person-photo" id="person-photo"></div>
+      </div>
+      <div class="prose" id="person-bio" style="max-width:65ch"></div>
     </div>
   </main>
 </div>

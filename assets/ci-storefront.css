@@ -22,11 +22,13 @@ body{background:var(--ci-cream);color:var(--ci-coffee);font-family:var(--ci-font
 .page.active{display:flex}
 
 /* ---- flag rules ---- */
-.flag-rule{height:3px;background:linear-gradient(to right,var(--ci-green) 50%,var(--ci-red) 50%)}
 .flag-strip{display:grid;grid-template-columns:1fr 1fr 1fr;height:4px}
 .flag-strip>:nth-child(1){background:var(--ci-green)}
 .flag-strip>:nth-child(2){background:var(--ci-cream)}
 .flag-strip>:nth-child(3){background:var(--ci-red)}
+/* hairline gives the white third contrast against the light background it meets */
+.flag-top{border-bottom:1px solid #333}
+.flag-bottom{border-top:1px solid #333}
 
 /* ---- header ---- */
 .ci-header{background:var(--ci-cream);border-bottom:1px solid var(--ci-hairline);position:sticky;top:0;z-index:100}
@@ -44,6 +46,8 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .shop-menu a{display:block;padding:.55rem .7rem;border-radius:6px;cursor:pointer;text-decoration:none}
 .shop-menu a:hover{background:var(--ci-cream)}
 .shop-menu .ita{font-family:var(--ci-font-display);font-style:italic;font-weight:600;font-size:1.05rem;color:var(--ci-coffee);display:block}
+.shop-menu .lbl{font-family:var(--ci-font-display);font-weight:600;font-size:1.05rem;color:var(--ci-coffee);display:block}
+.shop-div{height:1px;background:var(--ci-hairline);margin:.35rem .3rem}
 .shop-menu .men{font-size:.76rem;color:var(--ci-espresso);display:block;line-height:1.35}
 .icon-btn{background:none;border:none;cursor:pointer;color:var(--ci-espresso);padding:.3rem;display:flex;align-items:center;transition:color 200ms}
 .icon-btn:hover{color:var(--ci-crema)}
@@ -254,10 +258,20 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .person-photo{width:100%;aspect-ratio:1;background:linear-gradient(135deg,var(--ci-espresso),var(--ci-coffee));border-radius:var(--ci-radius);border:1px solid var(--ci-hairline);display:flex;align-items:center;justify-content:center;font-family:var(--ci-font-display);font-style:italic;font-size:.9rem;color:var(--ci-crema-light);text-align:center;padding:.75rem;margin-bottom:.65rem}
 .person-card h4{font-family:var(--ci-font-display);font-weight:600;font-size:1rem;color:var(--ci-coffee);margin:0}
 .person-card .person-role{font-size:.8rem;color:var(--ci-mute);margin:.15rem 0 0}
+.person-card.is-link{cursor:pointer}
+.person-card.is-link .person-photo{transition:border-color 150ms}
+.person-card.is-link h4{transition:color 150ms}
+.person-card.is-link:hover h4{color:var(--ci-crema)}
+.person-card.is-link:hover .person-photo{border-color:var(--ci-crema)}
 .founder-col{width:200px}
 .founder-photo{width:200px;aspect-ratio:1;object-fit:cover;border-radius:var(--ci-radius);border:1px solid var(--ci-hairline);display:block}
 .founder-name{font-family:var(--ci-font-display);font-weight:600;font-size:1.05rem;color:var(--ci-coffee);margin:.6rem 0 0}
 .founder-col .person-role{font-size:.8rem;color:var(--ci-mute);margin:.15rem 0 0}
+.story-photo{margin:1.25rem 0}
+.story-photo img{display:block;width:100%;height:auto;border-radius:var(--ci-radius);border:1px solid var(--ci-hairline)}
+.story-photo figcaption{font-size:.8rem;color:var(--ci-mute);margin-top:.5rem}
+/* Second stacked tile beneath a founder/company portrait (dog photo, caffè door). */
+.founder-stack{margin:1.1rem 0 0}
 
 /* ---- back button ---- */
 .back-btn{display:inline-flex;align-items:center;gap:.3rem;background:none;border:none;cursor:pointer;font-family:var(--ci-font-body);font-size:.85rem;color:var(--ci-espresso);padding:0;margin-bottom:1.5rem;transition:color 200ms}
@@ -366,7 +380,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 /* ---- home landing (POC5 model) ---- */
-.home-jump{position:sticky;top:58px;z-index:80;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;padding:.6rem 1rem;background:rgba(251,248,241,.9);backdrop-filter:blur(6px);border-bottom:1px solid var(--ci-hairline)}
+.home-jump{position:sticky;top:68px;z-index:80;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;padding:.6rem 1rem;background:rgba(251,248,241,.9);backdrop-filter:blur(6px);border-bottom:1px solid var(--ci-hairline)}
 .home-jump button{font-family:var(--ci-font-body);font-size:.8rem;font-weight:600;color:var(--ci-espresso);background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:999px;padding:.35rem .95rem;cursor:pointer;transition:all 150ms}
 .home-jump button:hover{border-color:var(--ci-crema);color:var(--ci-crema)}
 .home-jump .hj-quiz{background:var(--ci-crema);color:var(--ci-cream);border-color:var(--ci-crema)}

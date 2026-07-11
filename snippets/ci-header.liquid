@@ -1,17 +1,20 @@
 {%- comment -%}
   ci-header.liquid — sticky storefront header.
-  Nav: Shop (dropdown: Roccia · Sorpresa · Selezione · Offerta) · Roasters · About · Journal · Bottega
+  Nav: Shop (dropdown: All Shelves · Roccia · Sorpresa · Selezione · Offerta) · Roasters · About · Journal · Bottega
   Right: search · cart · sign-in. SPA navigation handled by ci-storefront.js (showPage).
 {%- endcomment -%}
 <header class="ci-header">
+  <div class="flag-strip flag-top" aria-hidden="true"><div></div><div></div><div></div></div>
   <div class="header-inner">
     <img class="ci-logo" src="{{ 'ci-logo.png' | asset_url }}" alt="Crema Italia" width="146" height="44"
          onclick="showPage('home')">
     <div class="header-right">
       <nav aria-label="Primary">
         <div class="nav-item">
-          <button onclick="showPage('shop')" id="nav-shop" aria-haspopup="true">Shop</button>
+          <button onclick="showPage('shop');closeShopMenu()" id="nav-shop" aria-haspopup="true">Shop</button>
           <div class="shop-menu" role="menu">
+            <a role="menuitem" tabindex="0" onclick="showPage('shop');closeShopMenu()"><span class="lbl">All Shelves</span><span class="men">Everything we carry, in one place.</span></a>
+            <div class="shop-div" role="separator"></div>
             <a role="menuitem" tabindex="0" onclick="showPage('roccia');closeShopMenu()"><span class="ita">Roccia</span><span class="men">The Rock — our rock-solid subscription plan.</span></a>
             <a role="menuitem" tabindex="0" onclick="showPage('sorpresa');closeShopMenu()"><span class="ita">Sorpresa</span><span class="men">Surprises — our curated collection of roasted delights.</span></a>
             <a role="menuitem" tabindex="0" onclick="showPage('selezione');closeShopMenu()"><span class="ita">Selezione</span><span class="men">Roasters' premium and seasonal offerings.</span></a>

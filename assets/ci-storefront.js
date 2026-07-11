@@ -15,6 +15,7 @@
   var CATALOG = { roasters: [], products: [] };
   var byHandle = {};
   var roasterByHandle = {};
+  var peopleById = {};
 
   // ---- filter + quiz + session state ----
   var activeRegion = 'all', activeShelf = 'all';
@@ -253,6 +254,7 @@
     var navKey = name;
     if (['roccia', 'sorpresa', 'selezione', 'offerta', 'product', 'cart'].indexOf(name) !== -1) navKey = 'shop';
     if (name === 'roaster') navKey = 'roasters';
+    if (name === 'person') navKey = 'about';
     var nb = $('nav-' + navKey);
     if (nb) nb.classList.add('active');
     // Persist the active taste profile onto shelf landing pages reached from the Shop dropdown.
@@ -298,6 +300,30 @@
         (r.phone ? esc(r.phone) : '');
     }
     showPage('roaster');
+  };
+
+  // Reusable team/partner detail page — populate the single #page-person container
+  // with the clicked person's record, then show it. Mirrors openRoaster.
+  window.openPerson = function (id) {
+    var pn = peopleById[id];
+    if (!pn) return;
+    $('person-group').textContent = pn.group === 'partner' ? 'Our partners' : 'Our team';
+    $('person-name').textContent = pn.name;
+    $('person-role-hero').textContent = pn.role || '';
+    var photo = $('person-photo');
+    if (photo) {
+      if (pn.photo) {
+        // PROD: real headshot/logo — swap the lettered placeholder for the image.
+        var purl = (window.CI_ASSETS && window.CI_ASSETS[pn.photo]) || pn.photo;
+        photo.style.background = 'center/cover no-repeat url(' + purl + ')';
+        photo.textContent = '';
+      } else {
+        photo.style.background = '';
+        photo.textContent = pn.name;
+      }
+    }
+    $('person-bio').innerHTML = (pn.bio || []).map(function (para) { return '<p>' + esc(para) + '</p>'; }).join('');
+    showPage('person');
   };
 
   window.openProduct = function (handle) {
@@ -1000,6 +1026,7 @@
       CATALOG = data;
       (CATALOG.products || []).forEach(function (p) { byHandle[p.handle] = p; });
       (CATALOG.roasters || []).forEach(function (r) { roasterByHandle[r.handle] = r; });
+      (CATALOG.people || []).forEach(function (pn) { peopleById[pn.id] = pn; });
       renderAll();
       renderCart();
     }).catch(function (err) { console.error('Catalog load failed', err); });

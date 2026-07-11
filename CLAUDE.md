@@ -844,6 +844,34 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   further edits: `shopify theme push --theme 151420207273`. Still open: turn storefront
   password back ON when friend-testing wraps; align Cowork's OneDrive region source to the
   Italian vocabulary.
+- 2026-07-11 — **POC5 polish batch built, baked, and re-deployed.** Interactive
+  build-model-show-Steve session on top of the deployed POC5. Landed: (a) **tricolore flag
+  strips** — the top strip moved INTO the sticky header as green/white/red thirds (4px) with
+  a 1px `#333` hairline so it now sticks instead of scrolling away; bottom strip got a
+  matching hairline; the sticky `.home-jump` desktop offset bumped 58→68px to clear the
+  ~10px-taller header (mobile `top:52px` left as-is, logged for the mobile review). (b)
+  **Offerta home copy** — "one for value" → "one for last-chance lots at an honest markdown".
+  (c) **Team/Partner detail pages** — clickable About tiles open a single reusable
+  `#page-person` container populated by `openPerson(id)` from a new `people[]` array in
+  `ci-catalog.json` (mirrors the roaster-profile pattern; the production seam per
+  `production_build_spec.md` §2). Lucia & Asia are live with real bios + real headshots;
+  Lauren & Partner 1 are inert until content arrives. Added a `window.CI_ASSETS` map in
+  `theme.liquid` to resolve catalog photo filenames → asset URLs for the JS-rendered page.
+  (d) **About photos** (all Steve's own photos — no rights issues; processed with Pillow:
+  crop, tame warm flush, low-sat): new founder espresso headshot (`ci-founder.jpg` replaced),
+  a stacked "Campiglia café dog-person test" tile (`ci-founder-dog.jpg`) under it, a stacked
+  Sarteano *caffè* door tile (`ci-company-door.jpg`) under the company Tuscany photo, and
+  real headshots `ci-lucia.jpg` / `ci-asia.jpg`. (e) **Team role labels** restructured to
+  "Role - Location": Operations Manager - Italy (Lucia), Board Advisor - Italy (Asia),
+  Operations Manager - US (Lauren), Freight Forwarder - Italy (Partner 1). (f) **Shop
+  dropdown** — added an "All Shelves" item (roman label + explainer) above a divider and the
+  four shelves; FIXED the auto-close (the "Shop" button itself never called `closeShopMenu()`
+  — now it does, matching the shelves); renamed the Shop hero eyebrow THE CATALOG → ALL
+  SHELVES and H1 "Shop the Catalog" → "Shop all our Coffee" so nav / dropdown / page align.
+  Committed + pushed to GitHub + re-deployed to the **POC5 Preview theme (151420207273)**.
+  **NEXT: full-site mobile review** (Steve, fresh task) — see the §10 to-do. Note: the
+  browser-pane screenshot tool was wedged for much of this session, so changes were verified
+  via live DOM/geometry inspection rather than screenshots.
 
 ## 10. Open questions / TODO
 
@@ -958,6 +986,15 @@ catalog schema additions) should be logged there too.
 - [ ] Deferred: no-waste copy rewrite on the Promise page (pending 3PL-city research).
 - [ ] Optional: `git tag poc3` to mark the POC3 milestone (still not done — consider
   before this POC4 batch is committed on top).
+- [ ] **Full-site MOBILE review — deferred until the POC is finalized (Steve, 2026-07-11).**
+  Once POC content/layout is locked, do a dedicated phone pass across every page. Known
+  issue found this session while fixing the flag strips: on mobile the header does NOT
+  collapse to a hamburger — it wraps to 3 rows (~148px tall) and the sticky `.home-jump`
+  chip bar (`top:52px` in the `max-width:640px` media query) is fully hidden behind it
+  when scrolled (pre-existing, not caused by the flag change). Likely wants a compact/
+  hamburger mobile header. Desktop was handled this session: the in-header flag strip grew
+  the header to ~68px, so `.home-jump` desktop offset was bumped `top:58px`→`68px`; the
+  mobile `top:52px` was left as-is pending this whole-site mobile pass.
 
 **NEXT (production build, after POC4 is vetted):** real product/collection/metafield
 data model (`crema_italia.*`) — note the POC4 batch already added a precedent for this

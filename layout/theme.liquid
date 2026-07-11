@@ -37,18 +37,22 @@
 
   <!-- POC3: baked-in test dataset location for the storefront JS. -->
   <script>window.CI_CATALOG_URL = {{ 'ci-catalog.json' | asset_url | json }};</script>
+  <!-- Resolves catalog `people[].photo` filenames to real asset URLs for the JS-rendered
+       person page. PROD: real team/partner records carry their own image URLs. -->
+  <script>window.CI_ASSETS = {
+    "ci-lucia.jpg": {{ 'ci-lucia.jpg' | asset_url | json }},
+    "ci-asia.jpg": {{ 'ci-asia.jpg' | asset_url | json }}
+  };</script>
 </head>
 
 <body>
-  <div class="flag-rule" aria-hidden="true"></div>
-
   {% render 'ci-header' %}
   {% render 'ci-profile-banner' %}
 
   {{ content_for_layout }}
 
   {% render 'ci-store-footer' %}
-  <div class="flag-strip" aria-hidden="true"><div></div><div></div><div></div></div>
+  <div class="flag-strip flag-bottom" aria-hidden="true"><div></div><div></div><div></div></div>
 
   {% render 'ci-quiz-modal' %}
   {% render 'ci-signin-modal' %}
