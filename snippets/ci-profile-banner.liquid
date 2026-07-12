@@ -1,8 +1,20 @@
-{%- comment -%} ci-profile-banner.liquid — taste-profile active banner (shown after the quiz). {%- endcomment -%}
-<div class="profile-banner" id="profile-banner">
-  <div class="profile-banner-inner">
-    <p>Your taste profile is active — catalog filtered to your preferences.</p>
-    <div class="profile-tags" id="profile-banner-tags"></div>
-    <button class="btn btn-outline" style="font-size:.78rem;padding:.3rem .75rem;border-color:rgba(255,255,255,.3)" onclick="clearProfile()">Clear profile</button>
+{%- comment -%}
+  ci-profile-banner.liquid — global taste-profile ribbon.
+  Shown ONLY on the Shop + shelf pages, and ONLY when a taste profile exists
+  (visibility + state driven by updateRibbon/renderRibbon in ci-storefront.js).
+  Toggles taste filtering on/off; "Edit profile" opens the taste console modal.
+{%- endcomment -%}
+<div class="taste-ribbon" id="taste-ribbon">
+  <div class="flag-strip taste-ribbon-flag" aria-hidden="true"><div></div><div></div><div></div></div>
+  <div class="taste-ribbon-inner">
+    <div class="tr-main">
+      <span class="tr-dot" aria-hidden="true"></span>
+      <p class="tr-status" id="tr-status"></p>
+      <div class="profile-tags tr-tags" id="tr-tags"></div>
+    </div>
+    <div class="tr-actions">
+      <button class="tr-edit" onclick="openTasteConsole()">Edit profile</button>
+      <button class="tr-toggle" id="tr-toggle" onclick="toggleProfileFilter()">Apply profile</button>
+    </div>
   </div>
 </div>

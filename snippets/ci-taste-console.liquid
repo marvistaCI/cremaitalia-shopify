@@ -1,0 +1,36 @@
+{%- comment -%}
+  ci-taste-console.liquid — the taste-profile editor, opened from the ribbon's
+  "Edit profile". Pills stage changes into the active taste; the footer (Apply /
+  Save my changes) only appears once a change is made. Apply = ephemeral (not saved),
+  Save my changes = persist to the profile. Behaviour lives in ci-storefront.js.
+{%- endcomment -%}
+<div class="modal-overlay" id="taste-console-modal">
+  <div class="modal taste-console-modal">
+    <button class="modal-close" onclick="closeTasteConsole()" aria-label="Close">&times;</button>
+    <h2>Your taste</h2>
+    <p class="subtitle">What we filter your shelves to.</p>
+    <div class="tc-groups">
+      <div class="filter-group"><div class="filter-label">Roast</div><div class="filter-pills">
+        <span class="pill" onclick="consoleTaste(this,'roast','all')">Any</span>
+        <span class="pill" onclick="consoleTaste(this,'roast','light')">Light</span>
+        <span class="pill" onclick="consoleTaste(this,'roast','medium')">Medium</span>
+        <span class="pill" onclick="consoleTaste(this,'roast','dark')">Dark</span>
+      </div></div>
+      <div class="filter-group"><div class="filter-label">Flavor</div><div class="filter-pills">
+        <span class="pill" onclick="consoleTaste(this,'flavor','all')">Any</span>
+        <span class="pill" onclick="consoleTaste(this,'flavor','fruit')">Fruit &amp; Floral</span>
+        <span class="pill" onclick="consoleTaste(this,'flavor','sweet')">Sweet &amp; Chocolate</span>
+        <span class="pill" onclick="consoleTaste(this,'flavor','terroir')">Bold &amp; Spiced</span>
+      </div><div class="flavor-desc" id="tc-flavor-desc"></div></div>
+      <div class="filter-group"><div class="filter-label">Caffeine</div><div class="filter-pills">
+        <span class="pill" onclick="consoleTaste(this,'caffeine','all')">Any</span>
+        <span class="pill" onclick="consoleTaste(this,'caffeine','full')">Caffeinated</span>
+        <span class="pill" onclick="consoleTaste(this,'caffeine','decaf')">Decaf</span>
+      </div></div>
+    </div>
+    <div class="tc-modal-foot" id="tc-modal-foot">
+      <button class="btn btn-secondary" onclick="applyEphemeral()">Apply</button>
+      <button class="btn btn-primary" onclick="saveProfileChanges()">Save my changes</button>
+    </div>
+  </div>
+</div>

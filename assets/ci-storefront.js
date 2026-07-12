@@ -27,7 +27,8 @@
   // Loop webhooks — not theme state. Faked here to demo the two Membership tile states.
   var session = { signedIn: false, subscriber: false, foundingMember: false, foundingForfeited: false, paused: false, firstTime: true, name: 'Steve R.' };
   var cart = [];
-  var profileActive = false, savedTaste = null, pendingSaveProfile = false;
+  // filterOn = taste filtering currently applied; savedTaste != null = a profile exists.
+  var filterOn = false, savedTaste = null, pendingSaveProfile = false;
   var pendingQuizAction = null; // null | 'matches' | 'everything' — set by the quiz result buttons
 
   var FREE_SHIP_THRESHOLD = 55;
@@ -259,6 +260,8 @@
     if (nb) nb.classList.add('active');
     // Persist the active taste profile onto shelf landing pages reached from the Shop dropdown.
     if (['roccia', 'selezione', 'offerta'].indexOf(name) !== -1) applyTasteToGrid('grid-' + name);
+    // The ribbon shows only on shopping surfaces, and only when a profile exists.
+    updateRibbon(name);
   };
 
   // Smooth in-page scroll for the home-page sticky jump-chips.
@@ -483,34 +486,14 @@
   };
 
   // ---------- filtering ----------
+  // Shelf + Region are ephemeral navigation (not saved). Taste is the profile axis,
+  // saved to the account and applied via the ribbon/console. `filterOn` gates whether
+  // the taste axis is currently applied; `savedTaste != null` means a profile EXISTS
+  // (which is what makes the ribbon appear at all — no profile, no ribbon).
+  var ALL_TASTE = { roast: 'all', flavor: 'all', caffeine: 'all' };
   window.filterRegion = function (el, val) { activeRegion = val; setActive(el); applyFilters(); };
   window.filterShelf = function (el, val) { activeShelf = val; setActive(el); applyFilters(); };
-  window.filterTaste = function (el, axis, val) {
-    activeTaste[axis] = val; setActiveAll(el); applyFilters();
-    if (axis === 'flavor') updateFlavorDesc();
-    refreshSaveProfile();
-  };
-  function tasteChanged() { return activeTaste.roast !== 'all' || activeTaste.flavor !== 'all' || activeTaste.caffeine !== 'all'; }
-  function refreshSaveProfile() { var el = $('save-profile'); if (el) el.classList.toggle('show', tasteChanged()); }
-  function updateFlavorDesc() {
-    var el = $('flavor-desc'); if (!el) return;
-    var d = FLAVOR_DESC[activeTaste.flavor];
-    if (d) { el.textContent = d; el.classList.add('show'); } else { el.textContent = ''; el.classList.remove('show'); }
-  }
-  // Save the current Taste selections as the customer's profile.
-  window.saveToProfile = function () {
-    if (session.signedIn) { commitProfile(); toast('Saved to your taste profile.'); }
-    else { pendingSaveProfile = true; openSignin(); }
-  };
-  function commitProfile() {
-    savedTaste = { roast: activeTaste.roast, flavor: activeTaste.flavor, caffeine: activeTaste.caffeine };
-    profileActive = true;
-    renderProfileTags();
-    $('profile-banner').classList.add('active');
-    var h = $('pf-hint'); if (h) h.style.display = 'block';
-    var sp = $('save-profile'); if (sp) sp.classList.remove('show');
-    applyFilters();
-  }
+
   function tasteTagsHtml(t) {
     var lbl = { roast: { light: 'Light Roast', medium: 'Medium Roast', dark: 'Dark Roast' }, flavor: FLAVOR_LABEL, caffeine: { full: 'Caffeinated', decaf: 'Decaf' } };
     var tags = [];
@@ -519,24 +502,102 @@
     if (t && t.caffeine && t.caffeine !== 'all') tags.push(lbl.caffeine[t.caffeine]);
     return tags.filter(Boolean).map(function (x) { return '<span class="profile-tag">' + esc(x) + '</span>'; }).join('');
   }
-  function renderProfileTags() {
-    var html = tasteTagsHtml(activeTaste);
-    var b = $('profile-banner-tags'); if (b) b.innerHTML = html;
-    var r = $('result-tags'); if (r) r.innerHTML = html;
+
+  // ---------- taste-profile ribbon ----------
+  // The ribbon is global (rendered once) but only visible on the Shop + shelf pages,
+  // and only when a profile exists. renderRibbon() paints its state; updateRibbon()
+  // decides whether it shows on the current page.
+  var SHOP_PAGES = ['shop', 'roccia', 'sorpresa', 'selezione', 'offerta'];
+  function renderRibbon() {
+    var r = $('taste-ribbon'); if (!r) return;
+    r.classList.toggle('is-active', filterOn);
+    var s = $('tr-status'), tg = $('tr-tags'), tb = $('tr-toggle');
+    if (s) s.textContent = filterOn
+      ? 'Your taste profile is active — shelves are filtered to your preferences.'
+      : 'Your profile is not active — all items are shown.';
+    if (tb) tb.textContent = filterOn ? 'Show everything' : 'Apply profile';
+    if (tg) { tg.innerHTML = tasteTagsHtml(activeTaste); tg.classList.toggle('muted', !filterOn); }
   }
-  // Apply the active taste profile to a shelf-page grid (Roccia/Selezione/Offerta).
+  function updateRibbon(pageName) {
+    var r = $('taste-ribbon'); if (!r) return;
+    var show = !!savedTaste && SHOP_PAGES.indexOf(pageName) !== -1;
+    r.classList.toggle('ribbon-visible', show);
+    if (show) renderRibbon();
+  }
+  // Ribbon toggle: flip taste filtering on/off (the saved profile is kept either way).
+  window.toggleProfileFilter = function () {
+    filterOn = !filterOn;
+    applyTasteEverywhere();
+    renderRibbon();
+  };
+
+  // ---------- taste console (modal editor, opened from the ribbon's "Edit profile") ----------
+  var consoleDirty = false;
+  window.openTasteConsole = function () {
+    syncConsolePills();
+    updateConsoleFlavorDesc();
+    consoleDirty = false;
+    var f = $('tc-modal-foot'); if (f) f.classList.remove('dirty');
+    $('taste-console-modal').classList.add('active');
+  };
+  window.closeTasteConsole = function () { $('taste-console-modal').classList.remove('active'); };
+  // Console pills only STAGE a change into activeTaste — nothing hits the grid until the
+  // customer chooses Apply (ephemeral) or Save my changes (persist). The two buttons
+  // only appear once a change is made (consoleDirty).
+  window.consoleTaste = function (el, axis, val) {
+    activeTaste[axis] = val; setActiveAll(el);
+    if (axis === 'flavor') updateConsoleFlavorDesc();
+    consoleDirty = true;
+    var f = $('tc-modal-foot'); if (f) f.classList.add('dirty');
+  };
+  function syncConsolePills() {
+    document.querySelectorAll('#taste-console-modal .filter-pills .pill').forEach(function (pill) {
+      var m = (pill.getAttribute('onclick') || '').match(/consoleTaste\(this,'(\w+)','(\w+)'\)/);
+      if (!m) return;
+      pill.classList.toggle('active', m[2] === (activeTaste[m[1]] || 'all'));
+    });
+  }
+  function updateConsoleFlavorDesc() {
+    var el = $('tc-flavor-desc'); if (!el) return;
+    var d = FLAVOR_DESC[activeTaste.flavor];
+    if (d) { el.textContent = d; el.classList.add('show'); } else { el.textContent = ''; el.classList.remove('show'); }
+  }
+  // Apply the console edits as an EPHEMERAL filter — applied now, NOT saved to the profile.
+  window.applyEphemeral = function () {
+    filterOn = true;
+    applyTasteEverywhere();
+    renderRibbon();
+    closeTasteConsole();
+  };
+  // Save the console edits to the taste profile (persist) AND apply. Signed-out customers
+  // route through sign-in first, then commitProfile() runs on success.
+  window.saveProfileChanges = function () {
+    if (session.signedIn) { commitProfile(); toast('Saved to your taste profile.'); renderAccount(); closeTasteConsole(); }
+    else { pendingSaveProfile = true; closeTasteConsole(); openSignin(); }
+  };
+  function commitProfile() {
+    savedTaste = { roast: activeTaste.roast, flavor: activeTaste.flavor, caffeine: activeTaste.caffeine };
+    filterOn = true;
+    applyTasteEverywhere();
+    updateRibbon(navCurrent);
+  }
+
+  // ---------- apply filters to the grids ----------
+  // Apply the taste axis to a shelf-page grid (Roccia/Selezione/Offerta). Gated by filterOn.
   function applyTasteToGrid(gridId) {
+    var t = filterOn ? activeTaste : ALL_TASTE;
     var cards = document.querySelectorAll('#' + gridId + ' .product-card');
     for (var i = 0; i < cards.length; i++) {
       var d = cards[i].dataset;
-      var show = !profileActive || (
-        (activeTaste.roast === 'all' || inFacet(d.roast, activeTaste.roast)) &&
-        (activeTaste.flavor === 'all' || inFacet(d.flavor, activeTaste.flavor)) &&
-        (activeTaste.caffeine === 'all' || inFacet(d.caffeine, activeTaste.caffeine)));
+      var show =
+        (t.roast === 'all' || inFacet(d.roast, t.roast)) &&
+        (t.flavor === 'all' || inFacet(d.flavor, t.flavor)) &&
+        (t.caffeine === 'all' || inFacet(d.caffeine, t.caffeine));
       cards[i].style.display = show ? '' : 'none';
     }
   }
   function applyProfileToShelves() { ['grid-roccia', 'grid-selezione', 'grid-offerta'].forEach(applyTasteToGrid); }
+  function applyTasteEverywhere() { applyFilters(); applyProfileToShelves(); }
   function setActive(el) {
     var pills = el.closest('.filter-pills').querySelectorAll('.pill:not(.disabled)');
     for (var i = 0; i < pills.length; i++) pills[i].classList.remove('active');
@@ -548,6 +609,7 @@
     el.classList.add('active');
   }
   function applyFilters() {
+    var t = filterOn ? activeTaste : ALL_TASTE;
     var visible = 0;
     var cards = document.querySelectorAll('#shop-grid .product-card');
     for (var i = 0; i < cards.length; i++) {
@@ -555,9 +617,9 @@
       var show =
         (activeRegion === 'all' || inFacet(d.region, activeRegion)) &&
         (activeShelf === 'all' || d.shelf === activeShelf) &&
-        (activeTaste.roast === 'all' || inFacet(d.roast, activeTaste.roast)) &&
-        (activeTaste.flavor === 'all' || inFacet(d.flavor, activeTaste.flavor)) &&
-        (activeTaste.caffeine === 'all' || inFacet(d.caffeine, activeTaste.caffeine));
+        (t.roast === 'all' || inFacet(d.roast, t.roast)) &&
+        (t.flavor === 'all' || inFacet(d.flavor, t.flavor)) &&
+        (t.caffeine === 'all' || inFacet(d.caffeine, t.caffeine));
       c.style.display = show ? '' : 'none';
       if (show) visible++;
     }
@@ -609,6 +671,7 @@
     var dots = document.querySelectorAll('.quiz-dot');
     for (var i = 0; i < dots.length; i++) dots[i].classList.add('done');
   };
+  // "Show me matches": save the quiz answers as the profile AND apply the filter.
   window.applyProfileAndClose = function () {
     if (quizAnswers.roast && quizAnswers.roast !== 'any') activeTaste.roast = quizAnswers.roast;
     // Sparse (near-implausible) roast/flavor pairings relax to roast-only matching so
@@ -616,90 +679,84 @@
     if (quizAnswers.flavor && !isSparseCombo(quizAnswers.roast, quizAnswers.flavor)) activeTaste.flavor = quizAnswers.flavor;
     if (quizAnswers.caffeine && quizAnswers.caffeine !== 'both') activeTaste.caffeine = quizAnswers.caffeine;
     savedTaste = { roast: activeTaste.roast, flavor: activeTaste.flavor, caffeine: activeTaste.caffeine };
-    profileActive = true;
-    $('profile-banner').classList.add('active');
-    renderProfileTags();
-    var h = $('pf-hint'); if (h) h.style.display = 'block';
-    syncFilterPills();
-    updateFlavorDesc();
+    filterOn = true;
     closeQuiz();
     showPage('shop');
-    applyFilters();
-    applyProfileToShelves();
+    applyTasteEverywhere();
+    updateRibbon('shop');
   };
-  // Saves the quiz answers as the customer's taste profile without applying them as
-  // the current Shop filter — used by "Show me everything" so we still capture
-  // signal even when the customer wants an unfiltered browse.
+  // "Show me everything": capture the quiz answers as the profile so we keep the signal,
+  // but leave filtering OFF. The ribbon then shows the honest "not active — all items
+  // shown" state with a one-tap Apply, instead of claiming a filter that isn't applied
+  // (the POC6 bug where "everything" reported the profile as active).
   function captureQuizProfile() {
     savedTaste = {
       roast: (quizAnswers.roast && quizAnswers.roast !== 'any') ? quizAnswers.roast : 'all',
       flavor: quizAnswers.flavor || 'all',
       caffeine: (quizAnswers.caffeine && quizAnswers.caffeine !== 'both') ? quizAnswers.caffeine : 'all'
     };
-    profileActive = true;
-    renderProfileTags();
-    $('profile-banner').classList.add('active');
-    var h = $('pf-hint'); if (h) h.style.display = 'block';
+    activeTaste = { roast: savedTaste.roast, flavor: savedTaste.flavor, caffeine: savedTaste.caffeine };
+    filterOn = false;
   }
   function showEverythingFromQuiz() {
-    activeTaste = { roast: 'all', flavor: 'all', caffeine: 'all' };
-    syncFilterPills();
-    updateFlavorDesc();
+    captureQuizProfile();
     closeQuiz();
     showPage('shop');
-    applyFilters();
+    applyTasteEverywhere();
+    updateRibbon('shop');
   }
   // Both quiz-result choices route through sign-in first — we want to capture the
   // customer's taste profile into their account whenever possible, regardless of
   // which browsing option they pick. See docs/POC_v4_change_list.md.
   window.chooseQuizMatches = function () { pendingQuizAction = 'matches'; closeQuiz(); openSignin(); };
   window.chooseQuizEverything = function () { pendingQuizAction = 'everything'; closeQuiz(); openSignin(); };
+  // "Clear filters" (from the no-results empty state): drop the ephemeral Shelf/Region
+  // navigation and turn taste filtering off, so everything shows again. The saved
+  // profile is KEPT (the ribbon stays, in its off state) — clearing filters is not the
+  // same as deleting your profile.
   window.clearProfile = function () {
-    activeTaste = { roast: 'all', flavor: 'all', caffeine: 'all' };
+    filterOn = false;
     activeRegion = 'all'; activeShelf = 'all';
-    profileActive = false;
-    $('profile-banner').classList.remove('active');
-    var h = $('pf-hint'); if (h) h.style.display = 'none';
     var groups = document.querySelectorAll('#page-shop .filter-pills');
     for (var g = 0; g < groups.length; g++) {
       var pills = groups[g].querySelectorAll('.pill');
       for (var i = 0; i < pills.length; i++) pills[i].classList.toggle('active', i === 0);
     }
-    updateFlavorDesc();
-    refreshSaveProfile();
-    applyFilters();
-    applyProfileToShelves();
+    applyTasteEverywhere();
+    renderRibbon();
   };
-  // reflect activeTaste into the shop filter pills after a quiz
-  function syncFilterPills() {
-    document.querySelectorAll('#page-shop .filter-pills .pill').forEach(function (pill) {
-      var oc = pill.getAttribute('onclick') || '';
-      var m = oc.match(/filterTaste\(this,'(\w+)','(\w+)'\)/);
-      if (m) {
-        var axis = m[1], val = m[2];
-        var others = pill.closest('.filter-pills').querySelectorAll('.pill');
-        if (val === activeTaste[axis] || (activeTaste[axis] === 'all' && val === 'all')) {
-          for (var i = 0; i < others.length; i++) others[i].classList.remove('active');
-          pill.classList.add('active');
-        }
-      }
-    });
-  }
 
   // ---------- sign-in ----------
   window.handleAccountClick = function () { if (session.signedIn) showPage('account'); else openSignin(); };
   // Hover-menu dropdowns (Shop, Account) reopen on :hover/:focus-within, which stays
   // true after a click if the cursor hasn't moved off the trigger — so selecting an
-  // item didn't close the menu. Force-close on selection, then re-arm on mouseleave
-  // so normal hover behavior resumes next time. See docs/POC_v4_change_list.md item 2.
+  // item didn't close the menu. Force-close on selection, then re-arm once the user's
+  // next interaction shows they've moved on. See docs/POC_v4_change_list.md item 2.
+  //
+  // The old code re-armed ONLY on `mouseleave`. That fires only when a moving pointer
+  // physically exits the nav area — so if the cursor stayed inside it after the click
+  // (common: the page jumps to top and the trigger sits at the top of that column), or
+  // on a touch device (a tablet has no gliding cursor at all), the flag never cleared
+  // and the menu went permanently dead (POC6 bug). Re-arm on the FIRST of, then detach:
+  //   - mouseleave on the container         (mouse leaves the area)
+  //   - pointermove while off the container  (mouse/stylus moves away)
+  //   - pointerdown anywhere outside         (a tap elsewhere — the touch case)
+  // Pointer events cover mouse, pen, and touch, so this re-arms on PC and tablet alike.
   function forceCloseDropdown(container) {
     if (!container) return;
     container.classList.add('menu-force-closed');
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
-    container.addEventListener('mouseleave', function reopen() {
+    function rearm() {
       container.classList.remove('menu-force-closed');
-      container.removeEventListener('mouseleave', reopen);
-    });
+      container.removeEventListener('mouseleave', onLeave);
+      document.removeEventListener('pointermove', onOutside, true);
+      document.removeEventListener('pointerdown', onOutside, true);
+    }
+    function onLeave() { rearm(); }
+    function onOutside(e) { if (!container.contains(e.target)) rearm(); }
+    container.addEventListener('mouseleave', onLeave);
+    document.addEventListener('pointermove', onOutside, true);
+    document.addEventListener('pointerdown', onOutside, true);
   }
   window.closeShopMenu = function () {
     var trigger = $('nav-shop');
@@ -738,7 +795,7 @@
     closeSignin();
     renderCart();
     if (quizAction) {
-      if (quizAction === 'matches') applyProfileAndClose(); else { captureQuizProfile(); showEverythingFromQuiz(); }
+      if (quizAction === 'matches') applyProfileAndClose(); else showEverythingFromQuiz();
       renderAccount();
       return;
     }
@@ -758,15 +815,10 @@
   window.showSubscriptions = function () { showPage('account'); var e = $('acct-subs'); if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
   window.applySavedProfile = function () {
     if (savedTaste) { activeTaste = { roast: savedTaste.roast, flavor: savedTaste.flavor, caffeine: savedTaste.caffeine }; }
-    profileActive = true;
-    renderProfileTags();
-    $('profile-banner').classList.add('active');
-    var h = $('pf-hint'); if (h) h.style.display = 'block';
-    syncFilterPills();
-    updateFlavorDesc();
+    filterOn = true;
     showPage('shop');
-    applyFilters();
-    applyProfileToShelves();
+    applyTasteEverywhere();
+    updateRibbon('shop');
   };
 
   // ---------- cart (mock) ----------
@@ -886,7 +938,7 @@
     if (!el) return;
     if (!session.signedIn) { el.innerHTML = '<p class="prose">Please <button class="back-btn" style="margin:0" onclick="openSignin()">sign in</button> to view your account.</p>'; return; }
     $('account-greeting').textContent = 'Buongiorno, ' + session.name;
-    var profHtml = (profileActive || savedTaste) ? tasteTagsHtml(savedTaste || activeTaste) : '';
+    var profHtml = savedTaste ? tasteTagsHtml(savedTaste) : '';
     el.innerHTML =
       '<div class="acct-grid">' +
         '<div class="acct-card"><h3>Membership</h3>' +

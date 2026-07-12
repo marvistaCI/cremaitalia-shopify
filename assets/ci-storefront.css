@@ -22,7 +22,7 @@ body{background:var(--ci-cream);color:var(--ci-coffee);font-family:var(--ci-font
 .page.active{display:flex}
 
 /* ---- flag rules ---- */
-.flag-strip{display:grid;grid-template-columns:1fr 1fr 1fr;height:4px}
+.flag-strip{display:grid;grid-template-columns:1fr 1fr 1fr;height:1px}
 .flag-strip>:nth-child(1){background:var(--ci-green)}
 .flag-strip>:nth-child(2){background:var(--ci-cream)}
 .flag-strip>:nth-child(3){background:var(--ci-red)}
@@ -110,6 +110,39 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .profile-banner-inner{max-width:var(--ci-page-max);margin:0 auto;display:flex;align-items:center;gap:1rem;justify-content:space-between;flex-wrap:wrap}
 .profile-banner p{font-size:.85rem;color:#d4c4b8;margin:0}
 .profile-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+
+/* ---- POC6 taste-profile ribbon ---- */
+.taste-ribbon{display:none;width:calc(100% - 3rem);max-width:var(--ci-page-max);margin:1.25rem auto;background:linear-gradient(135deg,#2a1208,#6B4A38);color:var(--ci-cream);border-radius:var(--ci-radius);overflow:hidden}
+.taste-ribbon.ribbon-visible{display:block}
+.tr-tags.muted{opacity:.5}
+.taste-ribbon-inner{max-width:var(--ci-page-max);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem 1.5rem;flex-wrap:wrap;padding:.7rem 1.25rem;min-height:2.6rem}
+.tr-main{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.tr-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--ci-crema);background:transparent;transition:background 200ms,box-shadow 200ms}
+.taste-ribbon.is-active .tr-dot{background:var(--ci-crema);box-shadow:0 0 0 3px rgba(184,131,72,.25)}
+.tr-status{font-size:.85rem;color:#e8dccb;margin:0}
+.tr-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+.tr-actions{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.tr-edit{background:none;border:none;color:var(--ci-cream);font-family:var(--ci-font-body);font-size:.8rem;text-decoration:underline;text-underline-offset:2px;cursor:pointer;padding:0}
+.tr-toggle{background:none;border:1px solid rgba(255,255,255,.35);color:var(--ci-cream);font-family:var(--ci-font-body);font-weight:600;font-size:.78rem;padding:.35rem .85rem;border-radius:var(--ci-radius);cursor:pointer;white-space:nowrap;transition:background 200ms}
+.tr-toggle:hover{background:rgba(255,255,255,.12)}
+
+/* ---- shop hero filters (Shelf + Region, dark band) ---- */
+.hero-filters{display:flex;flex-direction:column;gap:1.1rem;margin-top:1.5rem}
+.dark-hero .filter-label{color:var(--ci-crema-light)}
+.dark-hero .pill{background:transparent;border:1px solid rgba(255,255,255,.28);color:var(--ci-cream)}
+.dark-hero .pill:hover{border-color:var(--ci-crema-light);color:var(--ci-cream)}
+.dark-hero .pill.active{background:var(--ci-crema);border-color:var(--ci-crema);color:var(--ci-cream)}
+.dark-hero .pill.disabled{opacity:.4;font-style:italic}
+.dark-hero .filter-region{width:100%}
+.dark-hero .region-note{color:#d4c4b8;font-size:.8rem;margin:.6rem 0 0}
+.dark-hero .region-learn{color:var(--ci-crema-light)}
+
+/* ---- taste console modal (opened from the ribbon's Edit profile) ---- */
+.taste-console-modal{max-width:520px}
+.taste-console-modal .tc-groups{display:flex;flex-direction:column;gap:1.15rem;text-align:left;margin-bottom:1.4rem}
+.taste-console-modal .flavor-desc{font-size:.8rem;font-style:italic;color:var(--ci-espresso);margin-top:.4rem;min-height:1rem}
+.tc-modal-foot{display:none;gap:.75rem;justify-content:flex-end;border-top:1px solid var(--ci-hairline);padding-top:1.1rem}
+.tc-modal-foot.dirty{display:flex}
 
 /* ---- main / sections ---- */
 .ci-main{flex:1;max-width:var(--ci-page-max);margin:0 auto;width:100%;padding:2rem 1.5rem 4rem}

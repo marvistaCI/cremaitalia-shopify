@@ -164,3 +164,28 @@ Requirements:
 Generalises beyond Sorpresa Tours to any composite product. Ties to the POC4 precedent already
 logged (a structured roaster-linkage field on bundle/composite products) — extend it to a full
 component-SKU BOM.
+
+## 8. Fully responsive — mobile & tablet (REQUIRED — Steve, 2026-07-12)
+
+The production storefront MUST be **fully responsive across phone, tablet, and desktop** —
+not desktop-first with mobile as an afterthought. This is a launch requirement, not a
+polish item.
+
+- **All three form factors are first-class.** Phone (portrait), tablet (portrait AND
+  landscape), and desktop must each be laid out and tested deliberately. Tablet is called
+  out explicitly because it is the easy one to miss: it usually inherits the *desktop*
+  layout (it sits above common phone breakpoints) while being a *touch* device — the worst
+  of both worlds if untested.
+- **No hover-only interactions.** Anything that today reveals on `:hover` / `:focus-within`
+  (the Shop and Account dropdowns are the live example) must have a **tap-first** path on
+  touch — a tap-to-toggle menu or a hamburger nav — because hover doesn't exist on touch.
+  The POC6 dead-menu bug (a hover dropdown that stuck closed after a selection, fixed in the
+  POC via device-agnostic pointer re-arming) is a symptom of this deeper issue; production
+  must not carry a hover-gated menu onto touch at all.
+- **Touch targets ≥ ~44px**, no reliance on a cursor, and test on real devices (or true
+  device emulation), not just a narrowed desktop window.
+- This supersedes nothing above; it is a global constraint on the whole production build.
+  The POC remains a desktop-oriented mock and only *documents* this — the responsive build
+  happens in production. The existing **full-site mobile review** (CLAUDE.md §10 to-do) is
+  the POC-side pass that will surface the specific breakpoints/components needing work
+  (known: the header does not collapse to a hamburger on phones; hover dropdowns on touch).

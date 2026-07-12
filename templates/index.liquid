@@ -70,7 +70,7 @@
     <div class="card-grid" id="home-roasters"></div>
 
     <!-- Promise -->
-    <div class="section-head" id="sec-promise"><p class="eyebrow">The Crema Italia Promise</p><h2>Three things we mean.</h2></div>
+    <div class="section-head" id="sec-promise"><p class="eyebrow">The Crema Italia Promise</p><h2>We deliver on these promises.</h2></div>
     <ul class="promise-list">
       <li><div class="pn">1</div><div class="pt"><h3>Curated with love, never aggregated.</h3><p>A small group of Italian roasters — carefully chosen, not collected.</p></div></li>
       <li><div class="pn">2</div><div class="pt"><h3>Love your first bag, or we send a different one — free.</h3><p>On Roccia, Sorpresa, and Selezione. Offerta is sold as-is (see <button class="inline-link" onclick="showPage('promise')">the Promise page</button>).</p></div></li>
@@ -81,42 +81,14 @@
 
 <!-- ============================== SHOP ============================== -->
 <div class="page" id="page-shop">
-  <!-- Brown hero: catalog framing + the SAVABLE taste console (identity). Taste is the only
-       axis saved to the profile; Shelf + Region below are ephemeral navigation. -->
+  <!-- Brown hero: catalog framing + EPHEMERAL Shelf/Region navigation. The taste axis
+       (the saved profile) lives in the global ribbon above the hero + the taste console
+       modal it opens ("Edit profile") — not shown inline here anymore. -->
   <div class="dark-hero"><div class="dark-hero-inner">
     <p class="eyebrow" style="color:var(--ci-crema-light)">All shelves</p>
     <h1>Shop all our Coffee</h1>
     <p>Organized into four shelves &mdash; <span class="ita">Roccia</span> &middot; <span class="ita">Sorpresa</span> &middot; <span class="ita">Selezione</span> &middot; <span class="ita">Offerta</span>.</p>
-    <div class="taste-console">
-      <div class="tc-head"><span class="tc-label">Your taste</span><span class="tc-note">saved to your profile</span></div>
-      <div class="tc-groups">
-        <div class="filter-group"><div class="filter-label">Roast</div><div class="filter-pills">
-          <span class="pill active" onclick="filterTaste(this,'roast','all')">Any</span>
-          <span class="pill" onclick="filterTaste(this,'roast','light')">Light</span>
-          <span class="pill" onclick="filterTaste(this,'roast','medium')">Medium</span>
-          <span class="pill" onclick="filterTaste(this,'roast','dark')">Dark</span>
-        </div></div>
-        <div class="filter-group"><div class="filter-label">Flavor</div><div class="filter-pills">
-          <span class="pill active" onclick="filterTaste(this,'flavor','all')">Any</span>
-          <span class="pill" onclick="filterTaste(this,'flavor','fruit')">Fruit &amp; Floral</span>
-          <span class="pill" onclick="filterTaste(this,'flavor','sweet')">Sweet &amp; Chocolate</span>
-          <span class="pill" onclick="filterTaste(this,'flavor','terroir')">Bold &amp; Spiced</span>
-        </div><div class="flavor-desc" id="flavor-desc"></div></div>
-        <div class="filter-group"><div class="filter-label">Caffeine</div><div class="filter-pills">
-          <span class="pill active" onclick="filterTaste(this,'caffeine','all')">Any</span>
-          <span class="pill" onclick="filterTaste(this,'caffeine','full')">Caffeinated</span>
-          <span class="pill" onclick="filterTaste(this,'caffeine','decaf')">Decaf</span>
-        </div></div>
-      </div>
-      <div class="tc-foot">
-        <div class="save-profile" id="save-profile"><button class="inline-link" onclick="saveToProfile()">Save to my taste profile</button></div>
-        <p class="pf-hint" id="pf-hint" style="display:none">Taste profile on. <span onclick="clearProfile()">Clear</span></p>
-      </div>
-    </div>
-  </div></div>
-  <!-- Cream body: EPHEMERAL navigation (shelf + region) + the grid. -->
-  <main class="ci-main">
-    <div class="filter-bar">
+    <div class="hero-filters">
       <div class="filter-group"><div class="filter-label">Shelf</div><div class="filter-pills">
         <span class="pill active" onclick="filterShelf(this,'all')">All</span>
         <span class="pill" onclick="filterShelf(this,'roccia')">Roccia</span>
@@ -124,7 +96,6 @@
         <span class="pill" onclick="filterShelf(this,'selezione')">Selezione</span>
         <span class="pill" onclick="filterShelf(this,'offerta')">Offerta</span>
       </div></div>
-      <div class="filter-divider"></div>
       <div class="filter-group filter-region">
         <div class="filter-label">Region <button class="region-learn" onclick="showPage('regions')">Learn about the regions &rarr;</button></div>
         <div class="filter-pills">
@@ -143,6 +114,9 @@
         <p class="region-note">Greyed regions are on the way as we grow &mdash; and great roasters sometimes appear in regions not shown here. <button class="inline-link" onclick="showPage('regions')">See the map</button>.</p>
       </div>
     </div>
+  </div></div>
+  <!-- Cream body: the grid. -->
+  <main class="ci-main">
     <div class="card-grid" id="shop-grid"></div>
     <div id="no-results" style="display:none;text-align:center;padding:3rem 1rem;color:var(--ci-mute)">
       <p style="font-weight:600;color:var(--ci-espresso)">No coffees match these filters right now.</p>
@@ -242,7 +216,7 @@
 <!-- ============================== ROASTER PROFILE (dynamic) ============================== -->
 <div class="page" id="page-roaster">
   <div class="dark-hero"><div class="dark-hero-inner">
-    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="showPage('roasters')">Show all roasters</button>
+    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="goBack()">&larr; Back</button>
     <div class="roaster-hero-row">
       <div class="roaster-portrait" id="roaster-logo"></div>
       <div>
@@ -478,7 +452,7 @@
      docs/production_build_spec.md §2) — the container is code, the people are data. -->
 <div class="page" id="page-person">
   <div class="dark-hero"><div class="dark-hero-inner">
-    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="showPage('about')">Back to About</button>
+    <button class="back-btn" style="color:var(--ci-crema-light)" onclick="goBack()">&larr; Back</button>
     <p class="eyebrow" style="color:var(--ci-crema-light)" id="person-group"></p>
     <h1 id="person-name"></h1>
     <p id="person-role-hero" style="color:var(--ci-crema-light);margin:.35rem 0 0"></p>

@@ -872,6 +872,41 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   **NEXT: full-site mobile review** (Steve, fresh task) — see the §10 to-do. Note: the
   browser-pane screenshot tool was wedged for much of this session, so changes were verified
   via live DOM/geometry inspection rather than screenshots.
+- 2026-07-12 — **POC6 batch built, verified, committed + pushed.** Interactive
+  build-model-show-Steve session on top of the deployed POC5. Detailed ledger in
+  `docs/POC6_change_list.md`; durable summary here. Landed: **(1) Dropdown dead-menu bug** —
+  the Shop/Account hover dropdowns went permanently dead after a selection because
+  `forceCloseDropdown()` only re-armed on `mouseleave`, which never fires if the pointer
+  stays in the nav column (or on touch). Now re-arms on the first of `mouseleave` /
+  `pointermove`-off / `pointerdown`-outside → recovers on PC **and** tablet (one shared
+  helper, so Shop + Account both fixed). **(2) Wording** — home Promise heading "Three
+  things we mean." → **"We deliver on these promises."** **(3) Filter redesign** — replaced
+  the two-object taste UI (global "profile active" banner + always-open hero "taste console")
+  with **one ribbon + a console-on-demand modal**. New state model: `savedTaste` (persisted
+  profile; null = none), `activeTaste` (current values), `filterOn` (applied or not). Ribbon
+  is global (`ci-profile-banner.liquid`) but shows ONLY on Shop + the four shelf pages and
+  ONLY when a profile exists (**no profile → no ribbon**, Steve's call — profiles are made
+  via the quiz or the account page). Two honest states (off "not active — all items shown" +
+  **Apply profile**; on "active — shelves filtered" + **Show everything**) with a gold state
+  dot + **Edit profile** link. **Edit profile** opens the taste console **modal**
+  (`ci-taste-console.liquid`) — pills stage into `activeTaste`, and a footer appears **only
+  on change** offering **Apply** (ephemeral, not saved) vs **Save my changes** (persist +
+  apply; signed-out routes through sign-in). **Fixed the "Show me everything" bug** (it used
+  to report the profile active while showing everything — now captures the profile but leaves
+  `filterOn` off, honest ribbon). **Shelf + Region moved back into the brown hero** (Steve
+  #4); taste pills left the hero entirely. Ribbon text vertically centered. **(4) Back-links**
+  — the roaster-profile and person-page back buttons hardcoded a fixed parent; both now use
+  the existing `goBack()` history stack and read **"← Back"** (coffee→roaster→Back returns to
+  the coffee, etc.). **(5) Tricolore** — the shared `.flag-strip` (header/footer/ribbon) went
+  from a 4px block to a fine **1px** line. **(6) Ribbon sparkle** — a fine tricolore accent +
+  a Crema-gold state dot (no decorative image, per brand). Also recorded **production
+  requirement §8 in `production_build_spec.md`: the real store MUST be fully responsive for
+  mobile + tablet** (no hover-only interactions on touch; the dropdown bug is the symptom).
+  Verified end-to-end via DOM (screenshot tool wedged again). Committed + pushed to GitHub.
+  **NOT yet deployed** to a Shopify preview theme (awaiting Steve's go — then push + rename
+  to "Crema Italia POC6 Preview"). **Open:** drop the header's `#333` hairline under the now-
+  1px tricolore (pending Steve); sweep the dead CSS from the old taste UI. **NEXT (Steve):
+  the mobile-ready POC** — folds into the queued full-site mobile review.
 
 ## 10. Open questions / TODO
 
@@ -1008,10 +1043,11 @@ production design prompts and a ready-to-use build prompt live in
 footer relationship pages, Loop/native/Functions account split) — read it first when the
 production build starts.
 
-**To resume, read in this order:** this block → `docs/POC5_change_list.md` (current POC
-backlog + what was applied 2026-07-09) → `docs/production_build_spec.md` (production design
-prompts + ready build prompt) → `docs/POC_v4_change_list.md` (POC4's detailed working
-ledger) → `docs/CremaItalia_POC_v3.html` (design source — now stale relative to POC4/POC5
+**To resume, read in this order:** this block → `docs/POC6_change_list.md` (latest batch —
+dropdown bug, Promise wording, taste-filter ribbon redesign, back-links, tricolore) →
+`docs/POC5_change_list.md` (prior POC backlog) → `docs/production_build_spec.md` (production
+design prompts + ready build prompt — now incl. §8 full-responsive requirement) →
+`docs/POC_v4_change_list.md` (POC4's detailed working ledger) → `docs/CremaItalia_POC_v3.html` (design source — now stale relative to POC4/POC5
 live copy in several places; treat the repo as source of truth over this frozen doc) →
 `00_PROJECT_BRIEF.md` (single source of truth) → `Coordination\DECISIONS_LOG.md`.
 
