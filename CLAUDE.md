@@ -902,9 +902,14 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   a Crema-gold state dot (no decorative image, per brand). Also recorded **production
   requirement §8 in `production_build_spec.md`: the real store MUST be fully responsive for
   mobile + tablet** (no hover-only interactions on touch; the dropdown bug is the symptom).
-  Verified end-to-end via DOM (screenshot tool wedged again). Committed + pushed to GitHub.
-  **NOT yet deployed** to a Shopify preview theme (awaiting Steve's go — then push + rename
-  to "Crema Italia POC6 Preview"). **Open:** drop the header's `#333` hairline under the now-
+  Verified end-to-end via DOM (screenshot tool wedged again). Committed + pushed to GitHub
+  (commit `2d8c423`). **Deployed** (Steve's go, for multi-device testing) to a NEW unpublished
+  theme **"Crema Italia POC6 Preview" (id `151440130217`)** via `shopify theme push
+  --unpublished --theme "Crema Italia POC6 Preview" --json`. POC5 Preview (`151420207273`) and
+  the live coming-soon theme (`150557294761`) untouched. Preview:
+  `https://crema-italia.myshopify.com?preview_theme_id=151440130217` · Editor:
+  `.../admin/themes/151440130217/editor`. Storefront password still OFF (friend-testing), so
+  the link works cross-device with no gate. To refresh: `shopify theme push --theme 151440130217`. **Open:** drop the header's `#333` hairline under the now-
   1px tricolore (pending Steve); sweep the dead CSS from the old taste UI. **NEXT (Steve):
   the mobile-ready POC** — folds into the queued full-site mobile review.
 
