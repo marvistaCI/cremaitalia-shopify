@@ -488,7 +488,6 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .status-chip{display:inline-block;margin-left:.5rem;font-size:.7rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:.14rem .55rem;border-radius:999px;vertical-align:middle;white-space:nowrap}
 .sc-active{color:var(--ci-crema);border:1px solid var(--ci-crema)}
 .sc-paused,.sc-lapsed{color:var(--ci-mute);border:1px solid var(--ci-hairline)}
-.badge-forfeited{opacity:.5}
 .sub-manage{background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);padding:1.1rem 1.25rem}
 .sub-line{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
 .sub-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.85rem}

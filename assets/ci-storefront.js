@@ -21,11 +21,13 @@
   var activeRegion = 'all', activeShelf = 'all';
   var activeTaste = { roast: 'all', flavor: 'all', caffeine: 'all' };
   var quizAnswers = { roast: null, flavor: null, caffeine: null };
-  // foundingForfeited = the Founding 12% was permanently forfeited by a deliberate full
-  // cancel (pause/dunning never forfeit). paused = subscription paused (rate preserved).
-  // PROD: this entitlement is a Shopify Function reading a one-way customer tag flipped by
-  // Loop webhooks — not theme state. Faked here to demo the two Membership tile states.
-  var session = { signedIn: false, subscriber: false, foundingMember: false, foundingForfeited: false, paused: false, firstTime: true, name: 'Steve R.' };
+  // Founding Member status is DURABLE and account-level (Store Operating Standards §4): it
+  // survives cancelling any/all subscriptions and is lost ONLY by closing the entire account.
+  // Benefits (12% founder / 10% regular + shipping offsets) ride an active subscription, with a
+  // 60-day win-back grace after cancel-all/pause-all (§3.1). This POC models founder-durable +
+  // subscribed-or-not; the 60-day grace + bounded pause windows are documented, not yet built.
+  // PROD: entitlement is a Shopify Function reading Loop-webhook-driven tags, not theme state.
+  var session = { signedIn: false, subscriber: false, foundingMember: false, paused: false, firstTime: true, name: 'Steve R.' };
   var cart = [];
   // filterOn = taste filtering currently applied; savedTaste != null = a profile exists.
   var filterOn = false, savedTaste = null, pendingSaveProfile = false;
@@ -803,7 +805,7 @@
   };
   window.simulateSignIn = function () {
     // POC: assume a Founding-Member active subscriber so discounts/portal are visible.
-    session.signedIn = true; session.subscriber = true; session.foundingMember = true; session.foundingForfeited = false; session.paused = false;
+    session.signedIn = true; session.subscriber = true; session.foundingMember = true; session.paused = false;
     $('signin-btn').classList.add('signed-in');
     $('signin-label').textContent = session.name;
     var w = $('account-wrap'); if (w) w.classList.add('is-signed-in');
@@ -891,13 +893,12 @@
     var subtotal = cart.reduce(function (s, it) { return s + it.price * (it.qty || 1); }, 0);
     var discount = 0, discountLabel = '';
     if (session.signedIn && session.subscriber) {
-      // Founding 12% applies only while the founding rate is not forfeited; otherwise the
-      // standard subscriber 10%. (Pause preserves the rate; forfeiture drops to 10%.)
-      var foundingRate = session.foundingMember && !session.foundingForfeited;
-      var rate = foundingRate ? 0.12 : 0.10;
+      // Founders always get 12% while subscribed; regular subscribers 10%. Founder status is
+      // durable (never forfeited by cancelling) — see Store Operating Standards §4.
+      var rate = session.foundingMember ? 0.12 : 0.10;
       var eligibleSum = cart.reduce(function (s, it) { return s + (eligibleForSubscriberDiscount(it.shelf) ? it.price * (it.qty || 1) : 0); }, 0);
       discount = eligibleSum * rate;
-      discountLabel = (foundingRate ? 'Founding Member 12%' : 'Subscriber 10%') + ' (Roccia · Sorpresa · Selezione)';
+      discountLabel = (session.foundingMember ? 'Founding Member 12%' : 'Subscriber 10%') + ' (Roccia · Sorpresa · Selezione)';
       if (session.firstTime) {
         // First-order +5% stacks on the first order only, on all shelves EXCEPT Bottega.
         var firstTimeBase = cart.reduce(function (s, it) { return s + (it.shelf === 'bottega' ? 0 : it.price * (it.qty || 1)); }, 0);
@@ -960,11 +961,12 @@
     el.innerHTML =
       '<div class="acct-grid">' +
         '<div class="acct-card"><h3>Membership</h3>' +
-          (session.foundingForfeited
-            ? '<span class="badge-founding badge-forfeited">Founding Member · No. 087</span><span class="status-chip sc-lapsed">Rate forfeited</span>' +
-              '<p class="prose" style="margin-top:.75rem">Founding rate forfeited. You\'re welcome back anytime at the standard <strong>10%</strong> + free shipping - and No. 087 is always yours.</p></div>'
-            : '<span class="badge-founding">Founding Member · No. 087</span><span class="status-chip sc-active">Active</span>' +
-              '<p class="prose" style="margin-top:.75rem">Your Founding rate of <strong>12%</strong> applies automatically across Roccia, Sorpresa, and Selezione. Offerta and Bottega are never discounted.</p></div>') +
+          '<span class="badge-founding">Founding Member · No. 087</span>' +
+          ((session.subscriber || session.paused)
+            ? '<span class="status-chip sc-active">Active</span>' +
+              '<p class="prose" style="margin-top:.75rem">Your Founding rate of <strong>12%</strong> applies automatically across Roccia, Sorpresa, and Selezione. Offerta and Bottega are never discounted.</p></div>'
+            : '<span class="status-chip sc-lapsed">Benefits paused</span>' +
+              '<p class="prose" style="margin-top:.75rem">No. 087 is yours for good. Your <strong>12%</strong> is active whenever you hold a subscription - resubscribe to reactivate it. After cancelling, your benefits continue for 60 days.</p></div>') +
         '<div class="acct-card"><h3>Taste profile</h3>' +
           (profHtml
             ? '<div class="tags" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.25rem">' + profHtml + '</div>' +
@@ -995,14 +997,14 @@
       subscriptionBlock() +
       '<div class="loop-slot" style="margin-top:1.25rem"><strong>On the live store, this is Loop\'s hosted portal.</strong> Pause, skip, swap roaster / SKU / bag-size (up to 48 h before lock), change cadence, or cancel, and manage ship-to + payment, plus your subscription reminders and delivery notifications - self-service, no fee. Passwordless login, embedded as a theme app block. ' +
       '<!-- LOOP: replace this slot with the Loop customer-portal app block / link. -->' +
-      '<!-- PROD: the Founding-rate entitlement (12% while subscribed, 10% once forfeited) is a Shopify Function reading a one-way customer tag flipped by Loop cancel/create webhooks — NOT theme state. This POC fakes it client-side to demonstrate the two Membership states. --></div>';
+      '<!-- PROD: entitlement is a Shopify Function driven by Loop webhooks — NOT theme state. Founder status is a DURABLE account tag (set at signup, removed only on account closure); the benefit rate is 12% (founder) / 10% (regular) while >=1 subscription actively ships OR within the 60-day post-cancel/pause grace, else 0%. No permanent forfeiture. See Store Operating Standards §3.1/§4. This POC fakes the subscribed-vs-not states client-side. --></div>';
   }
 
   // Mock subscription-management block (POC). PROD: this whole area is Loop's hosted portal.
   function subscriptionBlock() {
     if (!session.subscriber) {
       return '<div class="sub-manage"><p class="prose" style="margin:0">You have no active Roccia subscription.</p>' +
-        (session.foundingForfeited ? '<p class="note">Your Founding 12% was forfeited when you cancelled. Resubscribe to return at the standard 10% + free shipping.</p>' : '') +
+        (session.foundingMember ? '<p class="note">Your Founding Member status (No. 087) is yours for good - resubscribe and your <strong>12%</strong> reactivates. Benefits continue for 60 days after cancelling.</p>' : '') +
         '<div class="sub-actions"><button class="btn btn-primary" onclick="mockResubscribe()">Resubscribe</button></div></div>';
     }
     if (session.paused) {
@@ -1015,31 +1017,32 @@
       '<div class="sub-actions"><button class="btn btn-secondary" onclick="mockPause()">Pause</button><button class="btn btn-secondary" onclick="mockStartCancel()">Cancel subscription</button></div>' +
       '<div id="cancel-flow"></div></div>';
   }
-  // Pause-first cancel prompt — the moment the warning does its work.
+  // Pause-first cancel prompt — nudge toward pause, but cancelling never costs founder status.
   window.mockStartCancel = function () {
     var el = $('cancel-flow');
     if (!el) return;
     el.innerHTML =
       '<div class="cancel-warn"><h4>Before you cancel</h4>' +
-      '<p>As a Founding Member, your <strong>12%</strong> is active only while you subscribe. <strong>Pause instead</strong> and keep it - with no charge while paused. Cancel and you can return anytime at the standard 10%.</p>' +
-      '<div class="sub-actions"><button class="btn btn-primary" onclick="mockPause()">Pause and keep my 12%</button><button class="btn btn-secondary" onclick="confirmForfeit()">Cancel anyway</button></div></div>';
+      '<p><strong>Pause instead</strong> and keep shipping on your own schedule. If you do cancel, your Founding Member status (No. 087) stays yours - your <strong>12%</strong> reactivates whenever you resubscribe, and your benefits continue for 60 days meanwhile.</p>' +
+      '<div class="sub-actions"><button class="btn btn-primary" onclick="mockPause()">Pause instead</button><button class="btn btn-secondary" onclick="confirmCancel()">Cancel anyway</button></div></div>';
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
   window.mockPause = function () {
     session.paused = true; renderCart(); renderAccount();
-    toast('Paused - your Founding 12% is preserved.');
+    toast('Paused - your Founding 12% stays active. Resume anytime.');
     var e = $('acct-subs'); if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   window.mockResume = function () { session.paused = false; renderCart(); renderAccount(); toast('Subscription resumed.'); };
-  window.confirmForfeit = function () {
-    session.subscriber = false; session.paused = false; session.foundingForfeited = true;
+  // Cancel stops the subscription but NEVER forfeits founder status (Store Operating Standards §4).
+  window.confirmCancel = function () {
+    session.subscriber = false; session.paused = false;
     renderCart(); renderAccount();
-    toast('Cancelled - Founding 12% forfeited. You are welcome back at 10%.');
+    toast('Subscription cancelled. No. 087 is still yours - resubscribe anytime to reactivate your 12%.');
     var e = $('acct-subs'); if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   window.mockResubscribe = function () {
     session.subscriber = true; session.paused = false; renderCart(); renderAccount();
-    toast(session.foundingForfeited ? 'Welcome back - subscribed at the standard 10%.' : 'Subscribed.');
+    toast(session.foundingMember ? 'Welcome back - your Founding 12% is active again.' : 'Subscribed.');
   };
 
   // Recent-orders rows (visual redesign). Reorder/detail behaviors are INSTRUCTED, not
