@@ -1051,6 +1051,30 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   with Steve; render the Standards to stamped PDFs for his shelf; then resume the production build
   readiness gate. Full model: `docs/standards/collaboration-standard.md`.
 
+- 2026-07-13 — **Store Operating Standards v1.0 → v1.1: three open decisions closed + Founding-member
+  model materially revised (Steve).** Walked the §12 open decisions with Steve. (1) **Per-SKU markup
+  override** — matrix stays the default; added an optional `markup_override` per SKU (blank = inherit
+  shelf/size), a deliberate exception that routes through the same admin approval as any price change.
+  (2) **SKU price-maintenance tool** — phased: spreadsheet-assisted at launch (small catalog, 6–10-wk
+  lot cadence) + Shopify Flow for Offerta aging; build a lightweight custom approve/hold/defer app
+  only when volume justifies (back-office; doesn't touch the theme build). (3) **Subscriber-benefit /
+  pause-cancel model** — REPLACED the 2026-07-10 "Active/Forfeited permanent-forfeiture" model.
+  New model: benefits (discount **and** shipping offsets) bound to **≥1 actively-shipping
+  subscription**; pausing-all OR cancelling-all triggers a **60-day win-back grace**, then benefits
+  lapse; reinstated at tier on any resume/re-subscribe. **Founding Member status is now DURABLE and
+  account-level** — survives cancelling any/all subscriptions; a returning founder comes back at 12%;
+  lost ONLY by closing the entire account (releases the numbered slot, e.g. death → family closes
+  account). The `founding_rate_forfeited` one-way tag and Active/Forfeited states are RETIRED (do not
+  build). Self-service controls specified: pause a sub / pause all with bounded windows ([next cycle]
+  / [next two cycles], longer → cancel), cancel a sub / cancel all (immediate ship stop, benefits keep
+  the 60-day grace). Rules in Store Operating Standards §2.2/§3.1/§4/§6/§11; §12 decisions 1/2/4 marked
+  RESOLVED. Also updated `docs/production_build_spec.md` §5 to point at the Standard (was carrying the
+  stale 2026-07-10 forfeiture rule — drift fixed). Standard re-rendered to
+  `Store_Operating_Standards_v1.1.pdf`. **FOUND: the POC account/subscription flow
+  (`assets/ci-storefront.js`) still implements the retired Active/Forfeited model** (`foundingForfeited`
+  state, "return at 10%" copy, permanent-forfeit cancel flow) — out of sync with v1.1; flagged to Steve
+  to decide fix-now vs defer-to-production (no theme code changed this session — gate still open).
+
 ## 10. Open questions / TODO
 
 **POC4 — CURRENT STATE (as of 2026-07-05) — read this first when resuming.**

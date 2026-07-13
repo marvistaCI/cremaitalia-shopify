@@ -1,8 +1,13 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.0 · 2026-07-13**
+**Version 1.1 · 2026-07-13**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.0 (look & voice) · Collaboration Standard v1.0 (how we work).
+
+> **v1.1 (2026-07-13)** closed the three open decisions from v1.0 §12: per-SKU markup override added
+> (§2.2), price-maintenance tool approach set (§11), and the subscriber-benefit / pause-cancel model
+> settled (§3.1) — including making **Founding Member status durable** (account-level, lost only on
+> account closure), which supersedes the 2026-07-10 Active/Forfeited model (§4).
 
 > **What this document is.** The canonical, human-and-machine-readable statement of **how the
 > Crema Italia store buys, prices, sells, and fulfils** — the commerce mechanics. Brand Standards
@@ -64,10 +69,12 @@ Retail price = SKU_LAST_COST × Markup[Shelf, Size]
 | **Offerta** | *uses the `O[size]` factor of the item's originating shelf* | | | | | | | |
 | **Bottega** | 2.0× flat (1.5× if clearing) | | | | | | | |
 
-> **Scope note (see §12 #1):** these factors are configurable **by shelf/size** — editing the table
-> changes every SKU of that shelf/size. A **per-SKU markup override** (giving one coffee a different
-> margin than its shelf/size peers) is **not** in the recorded data model today. This is an open
-> decision, because Steve's stated intent was per-SKU editability.
+> **Per-SKU override (LOCKED 2026-07-13).** The matrix is the **default** that governs every SKU by
+> shelf/size — editing the table moves every SKU of that shelf/size together. In addition, a SKU may
+> carry an optional **`markup_override`**: leave it blank (the normal case) and the SKU inherits the
+> matrix; set it and it wins **for that SKU only**. This mirrors how `days_to_offerta` works (a
+> default plus a per-SKU override). An override is a **deliberate exception, not the norm**, and it
+> **routes through the same admin approval** as any price change (§2.4).
 
 ### 2.3 Tour / bundle pricing
 
@@ -106,34 +113,51 @@ There is NO visible promo-code field at checkout.**
 | **Win-back** | 15% | All shelves | 30 days post-Roccia-cancel; one link; replaces subscriber |
 | **Referral** | free 100g bag | Any shelf except Bottega (free shipping) | One bag per 5 completed referrals |
 
-**"Active" subscriber definition:** at least one **$45-or-greater Roccia shipment delivered per
-calendar month**; auto-tagged `active-roccia` by Shopify Flow.
+### 3.1 Subscriber benefits & how long they last (LOCKED 2026-07-13)
 
-**No sitewide percentage-off promotional sales** — the subscriber privilege is the standing benefit,
+**"Subscriber benefits" = the discount (12% founder / 10% regular) *and* the shipping offsets**
+(free/reduced shipping). They are bound to being a subscriber, with a deliberate win-back grace:
+
+- **ON** while the account has **≥1 actively-shipping subscription.** A customer may hold several; any
+  one shipping keeps benefits on. Pausing or cancelling *some* changes nothing while another ships.
+- **60-day grace.** When the account reaches **no actively-shipping subscription** — whether by
+  **pausing all** or **cancelling all** — benefits **continue for 60 days** from that date, then
+  lapse. The grace is intentional: it is our window to re-contact the customer and win them back on
+  the benefits they are about to lose (FOMO), and it means no one is punished the instant they pause
+  or cancel.
+- **Reinstatement.** Resuming or re-subscribing at **any** later date restores benefits at the
+  account's tier — **12% if still a Founding Member, 10% if regular** (§4).
+- Benefits never apply to **Offerta or Bottega** (§3 table), regardless of tier.
+
+> **Supersedes** both the older "$45+ shipment delivered per calendar month" active-definition and the
+> interim "cancel = immediate benefit loss" rule: **cancel-all now carries the same 60-day grace as
+> pause-all.** The only thing that ends benefits *without* a grace is closing the entire account (§4).
+
+**No sitewide percentage-off promotional sales** — the subscriber benefit is the standing perk,
 not a recurring sale. **No Italian-holiday discounting** — holidays are Journal editorial only.
 
 ---
 
-## 4. Founding Member mechanic (LOCKED 2026-07-10)
+## 4. Founding Member mechanic (LOCKED 2026-07-13 — supersedes 2026-07-10)
 
-- **"Founding Member · No. NNN"** is a **permanent honorific** — the first 222 Roccia subscribers at
-  launch, numbered, with a certificate. Kept **forever**, even after forfeiture (shown muted).
-- The **12% is an *Active Subscriber Discount*** tied to *holding* a subscription — not an
-  unconditional lifetime rate.
-- **Exactly two customer-facing states — Active and Forfeited. No grace/at-risk state.**
-  - **Active Founder → 12%.** **Forfeited → 10%.**
-- **Pause preserves the rate** (indefinitely). **Loop dunning** (failed-card retries) also preserves it.
-- The **only** way to forfeit is a **deliberate full cancel** (after being offered Pause first).
-  Forfeiture is **permanent** — a returning founder comes back at 10%, never 12% again.
-- **Entitlement rule (server-side, authoritative):** a one-way `founding_rate_forfeited` customer tag,
-  set ONLY on a deliberate full cancel (never by pause or dunning):
-  - `founding && !forfeited && (active | paused | in-dunning)` → **12%**
-  - any other active/paused subscriber → **10%**
-  - else → **0%**
-- Both the cart discount and the account Membership tile read this tag via Shopify Functions.
-- *Rationale:* the 12-vs-10 delta is ~$10/yr — a pride good, not an economic one. Pause +
-  always-welcome-back + up-front disclosure are what keep the mechanic from angering a founder into
-  permanent exit.
+- **"Founding Member · No. NNN"** is a **durable, account-level status** — one of **222** numbered
+  slots, granted at launch signup, with a numbered certificate. It is tied to the **account**, not to
+  any subscription.
+- **It survives cancelling any or all subscriptions.** A founder who cancels everything and
+  re-subscribes months or years later returns a **Founding Member at 12%.** Founder status is not
+  something a subscription action can take away.
+- **The 12% is the *founder tier* of the subscriber benefit** (§3.1): a founder receives **12%**
+  whenever subscriber benefits are ON (an actively-shipping subscription, or within the 60-day grace);
+  a regular subscriber receives **10%** under the same conditions; benefits OFF → 0%.
+- **Founding status is lost ONLY by closing the entire account** — *"Cancel the entire account,"* a
+  distinct action from cancelling a subscription (e.g. a founder dies and a family member closes the
+  account). On account closure the numbered founding **slot is released/retired.**
+- **Retired (do not build):** the 2026-07-10 "Active/Forfeited" two-state model, the permanent
+  12%→10% forfeiture on a subscription cancel, and the one-way `founding_rate_forfeited` tag. **There
+  is no permanent forfeiture** — the only terminal event for a founder is account closure.
+- *Rationale:* the 12-vs-10 delta is tiny (~$10/yr) — a pride good. Making founder status durable and
+  always-reinstatable removes any reason a founder would fear pausing or cancelling, and keeps the
+  win-back door open.
 
 ---
 
@@ -161,8 +185,15 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
 - **Cadences 4 / 6 / 8 weeks.** Customer selects roaster + SKU + size (**250g / 500g / 1kg only**) +
   cadence.
 - Every Roccia shipment: **10% off + free shipping** (no minimum).
-- **Self-service:** pause, skip, swap roaster/SKU/size (up to 48h before order lock), cancel — no fee,
-  no minimum commitment.
+- **Self-service controls (no fee, no minimum commitment):**
+  - **Skip** one shipment; **swap** roaster/SKU/size up to 48h before order lock.
+  - **Pause** — a single subscription **or** all subscriptions — offered as a bounded window:
+    **[next delivery cycle]** or **[next two delivery cycles]**, then auto-resumes. Pause is a short
+    skip, **not** a long hold: anything longer than two cycles, the customer should **cancel** instead.
+  - **Cancel** — a single subscription **or** all subscriptions — stops shipping immediately.
+  - Reaching **no actively-shipping subscription** (by pause-all or cancel-all) starts the **60-day
+    benefits grace** (§3.1); benefits reinstate on any resume/re-subscribe. Founder status is
+    unaffected either way (§4).
 - **Pallet-timing gap policy:** when a subscriber's SKU is between pallets and can't fill the next
   cadence, notify 7+ days ahead with two options: (a) wait for restock (no charge until ship), or
   (b) substitute a similar bag **from the same roaster**. **Never** substitute from Sorpresa/
@@ -235,13 +266,17 @@ damage replacement, the freshness window, and the no-waste pledge (Feeding Tampa
 ## 11. Data model & tooling (production)
 
 **Metafields (`crema_italia.*`):** `roast_date` (Date), `lot_id` (Text), `eur_usd_rate` (Decimal),
-`landed_cost_usd` (Currency, locked at receipt), `days_to_offerta` (Int), `offerta_transition_date`
+`landed_cost_usd` (Currency, locked at receipt), `markup_override` (Decimal, **optional** — blank =
+inherit the shelf/size matrix), `days_to_offerta` (Int), `offerta_transition_date`
 (Date), `current_shelf` (SingleSelect: Roccia|Sorpresa|Selezione|Offerta), `Referral_Gift_Allowed`
 (Boolean), plus taxonomy: `roast_level`, `flavor_profile`, `caffeine`, `shelf`, `region`,
 `roaster_handle`, `best_by_date`. Extend with a structured component-SKU BOM field on bundles (§7).
 
-**Customer tags:** `active-roccia`, `founding-member-N`, `founding_rate_forfeited`, `paused-roccia`,
-`cancelled-roccia`, `sorpresa-subscriber`. Auto-managed by Shopify Flow / Loop webhooks.
+**Customer tags:** `founding-member-NNN` (durable; set at signup, removed only on account closure —
+NO `founding_rate_forfeited`, retired per §4), plus subscription-state tags derived from Loop
+(actively-shipping / in-60-day-grace / lapsed) driving the benefit gate. Auto-managed by Shopify Flow
+/ Loop webhooks. **Entitlement logic:** `benefits_on = (≥1 actively-shipping sub) OR (within 60-day
+grace)`; `rate = founder ? 12% : 10%` when `benefits_on`, else 0%.
 
 **Automation:** Shopify Flow moves `current_shelf` → Offerta on `offerta_transition_date` and tags
 `active-roccia` on the $45+/month rule.
@@ -255,29 +290,33 @@ damage replacement, the freshness window, and the no-waste pledge (Feeding Tampa
   driven by Loop webhooks — the authoritative, server-side downgrade path (a customer can cancel via
   an email link and never touch theme UI).
 
-**REQUIRED tool — the SKU price-maintenance engine:** landed-cost × markup with the approval
-governance (§2.4) is **not a native Shopify feature** (Shopify gives cost-per-item + manual price +
-Flow, but not a governed markup-matrix pricing workflow). Building it is a real deliverable — see
-§12 #2 for the mechanism decision.
+**The SKU price-maintenance engine (approach LOCKED 2026-07-13 — phased).** Landed-cost × markup with
+the approval governance (§2.4) is **not a native Shopify feature**. Chosen path:
+- **At launch:** **spreadsheet-assisted** (compute in `Crema_Italia_Landed_Cost_Model_v1.xlsx`, enter
+  prices manually in Shopify). Adequate for the small launch catalog on a 6–10-week lot cadence;
+  governance = admin review at entry time. Zero build.
+- **Automation:** use **Shopify Flow** for what it does well — the Offerta **aging** transition
+  (date-triggered shelf move + price recalc to `O[size]` + admin alert). Native, free.
+- **Later:** build a **lightweight custom app** (a proposed-price approve/hold/defer queue) **when
+  volume justifies it** — trigger = SKU count / lot velocity high enough that manual pricing becomes
+  a chore or error-prone. Back-office only; does **not** block or shape the storefront theme build.
 
 ---
 
 ## 12. Open decisions (must close before / at production build)
 
-1. **Per-SKU markup override.** The matrix is per shelf/size; no per-SKU markup field exists in the
-   recorded model. Steve's stated intent was per-SKU editability. **Decide:** add a per-SKU markup
-   override (e.g. a `markup_override` metafield that wins over the table) or keep shelf/size + per-lot
-   landed cost only?
-2. **The SKU price-maintenance tool mechanism.** Options: (a) Shopify Flow + metafields + a manual
-   admin approval step; (b) a lightweight custom app; (c) spreadsheet-assisted at launch, tool later.
-   **Decide** the launch approach.
+1. ~~**Per-SKU markup override.**~~ **RESOLVED 2026-07-13** — matrix + optional per-SKU
+   `markup_override` (blank = inherit); override is a deliberate exception and routes through admin
+   approval. Rule now in §2.2; field in §11.
+2. ~~**The SKU price-maintenance tool mechanism.**~~ **RESOLVED 2026-07-13** — phased: spreadsheet
+   + Shopify Flow (aging) at launch; lightweight custom app when volume justifies. Detail in §11.
 3. **Pricing numbers never validated.** The multipliers were specified, never run against real landed
    costs (the POC cart is mocked). **Pre-launch:** sanity-check several real SKUs through the matrix
    against `Crema_Italia_Landed_Cost_Model_v1.xlsx` before charging real money.
-4. **Pause-semantics reconciliation.** The Founding-rate lock (§4, 2026-07-10) says pause preserves
-   the rate **indefinitely**; the older subscription spec said a general subscriber's "active" status
-   pauses for **60 days then suspends**. The 2026-07-10 lock governs the Founding rate. **Decide**
-   whether *general* (non-founding) subscriber status is also indefinite-on-pause or 60-day.
+4. ~~**Pause-semantics reconciliation.**~~ **RESOLVED 2026-07-13** — benefits bound to ≥1
+   actively-shipping subscription; pause-all **and** cancel-all trigger a 60-day win-back grace, then
+   lapse; reinstated on resume/re-subscribe. Founder status made **durable** (account-level, lost only
+   on account closure), superseding the 2026-07-10 permanent-forfeiture model. Rules in §3.1 and §4.
 5. **Deferred perks.** The month-12 "complimentary Selezione bag" annual perk was deferred to
    post-launch — confirmed deferred, tracked here so it isn't lost.
 
