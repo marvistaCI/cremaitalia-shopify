@@ -1,8 +1,18 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.1 · 2026-07-13**
+**Version 1.2 · 2026-07-13**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.0 (look & voice) · Collaboration Standard v1.0 (how we work).
+
+> **v1.2 (2026-07-13)** replaced additive discount stacking with a **no-stacking, highest-wins (`MAX`)**
+> rule (§3): a customer receives only the single highest discount they qualify for — a founder who is also
+> a first-time buyer gets **12%** (not 17%); a first-time buyer who earns the 3-bag volume tier gets **10%**
+> (not 15%). The `MAX` rule *is* the cap, so there is no separate discount ceiling. Split the delivery
+> mechanism (standing benefit auto-applied server-side vs campaign discounts via link). **BFCM** is no
+> longer additive — it is a flat candidate in the `MAX`. Marked the **Referral** reward + capture **TBD**
+> (§3, §12.6) since the former "free 100g bag" has no standalone SKU. Annotated the vestigial
+> **Sorpresa 250g / O250g** matrix cells as retired (§2.2). **Note:** the POC discount code still stacks
+> and is now knowingly behind this Standard — a POC/production fix, tracked separately.
 
 > **v1.1 (2026-07-13)** closed the three open decisions from v1.0 §12: per-SKU markup override added
 > (§2.2), price-maintenance tool approach set (§11), and the subscriber-benefit / pause-cancel model
@@ -64,10 +74,15 @@ Retail price = SKU_LAST_COST × Markup[Shelf, Size]
 | Shelf | 100g | 250g | 500g | 1kg | O100g | O250g | O500g | O1kg |
 |---|---|---|---|---|---|---|---|---|
 | **Roccia** | — | 2.8× | 2.5× | 2.2× | — | 2.3× | 1.7× | 1.5× |
-| **Sorpresa** | 3.7× | 3.0× | — | — | 3.2× | 2.5× | — | — |
+| **Sorpresa** | 3.7× | — | — | — | 3.2× | — | — | — |
 | **Selezione** | 3.7× | 3.0× | 2.7× | 2.4× | 3.2× | 2.5× | 2.2× | 1.9× |
 | **Offerta** | *uses the `O[size]` factor of the item's originating shelf* | | | | | | | |
 | **Bottega** | 2.0× flat (1.5× if clearing) | | | | | | | |
+
+> **Sorpresa 250g / O250g are intentionally blank (retired 2026-07-13).** Sorpresa ships **only as Tours**
+> (§2.3), priced off the 100g factor (3.7× fresh / 3.2× aged); there is no standalone Sorpresa 250g
+> product, so those cells carry no live factor. If a standalone Sorpresa bag is ever introduced, restore
+> the cells and log it.
 
 > **Per-SKU override (LOCKED 2026-07-13).** The matrix is the **default** that governs every SKU by
 > shelf/size — editing the table moves every SKU of that shelf/size together. In addition, a SKU may
@@ -99,19 +114,29 @@ deliberate decision.
 
 ## 3. Discounts & the subscriber privilege
 
-**Delivery mechanism (LOCKED):** discounts apply via **URL parameter or personalized email link only.
-There is NO visible promo-code field at checkout.**
+**No stacking — highest applicable discount wins (LOCKED 2026-07-13).** A customer never receives two
+discounts at once. The applied rate is the **`MAX` of every discount they currently qualify for**; all
+others are obviated. This deliberately protects margin on thin per-bag markups: a founder who is also a
+first-time buyer gets **12%** (not 17%); a first-time buyer who earns the 3-bag volume tier gets **10%**
+(not 15%). There is **no additive stacking and no separate combined cap — the `MAX` rule is the cap.**
 
-| Discount | Amount | Applies to | Stacking |
+**Delivery mechanism (LOCKED):** there is **NO visible promo-code field at checkout.** Discounts reach the
+customer by kind: the **standing subscriber / founder benefit applies automatically, server-side**, whenever
+the customer is signed in and benefits are on (Shopify Functions reading the entitlement tag, §11);
+**campaign discounts** (first-time, volume, abandoned-cart, win-back, BFCM) apply via **URL parameter or
+personalized email link**. Whichever mechanism fires, the customer still receives only the single highest
+applicable rate (the `MAX` rule above).
+
+| Discount | Rate | Applies to | Notes (every row competes in the `MAX`; none stack) |
 |---|---|---|---|
-| **Active subscriber** | 10% | Roccia, Sorpresa, Selezione (never Offerta/Bottega) | Final — replaces volume (customer gets the better) |
-| **Founding Member** | 12% | Roccia, Sorpresa, Selezione | Final (see §4 for the full mechanic) |
-| **First-time buyer** | +5% | All shelves except Bottega | **Stacks** on subscriber → new Roccia subscriber's first order = **15%**. One-time, detected server-side (zero prior orders). |
-| **Volume** | 2 bags 5% / 3+ bags 10% | Coffee shelves except Offerta/Bottega | Does **not** stack for subscribers (better-of applied automatically) |
-| **BFCM bonus** | +5% | All shelves incl. Offerta/Bottega | Additive on top of subscriber/volume. Manual admin toggle, site banner. |
-| **Abandoned cart** | 5% | All shelves | Email #3 link only; once per customer per 90 days |
-| **Win-back** | 15% | All shelves | 30 days post-Roccia-cancel; one link; replaces subscriber |
-| **Referral** | free 100g bag | Any shelf except Bottega (free shipping) | One bag per 5 completed referrals |
+| **Founding Member** | 12% | Roccia, Sorpresa, Selezione | Auto when benefits on. Founder tier of the subscriber benefit — see §4. |
+| **Active subscriber** | 10% | Roccia, Sorpresa, Selezione | Auto when benefits on (regular tier). |
+| **Win-back** | 15% | All shelves | 30 days post-Roccia-cancel; one email link. Wins over the standing benefit by design. |
+| **Volume** | 2 bags 5% / 3+ bags 10% | Coffee shelves except Offerta/Bottega | Competes in the `MAX`; for a subscriber the 10/12% already wins. |
+| **First-time buyer** | 5% | All shelves except Bottega | One-time, detected server-side (zero prior orders). A first-time founder/subscriber still gets 12/10% (higher). |
+| **BFCM** | 5% | All shelves incl. Offerta/Bottega | Manual admin toggle, site banner. A **flat** candidate in the `MAX` (no longer additive) — mainly benefits customers who hold no higher discount. |
+| **Abandoned cart** | 5% | All shelves | Email #3 link only; once per customer per 90 days. |
+| **Referral** | **TBD** | **TBD** | Referral capture is **not built yet**; reward + mechanism are open (§12.6). The former "free 100g bag" is void — 100g exists only inside Tours (§1), so there is no standalone 100g SKU to gift. |
 
 ### 3.1 Subscriber benefits & how long they last (LOCKED 2026-07-13)
 
@@ -276,7 +301,8 @@ inherit the shelf/size matrix), `days_to_offerta` (Int), `offerta_transition_dat
 NO `founding_rate_forfeited`, retired per §4), plus subscription-state tags derived from Loop
 (actively-shipping / in-60-day-grace / lapsed) driving the benefit gate. Auto-managed by Shopify Flow
 / Loop webhooks. **Entitlement logic:** `benefits_on = (≥1 actively-shipping sub) OR (within 60-day
-grace)`; `rate = founder ? 12% : 10%` when `benefits_on`, else 0%.
+grace)`; the *standing* rate `standing = founder ? 12% : 10%` when `benefits_on`, else 0%. The **applied**
+discount is `MAX(standing, any qualifying campaign discount)` per the no-stacking rule (§3) — never a sum.
 
 **Automation:** Shopify Flow moves `current_shelf` → Offerta on `offerta_transition_date` and tags
 `active-roccia` on the $45+/month rule.
@@ -319,8 +345,12 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    on account closure), superseding the 2026-07-10 permanent-forfeiture model. Rules in §3.1 and §4.
 5. **Deferred perks.** The month-12 "complimentary Selezione bag" annual perk was deferred to
    post-launch — confirmed deferred, tracked here so it isn't lost.
+6. **Referral program — reward + capture TBD (2026-07-13).** No referral-capture mechanism has been
+   built, and the former "free 100g bag" reward is void (no standalone 100g SKU — 100g exists only inside
+   Tours, §1). Both the reward form (e.g. a 250g bag, account credit) and the capture/tracking tooling are
+   open; decide before any referral discount is enabled. The §3 table carries Referral as **TBD** until then.
 
 ---
 
-*Store Operating Standards v1.0 · 2026-07-13 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.2 · 2026-07-13 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*

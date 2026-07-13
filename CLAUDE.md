@@ -1088,6 +1088,36 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   photography, trust signals, no-waste Promise copy, the invented "Surprise me" persona names). Ready
   to start the production build when Steve is (see the ready-to-use prompt in `production_build_spec.md`).
 
+- 2026-07-13 — **Store Operating Standards v1.1 → v1.2: discount model changed to no-stacking
+  highest-wins (`MAX`), plus three cold-read contradiction fixes (Steve).** A fresh cold-read
+  readiness gate on the three Standards surfaced real internal contradictions in the discount section
+  and matrix; Steve's calls closed them. **(1) Discount stacking replaced with `MAX`.** No discount
+  ever stacks — the applied rate is `MAX(every discount the customer qualifies for)`; all others are
+  obviated. Steve's rule verbatim: "non-stacking period, highest discount wins … MAX(d1,d2,d3)."
+  Consequences now in the Standard §3: a founder who is also a first-time buyer gets **12% (not 17%)**;
+  a first-time buyer who earns the 3-bag volume tier gets **10% (not 15%)**; the `MAX` rule *is* the
+  cap (no separate ceiling). Rationale: tight per-bag margins — additive stacks "could eat our lunch."
+  **BFCM** is no longer "+5% additive" (illegal under `MAX`) — it's a flat 5% candidate that competes
+  in the `MAX`. **(2) Delivery mechanism split** (fixes the §3-vs-§11 contradiction): the standing
+  subscriber/founder benefit applies **automatically server-side** when signed in (Shopify Functions +
+  entitlement tag); campaign discounts (first-time, volume, abandoned-cart, win-back, BFCM) apply via
+  URL/email link — but only the single highest rate lands either way. §11 entitlement note updated:
+  `applied = MAX(standing, qualifying campaign)`, never a sum. **(3) Referral → TBD** (§3 + new §12.6):
+  the old "free 100g bag" reward is void because 100g exists only inside Tours (§1) — no standalone
+  100g SKU to gift; reward form + capture tooling are open, decide before enabling any referral
+  discount. **(4) Sorpresa 250g / O250g matrix cells retired** (§2.2) — Sorpresa ships only as Tours
+  priced off the 100g factor; nothing sells a standalone Sorpresa 250g, so those cells are now blank
+  with a footnote. Standard bumped **v1.1 → v1.2** (header changelog + footer stamp + §12.6). **KNOWN
+  DRIFT (tracked, not yet fixed):** the POC discount code (`assets/ci-storefront.js` cart math) still
+  *stacks* founder 12% + first-time 5% = 17% and is now knowingly behind v1.2 — Steve acknowledged
+  "the POC will be wrong"; a POC/production discount-logic fix is deferred. **NEXT (Track B of the
+  cold-read plan):** sweep the stale `v1.0` pointers to the Store Operating Standard (CLAUDE.md top
+  pointer block, `docs/standards/README.md` table + `render.py` filename, `collaboration-standard.md`
+  companion header) up to **v1.2**; append a correction to the earlier 2026-07-13 §9 note that wrongly
+  says the POC "still implements the retired Active/Forfeited model" (commit `284c43b` already fixed
+  that); re-render the Standard PDF. Cross-surface: the `Coordination/DECISIONS_LOG.md` should carry
+  the `MAX` discount rule too (Cowork lane — flag to Steve/Cowork, not edited from Code).
+
 ## 10. Open questions / TODO
 
 **POC4 — CURRENT STATE (as of 2026-07-05) — read this first when resuming.**
