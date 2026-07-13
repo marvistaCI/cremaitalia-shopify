@@ -4,8 +4,10 @@ Durable home for decisions about the **real production storefront** (as opposed 
 POC). Created 2026-07-09. These are agreements that should shape the production rebuild
 but are NOT POC changes — the POC is a mock and can only document them.
 
-Read alongside: `CLAUDE.md` (§9 log, §10 "NEXT (production build)"), `00_PROJECT_BRIEF.md`
-(OneDrive, single source of truth), `docs/POC5_change_list.md` (POC backlog).
+Read alongside: the three **Standards** (`docs/standards/` — Brand, Store Operating **v1.2**,
+Collaboration — the canonical rules), `docs/POC_drift_from_standards.md` (where the POC knowingly lags
+the Standards — must not be missed), `CLAUDE.md` (§9 log, §10 "NEXT (production build)"),
+`00_PROJECT_BRIEF.md` (OneDrive, single source of truth), `docs/POC5_change_list.md` (POC backlog).
 
 ---
 
@@ -13,12 +15,16 @@ Read alongside: `CLAUDE.md` (§9 log, §10 "NEXT (production build)"), `00_PROJE
 
 When Steve is ready to have Claude Code build the real storefront, paste this:
 
-> We're building the real production storefront now, replacing the POC. Read `CLAUDE.md`
-> top to bottom — especially §10's "To resume, read in this order" and the "NEXT
-> (production build)" block — plus `docs/production_build_spec.md` and
-> `docs/POC5_change_list.md`, and `00_PROJECT_BRIEF.md` in OneDrive. Then propose a
-> phased build plan and wait for my OK before writing code. Reuse the POC3/POC4/POC5
-> CSS/JS/markup as the design system.
+> We're building the real production storefront now, replacing the POC. The canonical rules
+> live in the three Standards under `docs/standards/` (Brand, Store Operating v1.2,
+> Collaboration) — read those first and treat them as authoritative over the POC. Then read
+> `docs/POC_drift_from_standards.md` (every place the POC knowingly diverges from the
+> Standards — do not carry that drift into production), and `CLAUDE.md` top to bottom —
+> especially §10's "To resume, read in this order" and the "NEXT (production build)" block —
+> plus `docs/production_build_spec.md` and `docs/POC5_change_list.md`, and
+> `00_PROJECT_BRIEF.md` in OneDrive. Then propose a phased build plan and wait for my OK
+> before writing code. Reuse the POC3/POC4/POC5 CSS/JS/markup as the design system, but where
+> the code contradicts a Standard, the Standard wins (see the drift ledger).
 
 Everything below is what that prompt pulls in.
 

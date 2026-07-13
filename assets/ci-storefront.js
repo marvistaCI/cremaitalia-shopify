@@ -886,10 +886,18 @@
     var html = '';
     // sign-in / create-account nudge for guests: surfaces BOTH the one-time first-purchase 5%
     // and the ongoing subscriber benefit.
+    // DRIFT (Store Operating Standards v1.2 §3): this copy frames first-time 5% "plus" subscriber
+    //   10% as additive. Under the no-stacking MAX rule the customer gets only the single highest
+    //   rate (10/12%), never 5%+10%. Reword for production. Ledger: docs/POC_drift_from_standards.md.
     if (!session.signedIn) {
       html += '<div class="cart-banner"><span>Create an account or sign in to unlock your one-time 5% first-purchase discount - plus subscriber benefits of 10% off Roccia, Sorpresa, and Selezione.</span><button onclick="openSignin()">Sign in</button></div>';
     }
     // discount math (line total = unit price × quantity)
+    // DRIFT (Store Operating Standards v1.2 §3): this block STACKS discounts (subscriber/founder rate
+    //   THEN adds first-time 5% below = up to 17%). v1.2 is no-stacking: applied rate = MAX(all
+    //   qualifying candidates), never a sum, so a first-time founder/subscriber gets 12/10% and the 5%
+    //   is obviated. Known-behind per Steve; POC math left as-is. Production must compute a MAX over
+    //   candidate rates instead of summing. Ledger: docs/POC_drift_from_standards.md.
     var subtotal = cart.reduce(function (s, it) { return s + it.price * (it.qty || 1); }, 0);
     var discount = 0, discountLabel = '';
     if (session.signedIn && session.subscriber) {
