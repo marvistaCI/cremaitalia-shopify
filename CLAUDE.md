@@ -1124,9 +1124,59 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   that); re-render the Standard PDF. Cross-surface: the `Coordination/DECISIONS_LOG.md` should carry
   the `MAX` discount rule too (Cowork lane — flag to Steve/Cowork, not edited from Code).
 
+- 2026-07-13 — **POC8: POC discount code made honest to Store Operating Standards v1.2 (no-stacking
+  MAX) — built, verified, committed, pushed, deployed.** Closes the POC drift the v1.2 entry above had
+  knowingly deferred (D1/D2/D3 + the `:436` watch item in `docs/POC_drift_from_standards.md`); detailed
+  ledger in `docs/POC8_change_list.md`. **The fix (`assets/ci-storefront.js` `renderCart()`):** replaced
+  the "subscriber/founder rate THEN add first-time 5%" **summing** block (up to 17%) with a **per-line
+  `MAX`** — each line takes the single highest rate it qualifies for: founder/subscriber **12/10%** on
+  Roccia · Sorpresa · Selezione (signed in + active subscription), **first-time 5%** on every shelf
+  except Bottega (signed in + first-time buyer); `discount = Σ(line_total × line_rate)`. Also fixed a
+  **latent miss** — the old branch only ran for subscribers, so a signed-in first-time **non-subscriber**
+  got nothing; now they correctly get 5%. Summary line is honest (single label — "Founding Member 12%"
+  / "Subscriber 10%" / "First-order 5%", or "Your discount (best applicable per item)" when shelves take
+  different best rates — never "12% + 5%"). **Copy (D2/D3/watch):** guest cart banner reworded so 5% and
+  10/12% read as **alternatives** ("you receive the higher of the two, never both" — no "plus"); FAQ
+  "How do subscriber discounts work?" rewritten (removed "stacks"/"15%", states the single highest
+  applicable discount, a first-time founder still gets 12% not 17%); the Roccia-toggle blurb (`:436`)
+  reworded off "plus subscriber benefits across the site." All new copy honors the no-em-dash rule (§6),
+  no exclamation marks, editorial voice. Removed the two resolved `// DRIFT` markers; moved D1/D2/D3 +
+  watch to **Resolved** in the drift ledger (struck, not deleted, noting commit `6b0a8ed`). **Verified**
+  end-to-end in `shopify theme dev` (drove the real cart via the app globals): founding subscriber +
+  first-time → **12%** on eligible lines and **5%** on an Offerta line (a $38 Roccia + $21 Offerta + $34
+  Bottega bag → −$5.61, i.e. 38×.12 + 21×.05, not 17%); non-subscriber first-timer → **5%** on non-Bottega
+  (−$2.95); guest → 0%. `shopify theme check` = the same 2 pre-existing `ImgWidthAndHeight` errors as the
+  baseline (hero-logo + founder-signature `img` tags, untouched by this batch), **0 new offenses**.
+  Committed (`6b0a8ed`) + pushed to GitHub. **Deployed** to a NEW unpublished theme **"Crema Italia POC8
+  Preview" (id `151454122153`)** via `shopify theme push --unpublished --theme "Crema Italia POC8
+  Preview" --json`. POC7 Preview (`151449862313`) and the live coming-soon theme (`150557294761`) were
+  untouched (confirmed via `shopify theme list`). Storefront password still OFF (friend-testing), so the
+  link works cross-device with no gate. Preview:
+  `https://crema-italia.myshopify.com?preview_theme_id=151454122153` · Editor:
+  `.../admin/themes/151454122153/editor`. To refresh: `shopify theme push --theme 151454122153`. Added a
+  one-line cross-surface note to `Coordination/DECISIONS_LOG.md` (Steve asked for it directly this batch).
+  **Coordination note:** a `docs/POC8_change_list.md` companion spec (acceptance-check table) was authored
+  by a separate Code session mid-batch; git evidence (no `index.lock`, no rival commits, my edits intact)
+  confirmed it was not concurrently writing code, so this session proceeded and committed it with the
+  batch. **Open (production, not POC):** the real store still needs the entitlement/discount `MAX` in
+  Shopify Functions (Standard §11) — the POC math now mirrors it.
+
 ## 10. Open questions / TODO
 
-**POC4 — CURRENT STATE (as of 2026-07-05) — read this first when resuming.**
+**▶ CURRENT STATE — POC8 (as of 2026-07-13) — read this first when resuming.** Latest deployed
+preview is **"Crema Italia POC8 Preview" (id `151454122153`)**, pushed 2026-07-13 (commit `6b0a8ed`).
+POC8 is a **narrow drift-fix batch**, not a feature batch: it made the POC's mocked cart discounts
+honest to **Store Operating Standards v1.2** (no-stacking, per-line `MAX` — the customer receives only
+the single highest rate they qualify for, never a sum; a founding subscriber who is also first-time
+gets 12%, not 17%), and reworded the guest banner / FAQ / Roccia-toggle copy to match (see §9
+2026-07-13 POC8 + `docs/POC8_change_list.md` + `docs/POC_drift_from_standards.md`, now all-Resolved).
+Everything below still describes the POC accurately — POC5→POC8 are the same custom-Liquid SPA with
+successive batches on top; the architecture, brand system, and production seams are unchanged. Preview:
+`https://crema-italia.myshopify.com?preview_theme_id=151454122153`. To refresh: `shopify theme push
+--theme 151454122153`. POC7 (`151449862313`) and the live coming-soon theme (`150557294761`) are
+untouched. Storefront password still OFF (friend-testing — the one open action from 2026-07-05/06).
+
+**POC4 — the batch that set the current architecture (as of 2026-07-05).**
 
 **What POC4 is.** The same custom-Liquid SPA architecture as POC3 — no structural
 change — with a batch of copy, layout, and behavior fixes applied on top (see §9's

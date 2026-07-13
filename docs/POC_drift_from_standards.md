@@ -29,7 +29,7 @@ POC in the same pass *or* add a row here **and** a `// DRIFT:` marker. When a di
 
 ## Resolved (kept for provenance; strike, don't delete)
 
-**All fixed in the POC8 batch (2026-07-13, commit `POC8_HASH`).** The POC cart now computes a per-line
+**All fixed in the POC8 batch (2026-07-13, commit `6b0a8ed`).** The POC cart now computes a per-line
 `MAX` (single highest applicable rate, never a sum), and all customer-facing copy presents the discounts
 as alternatives. `// DRIFT` markers removed. Verified in `shopify theme dev`: founding subscriber +
 first-time shows 12% on Roccia/Sorpresa/Selezione lines and 5% on an Offerta line; a non-subscriber
