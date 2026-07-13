@@ -1075,6 +1075,19 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   state, "return at 10%" copy, permanent-forfeit cancel flow) — out of sync with v1.1; flagged to Steve
   to decide fix-now vs defer-to-production (no theme code changed this session — gate still open).
 
+- 2026-07-13 — **Readiness gate CLOSED — Team/Partners mechanism locked = sections + blocks
+  (Steve); production build unblocked on decisions.** Last open production decision from the gate:
+  Team/Partners content managed via **Shopify sections + blocks** (theme-editor "Add block", friendly
+  for a non-technical owner), NOT metaobjects — metaobjects deferred as an upgrade path only if an
+  entry is reused across pages (e.g. a team member also authoring Journal posts) or the lists grow
+  large. Recorded in `docs/production_build_spec.md` §2. **Gate status:** all substantive
+  decisions are now locked (pricing matrix + per-SKU override + governance; discounts; durable
+  Founding model + 60-day benefit grace; subscriptions/Loop; Tours/BOM; account split; price-tool
+  phased approach; Team/Partners). What remains is **not decisions** — pre-launch validation (sanity-
+  check real SKUs through the pricing matrix vs the landed-cost model) and asset-gated content (real
+  photography, trust signals, no-waste Promise copy, the invented "Surprise me" persona names). Ready
+  to start the production build when Steve is (see the ready-to-use prompt in `production_build_spec.md`).
+
 ## 10. Open questions / TODO
 
 **POC4 — CURRENT STATE (as of 2026-07-05) — read this first when resuming.**

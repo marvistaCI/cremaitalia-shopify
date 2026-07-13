@@ -50,12 +50,12 @@ merchant-editable with **no developer and no build**. Only rarely-changing conte
   "Italian Freight Forwarder," not a job title). Steve then manages entries in the theme
   editor via "Add block" — drag to reorder, delete, live preview. Matches his mental
   model and is friendliest for a non-technical owner.
-- **Decision left open (Steve to lock):** sections+blocks vs **metaobjects**. Prefer
-  metaobjects only if Team/Partners grow large or an entry is reused across pages (e.g. a
-  team member also authors Journal posts — see §3). Metaobjects live in the store (survive
-  theme changes), more database-like, more clinical admin. Roasters are already structured
-  this way, so metaobjects are a natural upgrade path. **Recommendation:** start with
-  sections+blocks; migrate to metaobjects only if reuse/scale demands it.
+- **LOCKED (Steve, 2026-07-13): sections + blocks.** Team/Partners are managed in the
+  theme editor via "Add block" (photo/name/role/bio for Team; logo/name/type/blurb for
+  Partners) — friendliest for a non-technical owner. **Metaobjects are the deferred upgrade
+  path**, taken only if a later need forces it — the trigger being an entry reused across
+  pages (e.g. a team member who also authors Journal/blog posts, so one shared record links
+  both) or the lists growing large. Not a launch concern; migrating later is a contained job.
 - POC state (2026-07-09): Team/Partners cards now show photo · name · role (names/roles
   real, photos + partner name placeholder). Founder/company copy still placeholder pending
   Steve's real language.
