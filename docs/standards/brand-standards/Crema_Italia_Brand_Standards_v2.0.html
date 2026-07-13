@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Crema Italia — Brand & Document Standards v2.0</title>
+
+<!-- Local brand fonts: Marcellus (display) + Inter (body), .ttf embedded. -->
+<link rel="stylesheet" href="fonts.css">
+<!-- Project brand stylesheet = single source of truth for palette + tokens. -->
+<link rel="stylesheet" href="Crema Italia Brand CSS.css">
+
+<style>
+  @page {
+    size: Letter;
+    margin: 20mm 16mm 18mm 16mm;
+    @top-left  { content: "Crema Italia"; font-family: "Marcellus","Georgia",serif;
+                 font-size: 9pt; color: #55331B; }
+    @top-right { content: "Brand & Document Standards"; font-family: "Inter",sans-serif;
+                 font-size: 8pt; color: #8C7E6A; }
+    @bottom-left  { content: "Crema Italia, LLC · Lutz, Florida, USA · cremaitalia.com";
+                    font-family:"Inter",sans-serif; font-size: 7.5pt; color:#8C7E6A; }
+    @bottom-right { content: "Page " counter(page); font-family:"Inter",sans-serif;
+                    font-size: 7.5pt; color:#8C7E6A; }
+  }
+  @page :first { @top-left{content:""} @top-right{content:""}
+                 @bottom-left{content:""} @bottom-right{content:""} }
+
+  html{ font-size:11pt; }
+  body{ background:#FFFFFF; color:var(--ci-coffee);
+        font-family:var(--ci-font-body); line-height:1.45; }
+  .wrap{ max-width:100%; }
+
+  h1,h2,h3{ font-family:var(--ci-font-display); font-weight:400; color:var(--ci-coffee);
+            line-height:1.15; }
+  h1{ font-size:22pt; margin:0 0 4pt; }
+  h2{ font-family:var(--ci-font-body); font-weight:600; color:var(--ci-crema);
+      font-size:13pt; margin:18pt 0 5pt; letter-spacing:.01em; }
+  h3{ font-size:12pt; margin:12pt 0 3pt; color:var(--ci-coffee); }
+  p{ margin:0 0 7pt; }
+  ul{ margin:0 0 8pt; padding-left:16pt; } li{ margin:0 0 3pt; }
+  .eyebrow{ font-family:var(--ci-font-body); font-weight:600; font-size:8.5pt;
+            letter-spacing:.12em; text-transform:uppercase; color:var(--ci-crema);
+            margin:0 0 4pt; }
+  .muted{ color:var(--ci-mute); }
+  .sub{ color:var(--ci-espresso); }
+
+  /* tricolore rule */
+  .flag-rule{ height:2px; width:100%;
+    background:linear-gradient(to right,var(--ci-green) 0 46%,transparent 46% 54%,var(--ci-red) 54% 100%);
+    margin:2pt 0 10pt; }
+  .flag-strip{ height:6px; width:100%; margin-top:10pt;
+    background:linear-gradient(to right,var(--ci-green) 0 33.3%,var(--ci-cream) 33.3% 66.6%,var(--ci-red) 66.6% 100%); }
+
+  table{ border-collapse:collapse; width:100%; margin:6pt 0 12pt; font-size:9pt;
+         page-break-inside:avoid; }
+  th{ background:var(--ci-coffee); color:var(--ci-cream); font-weight:600;
+      text-align:left; padding:5pt 7pt; font-size:9pt; }
+  td{ padding:5pt 7pt; border-bottom:.5pt solid var(--ci-hairline);
+      vertical-align:top; background:#FFFFFF; }
+  .sw{ display:inline-block; width:10pt; height:10pt; border:.5pt solid var(--ci-hairline);
+       vertical-align:middle; margin-right:5pt; border-radius:2pt; }
+  code{ font-family:"Inter",monospace; font-size:8.5pt; background:#F3EEE4;
+        padding:1pt 3pt; border-radius:3pt; }
+
+  .callout{ background:var(--ci-cream); border-left:3pt solid var(--ci-crema);
+            padding:8pt 12pt; margin:8pt 0 12pt; page-break-inside:avoid; }
+  .callout .eyebrow{ margin-bottom:2pt; }
+
+  section{ page-break-inside:auto; }
+  .keep{ page-break-inside:avoid; }
+  .pbreak{ page-break-before:always; }
+
+  /* cover */
+  .cover{ height:100%; display:flex; flex-direction:column; align-items:center;
+          justify-content:flex-start; text-align:center; page-break-after:always; }
+  .cover img{ width:52%; max-width:300px; margin:22mm 0 8mm; }
+  .cover h1{ font-size:30pt; margin:0 0 4pt; }
+  .cover .csub{ font-family:var(--ci-font-display); font-size:15pt; color:var(--ci-espresso);
+                margin:0 0 16pt; }
+  .metastrip{ display:flex; gap:0; width:82%; border-top:.5pt solid var(--ci-hairline);
+              border-bottom:.5pt solid var(--ci-hairline); margin-top:8mm; }
+  .metastrip div{ flex:1; padding:8pt 6pt; }
+  .metastrip .lab{ font-size:7.5pt; letter-spacing:.12em; text-transform:uppercase;
+                   color:var(--ci-crema); font-weight:600; margin-bottom:3pt; }
+  .metastrip .val{ font-size:9pt; color:var(--ci-coffee); }
+  .cover .foot{ margin-top:auto; width:100%; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <img src="Logo Assets/PNG/CI Main Logo - Transparent.png" alt="Crema Italia">
+  <h1>Brand &amp; Document Standards</h1>
+  <div class="csub">Standard del marchio e dei documenti</div>
+  <div class="metastrip">
+    <div><div class="lab">Issued by</div><div class="val">Crema Italia, LLC<br>Lutz, Florida, USA</div></div>
+    <div><div class="lab">Audience</div><div class="val">Internal team<br>&amp; brand contributors</div></div>
+    <div><div class="lab">Status</div><div class="val">Authoritative<br>Version 2.0</div></div>
+  </div>
+  <div class="foot">
+    <div class="flag-strip"></div>
+    <p class="muted" style="font-size:8.5pt;margin-top:8pt">July 2026 · Version 2.0 · English</p>
+  </div>
+</div>
+
+<!-- ============ INTRO + ESSENCE + LOGO ============ -->
+<section>
+  <p class="eyebrow">The canonical reference</p>
+  <h1>Crema Italia Brand &amp; Document Standards</h1>
+  <div class="flag-rule"></div>
+  <p class="sub" style="font-size:9.5pt">Version 2.0 · July 2026 · Owner: Crema Italia, LLC · Lutz,
+  Florida, USA · cremaitalia.com · Applies to: all Crema Italia documents (DOCX, PDF, Markdown),
+  web pages, decks, email templates, and partner-facing collateral.</p>
+
+  <p>This is the canonical reference. When you ask a tool to build a Crema Italia document,
+  slide, or web page, point it at this file and the accompanying <code>Crema Italia Brand CSS.css</code>
+  and the finalized logo files in <code>Logo Assets/</code>. The look established by the Roaster
+  Onboarding &amp; Partnership Guide is the visual reference; this document codifies it.</p>
+
+  <div class="callout">
+    <p class="eyebrow">What changed in v2.0 (artist rebrand, 2026-07-01)</p>
+    <p style="margin-bottom:0">A graphic artist delivered the finalized <strong>Crema Italia™</strong>
+    mark (vector master + full lockup set) for the trademark filing. Two brand systems were revised as a
+    result: the <strong>palette</strong> — Espresso Brown is now <code>#55331B</code> and Crema Gold is
+    <code>#B88348</code> (replacing the former <code>#3B1F12</code> / <code>#C46A1F</code>); and the
+    <strong>type</strong> — the wordmark is set in Montecatini&nbsp;Pro (in the logo art only), and live
+    web/document headings use <strong>Marcellus</strong>, ending the earlier Cormorant→Lora display-font
+    history. Green, red, cream, and Inter body type are unchanged.</p>
+  </div>
+
+  <h2>1 · Brand essence</h2>
+  <p>Crema Italia is a small, selective importer of artisan Italian coffee. The visual language must read as:</p>
+  <ul>
+    <li><strong>Editorial</strong> — long-form, considered, like a fine-press book. Not e-commerce loud.</li>
+    <li><strong>Italian</strong> — a quiet nod to the tricolore (green / white / red) without ever shouting it.</li>
+    <li><strong>Warm</strong> — cream and coffee tones, never stark white, never grey corporate.</li>
+    <li><strong>Bilingual-ready</strong> — every layout must comfortably hold an English column and an Italian column side by side.</li>
+  </ul>
+  <p><em>When in doubt: fewer elements, more whitespace, smaller logo, larger margins.</em></p>
+
+  <h2>2 · Logo</h2>
+  <p><strong>Files:</strong> the finalized artist mark lives in <code>Logo Assets/</code> — a vector
+  master (<code>Art Files/*.ai</code>) plus matched <code>EPS/</code>, <code>PDF/</code>,
+  <code>SVG/</code>, <code>PNG/</code> exports and generated <code>Web/</code> derivatives. Three
+  lockups — <strong>main</strong> (vertical), <strong>horizontal</strong>, and <strong>favicon</strong>
+  (cup only) — each in a light-background and a dark-background version.</p>
+  <ul>
+    <li><strong>Trademark:</strong> the mark is <strong>Crema Italia™</strong>. The ™ sits as a
+      cap-height superscript after the final “A” in “ITALIA.” Never use ® — Crema Italia is not
+      federally registered yet.</li>
+    <li><strong>Clear space:</strong> at least the height of the wordmark “C” on every side. Never crop the tricolore arcs.</li>
+    <li><strong>Minimum size:</strong> print 25 mm wide; screen 120 px wide. A favicon-only crop of the cup is acceptable below 120 px.</li>
+    <li><strong>On dark backgrounds:</strong> use the dark-background lockup (cream wordmark), e.g.
+      <code>PNG/CI Logo for Dark Background - Transparent.png</code> — never the light mark recolored. Never re-color the cup.</li>
+    <li><strong>Don’t:</strong> stretch, rotate, or add drop-shadows; place on photographs without a solid backing; re-typeset the wordmark. Master edits happen in the <code>.ai</code>; re-export the others.</li>
+  </ul>
+</section>
+
+<!-- ============ COLOR ============ -->
+<section class="pbreak">
+  <h2>3 · Color system</h2>
+  <p>All colors are derived from the finalized logo and its artist spec sheet. Use the role, not the hex name, when prompting.</p>
+
+  <h3>3.1 Primary palette</h3>
+  <table>
+    <thead><tr><th style="width:30%">Role</th><th>Hex</th><th>RGB</th><th>Where it lives</th></tr></thead>
+    <tbody>
+      <tr><td><span class="sw" style="background:#FBF8F1"></span>Background — Cream</td><td><code>#FBF8F1</code></td><td>251, 248, 241</td><td>Page background, document body, hero sections</td></tr>
+      <tr><td><span class="sw" style="background:#FFFFFF"></span>Surface — Ivory</td><td><code>#FFFFFF</code></td><td>255, 255, 255</td><td>Tables, callout cards, web cards on cream</td></tr>
+      <tr><td><span class="sw" style="background:#55331B"></span>Espresso — Brown</td><td><code>#55331B</code></td><td>85, 51, 27</td><td>Body text, H1 headings, wordmark</td></tr>
+      <tr><td><span class="sw" style="background:#6B4A38"></span>Espresso — Soft Brown</td><td><code>#6B4A38</code></td><td>107, 74, 56</td><td>Muted / secondary body, captions <span class="muted">(interim)</span></td></tr>
+      <tr><td><span class="sw" style="background:#B88348"></span>Crema — Gold</td><td><code>#B88348</code></td><td>184, 131, 72</td><td>H2 / sub-headings, accents, links, key numbers</td></tr>
+      <tr><td><span class="sw" style="background:#E8A86A"></span>Crema Light</td><td><code>#E8A86A</code></td><td>232, 168, 106</td><td>Hover states, light fills, chart shades <span class="muted">(interim)</span></td></tr>
+    </tbody>
+  </table>
+  <p class="sub" style="font-size:8.5pt"><em>Interim tokens (Espresso Soft, Crema Light, and hover
+  <code>#9C6E3C</code>) are harmonizations pending re-derivation from the two artist hero tones.</em></p>
+
+  <h3>3.2 Italian flag accents (use sparingly)</h3>
+  <table>
+    <thead><tr><th style="width:30%">Role</th><th>Hex</th><th>RGB</th><th>Where it lives</th></tr></thead>
+    <tbody>
+      <tr><td><span class="sw" style="background:#0E7A3A"></span>Tricolore Green</td><td><code>#0E7A3A</code></td><td>14, 122, 58</td><td>Top-left page rule, footer bar, ENGLISH column markers</td></tr>
+      <tr><td><span class="sw" style="background:#C8342B"></span>Tricolore Red</td><td><code>#C8342B</code></td><td>200, 52, 43</td><td>Top-right page rule, footer bar, ITALIANO column markers</td></tr>
+    </tbody>
+  </table>
+  <p>The flag colors are <strong>decorative rules, never large fills</strong>. Think: a pencil-thick rule across the top of the page, a 6 mm strip at the foot of the cover. Never block colors.</p>
+
+  <h3>3.3 Neutral / structural</h3>
+  <table>
+    <thead><tr><th style="width:30%">Role</th><th>Hex</th><th>Use</th></tr></thead>
+    <tbody>
+      <tr><td><span class="sw" style="background:#D9D2C2"></span>Hairline</td><td><code>#D9D2C2</code></td><td>Column dividers, table borders, footer rules</td></tr>
+      <tr><td><span class="sw" style="background:#8C7E6A"></span>Mute</td><td><code>#8C7E6A</code></td><td>Page numbers, footer text, eyebrow labels (ENGLISH, ITALIANO)</td></tr>
+      <tr><td><span class="sw" style="background:#5A4A3F"></span>Ink soft</td><td><code>#5A4A3F</code></td><td>Long-form body text where pure brown is too heavy</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.4 Contrast — non-negotiable</h3>
+  <table>
+    <thead><tr><th>Pair (on Cream #FBF8F1)</th><th>Ratio</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Espresso Brown <code>#55331B</code></td><td>10.6 : 1</td><td>AAA</td></tr>
+      <tr><td>Espresso Soft <code>#6B4A38</code></td><td>7.4 : 1</td><td>AAA</td></tr>
+      <tr><td>Ink soft <code>#5A4A3F</code></td><td>8.0 : 1</td><td>AAA</td></tr>
+      <tr><td>Crema Gold <code>#B88348</code></td><td>3.1 : 1</td><td><strong>Large display only</strong> — ≥ 18 pt / 24 px (or bold ≥ 14 pt)</td></tr>
+      <tr><td>Mute <code>#8C7E6A</code></td><td>3.7 : 1</td><td>Captions / fine print only</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">
+    <p style="margin-bottom:0"><strong>Rule:</strong> Crema Gold’s contrast on cream (3.1 : 1) is
+    lower than the terracotta it replaced — it clears WCAG only for <strong>large text</strong>.
+    Use gold for large headings, short bold accent runs, links, and key numerals; <strong>never</strong>
+    body copy or small text. When a gold element could fall below ~18 px, set it in Espresso Brown instead.</p>
+  </div>
+
+  <h3>3.5 Don’t introduce new colors</h3>
+  <p>If a chart or web feature seems to need a new hue, derive it from Crema Light, Espresso, or a desaturated Tricolore Green. The brand should never sprout a sixth or seventh accent.</p>
+</section>
+
+<!-- ============ TYPOGRAPHY ============ -->
+<section class="pbreak">
+  <h2>4 · Typography</h2>
+  <p>Two live families plus the logo face. Hold this line — the document brand depends on it.</p>
+
+  <h3>4.1 The pairing</h3>
+  <table>
+    <thead><tr><th style="width:24%">Role</th><th>Family</th><th>Where to use</th></tr></thead>
+    <tbody>
+      <tr><td>Logo wordmark</td><td>Montecatini Pro (Normale Semi-Bold)</td><td>Logo artwork <strong>only</strong> — already outlined in the files. Commercial font; licensing unconfirmed for any use beyond the outlined mark.</td></tr>
+      <tr><td>Display &amp; Headings</td><td>Marcellus (serif, weight 400)</td><td>Cover title, H1, section headings, web/document display. The free Google-Font stand-in for Montecatini.</td></tr>
+      <tr><td>Body &amp; UI</td><td>Inter (sans, 400 / 500 / 600)</td><td>All body text, tables, captions, web UI, buttons, tagline.</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Why this pairing:</strong> Marcellus echoes the classical Roman capitals of the wordmark and reads as considered and Italian without theatrics; Inter is a calm, neutral workhorse that handles bilingual copy and small sizes without strain. Both are free, web-safe, and embed cleanly in PDF.</p>
+
+  <div class="callout">
+    <p style="margin-bottom:0"><strong>Marcellus is roman-only</strong> — it ships a single 400 weight
+    with no italic. Two consequences: (1) heading <em>hierarchy is set by size, not weight</em>; use bold
+    Inter for emphasis within text. (2) The English-vs-Italian cue is now carried by the
+    <span class="eyebrow" style="display:inline">ENGLISH / ITALIANO</span> eyebrow label and column
+    position — <em>not</em> by italic display type. Reserve italics (Inter Italic) for references and short foreign words.</p>
+  </div>
+
+  <h3>4.2 Sub-heading exception</h3>
+  <p>H2 sub-headings are set in <strong>Inter SemiBold (600) in Crema Gold</strong>, not in serif. Keep this rule — it visually separates major editorial titles (Marcellus, brown) from in-page section markers (Inter, gold).</p>
+
+  <h3>4.3 Word &amp; PDF — exact specifications</h3>
+  <table>
+    <thead><tr><th>Element</th><th>Family</th><th>Wt</th><th>Size</th><th>Color</th><th>Lead</th></tr></thead>
+    <tbody>
+      <tr><td>Cover title</td><td>Marcellus</td><td>400</td><td>30–36 pt</td><td>Espresso #55331B</td><td>1.1</td></tr>
+      <tr><td>Cover sub-title (Italian)</td><td>Marcellus</td><td>400</td><td>15–18 pt</td><td>Espresso Soft #6B4A38</td><td>1.2</td></tr>
+      <tr><td>H1 page heading</td><td>Marcellus</td><td>400</td><td>22–24 pt</td><td>Espresso #55331B</td><td>1.15</td></tr>
+      <tr><td>H2 sub-heading</td><td>Inter</td><td>600</td><td>13 pt</td><td>Crema Gold #B88348</td><td>1.25</td></tr>
+      <tr><td>Eyebrow (ENGLISH/ITALIANO)</td><td>Inter</td><td>600</td><td>8.5 pt, +0.12 em</td><td>Crema Gold #B88348</td><td>1.0</td></tr>
+      <tr><td>Body</td><td>Inter</td><td>400</td><td>10.5 pt</td><td>Espresso #55331B</td><td>1.45</td></tr>
+      <tr><td>Body emphasis</td><td>Inter</td><td>600</td><td>10.5 pt</td><td>Espresso #55331B</td><td>1.45</td></tr>
+      <tr><td>Caption / reference</td><td>Inter Italic</td><td>400</td><td>9 pt</td><td>Espresso Soft #6B4A38</td><td>1.4</td></tr>
+      <tr><td>Table header</td><td>Inter</td><td>600</td><td>9.5 pt</td><td>Cream on Espresso</td><td>1.3</td></tr>
+      <tr><td>Table body</td><td>Inter</td><td>400</td><td>9.5 pt</td><td>Espresso #55331B</td><td>1.4</td></tr>
+      <tr><td>Footer / page no.</td><td>Inter</td><td>400/500</td><td>8.5 pt</td><td>Mute #8C7E6A</td><td>1.3</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4.4 Web — exact specifications</h3>
+  <table>
+    <thead><tr><th>Element</th><th>Family</th><th>Wt</th><th>Size</th><th>Color</th></tr></thead>
+    <tbody>
+      <tr><td>Hero / cover</td><td>Marcellus</td><td>400</td><td>4.5 rem / 72 px</td><td>Espresso</td></tr>
+      <tr><td>H1</td><td>Marcellus</td><td>400</td><td>2.5 rem / 40 px</td><td>Espresso</td></tr>
+      <tr><td>H2</td><td>Inter</td><td>600</td><td>1.125 rem / 18 px</td><td>Crema Gold</td></tr>
+      <tr><td>H3</td><td>Inter</td><td>600</td><td>1 rem / 16 px</td><td>Espresso</td></tr>
+      <tr><td>Body</td><td>Inter</td><td>400</td><td>1.0625 rem / 17 px</td><td>Espresso</td></tr>
+      <tr><td>Small / caption</td><td>Inter</td><td>400</td><td>0.875 rem / 14 px</td><td>Espresso Soft</td></tr>
+      <tr><td>Eyebrow</td><td>Inter</td><td>600</td><td>0.75 rem / 12 px, +0.12 em, uppercase</td><td>Crema Gold</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4.5 Body type rules</h3>
+  <ul>
+    <li><strong>Measure:</strong> 65–75 characters per line. In a two-column bilingual Letter layout this lands at ~3.1 in / 7.9 cm column width.</li>
+    <li><strong>Paragraph spacing:</strong> 6 pt before, no first-line indent. Never both indent and space.</li>
+    <li><strong>Hyphenation:</strong> off for English and Italian; a slightly ragged right reads better, and Italian breaks awkwardly.</li>
+    <li><strong>Numerals:</strong> lining, tabular in tables and prices; proportional elsewhere.</li>
+    <li><strong>Italics carry meaning</strong> — Italian-language references and short foreign words (Inter Italic). Don’t italicize for emphasis; use bold.</li>
+  </ul>
+
+  <h3>4.6 Font fallbacks</h3>
+  <p>Display: <code>"Marcellus", "Georgia", serif</code> · Body: <code>"Inter", "Helvetica Neue", "Arial", sans-serif</code>. For Word documents, ship Marcellus and Inter as embedded named styles; if a recipient lacks them, Word falls back to Georgia and Calibri — close enough to preserve hierarchy.</p>
+</section>
+
+<!-- ============ LAYOUT ============ -->
+<section class="pbreak">
+  <h2>5 · Page layout</h2>
+  <h3>5.1 Document grid (Letter — 8.5 × 11 in)</h3>
+  <table>
+    <thead><tr><th>Margin</th><th>Size</th></tr></thead>
+    <tbody>
+      <tr><td>Top / Bottom</td><td>0.85 in</td></tr>
+      <tr><td>Left &amp; Right</td><td>0.75 in</td></tr>
+      <tr><td>Gutter (between bilingual columns)</td><td>0.4 in</td></tr>
+      <tr><td>Column width (each)</td><td>3.55 in</td></tr>
+    </tbody>
+  </table>
+
+  <h3>5.2 Page chrome</h3>
+  <ul>
+    <li><strong>Top:</strong> two short rules — green <code>#0E7A3A</code> left, red <code>#C8342B</code> right, ~1.6 in long, 1.2 pt thick. Wordmark “Crema Italia” sits left in 9–11 pt Marcellus; running title sits right in 9 pt Inter.</li>
+    <li><strong>Bottom:</strong> single hairline rule <code>#D9D2C2</code>, 0.5 pt. Below it, footer “Crema Italia, LLC · Lutz, Florida, USA · cremaitalia.com” left, “Page N” right, both 8.5 pt Inter Mute.</li>
+    <li><strong>Cover:</strong> logo top-center, centered title block, three-column meta strip (Issued by / Audience / Status) above a hairline, and a 6 mm green-cream-red flag strip at the foot.</li>
+  </ul>
+
+  <h3>5.3 Bilingual columns</h3>
+  <ul>
+    <li>Always English left, Italian right.</li>
+    <li>Column eyebrow labels (ENGLISH, ITALIANO) in Crema Gold, set above the H1.</li>
+    <li>A 0.5 pt hairline runs the full text height between columns.</li>
+    <li>Because Marcellus has no italic, the English/Italian distinction is carried by the eyebrow label and column position — not by italic display type (a change from v1.0).</li>
+  </ul>
+
+  <h3>5.4 Lists, tables, callouts</h3>
+  <ul>
+    <li><strong>Bulleted lists:</strong> • (U+2022), 0.18 in indent, 0.12 in hanging indent. No nested bullets in body content; if you need a second level, restructure into a table.</li>
+    <li><strong>Tables:</strong> Espresso-brown header bar <code>#55331B</code> with cream text; body rows on Ivory <code>#FFFFFF</code>; row separators <code>#D9D2C2</code>. No vertical lines.</li>
+    <li><strong>Callouts:</strong> cream box <code>#FBF8F1</code> on ivory page, 1 pt left rule in Crema Gold <code>#B88348</code>, 0.25 in inner padding.</li>
+    <li><strong>References:</strong> italic caption style, prefixed “Reference:” / “Riferimento:”.</li>
+  </ul>
+</section>
+
+<!-- ============ WEB + DATAVIZ + IMAGERY ============ -->
+<section class="pbreak">
+  <h2>6 · Web styling</h2>
+  <p>The accompanying <code>Crema Italia Brand CSS.css</code> (v1.2) is the canonical implementation. It exposes every value above as a CSS custom property and includes ready-made classes for <code>.eyebrow</code>, <code>.bilingual</code>, <code>.callout</code>, <code>.flag-rule</code>, and <code>.btn-primary</code>.</p>
+  <h3>6.1 Web rules</h3>
+  <ul>
+    <li>Max content width 72 ch for long-form, 1120 px for landing pages.</li>
+    <li>Load fonts: <code>Marcellus</code> + <code>Inter</code> from Google Fonts.</li>
+    <li>Buttons: Crema Gold fill, Cream text, 8 px radius, 12 px / 24 px padding, no shadow.</li>
+    <li>Hover: darken Crema by ~8% — <code>--ci-crema-hover: #9C6E3C</code>.</li>
+    <li>Focus ring: 2 px Crema Gold with 2 px Cream offset — required for accessibility.</li>
+    <li>Never animate gratuitously. A 200 ms color transition on links is the ceiling.</li>
+  </ul>
+
+  <h2>7 · Data visualization</h2>
+  <ul>
+    <li>Single-series: Crema Gold <code>#B88348</code>.</li>
+    <li>Two-series: Crema Gold <code>#B88348</code> and Espresso Soft <code>#6B4A38</code>.</li>
+    <li>Three-to-five series: Crema Gold, Espresso Soft, Tricolore Green <code>#0E7A3A</code>, Espresso Brown <code>#55331B</code>, Crema Light <code>#E8A86A</code> — in that order.</li>
+    <li>Background: Cream. Gridlines: Hairline <code>#D9D2C2</code>, dashed, 0.5 pt. Axis labels: Inter 9 pt, Mute.</li>
+    <li>Title above the chart in Inter SemiBold 11 pt Espresso — state the insight, not the variable.</li>
+    <li>No 3D, no pie charts with more than 3 wedges, no dual axes.</li>
+  </ul>
+
+  <h2>8 · Imagery &amp; photography</h2>
+  <ul>
+    <li><strong>Style:</strong> natural light, low saturation, narrow depth of field. Espresso cups, roasting drums, hands at work, Tuscan landscape.</li>
+    <li><strong>Don’t:</strong> stock photos of generic baristas, vector illustrations, emoji, decorative coffee-bean borders.</li>
+    <li><strong>Treatment:</strong> images sit on Cream with a 1 px Hairline border and 0.25 in margin. No drop-shadows.</li>
+    <li><strong>Aspect ratios:</strong> 3:2 landscape product shots, 1:1 roaster portraits, 16:9 hero web banners.</li>
+  </ul>
+</section>
+
+<!-- ============ VOICE + NAMING + CHECKLIST ============ -->
+<section class="pbreak">
+  <h2>9 · Voice &amp; tone (brief)</h2>
+  <ul>
+    <li><strong>Plain, direct, deferential.</strong> “We choose a small number of roasters whose work represents the craft of Italian roasting at its best.” Not: “We hand-pick the world’s most exclusive coffee artisans.”</li>
+    <li><strong>Bilingual parity.</strong> Every roaster-facing artifact ships in English and Italian. Italian is the controlling version when handed to an Italian roaster.</li>
+    <li><strong>Honour formal address in Italian.</strong> Use Voi / Vi / Vostro, capitalized.</li>
+    <li><strong>Numbers and units.</strong> Always include both metric (250 g, 1 kg) and U.S. customary (8.82 oz, 2.20 lb) on weight references.</li>
+  </ul>
+
+  <h2>10 · File naming &amp; versioning</h2>
+  <ul>
+    <li>Documents: <code>Crema_Italia_&lt;Topic&gt;_v&lt;MAJOR&gt;.&lt;MINOR&gt;.{docx|pdf}</code>.</li>
+    <li>Logos: organized by lockup and format in <code>Logo Assets/</code> — <code>Art Files/</code> (.ai master), <code>EPS/</code>, <code>PDF/</code>, <code>SVG/</code>, <code>PNG/</code>, <code>Web/</code>. Lockups: main, horizontal, favicon — each light and dark.</li>
+    <li>CSS / templates: <code>Crema Italia Brand CSS.css</code>, kept under version control.</li>
+    <li>Increment minor (2.0 → 2.1) for copy fixes. Increment major (2.x → 3.0) for any change to color, type, or layout grid.</li>
+    <li>Always use the greatest version-number variant of a file (<code>_v2</code> &gt; <code>_v1</code>).</li>
+  </ul>
+
+  <h2>11 · Quick checklist before sharing any artifact</h2>
+  <ul>
+    <li>Logo: correct file &amp; lockup, clear space respected, minimum size honored, ™ present (never ®).</li>
+    <li>Background is Cream <code>#FBF8F1</code>, not white (except inside tables/cards).</li>
+    <li>Headings in Marcellus, body in Inter; wordmark artwork only in Montecatini.</li>
+    <li>Crema Gold used only on large headings, links, key numerals — never body or small text.</li>
+    <li>Tricolore green and red appear only as thin rules, never as fills.</li>
+    <li>Bilingual layout: English left, Italian right; English/Italian cue via eyebrow label, not italic.</li>
+    <li>Footer carries “Crema Italia, LLC · Lutz, Florida, USA · cremaitalia.com”; page numbers present.</li>
+    <li>Body type ≥ 10.5 pt (print) / 17 px (web); contrast checked (gold large-only).</li>
+    <li>No introduced colors, no decorative graphics, no stretched logo.</li>
+  </ul>
+
+  <div class="flag-strip"></div>
+  <p class="muted" style="font-size:8pt;margin-top:8pt">Document maintained by Crema Italia, LLC.
+  Companion files: <code>Crema Italia Brand CSS.css</code> (v1.2), the finalized logo set in
+  <code>Logo Assets/</code>, and this document’s editable source
+  <code>Crema_Italia_Brand_Standards_v2.0.html</code>. Supersedes Brand Standards v1.0 (May 2026).</p>
+</section>
+
+</div>
+</body>
+</html>

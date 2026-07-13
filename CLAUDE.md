@@ -5,8 +5,23 @@ Crema Italia, LLC — a small selective importer of artisan Italian roasted coff
 Owner: Steve. Operating entity: Crema Italia, LLC, Lutz, Florida, USA.
 
 This `CLAUDE.md` is loaded into every Claude Code session in this directory. It is the
-agent's persistent project memory. Update it whenever a meaningful decision is made;
-treat it as the source of truth for "how we do things here."
+agent's persistent project memory and **change log** (§9). It is **not** where the rules
+live — those live in the three **Standards** below. Keep `CLAUDE.md` lean: log decisions
+here, but record the *rules themselves* in the Standard they belong to, and point here.
+
+> **The three Standards — canonical source of truth (adopted 2026-07-13, Option A).**
+> Sources live in `docs/standards/` (git is the gate); OneDrive/PDF copies are read-only
+> **renders**. A Standard says *what is true now*; this file's §9 + `DECISIONS_LOG.md` say
+> *what changed, when*. On any decision: update the Standard **and** log it. See
+> `docs/standards/README.md`.
+> - **Brand Standards** (v2.0) — look & voice: `docs/standards/brand-standards/`
+> - **Store Operating Standards** (v1.0) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Collaboration Standard** (v1.0) — lanes, source/render model, editing protocol: `docs/standards/collaboration-standard.md`
+>
+> **Editing protocol:** Code owns the repo and all Standard sources; **Cowork proposes,
+> Code applies** — any edit Steve asks Cowork to make to a repo artifact is converted into
+> a prompt for Code. The coordination callouts below are being consolidated into the
+> Collaboration Standard; treat that Standard as canonical where they overlap.
 
 > **Agent coordination — Code owns this repo (Steve, 2026-07-02).** Claude **Code**
 > (this CLI, in `~/code/cremaitalia-shopify`) is the authority for the Shopify theme.
@@ -1008,6 +1023,33 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   1-per-row; footer tricolore hairline (drop for symmetry?); three borderline dash-vs-ellipsis
   copy calls (see change list). **Windows CLI note:** `theme dev` hot-reload of `templates/*.liquid`
   still trips the temp-file bug; a dev-server restart (full upload) clears it.
+
+- 2026-07-13 — **Source-of-truth architecture adopted: three versioned Standards, repo-canonical
+  (Option A), + the source/render model (Steve).** Prep work before generating the real storefront.
+  Triggered by a readiness-gate finding: the retired Magic Build Prompt (see 2026-07-03) still
+  contained the only complete copy of locked commerce rules (the pricing markup matrix), i.e. a live
+  rule whose only home was an archived, non-authoritative doc — the same drift class as Item-1's
+  stale §9/`storefront-plan.md` cross-references. Fix, abstracted with Steve: **separate *source*
+  from *render* — one editable source of truth per Standard, versioned, in the repo (git = the gate);
+  every human/Cowork/PDF copy is a read-only, version-stamped render.** Named **three Standards** by
+  kind of truth: **Brand Standards** v2.0 (look & voice), **Store Operating Standards** v1.0
+  (pricing/shelves/discounts/subscriptions/Tours/fulfilment), **Collaboration Standard** v1.0 (lanes,
+  source/render model, editing protocol). Sources now live in `docs/standards/` (`README.md` +
+  `store-operating-standards.md` + `collaboration-standard.md` + `brand-standards/` with the HTML
+  source, CSS, current fonts, and the PDF render). **Two governance decisions locked this session:**
+  (a) **Option A** — repo is canonical for *all* Standards (Brand Standards re-homed from OneDrive
+  into the repo; OneDrive keeps read-only renders); (b) **Cowork proposes, Code applies** — any edit
+  Steve asks Cowork to make to a repo artifact is converted into a prompt for Code. Also: distinguished
+  **Standard (what's true now)** from **log (what changed, when)** — §9 + `DECISIONS_LOG.md` stay
+  logs; rules move into Standards; `CLAUDE.md` gets a slim pointer block (top) so it stops carrying
+  rule-text and doesn't grow overweight (the coordination callouts are being consolidated into the
+  Collaboration Standard). The Operating Standard transcribes the locked rules faithfully and parks
+  **5 open decisions** in its §12 — most important: **per-SKU markup override** (Steve's remembered
+  intent that never made it into the recorded data model — the matrix is per shelf/size only), and
+  **the SKU price-maintenance tool** (landed-cost × markup + approval governance is NOT native
+  Shopify; must be built). No theme code written. Committed. **NEXT:** walk the §12 open decisions
+  with Steve; render the Standards to stamped PDFs for his shelf; then resume the production build
+  readiness gate. Full model: `docs/standards/collaboration-standard.md`.
 
 ## 10. Open questions / TODO
 

@@ -1,0 +1,404 @@
+/* ============================================================
+   Crema Italia — Brand stylesheet
+   v1.2 · July 1, 2026  (artist rebrand: revised palette + type)
+   Drop-in for any HTML page. Pair with Google Fonts:
+     Marcellus (400) — web stand-in for logo font Montecatini Pro
+     Inter (400/500/600)
+
+   PALETTE NOTE (2026-07-01): --ci-coffee and --ci-crema updated to the
+   finalized artist palette (Espresso Brown #55331B, Crema Gold #B88348).
+   --ci-espresso (#6B4A38), --ci-crema-light (#E8A86A) and --ci-crema-hover
+   (#9C6E3C) are interim harmonizations, not artist-specified — re-derive
+   when the Brand Standards PDF is regenerated.
+
+   Import in your HTML <head>:
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+   ============================================================ */
+
+:root {
+  /* Primary palette */
+  --ci-cream:        #FBF8F1;
+  --ci-ivory:        #FFFFFF;
+  --ci-coffee:       #55331B;
+  --ci-espresso:     #6B4A38;
+  --ci-crema:        #B88348;
+  --ci-crema-hover:  #9C6E3C;
+  --ci-crema-light:  #E8A86A;
+
+  /* Italian flag accents — rules only, never fills */
+  --ci-green:        #0E7A3A;
+  --ci-red:          #C8342B;
+
+  /* Structural */
+  --ci-hairline:     #D9D2C2;
+  --ci-mute:         #8C7E6A;
+  --ci-ink-soft:     #5A4A3F;
+
+  /* Typography */
+  --ci-font-display: "Marcellus", "Georgia", serif;
+  --ci-font-body:    "Inter", "Helvetica Neue", "Arial", sans-serif;
+
+  /* Scale (web) */
+  --ci-fs-hero:      4.5rem;   /* 72px */
+  --ci-fs-h1:        2.5rem;   /* 40px */
+  --ci-fs-h2:        1.125rem; /* 18px */
+  --ci-fs-h3:        1rem;     /* 16px */
+  --ci-fs-body:      1.0625rem;/* 17px */
+  --ci-fs-small:     0.875rem; /* 14px */
+  --ci-fs-eyebrow:   0.75rem;  /* 12px */
+
+  /* Layout */
+  --ci-measure:      72ch;
+  --ci-page-max:     1120px;
+  --ci-radius:       8px;
+  --ci-rule-thick:   1.2px;
+  --ci-rule-thin:    0.5px;
+}
+
+/* ---------- Base ------------------------------------------ */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ci-cream);
+  color: var(--ci-coffee);
+  font-family: var(--ci-font-body);
+  font-size: var(--ci-fs-body);
+  line-height: 1.55;
+  font-feature-settings: "kern", "liga", "calt";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Typography ------------------------------------ */
+
+h1, h2, h3, h4 {
+  margin: 0 0 0.5em;
+  color: var(--ci-coffee);
+  line-height: 1.15;
+}
+
+h1 {
+  font-family: var(--ci-font-display);
+  font-weight: 600;
+  font-size: var(--ci-fs-h1);
+  letter-spacing: -0.005em;
+}
+
+h1.italic,           /* Italian-language H1 */
+.bilingual .ita h1 {
+  font-style: italic;
+}
+
+h2 {
+  font-family: var(--ci-font-body);
+  font-weight: 600;
+  font-size: var(--ci-fs-h2);
+  color: var(--ci-crema);
+  letter-spacing: 0;
+  margin-top: 1.5em;
+}
+
+h3 {
+  font-family: var(--ci-font-body);
+  font-weight: 600;
+  font-size: var(--ci-fs-h3);
+  color: var(--ci-coffee);
+  margin-top: 1.25em;
+}
+
+p { margin: 0 0 1em; max-width: var(--ci-measure); }
+
+a {
+  color: var(--ci-crema);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: color 200ms ease;
+}
+a:hover { color: var(--ci-crema-hover); }
+a:focus-visible {
+  outline: 2px solid var(--ci-crema);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+strong, b { font-weight: 600; color: var(--ci-coffee); }
+em, i     { font-style: italic; }
+
+small, .small {
+  font-size: var(--ci-fs-small);
+  color: var(--ci-espresso);
+}
+
+.eyebrow {
+  font-family: var(--ci-font-body);
+  font-weight: 600;
+  font-size: var(--ci-fs-eyebrow);
+  color: var(--ci-crema);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 0.6em;
+}
+
+.muted   { color: var(--ci-mute); }
+.italian { font-style: italic; }
+
+/* ---------- Hero / cover ---------------------------------- */
+
+.ci-hero {
+  font-family: var(--ci-font-display);
+  font-weight: 600;
+  font-size: clamp(2.5rem, 6vw, var(--ci-fs-hero));
+  line-height: 1.05;
+  color: var(--ci-coffee);
+  margin: 0 0 0.4em;
+  letter-spacing: -0.01em;
+}
+
+.ci-hero-subtitle {
+  font-family: var(--ci-font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  color: var(--ci-espresso);
+  margin: 0 0 1.5em;
+}
+
+/* ---------- Header / footer chrome ------------------------ */
+
+.ci-header {
+  position: relative;
+  padding: 1.25rem clamp(1rem, 4vw, 2.5rem);
+  background: var(--ci-cream);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ci-logo {
+  height: 56px;
+  width: auto;
+  display: block;
+}
+
+/* Two-rule top: green left, red right */
+.flag-rule {
+  display: grid;
+  grid-template-columns: 1fr 0.4rem 1fr;
+  align-items: center;
+  height: var(--ci-rule-thick);
+  width: 100%;
+  margin: 0 0 1rem;
+}
+.flag-rule::before,
+.flag-rule::after { content: ""; height: 100%; }
+.flag-rule::before { background: var(--ci-green); }
+.flag-rule::after  { background: var(--ci-red);   }
+
+/* Cover-foot tricolore strip */
+.flag-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  height: 6mm;
+  margin-top: 2rem;
+}
+.flag-strip > :nth-child(1) { background: var(--ci-green); }
+.flag-strip > :nth-child(2) { background: var(--ci-cream); }
+.flag-strip > :nth-child(3) { background: var(--ci-red);   }
+
+.ci-footer {
+  border-top: var(--ci-rule-thin) solid var(--ci-hairline);
+  margin-top: 4rem;
+  padding: 1rem clamp(1rem, 4vw, 2.5rem);
+  font-size: var(--ci-fs-small);
+  color: var(--ci-mute);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ---------- Page container -------------------------------- */
+
+.ci-page {
+  max-width: var(--ci-page-max);
+  margin: 0 auto;
+  padding: 2rem clamp(1rem, 4vw, 2.5rem);
+}
+
+.ci-prose { max-width: var(--ci-measure); }
+
+/* ---------- Bilingual two-column -------------------------- */
+
+.bilingual {
+  display: grid;
+  grid-template-columns: 1fr var(--ci-rule-thin) 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.bilingual > .divider {
+  background: var(--ci-hairline);
+  align-self: stretch;
+}
+
+@media (max-width: 720px) {
+  .bilingual { grid-template-columns: 1fr; gap: 2.5rem; }
+  .bilingual > .divider { display: none; }
+}
+
+/* ---------- Buttons --------------------------------------- */
+
+.btn {
+  display: inline-block;
+  font-family: var(--ci-font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--ci-radius);
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.btn-primary {
+  background: var(--ci-crema);
+  color: var(--ci-cream);
+}
+.btn-primary:hover { background: var(--ci-crema-hover); color: var(--ci-cream); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--ci-coffee);
+  border-color: var(--ci-coffee);
+}
+.btn-secondary:hover {
+  background: var(--ci-coffee);
+  color: var(--ci-cream);
+}
+
+/* ---------- Tables ---------------------------------------- */
+
+table.ci-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--ci-ivory);
+  font-size: 0.95rem;
+  margin: 1.25rem 0;
+}
+
+table.ci-table thead th {
+  background: var(--ci-coffee);
+  color: var(--ci-cream);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.65rem 0.85rem;
+}
+
+table.ci-table tbody td {
+  padding: 0.6rem 0.85rem;
+  border-top: 1px solid var(--ci-hairline);
+  color: var(--ci-coffee);
+  vertical-align: top;
+}
+
+table.ci-table tbody tr:nth-child(even) td { background: var(--ci-cream); }
+
+/* ---------- Callouts -------------------------------------- */
+
+.callout {
+  background: var(--ci-cream);
+  border-left: 3px solid var(--ci-crema);
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  border-radius: 0 var(--ci-radius) var(--ci-radius) 0;
+}
+
+.callout > :first-child { margin-top: 0; }
+.callout > :last-child  { margin-bottom: 0; }
+
+/* ---------- Cards ----------------------------------------- */
+
+.card {
+  background: var(--ci-ivory);
+  border: 1px solid var(--ci-hairline);
+  border-radius: var(--ci-radius);
+  padding: 1.5rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+/* ---------- Images ---------------------------------------- */
+
+img.ci-figure {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--ci-hairline);
+  background: var(--ci-ivory);
+  padding: 4px;
+  border-radius: 4px;
+}
+
+figure { margin: 1.5rem 0; }
+figcaption {
+  font-size: var(--ci-fs-small);
+  color: var(--ci-espresso);
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+/* ---------- Lists ----------------------------------------- */
+
+ul, ol { padding-left: 1.25rem; max-width: var(--ci-measure); }
+ul li, ol li { margin: 0.25rem 0; }
+ul { list-style: none; padding-left: 1rem; }
+ul li::before {
+  content: "•";
+  color: var(--ci-crema);
+  display: inline-block;
+  width: 1rem;
+  margin-left: -1rem;
+}
+
+/* ---------- Reference / caption block --------------------- */
+
+.reference {
+  font-size: var(--ci-fs-small);
+  font-style: italic;
+  color: var(--ci-espresso);
+  border-top: 1px solid var(--ci-hairline);
+  padding-top: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* ---------- Print ----------------------------------------- */
+
+@media print {
+  body { background: var(--ci-cream); }
+  .ci-header, .ci-footer { padding-inline: 0; }
+  a { color: var(--ci-coffee); text-decoration: none; }
+  .btn { display: none; }
+}
+
+/* ---------- Reduced motion -------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
