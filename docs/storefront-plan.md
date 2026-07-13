@@ -1,8 +1,20 @@
 # Crema Italia — Storefront Build: Reading Order & Reconciliation
 
-**As of 2026-06-27, the canonical specs are the two documents below. Read them
+> ⚠️ **HISTORICAL / SUPERSEDED (as of 2026-07-03).** This file is a snapshot from
+> 2026-06-27, back when the ClaudeCode Brief and the Shopify Magic Build Prompt were
+> the "authoritative" specs. **They no longer are.** The Magic Build Prompt was
+> **retired as a build artifact on 2026-07-03** (archived, not authoritative — see
+> `CLAUDE.md` §9 2026-07-03 and `Coordination/DECISIONS_LOG.md`), and the brief/POC
+> versions named below (v1/v2) are old. **We do NOT need a Magic Prompt to convert the
+> POC into the live build.** Current source of truth = the **theme repo (POCs + the
+> `CLAUDE.md` §9 log + `docs/*` change lists), `DECISIONS_LOG.md`, and the brand
+> standards.** Everything below is kept only for historical reference — do not treat any
+> doc named "Authoritative" in this file as governing today.
+
+**~~As of 2026-06-27, the canonical specs are the two documents below. Read them
 in this order before writing any Liquid. This file is just the index +
-reconciliation of open questions; the brief and prompt govern.**
+reconciliation of open questions; the brief and prompt govern.~~** *(superseded — see
+banner above)*
 
 1. **`CremaItalia_ClaudeCode_Brief_v1.md`** — HOW to build (stack, file
    structure, metafields, templates, 10-phase build sequence). Authoritative.

@@ -398,7 +398,11 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   `docs/CremaItalia_POC_v3.html` (design/UX source of truth — nav is now
   **Shop ▾ · Roasters · About · Journal · Bottega**, NOT the v2 Trovare/La Bottega nav),
   `Operations/In USA/shopify/Initial Site Build Out/Shopify_Magic_Build_Prompt_v3_FINAL.txt`
-  (locked business rules), `00_PROJECT_BRIEF.md` (single source of truth),
+  (locked business rules — **NOTE: the Magic Build Prompt was RETIRED as a build artifact
+  2026-07-03, see that entry below; it is archived, NOT authoritative. The business rules it
+  captured, incl. the pricing markup matrix, are now carried by the repo/POCs + this §9 log,
+  not by the archived Prompt. Do not read the Prompt as governing.**), `00_PROJECT_BRIEF.md`
+  (single source of truth),
   `Operations/In USA/shopify/Crema_Italia_Commerce_Playbook_v3.docx`. Conflict rule from
   Steve: **POC v3 + Magic Build Prompt v3 FINAL win.** Resolved by that rule:
   (a) **custom Liquid theme** (Steve's direct instruction + this file) over the
@@ -481,6 +485,19 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   NOTE: Cowork's commit `3a21d11` captured a partial (truncated) `index.liquid` + partial
   JS; this state completes them. Preview theme (151277174953) NOT yet re-pushed — awaiting
   Steve's OK.
+- 2026-07-03 — **Magic Build Prompt RETIRED as a build artifact; the theme repo (POCs +
+  this §9 log + `DECISIONS_LOG.md`) + brand standards are the source of truth going
+  forward (Steve).** Now that the POC is live and working in this repo, the Magic Build
+  Prompt's job — getting Shopify Magic to the *initial* build — is done. It is **archived,
+  not authoritative**: `Shopify_Magic_Build_Prompt_v3_FINAL.txt` (nav line corrected first)
+  now lives in `Operations/In USA/shopify/Initial Site Build Out/Archive/` alongside v1/v2.
+  **We do NOT need a Magic Prompt to convert the POC into the live build.** The locked
+  business rules it once held remain in force — most importantly the **pricing markup
+  matrix + SKU_LAST_COST model** (see the 2026-06-29 entry above, and the fuller writeup
+  in this repo) — but their canonical home is now the repo/decisions, not the Prompt. Do
+  not resurrect, diff against, or "read the current Magic Prompt" for this project; if a
+  business rule needs restating, it goes in this §9 log / `DECISIONS_LOG.md`, not back into
+  a Prompt. Full decision: `Coordination/DECISIONS_LOG.md` 2026-07-03 (status: locked).
 - 2026-07-04 — **POC4 change batch built on the POC3 baseline.** Working process this
   round: Steve flagged defects/changes incrementally in `docs/POC_v4_change_list.md`
   (the running to-do ledger — kept as the detailed record; this entry is the durable
