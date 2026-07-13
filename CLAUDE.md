@@ -913,6 +913,28 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   1px tricolore (pending Steve); sweep the dead CSS from the old taste UI. **NEXT (Steve):
   the mobile-ready POC** — folds into the queued full-site mobile review.
 
+- 2026-07-13 — **Coordinator "truncated files" alarm was a FALSE ALARM — root cause was a
+  stale `.git/index.lock`, not truncation.** The scheduled coordinator (Cowork) reported the
+  theme repo had "uncommitted, apparently truncated changes across 7 files" (the exact POC6
+  file set) plus a fresh `.git/index.lock`, flagging it as the known truncated-write failure
+  mode. Code investigated directly: `git status` was **clean**, `git diff` showed **no content
+  changes**, both POC6 commits (`2d8c423`, `bf95448`) were present + pushed, and the tail of
+  every flagged file was intact (`})();`, `</html>`, proper closing tags — nothing cut off).
+  The only real artifact was a **0-byte `.git/index.lock` from 07:11**, left by an interrupted
+  git operation (timing matches the coordinator's own scheduled `git status` run — `git status`
+  can briefly take an index.lock to refresh the stat cache, and if interrupted leaves a stale
+  one). With that lock present, a `git status` can misreport clean files as "modified" (this
+  repo has LF→CRLF autocrlf churn, so every text file shows a line-ending warning), which is
+  almost certainly what the coordinator misread as truncation. **Fix:** removed the stale lock
+  (`rm -f .git/index.lock`, no git process running, per the brief's sanction) — git healthy
+  and up to date with origin. **Lesson for future sessions/coordinator:** a stale `index.lock`
+  + autocrlf warnings ≠ truncation; verify with `git status --short` (empty = clean) and the
+  file tails before sounding the alarm. Also fixed the one legit repo finding the coordinator
+  raised (a stale nav-order comment in `ci-header.liquid`, `Roasters·About·Journal·Bottega` →
+  the actual `Bottega·Roasters·Journal·About`, commit `e53817d`). The other two coordinator
+  findings (OneDrive region docs still English; Commerce Playbook pricing table stale) are
+  **Cowork/OneDrive lane, not Code's repo** — routed to Steve/Cowork.
+
 ## 10. Open questions / TODO
 
 **POC4 — CURRENT STATE (as of 2026-07-05) — read this first when resuming.**
