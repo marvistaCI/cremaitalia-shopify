@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.0) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.0) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.2) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.0) — lanes, source/render model, editing protocol: `docs/standards/collaboration-standard.md`
 >
 > **Editing protocol:** Code owns the repo and all Standard sources; **Cowork proposes,
@@ -1074,6 +1074,12 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   (`assets/ci-storefront.js`) still implements the retired Active/Forfeited model** (`foundingForfeited`
   state, "return at 10%" copy, permanent-forfeit cancel flow) — out of sync with v1.1; flagged to Steve
   to decide fix-now vs defer-to-production (no theme code changed this session — gate still open).
+  **[Correction, appended 2026-07-13:] this "still implements the retired Active/Forfeited model"
+  finding is RESOLVED — commit `284c43b` ("POC: correct account flow to durable-founder model") updated
+  `assets/ci-storefront.js` to the durable model (no `foundingForfeited`, cancel never forfeits, 60-day
+  grace copy). The above sentence reflects the state at the moment it was written; the POC account/
+  subscription flow now matches Standard §3.1/§4. (Note this is distinct from the separate discount-
+  stacking drift tracked in `docs/POC_drift_from_standards.md`, which is still open.)**
 
 - 2026-07-13 — **Readiness gate CLOSED — Team/Partners mechanism locked = sections + blocks
   (Steve); production build unblocked on decisions.** Last open production decision from the gate:
