@@ -26,8 +26,9 @@ body{background:var(--ci-cream);color:var(--ci-coffee);font-family:var(--ci-font
 .flag-strip>:nth-child(1){background:var(--ci-green)}
 .flag-strip>:nth-child(2){background:var(--ci-cream)}
 .flag-strip>:nth-child(3){background:var(--ci-red)}
-/* hairline gives the white third contrast against the light background it meets */
-.flag-top{border-bottom:1px solid #333}
+/* Tricolore rule: green | cream | red. The header top strip is a single clean fine line
+   with no underline (Steve, 2026-07-13); the cream middle third reads as an airy gap.
+   The footer strip keeps its hairline for now (see flag-bottom). */
 .flag-bottom{border-top:1px solid #333}
 
 /* ---- header ---- */
@@ -57,6 +58,52 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .sign-in-btn.signed-in{background:var(--ci-coffee);color:var(--ci-cream);border-color:var(--ci-coffee)}
 .cart-count{background:var(--ci-crema);color:var(--ci-cream);font-size:.62rem;font-weight:600;min-width:15px;height:15px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 4px;margin-left:-4px;margin-top:-10px}
 .cart-count.show{display:inline-flex}
+/* Hamburger + mobile-only row labels are hidden on desktop; the mobile block below reveals them. */
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:0;width:44px;height:44px;color:var(--ci-coffee);align-items:center;justify-content:center;flex-shrink:0}
+.ham-bars{display:block;width:22px;height:16px;position:relative}
+.ham-bars span{position:absolute;left:0;width:100%;height:2px;background:currentColor;border-radius:2px;transition:transform 200ms,opacity 150ms;transform-origin:center}
+.ham-bars span:nth-child(1){top:0}
+.ham-bars span:nth-child(2){top:7px}
+.ham-bars span:nth-child(3){top:14px}
+.ci-header.menu-open .ham-bars span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.ci-header.menu-open .ham-bars span:nth-child(2){opacity:0}
+.ci-header.menu-open .ham-bars span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.btn-label{display:none}
+
+/* ---- MOBILE / TABLET header: hamburger + tap-first panel ----
+   Triggers at <=1024px OR on any touch device (hover:none + pointer:coarse),
+   so phones and tablets in portrait AND landscape all get the tap-first menu
+   regardless of exact width. Desktop with a mouse keeps the inline nav. */
+@media (max-width:1024px), (hover:none) and (pointer:coarse){
+  .hamburger{display:flex}
+  .header-inner{flex-wrap:nowrap;padding:.5rem 1rem;gap:.5rem}
+  /* .header-right collapses into a full-width dropdown panel under the bar */
+  .header-right{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;flex-wrap:nowrap;background:var(--ci-cream);border-bottom:1px solid var(--ci-hairline);box-shadow:0 12px 24px rgba(59,31,18,.14);padding:.3rem 0 .5rem;max-height:calc(100vh - 62px);overflow-y:auto;display:none}
+  .ci-header.menu-open .header-right{display:flex}
+  .header-right>nav{border-bottom:1px solid var(--ci-hairline);padding-bottom:.3rem;margin-bottom:.3rem}
+  /* nav becomes a vertical list of full-width tap rows (scoped to the header so the
+     home-page <nav class="home-jump"> chip bar is NOT affected) */
+  .header-right nav{flex-direction:column;align-items:stretch;gap:0;width:100%;flex-wrap:nowrap}
+  .nav-item{display:block;position:static}
+  .header-right nav button{width:100%;text-align:left;justify-content:flex-start;font-size:1rem;font-weight:500;min-height:48px;padding:.55rem 1.25rem;border-radius:0}
+  /* Shop submenu shows inline, always expanded, inside the open panel */
+  .shop-menu{display:block;position:static;box-shadow:none;border:none;min-width:0;padding:0;background:transparent}
+  .nav-item.menu-force-closed .shop-menu{display:block!important}
+  .shop-menu a{min-height:48px;padding:.5rem 1.25rem .5rem 2.1rem;display:flex;flex-direction:column;justify-content:center}
+  .shop-menu .ita,.shop-menu .lbl{font-size:.98rem}
+  .shop-div{margin:.2rem 1.25rem}
+  /* search / cart become full-width labelled rows */
+  .icon-btn{width:100%;justify-content:flex-start;gap:.7rem;min-height:48px;padding:.55rem 1.25rem;color:var(--ci-espresso)}
+  .icon-btn svg{width:20px;height:20px}
+  .btn-label{display:inline;font-size:1rem;font-weight:500}
+  .cart-count{margin:0 0 0 .1rem}
+  /* account: sign-in row, and (when signed in) the account links inline */
+  .account-wrap{width:100%;position:static}
+  .sign-in-btn{width:100%;justify-content:flex-start;border:none;border-radius:0;min-height:48px;padding:.55rem 1.25rem;font-size:1rem}
+  .account-menu{display:none;position:static;box-shadow:none;border:none;min-width:0;margin:0;padding:0;background:transparent}
+  .account-wrap.is-signed-in .account-menu{display:block}
+  .account-menu a{min-height:48px;padding:.55rem 1.25rem .55rem 2.1rem;display:flex;align-items:center;font-size:1rem}
+}
 
 /* ---- modals ---- */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(30,12,4,.72);z-index:500;align-items:center;justify-content:center;padding:1rem}
@@ -218,9 +265,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .shelf-card .ss2{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ci-mute);margin-bottom:.5rem}
 .shelf-card p{font-size:.85rem;color:var(--ci-ink-soft);max-width:none;margin:0}
 
-/* ---- filter bar ---- */
-.filter-bar{background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);padding:1rem 1.25rem;margin-bottom:2rem;display:flex;flex-direction:column;gap:.75rem}
-.filter-row{display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap}
+/* ---- filters (shelf / region pills; also used by the taste-console modal) ---- */
 .filter-group{display:flex;flex-direction:column;gap:.4rem}
 .filter-label{font-size:.72rem;font-weight:600;color:var(--ci-crema);letter-spacing:.1em;text-transform:uppercase}
 .filter-pills{display:flex;gap:.4rem;flex-wrap:wrap}
@@ -228,9 +273,6 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .pill:hover{border-color:var(--ci-crema);color:var(--ci-crema)}
 .pill.active{background:var(--ci-crema);color:var(--ci-cream);border-color:var(--ci-crema)}
 .pill.disabled{opacity:.4;cursor:default;font-style:italic}
-.filter-divider{height:1px;background:var(--ci-hairline)}
-.pf-hint{font-size:.78rem;color:var(--ci-espresso);font-style:italic}
-.pf-hint span{color:var(--ci-crema);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 
 /* ---- freshness + badges ---- */
 .freshness{display:inline-flex;align-items:center;gap:.3rem;font-size:.78rem;font-weight:600;color:var(--ci-green);background:rgba(14,122,58,.08);padding:.2rem .5rem;border-radius:3px}
@@ -355,10 +397,6 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .flavor-desc{display:none;font-size:.8rem;font-style:italic;color:var(--ci-espresso);margin-top:.5rem;max-width:46ch}
 .flavor-desc.show{display:block}
 
-/* ---- save-to-profile ---- */
-.save-profile{display:none;padding-top:.6rem;border-top:1px solid var(--ci-hairline);font-size:.85rem}
-.save-profile.show{display:block}
-
 /* ---- account dropdown (signed-in) ---- */
 .account-wrap{position:relative}
 .account-menu{display:none;position:absolute;top:100%;right:0;background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);box-shadow:0 8px 24px rgba(59,31,18,.12);min-width:170px;padding:.4rem;z-index:200;margin-top:.35rem}
@@ -421,7 +459,30 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 #sec-story,#sec-shelves,#sec-roasters,#sec-promise{scroll-margin-top:118px}
 .founder-signature{display:block;width:184px;max-width:56%;height:auto;margin:1.1rem 0 .05rem}
 .founder-sign{font-family:var(--ci-font-display);font-style:italic;color:var(--ci-mute);margin-top:.1rem}
-@media(max-width:640px){.home-jump{top:52px}}
+/* Clear the compact mobile/tablet header (62px) so the sticky jump-bar isn't buried under it,
+   and keep the chips in one compact, horizontally-scrollable, tappable row. */
+@media (max-width:1024px), (hover:none) and (pointer:coarse){
+  .home-jump{top:61px;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .home-jump::-webkit-scrollbar{display:none}
+  .home-jump button{min-height:40px;white-space:nowrap;flex:0 0 auto}
+}
+
+/* ---- MOBILE / TABLET touch targets (aim >=44px; no reliance on hover).
+   Placed after all component base rules so these overrides win the cascade. ---- */
+@media (max-width:1024px), (hover:none) and (pointer:coarse){
+  /* filter pills — Shop hero shelf/region + taste-console modal */
+  .pill{min-height:44px;display:inline-flex;align-items:center;padding:.4rem .95rem}
+  /* product-detail gallery arrows */
+  .pd-gnav{width:44px;height:44px}
+  /* cart quantity steppers */
+  .qty-stepper button{width:40px;height:40px;font-size:1.15rem}
+  .qty-n{min-width:2rem;font-size:1rem}
+  /* taste ribbon controls */
+  .tr-toggle{min-height:40px;display:inline-flex;align-items:center}
+  .tr-edit{padding:.5rem 0;min-height:40px;display:inline-flex;align-items:center}
+  /* modal close gets a real tap area */
+  .modal-close{width:44px;height:44px;display:flex;align-items:center;justify-content:center;top:.5rem;right:.5rem}
+}
 
 /* ---- account: founding status + subscription mock (POC5) ---- */
 .status-chip{display:inline-block;margin-left:.5rem;font-size:.7rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:.14rem .55rem;border-radius:999px;vertical-align:middle;white-space:nowrap}
@@ -443,22 +504,8 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .order-sub{font-size:.78rem;color:var(--ci-mute);margin-top:.12rem}
 .order-again{font-size:.76rem;margin-top:.35rem;display:inline-block}
 .bom-cue{color:var(--ci-crema);font-weight:600;font-size:.72rem;letter-spacing:.02em;margin-top:.15rem}
-/* ---- shop: taste console (in the brown hero) + region line (POC5+) ---- */
-.taste-console{max-width:760px;margin:1.6rem auto 0;text-align:left}
-.tc-head{display:flex;align-items:baseline;gap:.6rem;margin-bottom:.75rem}
-.tc-label{font-family:var(--ci-font-display);font-size:1.1rem;color:var(--ci-cream)}
-.tc-note{font-size:.68rem;text-transform:uppercase;letter-spacing:.09em;color:var(--ci-crema-light)}
+/* ---- shop: region line (POC5+); .tc-groups is the taste-console modal's group wrapper ---- */
 .tc-groups{display:flex;flex-wrap:wrap;gap:1.1rem 2rem}
-.taste-console .filter-label{color:var(--ci-crema-light)}
-.taste-console .pill{background:transparent;border:1px solid rgba(255,255,255,.28);color:var(--ci-cream)}
-.taste-console .pill:hover{border-color:var(--ci-crema-light);color:var(--ci-cream)}
-.taste-console .pill.active{background:var(--ci-crema);border-color:var(--ci-crema);color:var(--ci-cream)}
-.taste-console .flavor-desc{color:var(--ci-crema-light)}
-.tc-foot{margin-top:1.1rem;display:flex;align-items:center;gap:1.25rem;min-height:1.4rem}
-.taste-console .save-profile{border-top:none;padding-top:0}
-.taste-console .save-profile .inline-link{color:var(--ci-cream);text-decoration:underline;text-underline-offset:2px}
-.taste-console .pf-hint{color:var(--ci-crema-light);margin:0}
-.taste-console .pf-hint span{color:var(--ci-cream)}
 .region-learn{background:none;border:none;color:var(--ci-crema);font-weight:600;font-size:.72rem;letter-spacing:normal;text-transform:none;cursor:pointer;margin-left:.5rem;font-family:var(--ci-font-body)}
 .region-learn:hover{text-decoration:underline}
 .filter-region{width:100%}

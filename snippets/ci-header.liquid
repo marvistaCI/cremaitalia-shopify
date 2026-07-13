@@ -8,15 +8,19 @@
   <div class="header-inner">
     <img class="ci-logo" src="{{ 'ci-logo.png' | asset_url }}" alt="Crema Italia" width="146" height="44"
          onclick="showPage('home')">
-    <div class="header-right">
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-haspopup="true" aria-expanded="false"
+            aria-controls="header-right" onclick="toggleMobileMenu()">
+      <span class="ham-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+    <div class="header-right" id="header-right">
       <nav aria-label="Primary">
         <div class="nav-item">
           <button onclick="showPage('shop');closeShopMenu()" id="nav-shop" aria-haspopup="true">Shop</button>
           <div class="shop-menu" role="menu">
             <a role="menuitem" tabindex="0" onclick="showPage('shop');closeShopMenu()"><span class="lbl">All Shelves</span><span class="men">Everything we carry, in one place.</span></a>
             <div class="shop-div" role="separator"></div>
-            <a role="menuitem" tabindex="0" onclick="showPage('roccia');closeShopMenu()"><span class="ita">Roccia</span><span class="men">The Rock — our rock-solid subscription plan.</span></a>
-            <a role="menuitem" tabindex="0" onclick="showPage('sorpresa');closeShopMenu()"><span class="ita">Sorpresa</span><span class="men">Surprises — our curated collection of roasted delights.</span></a>
+            <a role="menuitem" tabindex="0" onclick="showPage('roccia');closeShopMenu()"><span class="ita">Roccia</span><span class="men">The Rock - our rock-solid subscription plan.</span></a>
+            <a role="menuitem" tabindex="0" onclick="showPage('sorpresa');closeShopMenu()"><span class="ita">Sorpresa</span><span class="men">Surprises - our curated collection of roasted delights.</span></a>
             <a role="menuitem" tabindex="0" onclick="showPage('selezione');closeShopMenu()"><span class="ita">Selezione</span><span class="men">Roasters' premium and seasonal offerings.</span></a>
             <a role="menuitem" tabindex="0" onclick="showPage('offerta');closeShopMenu()"><span class="ita">Offerta</span><span class="men">Limited-time offers, on sale while inventory lasts.</span></a>
           </div>
@@ -28,9 +32,11 @@
       </nav>
       <button class="icon-btn" title="Search" aria-label="Search" onclick="showPage('shop')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
+        <span class="btn-label">Search</span>
       </button>
       <button class="icon-btn" title="Cart" aria-label="Cart" onclick="showPage('cart')" style="position:relative">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M6 6 5 3H2"></path></svg>
+        <span class="btn-label">Cart</span>
         <span class="cart-count" id="cart-count">0</span>
       </button>
       <div class="account-wrap" id="account-wrap">

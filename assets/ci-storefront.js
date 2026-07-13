@@ -89,8 +89,8 @@
   };
   var SUBHEAD_ROAST_ONLY = "You know your roast; we'll help you find your flavor.";
   var SUBHEAD_DEFAULT = 'We have filtered the catalog to show your best matches.';
-  var SUBHEAD_SPARSE = 'This is a rarer combination — here are the closest matches in our current catalog.';
-  var SUBHEAD_NONE = "You're open to anything — we'll show you the full range, curator's choice first.";
+  var SUBHEAD_SPARSE = 'This is a rarer combination - here are the closest matches in our current catalog.';
+  var SUBHEAD_NONE = "You're open to anything - we'll show you the full range, curator's choice first.";
 
   function isSparseCombo(roast, flavor) {
     var cell = roast && flavor && PERSONA_MATRIX[roast] && PERSONA_MATRIX[roast][flavor];
@@ -244,6 +244,7 @@
   var navStack = [], navCurrent = 'home';
   window.goBack = function () { showPage(navStack.length ? navStack.pop() : 'home', true); };
   window.showPage = function (name, isBack) {
+    if (window.closeMobileMenu) window.closeMobileMenu();
     if (!isBack && name !== navCurrent) navStack.push(navCurrent);
     navCurrent = name;
     var pages = document.querySelectorAll('.page');
@@ -513,8 +514,8 @@
     r.classList.toggle('is-active', filterOn);
     var s = $('tr-status'), tg = $('tr-tags'), tb = $('tr-toggle');
     if (s) s.textContent = filterOn
-      ? 'Your taste profile is active — shelves are filtered to your preferences.'
-      : 'Your profile is not active — all items are shown.';
+      ? 'Your taste profile is active - shelves are filtered to your preferences.'
+      : 'Your profile is not active - all items are shown.';
     if (tb) tb.textContent = filterOn ? 'Show everything' : 'Apply profile';
     if (tg) { tg.innerHTML = tasteTagsHtml(activeTaste); tg.classList.toggle('muted', !filterOn); }
   }
@@ -765,7 +766,24 @@
   window.closeAccountMenu = function () {
     forceCloseDropdown($('account-wrap'));
   };
-  window.openSignin = function () { $('signin-modal').classList.add('active'); };
+  // Mobile / tablet hamburger panel. On touch there is no hover, so the nav lives in a
+  // tap-to-open panel toggled here (see the responsive header CSS). closeMobileMenu() is
+  // called on every navigation so the panel never lingers after a selection.
+  window.toggleMobileMenu = function () {
+    var h = document.querySelector('.ci-header');
+    if (!h) return;
+    var open = h.classList.toggle('menu-open');
+    var btn = $('hamburger');
+    if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  };
+  window.closeMobileMenu = function () {
+    var h = document.querySelector('.ci-header');
+    if (!h || !h.classList.contains('menu-open')) return;
+    h.classList.remove('menu-open');
+    var btn = $('hamburger');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  };
+  window.openSignin = function () { if (window.closeMobileMenu) window.closeMobileMenu(); $('signin-modal').classList.add('active'); };
   window.closeSignin = function () {
     $('signin-modal').classList.remove('active');
     // Dismissed without signing in: still let the customer see the coffee — carry
@@ -836,7 +854,7 @@
     else { cart.push({ handle: handle, title: p.display_title, shelf: p.shelf, size: s.size, price: s.price, img: p.img, sub: !!isSub, cadence: cadence, qty: 1 }); }
     updateCartCount();
     renderCart();
-    toast(isSub ? 'Added — Roccia subscription, every ' + cadence + ' weeks.' : 'Added to your bag.');
+    toast(isSub ? 'Added - Roccia subscription, every ' + cadence + ' weeks.' : 'Added to your bag.');
   };
   window.removeFromCart = function (idx) { cart.splice(idx, 1); updateCartCount(); renderCart(); };
   window.changeQty = function (idx, delta) {
@@ -867,7 +885,7 @@
     // sign-in / create-account nudge for guests: surfaces BOTH the one-time first-purchase 5%
     // and the ongoing subscriber benefit.
     if (!session.signedIn) {
-      html += '<div class="cart-banner"><span>Create an account or sign in to unlock your one-time 5% first-purchase discount — plus subscriber benefits of 10% off Roccia, Sorpresa, and Selezione.</span><button onclick="openSignin()">Sign in</button></div>';
+      html += '<div class="cart-banner"><span>Create an account or sign in to unlock your one-time 5% first-purchase discount - plus subscriber benefits of 10% off Roccia, Sorpresa, and Selezione.</span><button onclick="openSignin()">Sign in</button></div>';
     }
     // discount math (line total = unit price × quantity)
     var subtotal = cart.reduce(function (s, it) { return s + it.price * (it.qty || 1); }, 0);
@@ -925,9 +943,9 @@
       '<div class="row"><span>Estimated shipping</span><span>' + (shipping === 0 ? 'Free' : money(shipping)) + '</span></div>' +
       '<div class="row"><span>Estimated tax</span><span>calculated at checkout</span></div>' +
       '<div class="row total"><span>Total</span><span>' + money(total) + '</span></div>' +
-      '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="toast(\'This is a preview — checkout is Shopify Checkout on the live store.\')">Checkout</button>' +
+      '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="toast(\'This is a preview - checkout is Shopify Checkout on the live store.\')">Checkout</button>' +
       (!session.signedIn ? '<p class="note" style="text-align:center;margin-top:.6rem">You can check out as a guest, or create an account to keep your 5% and manage subscriptions.</p>' : '') +
-      '<p class="note" style="text-align:center">No promo code field — earned discounts apply automatically when signed in or via a personal link.</p>' +
+      '<p class="note" style="text-align:center">No promo code field - earned discounts apply automatically when signed in or via a personal link.</p>' +
       '</div>';
     el.innerHTML = html;
   }
@@ -944,7 +962,7 @@
         '<div class="acct-card"><h3>Membership</h3>' +
           (session.foundingForfeited
             ? '<span class="badge-founding badge-forfeited">Founding Member · No. 087</span><span class="status-chip sc-lapsed">Rate forfeited</span>' +
-              '<p class="prose" style="margin-top:.75rem">Founding rate forfeited. You\'re welcome back anytime at the standard <strong>10%</strong> + free shipping — and No. 087 is always yours.</p></div>'
+              '<p class="prose" style="margin-top:.75rem">Founding rate forfeited. You\'re welcome back anytime at the standard <strong>10%</strong> + free shipping - and No. 087 is always yours.</p></div>'
             : '<span class="badge-founding">Founding Member · No. 087</span><span class="status-chip sc-active">Active</span>' +
               '<p class="prose" style="margin-top:.75rem">Your Founding rate of <strong>12%</strong> applies automatically across Roccia, Sorpresa, and Selezione. Offerta and Bottega are never discounted.</p></div>') +
         '<div class="acct-card"><h3>Taste profile</h3>' +
@@ -956,7 +974,7 @@
         '<div class="acct-card"><h3>Recent orders</h3>' +
           '<div class="order-list">' +
             orderRow('1042', 'Tour d\'Italia 1', '2026-06-12', '$77.70') +
-            orderRow('1031', 'Gardelli — Ethiopia Bombe · 250g', '2026-05-28', '$38.00') +
+            orderRow('1031', 'Gardelli - Ethiopia Bombe · 250g', '2026-05-28', '$38.00') +
           '</div>' +
           '<button class="inline-link" style="margin-top:.7rem" onclick="mockAllOrders()">Show all orders</button>' +
           '<!-- PROD: rows link to the native Shopify ORDER DETAIL page (an order may hold multiple line items); "Order again" re-adds that order\'s line items to the native cart, and for Roccia items can convert to a selling_plan (Loop) subscription with a "you\'re leaving 10-12% + free shipping behind" nudge; "Show all orders" -> native Shopify order-history page. Use "Order #" (Shopify order number), NOT "invoice". Reorder is not 1:1 — production needs a graceful "no longer available, here\'s a similar one" path. -->' +
@@ -971,11 +989,11 @@
           // consent = native Shopify + the email platform (Shopify Email / Klaviyo) preference
           // centre. Not built in this POC. Transactional order emails are store-level (not a
           // customer toggle). Subscription reminders live in the Loop slot below.
-          '<p class="note">Managed via native Shopify customer accounts + our email platform on the live store — not built in this POC.</p></div>' +
+          '<p class="note">Managed via native Shopify customer accounts + our email platform on the live store - not built in this POC.</p></div>' +
       '</div>' +
       '<div class="section-head" id="acct-subs"><p class="eyebrow">Roccia subscription</p><h2>Manage your subscription</h2></div>' +
       subscriptionBlock() +
-      '<div class="loop-slot" style="margin-top:1.25rem"><strong>On the live store, this is Loop\'s hosted portal.</strong> Pause, skip, swap roaster / SKU / bag-size (up to 48 h before lock), change cadence, or cancel, and manage ship-to + payment, plus your subscription reminders and delivery notifications — self-service, no fee. Passwordless login, embedded as a theme app block. ' +
+      '<div class="loop-slot" style="margin-top:1.25rem"><strong>On the live store, this is Loop\'s hosted portal.</strong> Pause, skip, swap roaster / SKU / bag-size (up to 48 h before lock), change cadence, or cancel, and manage ship-to + payment, plus your subscription reminders and delivery notifications - self-service, no fee. Passwordless login, embedded as a theme app block. ' +
       '<!-- LOOP: replace this slot with the Loop customer-portal app block / link. -->' +
       '<!-- PROD: the Founding-rate entitlement (12% while subscribed, 10% once forfeited) is a Shopify Function reading a one-way customer tag flipped by Loop cancel/create webhooks — NOT theme state. This POC fakes it client-side to demonstrate the two Membership states. --></div>';
   }
@@ -988,12 +1006,12 @@
         '<div class="sub-actions"><button class="btn btn-primary" onclick="mockResubscribe()">Resubscribe</button></div></div>';
     }
     if (session.paused) {
-      return '<div class="sub-manage"><div class="sub-line"><div><strong>Gardelli — Ethiopia Bombe</strong><div class="rn">250g · every 4 weeks</div></div><span class="status-chip sc-paused">Paused</span></div>' +
-        '<p class="note">Paused — your Founding 12% is preserved. Resume anytime.</p>' +
+      return '<div class="sub-manage"><div class="sub-line"><div><strong>Gardelli - Ethiopia Bombe</strong><div class="rn">250g · every 4 weeks</div></div><span class="status-chip sc-paused">Paused</span></div>' +
+        '<p class="note">Paused - your Founding 12% is preserved. Resume anytime.</p>' +
         '<div class="sub-actions"><button class="btn btn-primary" onclick="mockResume()">Resume</button><button class="btn btn-secondary" onclick="mockStartCancel()">Cancel subscription</button></div>' +
         '<div id="cancel-flow"></div></div>';
     }
-    return '<div class="sub-manage"><div class="sub-line"><div><strong>Gardelli — Ethiopia Bombe</strong><div class="rn">250g · every 4 weeks · next ships 2026-07-20</div></div><span class="status-chip sc-active">Active</span></div>' +
+    return '<div class="sub-manage"><div class="sub-line"><div><strong>Gardelli - Ethiopia Bombe</strong><div class="rn">250g · every 4 weeks · next ships 2026-07-20</div></div><span class="status-chip sc-active">Active</span></div>' +
       '<div class="sub-actions"><button class="btn btn-secondary" onclick="mockPause()">Pause</button><button class="btn btn-secondary" onclick="mockStartCancel()">Cancel subscription</button></div>' +
       '<div id="cancel-flow"></div></div>';
   }
@@ -1003,25 +1021,25 @@
     if (!el) return;
     el.innerHTML =
       '<div class="cancel-warn"><h4>Before you cancel</h4>' +
-      '<p>As a Founding Member, your <strong>12%</strong> is active only while you subscribe. <strong>Pause instead</strong> and keep it — with no charge while paused. Cancel and you can return anytime at the standard 10%.</p>' +
+      '<p>As a Founding Member, your <strong>12%</strong> is active only while you subscribe. <strong>Pause instead</strong> and keep it - with no charge while paused. Cancel and you can return anytime at the standard 10%.</p>' +
       '<div class="sub-actions"><button class="btn btn-primary" onclick="mockPause()">Pause and keep my 12%</button><button class="btn btn-secondary" onclick="confirmForfeit()">Cancel anyway</button></div></div>';
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
   window.mockPause = function () {
     session.paused = true; renderCart(); renderAccount();
-    toast('Paused — your Founding 12% is preserved.');
+    toast('Paused - your Founding 12% is preserved.');
     var e = $('acct-subs'); if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   window.mockResume = function () { session.paused = false; renderCart(); renderAccount(); toast('Subscription resumed.'); };
   window.confirmForfeit = function () {
     session.subscriber = false; session.paused = false; session.foundingForfeited = true;
     renderCart(); renderAccount();
-    toast('Cancelled — Founding 12% forfeited. You are welcome back at 10%.');
+    toast('Cancelled - Founding 12% forfeited. You are welcome back at 10%.');
     var e = $('acct-subs'); if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   window.mockResubscribe = function () {
     session.subscriber = true; session.paused = false; renderCart(); renderAccount();
-    toast(session.foundingForfeited ? 'Welcome back — subscribed at the standard 10%.' : 'Subscribed.');
+    toast(session.foundingForfeited ? 'Welcome back - subscribed at the standard 10%.' : 'Subscribed.');
   };
 
   // Recent-orders rows (visual redesign). Reorder/detail behaviors are INSTRUCTED, not
@@ -1036,9 +1054,9 @@
       '<button class="inline-link order-again" onclick="mockOrderAgain(\'' + no + '\')">Order again</button>' +
       '</div>';
   }
-  window.mockOrderDetail = function (no) { toast('Preview — Order #' + no + ' opens on the live store (Shopify order detail).'); };
-  window.mockOrderAgain = function (no) { toast('Preview — "Order again" re-adds Order #' + no + ' to your cart on the live store.'); };
-  window.mockAllOrders = function () { toast('Preview — your full order history lives in your account on the live store.'); };
+  window.mockOrderDetail = function (no) { toast('Preview - Order #' + no + ' opens on the live store (Shopify order detail).'); };
+  window.mockOrderAgain = function (no) { toast('Preview - "Order again" re-adds Order #' + no + ' to your cart on the live store.'); };
+  window.mockAllOrders = function () { toast('Preview - your full order history lives in your account on the live store.'); };
 
   // ---------- toast ----------
   window.toast = function (msg) {

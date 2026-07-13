@@ -240,6 +240,12 @@ lowercase-with-hyphens for CSS classes (`.hero-section__title`), camelCase for J
 - **Never** use emoji in copy or commit messages (Steve hasn't asked for emoji)
 - **Never** use "hand-picked," "world-class," "exclusive," or other e-commerce-loud
   language in brand copy
+- **Never** use em-dashes in customer-facing copy (product text, page copy, forms,
+  emails, coming-soon page) - they read as AI-generated (Steve, 2026-07-13). Replace per
+  this rule: where a semicolon would work, use a spaced regular dash (` - `); where a
+  sentence trails into a sequenced next thought, use an ellipsis (`...`); if unsure, ask
+  Steve. This applies to customer-facing copy only - internal docs (this file, the change
+  lists, code comments) may still use them.
 - **Never** italicize for emphasis (use bold); italics are reserved for Italian-language
 - **Never** ship an edited Crema Italia document still on an old brand version (see §6.1)
 
@@ -939,6 +945,52 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   **working-tree integrity — uncommitted changes, truncation, `.git/index.lock` — is
   explicitly out of its scope** (Code's lane). That removes both the mechanism that created
   the stale lock and the invented "truncation" check, so this false alarm shouldn't recur.
+
+- 2026-07-13 — **Brand voice rule added: no em-dashes in customer-facing copy** (Steve).
+  Em-dashes read as AI-generated, so they're out of all customer-facing text (storefront
+  product/page copy, forms, and the live coming-soon page). Replacement rule Steve gave:
+  where a **semicolon** would work (two related independent clauses), use a **spaced regular
+  dash** (` - `); where a sentence **trails into a sequenced next thought**, use an
+  **ellipsis** (`...`); if genuinely ambiguous, **ask**. Recorded in §6 "Things to NEVER do."
+  Internal docs (this file, `docs/*` change lists, code comments) are exempt. Kicked off a
+  sweep of the ~178 existing occurrences across `templates/index.liquid`, `assets/ci-catalog.json`,
+  `assets/ci-storefront.js`, the `snippets/ci-*`, and the coming-soon files
+  (`live-theme/`, `templates/password.liquid`, `templates/404.liquid`). **Coordination
+  follow-up (Cowork lane):** the canonical OneDrive Brand Standards (v2.0 PDF + HTML source,
+  §3.1 Voice) and `Coordination/DECISIONS_LOG.md` should carry the same rule so the source of
+  truth doesn't drift - flagged to Steve/Cowork rather than edited from Code.
+
+- 2026-07-13 — **POC7 batch built, verified, committed + pushed + deployed - the mobile-ready
+  pass.** Detailed ledger in `docs/POC7_change_list.md`; durable summary here. **(1) Responsive
+  mobile/tablet header (keystone):** the header wrapped to ~146px/3 rows on phones and the
+  Shop/Account dropdowns were hover-only (dead on touch). Rebuilt as a **62px single-row bar
+  with a hamburger** below 1024px OR on any touch device (`@media (max-width:1024px),
+  (hover:none) and (pointer:coarse)` - catches iPads in landscape too); the hamburger opens a
+  full-width tap-first panel (Shop shelves inline, nav, Search/Cart/Sign-In or account links).
+  New JS `toggleMobileMenu()`/`closeMobileMenu()` wired into `showPage()`/`openSignin()`; new
+  `.hamburger` markup + mobile row labels in `ci-header.liquid`. **Desktop (>1024, mouse) is
+  unchanged** (verified). **(2)** Sticky home-jump chip bar now clears the 62px header
+  (`top:61px`, was buried at `top:52px`) and is a one-row horizontal-scroll strip on mobile.
+  **(3)** Touch targets sized up (nav 48px, filter pills 44px, gallery arrows 44px, steppers
+  40px, modal close 44px). **(4)** Dropped the header tricolore's `#333` underline (single clean
+  line; footer strip's hairline kept, Steve scoped it to the header). **(5)** Dead-CSS sweep
+  (`.taste-console`+`.tc-*`, `.save-profile`, `.filter-bar/.filter-row/.filter-divider`,
+  `.pf-hint` - all verified unreferenced; live `.taste-console-modal`/`.tc-groups`/`.filter-*`
+  kept). **(6)** Home hero copy: "Italian Bar (Café)" → "(Caffè)". **(7)** Applied the new
+  no-em-dash rule across all customer-facing copy (literal `—` AND `&mdash;` entities incl. the
+  page `<title>`, hero, About, Regions, coming-soon titles/og); verified zero em-dashes in the
+  rendered DOM across all pages. Verified responsive geometry via DOM at phone portrait/landscape,
+  tablet portrait/landscape, desktop (screenshot tool wedged again). Committed + pushed to GitHub.
+  **Deployed** to a NEW unpublished theme **"Crema Italia POC7 Preview" (id `151449862313`)** via
+  `shopify theme push --unpublished --theme "Crema Italia POC7 Preview" --json`. POC6 Preview
+  (`151440130217`) and the live coming-soon theme (`150557294761`) untouched; storefront password
+  still OFF so the link works cross-device with no gate. Preview:
+  `https://crema-italia.myshopify.com?preview_theme_id=151449862313` · Editor:
+  `.../admin/themes/151449862313/editor`. To refresh: `shopify theme push --theme 151449862313`.
+  **Open (for Steve's eye on device):** phone ribbon ~150px tall; About team/partner cards stack
+  1-per-row; footer tricolore hairline (drop for symmetry?); three borderline dash-vs-ellipsis
+  copy calls (see change list). **Windows CLI note:** `theme dev` hot-reload of `templates/*.liquid`
+  still trips the temp-file bug; a dev-server restart (full upload) clears it.
 
 ## 10. Open questions / TODO
 

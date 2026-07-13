@@ -17,7 +17,7 @@
       "label": "Gardelli",
       "blurb": "World-championship palates, exacting light roasts, named farms.",
       "bio": [
-        "Rubens Gardelli built his reputation on competition tables before he built a roastery. The house style is light, clean, and unmistakably origin-forward — coffees chosen for what the farm and the process can say on their own.",
+        "Rubens Gardelli built his reputation on competition tables before he built a roastery. The house style is light, clean, and unmistakably origin-forward - coffees chosen for what the farm and the process can say on their own.",
         "We import a small selection of Gardelli's bags. They reach you exactly as Gardelli sealed them: whole bean, in valve bags, nothing repackaged."
       ],
       "find": "Forlì, Emilia-Romagna · gardellicoffee.com",
@@ -34,9 +34,9 @@
       "founded": 1998,
       "portrait_cls": "p",
       "label": "La Sosta",
-      "blurb": "Classic Florentine balance — caramel, nuts, gentle sweetness.",
+      "blurb": "Classic Florentine balance - caramel, nuts, gentle sweetness.",
       "bio": [
-        "A Florentine roastery in the classic mold — the cup the city actually drinks. La Sosta roasts for balance and sweetness, the everyday espresso that rewards a good machine and a steady hand.",
+        "A Florentine roastery in the classic mold - the cup the city actually drinks. La Sosta roasts for balance and sweetness, the everyday espresso that rewards a good machine and a steady hand.",
         "We import their Guatemala year-round and a seasonal Christmas edition. Whole bean, valve-sealed, unchanged."
       ],
       "find": "Firenze, Toscana · lasosta.example.it",
@@ -54,7 +54,7 @@
       "portrait_cls": "r",
       "portrait_style": "background:linear-gradient(135deg,#2a1a0e,#6B4A38);color:var(--ci-crema-light)",
       "label": "Fusari",
-      "blurb": "Dark, sweet, and chocolatey — espresso as Nonna makes it.",
+      "blurb": "Dark, sweet, and chocolatey - espresso as Nonna makes it.",
       "bio": [
         "Caffè Fusari roasts the Tuscan bar cup: dark, round, and sweet, built for the moka pot and the espresso machine. A family roastery that has changed very little, on purpose.",
         "We import their Colombia year-round and a monsooned Indian lot for the winter. Whole bean, valve-sealed, unchanged."
@@ -76,7 +76,7 @@
       "label": "GCB",
       "blurb": "Earthy, complex, characterful single-origins.",
       "bio": [
-        "Two brothers who started in a garage in Prato and never lost the experimental streak. Garage Coffee Bros chase character — the cup that makes you stop and ask what it is.",
+        "Two brothers who started in a garage in Prato and never lost the experimental streak. Garage Coffee Bros chase character - the cup that makes you stop and ask what it is.",
         "We import a rotating single-origin and a Brazilian for the subscription shelf. Whole bean, valve-sealed, unchanged."
       ],
       "find": "Prato, Toscana · garagecoffeebros.example.it",
@@ -94,9 +94,9 @@
       "portrait_cls": "r",
       "portrait_style": "background:linear-gradient(135deg,#1a2a3a,#3a5a6a);color:var(--ci-crema-light)",
       "label": "Val d'Orcia",
-      "blurb": "The decaf that started Crema Italia — walnut, dried fig, cocoa.",
+      "blurb": "The decaf that started Crema Italia - walnut, dried fig, cocoa.",
       "bio": [
-        "A small Sienese roastery in the Val d'Orcia, as much a part of the landscape as the cypress rows. Their decaf is the cup that started Crema Italia — proof that decaffeinated need not mean diminished.",
+        "A small Sienese roastery in the Val d'Orcia, as much a part of the landscape as the cypress rows. Their decaf is the cup that started Crema Italia - proof that decaffeinated need not mean diminished.",
         "We import their sugarcane-decaf year-round and a house blend. Whole bean, valve-sealed, unchanged."
       ],
       "find": "Siena, Toscana · valdorcia.example.it",
@@ -109,7 +109,7 @@
     {
       "handle": "gardelli-ethiopia",
       "title": "Ethiopia Bombe",
-      "display_title": "Gardelli — Ethiopia Bombe",
+      "display_title": "Gardelli - Ethiopia Bombe",
       "roaster": "gardelli",
       "shelf": "roccia",
       "region": "emilia",
@@ -126,13 +126,13 @@
       "sizes": [{"size": "250g", "price": 38}, {"size": "500g", "price": 68}, {"size": "1kg", "price": 120}],
       "img": {"cls": "p", "label": "Gardelli · Ethiopia"},
       "blurb": "Jasmine, peach, bergamot. Natural process.",
-      "long": "A natural-process Yirgacheffe roasted light to keep its perfume intact — jasmine and bergamot up top, ripe peach underneath. Imported whole bean in Gardelli's valve-sealed bag.",
-      "brewing": "Excellent as filter or in a moka pot. We sell whole bean only — grind fresh just before you brew."
+      "long": "A natural-process Yirgacheffe roasted light to keep its perfume intact - jasmine and bergamot up top, ripe peach underneath. Imported whole bean in Gardelli's valve-sealed bag.",
+      "brewing": "Excellent as filter or in a moka pot. We sell whole bean only - grind fresh just before you brew."
     },
     {
       "handle": "gardelli-rwanda",
       "title": "Rwanda Nyamasheke",
-      "display_title": "Gardelli — Rwanda Nyamasheke",
+      "display_title": "Gardelli - Rwanda Nyamasheke",
       "roaster": "gardelli",
       "shelf": "roccia",
       "region": "emilia",
@@ -150,12 +150,12 @@
       "img": {"cls": "r", "label": "Gardelli · Rwanda"},
       "blurb": "Red currant, black tea, lime. Washed.",
       "long": "A washed Rwandan from the hills of Nyamasheke, roasted light and clean. Sparkling acidity, red-fruit clarity, a black-tea finish.",
-      "brewing": "Best as pour-over or filter. Whole bean only — grind fresh just before you brew."
+      "brewing": "Best as pour-over or filter. Whole bean only - grind fresh just before you brew."
     },
     {
       "handle": "lasosta-guatemala",
       "title": "Guatemala Huehuetenango",
-      "display_title": "La Sosta — Guatemala Huehuetenango",
+      "display_title": "La Sosta - Guatemala Huehuetenango",
       "roaster": "lasosta",
       "shelf": "roccia",
       "region": "toscana",
@@ -172,13 +172,13 @@
       "sizes": [{"size": "250g", "price": 28}, {"size": "500g", "price": 50}, {"size": "1kg", "price": 88}],
       "img": {"cls": "r", "label": "La Sosta · Guatemala"},
       "blurb": "Brown sugar, dried apricot, almond.",
-      "long": "A washed Huehuetenango roasted to a classic Florentine medium — brown sugar and almond, with a dried-apricot sweetness that suits a moka pot or an espresso machine.",
-      "brewing": "Built for moka and espresso. Whole bean only — grind fresh just before you brew."
+      "long": "A washed Huehuetenango roasted to a classic Florentine medium - brown sugar and almond, with a dried-apricot sweetness that suits a moka pot or an espresso machine.",
+      "brewing": "Built for moka and espresso. Whole bean only - grind fresh just before you brew."
     },
     {
       "handle": "lasosta-brasile",
       "title": "Brasile Cerrado",
-      "display_title": "La Sosta — Brasile Cerrado",
+      "display_title": "La Sosta - Brasile Cerrado",
       "roaster": "lasosta",
       "shelf": "roccia",
       "region": "toscana",
@@ -195,13 +195,13 @@
       "sizes": [{"size": "250g", "price": 26}, {"size": "500g", "price": 46}, {"size": "1kg", "price": 82}],
       "img": {"cls": "p", "label": "La Sosta · Brasile"},
       "blurb": "Peanut, cocoa, caramel. Natural.",
-      "long": "A natural Cerrado for the everyday cup — roasted, sweet, and low in acidity. The dependable house espresso.",
-      "brewing": "Ideal for espresso and moka. Whole bean only — grind fresh just before you brew."
+      "long": "A natural Cerrado for the everyday cup - roasted, sweet, and low in acidity. The dependable house espresso.",
+      "brewing": "Ideal for espresso and moka. Whole bean only - grind fresh just before you brew."
     },
     {
       "handle": "fusari-colombia",
       "title": "Colombia Antioquia",
-      "display_title": "Caffè Fusari — Colombia Antioquia",
+      "display_title": "Caffè Fusari - Colombia Antioquia",
       "roaster": "fusari",
       "shelf": "roccia",
       "region": "toscana",
@@ -218,13 +218,13 @@
       "sizes": [{"size": "250g", "price": 47}, {"size": "1kg", "price": 148}],
       "img": {"cls": "p", "label": "Fusari · Colombia"},
       "blurb": "Milk chocolate, hazelnut, caramel.",
-      "long": "A washed Antioquia roasted dark in the Tuscan bar tradition — milk chocolate and hazelnut, a caramel sweetness, almost no edge. Nonna's espresso.",
-      "brewing": "Made for espresso and moka. Whole bean only — grind fresh just before you brew."
+      "long": "A washed Antioquia roasted dark in the Tuscan bar tradition - milk chocolate and hazelnut, a caramel sweetness, almost no edge. Nonna's espresso.",
+      "brewing": "Made for espresso and moka. Whole bean only - grind fresh just before you brew."
     },
     {
       "handle": "fusari-india",
       "title": "India Monsooned Malabar",
-      "display_title": "Caffè Fusari — India Monsooned Malabar",
+      "display_title": "Caffè Fusari - India Monsooned Malabar",
       "roaster": "fusari",
       "shelf": "roccia",
       "region": "toscana",
@@ -241,13 +241,13 @@
       "sizes": [{"size": "250g", "price": 44}, {"size": "1kg", "price": 138}],
       "img": {"cls": "r", "label": "Fusari · India"},
       "blurb": "Dark chocolate, pipe tobacco, baking spice.",
-      "long": "A monsooned Malabar — low acidity, full body, a savoury depth of tobacco and spice. A winter espresso with character.",
-      "brewing": "Espresso and moka. Whole bean only — grind fresh just before you brew."
+      "long": "A monsooned Malabar - low acidity, full body, a savoury depth of tobacco and spice. A winter espresso with character.",
+      "brewing": "Espresso and moka. Whole bean only - grind fresh just before you brew."
     },
     {
       "handle": "gcb-brasile",
       "title": "Brasile Daterra",
-      "display_title": "Garage Coffee Bros — Brasile Daterra",
+      "display_title": "Garage Coffee Bros - Brasile Daterra",
       "roaster": "gcb",
       "shelf": "roccia",
       "region": "toscana",
@@ -264,8 +264,8 @@
       "sizes": [{"size": "250g", "price": 42}, {"size": "500g", "price": 75}, {"size": "1kg", "price": 132}],
       "img": {"cls": "p", "label": "GCB · Brasile"},
       "blurb": "Hazelnut, milk chocolate, brown sugar.",
-      "long": "A pulped-natural Daterra roasted medium — clean, sweet, and comforting. The brothers' take on a crowd-pleasing everyday bean.",
-      "brewing": "Espresso, moka, or filter. Whole bean only — grind fresh just before you brew."
+      "long": "A pulped-natural Daterra roasted medium - clean, sweet, and comforting. The brothers' take on a crowd-pleasing everyday bean.",
+      "brewing": "Espresso, moka, or filter. Whole bean only - grind fresh just before you brew."
     },
     {
       "handle": "valdorcia-decaf",
@@ -287,20 +287,20 @@
       "sizes": [{"size": "250g", "price": 38}, {"size": "500g", "price": 68}],
       "img": {"cls": "r", "style": "background:linear-gradient(135deg,#1a2a3a,#3a5a6a)", "label": "Val d'Orcia Decaf"},
       "blurb": "Walnut, dried fig, cocoa. The cup that started Crema Italia.",
-      "long": "A sugarcane-process decaf from Colombia, roasted medium — walnut, dried fig, and cocoa, with none of the flatness decaf is unfairly known for. The cup that started Crema Italia.",
-      "brewing": "Lovely as an evening espresso or moka. Whole bean only — grind fresh just before you brew."
+      "long": "A sugarcane-process decaf from Colombia, roasted medium - walnut, dried fig, and cocoa, with none of the flatness decaf is unfairly known for. The cup that started Crema Italia.",
+      "brewing": "Lovely as an evening espresso or moka. Whole bean only - grind fresh just before you brew."
     },
     {
       "handle": "valdorcia-classica",
       "title": "Miscela Classica",
-      "display_title": "Val d'Orcia — Miscela Classica",
+      "display_title": "Val d'Orcia - Miscela Classica",
       "roaster": "valdorcia",
       "shelf": "roccia",
       "region": "toscana",
       "roast": "medium",
       "flavor": "sweet",
       "caffeine": "full",
-      "origin": "Blend — Brazil, Ethiopia, India",
+      "origin": "Blend - Brazil, Ethiopia, India",
       "process": "Blend",
       "roast_level": "Medium",
       "notes": ["Cocoa", "Toasted almond", "Caramel"],
@@ -310,8 +310,8 @@
       "sizes": [{"size": "250g", "price": 30}, {"size": "500g", "price": 54}, {"size": "1kg", "price": 96}],
       "img": {"cls": "p", "style": "background:linear-gradient(135deg,#2a1a12,#6B4A38)", "label": "Val d'Orcia · Classica"},
       "blurb": "Cocoa, toasted almond, caramel. A signature blend.",
-      "long": "The roastery's signature blend — Brazilian body, a touch of Ethiopian lift, Indian depth. Cocoa and toasted almond, built for the bar cup.",
-      "brewing": "Espresso and moka. Whole bean only — grind fresh just before you brew."
+      "long": "The roastery's signature blend - Brazilian body, a touch of Ethiopian lift, Indian depth. Cocoa and toasted almond, built for the bar cup.",
+      "brewing": "Espresso and moka. Whole bean only - grind fresh just before you brew."
     },
     {
       "handle": "tour-ditalia-1",
@@ -333,20 +333,20 @@
       "img": {"cls": "p", "style": "background:linear-gradient(135deg,#5a3a18,#B88348)", "label": "Tour d'Italia 1"},
       "freshness_note": "Freshness-gated · assembled to order",
       "blurb": "Three 100g bags, three roasters, assembled on-demand. Printed tasting card included.",
-      "long": "A journey across regions: North, Central, South. Three 100g bags — Gardelli Ethiopia, La Sosta Guatemala, Fusari Colombia — boxed with a tasting card and assembled to order so every bag ships fresh.",
-      "brewing": "Each bag is whole bean — grind fresh just before you brew. The card suggests a method for each."
+      "long": "A journey across regions: North, Central, South. Three 100g bags - Gardelli Ethiopia, La Sosta Guatemala, Fusari Colombia - boxed with a tasting card and assembled to order so every bag ships fresh.",
+      "brewing": "Each bag is whole bean - grind fresh just before you brew. The card suggests a method for each."
     },
     {
       "handle": "gardelli-geisha",
       "title": "Finca Deborah Geisha",
-      "display_title": "Gardelli — Finca Deborah Geisha",
+      "display_title": "Gardelli - Finca Deborah Geisha",
       "roaster": "gardelli",
       "shelf": "selezione",
       "region": "emilia",
       "roast": "light",
       "flavor": "fruit",
       "caffeine": "full",
-      "origin": "Panama, Volcán — Finca Deborah",
+      "origin": "Panama, Volcán - Finca Deborah",
       "process": "Washed",
       "roast_level": "Light",
       "notes": ["Chamomile", "White peach", "Jasmine"],
@@ -359,20 +359,20 @@
       "img": {"cls": "r", "style": "background:linear-gradient(135deg,#2a1008,#8B3A10)", "label": "Gardelli · Geisha"},
       "scarcity": "This pallet only",
       "blurb": "Chamomile, white peach, jasmine. Panama micro-lot.",
-      "long": "A washed Geisha from Finca Deborah, high on the Volcán slopes — chamomile, white peach, jasmine. A micro-lot we secured a few kilos of; when this pallet is gone it may not return.",
-      "brewing": "Reserve it for pour-over, where the florals carry. Whole bean only — grind fresh just before you brew."
+      "long": "A washed Geisha from Finca Deborah, high on the Volcán slopes - chamomile, white peach, jasmine. A micro-lot we secured a few kilos of; when this pallet is gone it may not return.",
+      "brewing": "Reserve it for pour-over, where the florals carry. Whole bean only - grind fresh just before you brew."
     },
     {
       "handle": "lasosta-natale",
       "title": "Edizione di Natale",
-      "display_title": "La Sosta — Edizione di Natale",
+      "display_title": "La Sosta - Edizione di Natale",
       "roaster": "lasosta",
       "shelf": "selezione",
       "region": "toscana",
       "roast": "medium",
       "flavor": "sweet",
       "caffeine": "full",
-      "origin": "Blend — seasonal",
+      "origin": "Blend - seasonal",
       "process": "Blend",
       "roast_level": "Medium",
       "notes": ["Panettone", "Candied orange", "Hazelnut"],
@@ -385,13 +385,13 @@
       "img": {"cls": "p", "style": "background:linear-gradient(135deg,#3a1a2a,#7a3a5a)", "label": "La Sosta · Natale"},
       "scarcity": "Seasonal",
       "blurb": "Panettone, candied orange, hazelnut. Holiday micro-lot.",
-      "long": "La Sosta's holiday blend — warm, sweet, and spiced, the cup that tastes like panettone on the table. A seasonal Selezione micro-lot.",
-      "brewing": "Espresso or moka, alongside something sweet. Whole bean only — grind fresh just before you brew."
+      "long": "La Sosta's holiday blend - warm, sweet, and spiced, the cup that tastes like panettone on the table. A seasonal Selezione micro-lot.",
+      "brewing": "Espresso or moka, alongside something sweet. Whole bean only - grind fresh just before you brew."
     },
     {
       "handle": "gcb-dolcevita",
       "title": "La Dolce Vita",
-      "display_title": "Garage Coffee Bros — La Dolce Vita",
+      "display_title": "Garage Coffee Bros - La Dolce Vita",
       "roaster": "gcb",
       "shelf": "offerta",
       "region": "toscana",
@@ -410,13 +410,13 @@
       "sizes": [{"size": "250g", "price": 21, "original": 28}],
       "img": {"cls": "p", "style": "background:linear-gradient(135deg,#3a3028,#7a6a58)", "label": "GCB · La Dolce Vita"},
       "blurb": "Chocolate, walnut, dried fig. Roasted 2026-05-30.",
-      "long": "A dark house blend that reached its Offerta threshold — still good coffee, still inside a real freshness window, priced down honestly. Sold as-is.",
-      "brewing": "Espresso and moka. Whole bean only — grind fresh just before you brew."
+      "long": "A dark house blend that reached its Offerta threshold - still good coffee, still inside a real freshness window, priced down honestly. Sold as-is.",
+      "brewing": "Espresso and moka. Whole bean only - grind fresh just before you brew."
     },
     {
       "handle": "bottega-moka-3cup",
-      "title": "Bialetti Moka Express — 3 cup",
-      "display_title": "Bialetti Moka Express — 3 cup",
+      "title": "Bialetti Moka Express - 3 cup",
+      "display_title": "Bialetti Moka Express - 3 cup",
       "roaster": null,
       "shelf": "bottega",
       "category": "Equipment",
@@ -437,8 +437,8 @@
     },
     {
       "handle": "bottega-espresso-cups",
-      "title": "Espresso Cups — pair",
-      "display_title": "Espresso Cups — pair",
+      "title": "Espresso Cups - pair",
+      "display_title": "Espresso Cups - pair",
       "roaster": null,
       "shelf": "bottega",
       "category": "Merch",
@@ -467,8 +467,8 @@
       "photo": "ci-lucia.jpg",
       "bio": [
         "My connection to the world of hospitality runs deep, starting within my own family of restaurateurs. When my parents opened a café, my summer school breaks became a hands-on introduction to the art of coffee, where I proudly brewed my very first espressos.",
-        "At 28, my journey led me to Australia, where I lived for four unforgettable years. It was during this time that my passion for coffee truly came full circle: working as a barista in a country where coffee culture is taken to an elite level — and where the craft is highly respected — not only connected me to the local scene but beautifully funded my studies.",
-        "This experience allowed me to later transition back to my chosen path as a professional massage therapist. Fueled by a lifelong love for high-quality coffee, I still turn every trip around the globe into a quest for the perfect cup — always searching for excellence, one bean at a time."
+        "At 28, my journey led me to Australia, where I lived for four unforgettable years. It was during this time that my passion for coffee truly came full circle: working as a barista in a country where coffee culture is taken to an elite level - and where the craft is highly respected - not only connected me to the local scene but beautifully funded my studies.",
+        "This experience allowed me to later transition back to my chosen path as a professional massage therapist. Fueled by a lifelong love for high-quality coffee, I still turn every trip around the globe into a quest for the perfect cup - always searching for excellence, one bean at a time."
       ]
     },
     {
@@ -478,7 +478,7 @@
       "group": "team",
       "photo": "ci-asia.jpg",
       "bio": [
-        "Silvia Asia Chirdo is a restaurant and hospitality consultant with 25 years of experience across the Italian food and HORECA industry. Since 2008, she has advised restaurants, food retail concepts, and hospitality brands in Italy and across Europe, with projects in Rome, Milan, and beyond. Her core strength lies in brand creation, launch, and development — building concepts from the ground up, defining identity and positioning, and guiding them through startup into sustainable growth."
+        "Silvia Asia Chirdo is a restaurant and hospitality consultant with 25 years of experience across the Italian food and HORECA industry. Since 2008, she has advised restaurants, food retail concepts, and hospitality brands in Italy and across Europe, with projects in Rome, Milan, and beyond. Her core strength lies in brand creation, launch, and development - building concepts from the ground up, defining identity and positioning, and guiding them through startup into sustainable growth."
       ]
     }
   ]
