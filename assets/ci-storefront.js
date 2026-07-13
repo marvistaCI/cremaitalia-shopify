@@ -433,7 +433,7 @@
       subBlock =
         '<div class="sub-toggle"><input type="checkbox" id="pd-sub" onchange="toggleSub(this)">' +
         '<div class="sub-toggle-text"><h4>Make this a Roccia subscription</h4>' +
-        '<p>10% off every shipment, free shipping, plus subscriber benefits across the site. Cancel anytime. Default is a one-time purchase.</p></div></div>' +
+        '<p>10% off every shipment and free shipping, your standing subscriber benefit on Roccia, Sorpresa, and Selezione. Cancel anytime. Default is a one-time purchase.</p></div></div>' +
         '<div class="cadence" id="pd-cadence"><div class="filter-label">Delivery cadence</div>' +
         '<div class="filter-pills">' +
         '<span class="pill active" data-weeks="4" onclick="selectCadence(this)">Every 4 weeks</span>' +
@@ -884,34 +884,43 @@
       return;
     }
     var html = '';
-    // sign-in / create-account nudge for guests: surfaces BOTH the one-time first-purchase 5%
-    // and the ongoing subscriber benefit.
-    // DRIFT (Store Operating Standards v1.2 §3): this copy frames first-time 5% "plus" subscriber
-    //   10% as additive. Under the no-stacking MAX rule the customer gets only the single highest
-    //   rate (10/12%), never 5%+10%. Reword for production. Ledger: docs/POC_drift_from_standards.md.
+    // sign-in / create-account nudge for guests: surfaces the two discounts as alternatives (you
+    // receive the higher), never additive — the no-stacking MAX rule (Store Operating Standards v1.2 §3).
     if (!session.signedIn) {
-      html += '<div class="cart-banner"><span>Create an account or sign in to unlock your one-time 5% first-purchase discount - plus subscriber benefits of 10% off Roccia, Sorpresa, and Selezione.</span><button onclick="openSignin()">Sign in</button></div>';
+      html += '<div class="cart-banner"><span>Create an account or sign in to unlock your discount - a one-time 5% first-purchase offer, or 10% off Roccia, Sorpresa, and Selezione with a subscription. You receive the higher of the two, never both.</span><button onclick="openSignin()">Sign in</button></div>';
     }
     // discount math (line total = unit price × quantity)
-    // DRIFT (Store Operating Standards v1.2 §3): this block STACKS discounts (subscriber/founder rate
-    //   THEN adds first-time 5% below = up to 17%). v1.2 is no-stacking: applied rate = MAX(all
-    //   qualifying candidates), never a sum, so a first-time founder/subscriber gets 12/10% and the 5%
-    //   is obviated. Known-behind per Steve; POC math left as-is. Production must compute a MAX over
-    //   candidate rates instead of summing. Ledger: docs/POC_drift_from_standards.md.
+    // No stacking (Store Operating Standards v1.2 §3): a customer never receives two discounts at
+    // once. Computed PER LINE, because shelves qualify differently — the applied rate is the single
+    // highest the customer qualifies for on that line (MAX), never a sum:
+    //   - founder/subscriber standing benefit (0.12 founder / 0.10 regular) on Roccia · Sorpresa ·
+    //     Selezione, when signed in with an active subscription;
+    //   - first-time 0.05 on every shelf except Bottega, when signed in and a first-time buyer
+    //     (works for a signed-in first-time NON-subscriber too).
+    // discount = Σ (line total × the line's own MAX rate). Founder status is durable (never
+    // forfeited by cancelling — Standard §4). Production computes the same MAX in Shopify Functions
+    // (Standard §11) instead of summing.
     var subtotal = cart.reduce(function (s, it) { return s + it.price * (it.qty || 1); }, 0);
     var discount = 0, discountLabel = '';
-    if (session.signedIn && session.subscriber) {
-      // Founders always get 12% while subscribed; regular subscribers 10%. Founder status is
-      // durable (never forfeited by cancelling) — see Store Operating Standards §4.
-      var rate = session.foundingMember ? 0.12 : 0.10;
-      var eligibleSum = cart.reduce(function (s, it) { return s + (eligibleForSubscriberDiscount(it.shelf) ? it.price * (it.qty || 1) : 0); }, 0);
-      discount = eligibleSum * rate;
-      discountLabel = (session.foundingMember ? 'Founding Member 12%' : 'Subscriber 10%') + ' (Roccia · Sorpresa · Selezione)';
-      if (session.firstTime) {
-        // First-order +5% stacks on the first order only, on all shelves EXCEPT Bottega.
-        var firstTimeBase = cart.reduce(function (s, it) { return s + (it.shelf === 'bottega' ? 0 : it.price * (it.qty || 1)); }, 0);
-        discount += firstTimeBase * 0.05;
-        discountLabel += ' + first-order 5%';
+    if (session.signedIn) {
+      var subRate = session.subscriber ? (session.foundingMember ? 0.12 : 0.10) : 0;
+      var appliedRates = {};
+      cart.forEach(function (it) {
+        var lineTotal = it.price * (it.qty || 1);
+        var lineRate = 0;
+        if (subRate && eligibleForSubscriberDiscount(it.shelf)) lineRate = Math.max(lineRate, subRate);
+        if (session.firstTime && it.shelf !== 'bottega') lineRate = Math.max(lineRate, 0.05);
+        if (lineRate > 0) { discount += lineTotal * lineRate; appliedRates[lineRate] = true; }
+      });
+      var rateKeys = Object.keys(appliedRates);
+      if (rateKeys.length === 1) {
+        // A single rate landed across the bag — name it plainly.
+        discountLabel = (parseFloat(rateKeys[0]) === subRate && subRate > 0)
+          ? (session.foundingMember ? 'Founding Member 12%' : 'Subscriber 10%')
+          : 'First-order 5%';
+      } else if (rateKeys.length > 1) {
+        // Different shelves took different best rates — honest umbrella label, never "12% + 5%".
+        discountLabel = 'Your discount (best applicable per item)';
       }
     }
     // free shipping progress (one-time orders; subscriptions always free)

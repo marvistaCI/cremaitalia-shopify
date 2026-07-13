@@ -23,51 +23,50 @@ POC in the same pass *or* add a row here **and** a `// DRIFT:` marker. When a di
 
 ## Open divergences
 
-### D1 — Cart discounts stack instead of taking the MAX
-- **Standard:** Store Operating Standards **v1.2 §3** — no stacking; `applied rate = MAX(all qualifying
-  discounts)`. A first-time founder/subscriber gets 12/10%, never 12%+5% = 17%.
-- **POC does:** `assets/ci-storefront.js`, `renderCart()` discount math — applies the subscriber/founder
-  rate (10/12%) and then **adds** first-time 5% on top (up to 17%). Marked `// DRIFT` at the
-  `// discount math` block.
-- **Correct behavior:** compute a single `MAX` over every candidate rate the customer qualifies for
-  (standing subscriber/founder benefit + any applicable campaign discount) and apply only that.
-- **Production fix:** the entitlement/discount logic (Shopify Functions per Standard §11) returns
-  `MAX(standing, qualifying campaign)`. Replace the summing block entirely.
-- **Status:** OPEN — POC fix deferred by Steve 2026-07-13 ("the POC will be wrong"); resolved in the
-  production build at the latest.
-
-### D2 — Cart guest banner copy implies additive stacking
-- **Standard:** Store Operating Standards **v1.2 §3** — discounts never stack.
-- **POC does:** `assets/ci-storefront.js`, `renderCart()` guest sign-in banner — "unlock your one-time
-  5% first-purchase discount **plus** subscriber benefits of 10% …", framing 5% and 10% as additive.
-  Marked `// DRIFT` above the `cart-banner` html.
-- **Correct behavior:** copy should present the discounts as alternatives (the customer receives the
-  higher of the two), not a sum.
-- **Production fix:** reword the nudge; no "plus". Tie to the D1 logic fix.
-- **Status:** OPEN — same deferral as D1.
-
-### D3 — FAQ states first-time 5% "stacks" to 15%
-- **Standard:** Store Operating Standards **v1.2 §3** — no stacking; highest single discount wins.
-- **POC does:** `templates/index.liquid`, the "How do subscriber discounts work?" FAQ (~L521):
-  *"a one-time first-purchase 5% **stacks** on top - so a new subscriber's first order is **15%** off
-  eligible shelves."* The clearest customer-facing stacking claim on the site. **No `// DRIFT` code
-  marker yet** — to be added by the fix session (this row is the record until then).
-- **Correct behavior:** a first-time founder/subscriber gets 12/10% (the higher), never 15/17%; the
-  answer should say the customer receives the single highest applicable discount, not a sum.
-- **Production fix:** rewrite the FAQ answer — remove "stacks" and the "15%".
-- **Status:** OPEN — found 2026-07-13 (missed when D1/D2 were first logged).
-
-### Watch (not yet a confirmed divergence)
-- `assets/ci-storefront.js:~436` — "10% off every shipment, free shipping, **plus subscriber benefits
-  across the site**." Muddled (the 10% *is* the subscriber benefit); review for an implied stacking
-  read when D1–D3 are fixed. Low priority. (`templates/index.liquid:~135` "10% discount plus free
-  shipping" is fine — shipping is a separate benefit, not a stacked percentage.)
+*(none — D1/D2/D3 and the `:436` watch item were all resolved in the POC8 batch 2026-07-13; see Resolved.)*
 
 ---
 
 ## Resolved (kept for provenance; strike, don't delete)
 
-*(none yet)*
+**All fixed in the POC8 batch (2026-07-13, commit `POC8_HASH`).** The POC cart now computes a per-line
+`MAX` (single highest applicable rate, never a sum), and all customer-facing copy presents the discounts
+as alternatives. `// DRIFT` markers removed. Verified in `shopify theme dev`: founding subscriber +
+first-time shows 12% on Roccia/Sorpresa/Selezione lines and 5% on an Offerta line; a non-subscriber
+first-timer shows 5%. See `CLAUDE.md` §9 2026-07-13 (POC8) + `docs/POC8_change_list.md`.
+
+### ~~D1 — Cart discounts stack instead of taking the MAX~~ RESOLVED (POC8)
+- **Standard:** Store Operating Standards **v1.2 §3** — no stacking; `applied rate = MAX(all qualifying
+  discounts)`. A first-time founder/subscriber gets 12/10%, never 12%+5% = 17%.
+- **Was:** `assets/ci-storefront.js`, `renderCart()` discount math — applied the subscriber/founder
+  rate (10/12%) and then **added** first-time 5% on top (up to 17%).
+- **Fix:** replaced the summing block with a per-line `MAX` over every candidate the line qualifies for
+  (founder/subscriber standing benefit on Roccia/Sorpresa/Selezione + first-time 5% on all shelves except
+  Bottega); `discount = Σ (line_total × line_rate)`. Also corrected the latent miss where the discount
+  branch only ran for subscribers — a signed-in first-time **non-subscriber** now correctly gets 5%.
+  Summary line honest (no "12% + 5%" concatenation).
+
+### ~~D2 — Cart guest banner copy implies additive stacking~~ RESOLVED (POC8)
+- **Standard:** Store Operating Standards **v1.2 §3** — discounts never stack.
+- **Was:** the guest sign-in banner framed 5% and 10% as additive ("… discount **plus** subscriber
+  benefits of 10% …").
+- **Fix:** reworded to present the two as alternatives — "a one-time 5% first-purchase offer, or 10% off
+  Roccia, Sorpresa, and Selezione with a subscription. You receive the higher of the two, never both."
+  No "plus."
+
+### ~~D3 — FAQ states first-time 5% "stacks" to 15%~~ RESOLVED (POC8)
+- **Standard:** Store Operating Standards **v1.2 §3** — no stacking; highest single discount wins.
+- **Was:** `templates/index.liquid`, the "How do subscriber discounts work?" FAQ — *"a one-time
+  first-purchase 5% **stacks** on top - so a new subscriber's first order is **15%** off eligible shelves."*
+- **Fix:** rewrote the answer — removed "stacks" and "15%"; states discounts never stack and the customer
+  receives the single highest applicable rate (a first-time founder still gets 12%, not 17%).
+
+### ~~Watch — `ci-storefront.js:~436` implied stacking~~ RESOLVED (POC8)
+- **Was:** the Roccia subscription-toggle blurb read "10% off every shipment, free shipping, **plus
+  subscriber benefits across the site**" — muddled, since the 10% *is* the subscriber benefit.
+- **Fix:** reworded to "10% off every shipment and free shipping, your standing subscriber benefit on
+  Roccia, Sorpresa, and Selezione." (`templates/index.liquid:~135` "10% discount plus free shipping"
+  was left as-is — shipping is a separate benefit, not a stacked percentage.)
 
 ---
 
