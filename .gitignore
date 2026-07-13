@@ -58,3 +58,9 @@ logs/
 # Local-only docs / notes (uncomment if you want to keep personal notes out of git)
 # NOTES.md
 # scratch/
+
+# Generated Standard PDFs — renders of the Markdown sources (regenerate with
+# docs/standards/render.py). Kept out of git to avoid binary churn on every edit;
+# the .md is the source of truth. (Brand Standards' own PDF under brand-standards/
+# is committed per the pdf-builder "save both" convention.)
+/docs/standards/*.pdf

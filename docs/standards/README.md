@@ -25,3 +25,18 @@ This folder holds the **canonical source of truth** for how Crema Italia is buil
   (restating is what drifts).
 - **Cowork proposes, Code applies.** Cowork reads rendered copies and may draft changes, but the
   canonical write always happens in Code's lane, through git.
+
+## Rendering the PDFs
+
+The Markdown Standards render to branded, version-stamped PDFs with:
+
+```
+py docs/standards/render.py store-operating-standards.md "Store_Operating_Standards_v1.0.pdf"
+py docs/standards/render.py collaboration-standard.md   "Collaboration_Standard_v1.0.pdf"
+```
+
+`render.py` converts the Markdown source to on-brand HTML (Marcellus/Inter, brand palette) and prints
+it to PDF via headless Edge/Chrome — no native dependencies. The intermediate HTML is a throwaway
+build artifact; the `.md` is the source. **These PDFs are generated on demand and are git-ignored**
+(they'd churn on every edit) — re-run the command after editing a source. Brand Standards renders via
+the `crema-italia-pdf-builder` skill (its HTML *is* its source; its PDF is committed alongside it).
