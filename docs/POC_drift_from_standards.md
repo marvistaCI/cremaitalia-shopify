@@ -46,6 +46,23 @@ POC in the same pass *or* add a row here **and** a `// DRIFT:` marker. When a di
 - **Production fix:** reword the nudge; no "plus". Tie to the D1 logic fix.
 - **Status:** OPEN — same deferral as D1.
 
+### D3 — FAQ states first-time 5% "stacks" to 15%
+- **Standard:** Store Operating Standards **v1.2 §3** — no stacking; highest single discount wins.
+- **POC does:** `templates/index.liquid`, the "How do subscriber discounts work?" FAQ (~L521):
+  *"a one-time first-purchase 5% **stacks** on top - so a new subscriber's first order is **15%** off
+  eligible shelves."* The clearest customer-facing stacking claim on the site. **No `// DRIFT` code
+  marker yet** — to be added by the fix session (this row is the record until then).
+- **Correct behavior:** a first-time founder/subscriber gets 12/10% (the higher), never 15/17%; the
+  answer should say the customer receives the single highest applicable discount, not a sum.
+- **Production fix:** rewrite the FAQ answer — remove "stacks" and the "15%".
+- **Status:** OPEN — found 2026-07-13 (missed when D1/D2 were first logged).
+
+### Watch (not yet a confirmed divergence)
+- `assets/ci-storefront.js:~436` — "10% off every shipment, free shipping, **plus subscriber benefits
+  across the site**." Muddled (the 10% *is* the subscriber benefit); review for an implied stacking
+  read when D1–D3 are fixed. Low priority. (`templates/index.liquid:~135` "10% discount plus free
+  shipping" is fine — shipping is a separate benefit, not a stacked percentage.)
+
 ---
 
 ## Resolved (kept for provenance; strike, don't delete)
