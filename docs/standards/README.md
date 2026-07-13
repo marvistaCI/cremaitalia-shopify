@@ -40,3 +40,9 @@ it to PDF via headless Edge/Chrome — no native dependencies. The intermediate 
 build artifact; the `.md` is the source. **These PDFs are generated on demand and are git-ignored**
 (they'd churn on every edit) — re-run the command after editing a source. Brand Standards renders via
 the `crema-italia-pdf-builder` skill (its HTML *is* its source; its PDF is committed alongside it).
+
+**Superseding a version → archive the old render.** When a Standard is bumped, move the previous PDF
+into [`_archive/`](_archive/) with an `_ARCHIVED` suffix and log it in that folder's README. Archived
+renders are *frozen* (a superseded version never changes), so they are committed as durable historical
+artifacts — unlike the live renders above, which stay git-ignored. Full convention: `_archive/README.md`.
+Anything in `_archive/` is historical, never current.
