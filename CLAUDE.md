@@ -933,7 +933,12 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   raised (a stale nav-order comment in `ci-header.liquid`, `Roasters·About·Journal·Bottega` →
   the actual `Bottega·Roasters·Journal·About`, commit `e53817d`). The other two coordinator
   findings (OneDrive region docs still English; Commerce Playbook pricing table stale) are
-  **Cowork/OneDrive lane, not Code's repo** — routed to Steve/Cowork.
+  **Cowork/OneDrive lane, not Code's repo** — routed to Steve/Cowork. **Coordinator routine
+  hardened same day** (Steve updated the scheduled prompt): it now uses only lock-free,
+  read-only git (`git --no-optional-locks log/show`) and never `git status`/`git diff`, and
+  **working-tree integrity — uncommitted changes, truncation, `.git/index.lock` — is
+  explicitly out of its scope** (Code's lane). That removes both the mechanism that created
+  the stale lock and the invented "truncation" check, so this false alarm shouldn't recur.
 
 ## 10. Open questions / TODO
 
