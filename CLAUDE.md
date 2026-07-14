@@ -1209,6 +1209,32 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   render-reference line-edits into `Coordination\coordinator_routine_prompt.md`; have Cowork add one
   dated line to `Coordination\DECISIONS_LOG.md` recording this protocol (Cowork's lane, direct write).
 
+- 2026-07-14 — **Brand Standards render path made canonical + self-contained: WeasyPrint now works on
+  this Windows box, and the cover logo is carried in-repo.** Two commits, done across two coordinated
+  Code sessions. **(1) Logo carried (`982a749`):** the Brand HTML's one cover `<img>` used to load from
+  OneDrive `Logo Assets/` and be staged beside the HTML per render — a non-self-contained render and a
+  silent trap in `crema-std-publish`. Fixed by carrying the cover PNG in-repo at
+  `docs/standards/brand-standards/assets/ci-cover-logo.png` (a copy of `CI Main Logo - Transparent.png`),
+  exactly as the brand fonts are already carried, and repointing the `<img>` at it. A deliberate, narrow
+  exception to "repo carries no logo binaries" — justified like the fonts (an offline render asset), and
+  it removes the OneDrive dependency. **(2) WeasyPrint adopted as the canonical Brand renderer
+  (`619dfae`):** WeasyPrint had never worked on this machine (missing native GTK/Pango libs), so Brand had
+  been rendered via **headless Edge**, which silently drops the HTML's `@page` running headers/footers +
+  page numbers. A parallel Code session installed the libs (**MSYS2**: `winget install MSYS2.MSYS2` →
+  `pacman -S mingw-w64-x86_64-pango`, DLLs in `C:\msys64\mingw64\bin`) and wrote a `render_pdf.py` fix
+  (`_ensure_native_libs()` auto-adds that DLL dir on Windows, `WEASYPRINT_DLL_DIRECTORIES` override, and
+  a broadened `(ImportError, OSError)` guard — missing DLLs raise `OSError`, not `ImportError`). This
+  session **adopted** that fix, re-rendered v2.1 via WeasyPrint (**448 KB, 12 pp, running footers + page
+  numbers + cover logo intact**, vs the ~690 KB header-less Edge render), refreshed the committed PDF +
+  the OneDrive `Standards\` copy, and flipped `brand-standards/README.md` + the `crema-std-publish` Brand
+  row to **WeasyPrint = canonical (renders as authored), Edge = fallback (drops running headers).** Net:
+  Brand renders fully offline end-to-end (HTML → WeasyPrint → committed PDF → OneDrive), no staging. The
+  two Markdown Standards continue to render via `docs/standards/render.py` (headless Edge is fine for
+  them — no running-header CSS). Coordination note: this was two concurrent Code sessions on one checkout;
+  the install/`render_pdf.py` work was handed off cleanly (its edit adopted + committed here, not left
+  uncommitted). **Open (Cowork lane, flagged):** nothing blocking — the OneDrive `Standards\` Brand copy
+  is current (v2.1 WeasyPrint); the old `Brand and Marketing\` v2.0 was already retired to `_Archive\`.
+
 ## 10. Open questions / TODO
 
 **▶ CURRENT STATE — POC8 (as of 2026-07-13) — read this first when resuming.** Latest deployed
