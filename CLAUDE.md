@@ -1186,6 +1186,29 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   the no-em-dash rule + this bump to `Coordination/DECISIONS_LOG.md` and the OneDrive Brand Standards
   render's own Voice section so the source-of-truth doesn't drift.
 
+- 2026-07-14 — **Render-trust protocol established: Collaboration Standard v1.1 (§9) + the
+  `crema-std-publish` skill + a single OneDrive `Standards\` render folder.** Closes the recurring
+  friction where Cowork couldn't verify brief/Playbook section anchors against the repo Standards (it
+  reads OneDrive, can't open the repo) and had to route "please confirm" through Steve/Code. New model,
+  three parts: **(a) one certifiable render home** — all three Standards' read-only PDF renders now live
+  in `CremaItalia LLC\Standards\` (Brand v2.1, Store-Ops v1.2, Collab v1.1) + a `README.txt` explaining
+  they're renders; the stray old `Brand and Marketing\Crema_Italia_Brand_Standards_v2.0.pdf` was retired
+  to `Brand and Marketing\_Archive\` (this also resolves the prior entry's Cowork follow-up #1 to
+  regenerate the OneDrive Brand render to v2.1). **(b) Code owns producing + delivering renders** on
+  every source change — the human decides truth, Code is its custodian — encoded as the new
+  `.claude/skills/crema-std-publish` skill (edit source → bump version → re-render → deliver to
+  `Standards\` → update cross-refs → commit → remind to log + re-certify; plus an `all`/`repair` resync
+  path that regenerates every render, the fix if trust ever goes red). **(c) the daily coordinator
+  certifies** each OneDrive render against its repo source and writes a standing
+  `Coordination\RENDER_TRUST.md` badge (per-Standard MATCH/STALE/MISSING); Cowork trusts a green copy
+  without involving Code and escalates on red. The rule itself is now Collaboration Standard §9 (bumped
+  v1.0 → v1.1; companion headers, standards README, and the CLAUDE.md pointer block bumped to match;
+  the v1.0 render archived). The badge is point-in-time, so a mid-cycle Standard change needs an
+  out-of-cycle coordinator run before Cowork relies on it. Committed (`63bf09c`). **Steve's remaining
+  steps (not Code's lane):** paste the coordinator `OUTPUT 3 — RENDER TRUST CERTIFICATE` block + two
+  render-reference line-edits into `Coordination\coordinator_routine_prompt.md`; have Cowork add one
+  dated line to `Coordination\DECISIONS_LOG.md` recording this protocol (Cowork's lane, direct write).
+
 ## 10. Open questions / TODO
 
 **▶ CURRENT STATE — POC8 (as of 2026-07-13) — read this first when resuming.** Latest deployed
