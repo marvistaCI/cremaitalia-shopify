@@ -31,7 +31,7 @@ See the source/render/trust protocol in the **Collaboration Standard §3 and §9
 
 | Standard | Source (repo) | Render command |
 |---|---|---|
-| **Brand Standards** | `docs/standards/brand-standards/Crema_Italia_Brand_Standards_vX.Y.html` (HTML *is* the source) | `crema-italia-pdf-builder` skill (or its `render_pdf.py`); PDF committed alongside the source |
+| **Brand Standards** | `docs/standards/brand-standards/Crema_Italia_Brand_Standards_vX.Y.html` (HTML *is* the source) | Headless Edge/Chrome `--headless=new --no-pdf-header-footer --print-to-pdf` on the HTML in place — cover logo (`assets/ci-cover-logo.png`) + fonts are carried locally, so **no OneDrive staging**. (Or the `crema-italia-pdf-builder` WeasyPrint path if installed.) PDF committed alongside the source; see `brand-standards/README.md`. |
 | **Store Operating Standards** | `docs/standards/store-operating-standards.md` | `py docs/standards/render.py store-operating-standards.md "Store_Operating_Standards_vX.Y.pdf"` |
 | **Collaboration Standard** | `docs/standards/collaboration-standard.md` | `py docs/standards/render.py collaboration-standard.md "Collaboration_Standard_vX.Y.pdf"` |
 
