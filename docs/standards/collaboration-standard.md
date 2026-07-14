@@ -1,8 +1,13 @@
 # Crema Italia — Collaboration Standard
 
-**Version 1.0 · 2026-07-13**
+**Version 1.1 · 2026-07-14**
 **Source of truth:** this file (`docs/standards/collaboration-standard.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Store Operating Standards v1.2 (commerce).
+
+> **v1.1 (2026-07-14)** added **§9 Render distribution & the trust certificate** — where the read-only
+> renders live (OneDrive `Standards\`), that **Code** produces and delivers them on every source
+> change, and how the coordinator's `RENDER_TRUST.md` badge lets Cowork trust an OneDrive copy without
+> round-tripping through Code. No change to §1–§8.
 
 > **What this document is.** The canonical statement of **how we work** — how truth is recorded,
 > who may edit what, and how the human (Steve) and the AI agents (Claude **Code** in this repo,
@@ -102,6 +107,36 @@ does not run git or the Shopify CLI; if it suspects a connectivity problem, it f
    it from growing overweight).
 4. **git history** = the audit trail of who changed which rule when.
 
+## 9. Render distribution & the trust certificate
+
+Sources live in the repo (§3); humans and Cowork read **renders**. This section fixes where renders
+live and how Cowork knows a render is safe to trust without round-tripping through Code.
+
+- **Where renders live.** The human/Cowork-facing render of every Standard lives, read-only, in
+  OneDrive `CremaItalia LLC\Standards\`, one PDF per Standard, each stamped *"render — do not edit;
+  source of truth is `docs/standards/…`."* This folder is the single certifiable home for all three
+  renders.
+- **Who produces & delivers them.** **Code** renders each Standard from its repo source at every
+  version bump (the render command is fixed per Standard) and delivers the copy into `Standards\`.
+  Cowork never edits or moves a render. The repeatable ritual is the **`crema-std-publish`** skill.
+- **The trust certificate.** The daily coordinator compares each OneDrive render's stamped version
+  against the repo source and overwrites `Coordination\RENDER_TRUST.md` — a standing latest-state
+  badge: per-Standard MATCH / STALE / MISSING plus one overall verdict line stamped with the commit
+  it checked against.
+- **How Cowork uses it.** Before validating any brief / Playbook / ops content against a Standard,
+  Cowork reads `RENDER_TRUST.md`:
+  - **MATCH (green):** the OneDrive render equals source — Cowork validates against the render directly
+    and does **not** involve Code or Steve.
+  - **STALE / MISSING (red):** Cowork does **not** trust that render — it routes the specific need to
+    Code (re-render / produce the copy) and never silently proceeds on a stale or absent copy.
+- **Invalidation & mid-cycle refresh.** The certificate is point-in-time — only as current as the last
+  coordinator run. A commit that changes a Standard source invalidates the prior green for that
+  Standard until the next run re-certifies. **If a Standard is changed mid-cycle and Cowork needs to
+  rely on it before the next scheduled run, Steve triggers an out-of-cycle coordinator run to
+  re-certify.** Until re-certified, that Standard is treated as red (anchor against Code, not the
+  copy). Because downstream docs *point at* Standards rather than restate them (§3), a briefly-stale
+  pointer is low-risk — but a red badge is always a real finding, not noise.
+
 ---
 
-*Collaboration Standard v1.0 · 2026-07-13 · Source of truth: `docs/standards/collaboration-standard.md`.*
+*Collaboration Standard v1.1 · 2026-07-14 · Source of truth: `docs/standards/collaboration-standard.md`.*

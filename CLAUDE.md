@@ -16,7 +16,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.1) — look & voice: `docs/standards/brand-standards/`
 > - **Store Operating Standards** (v1.2) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
-> - **Collaboration Standard** (v1.0) — lanes, source/render model, editing protocol: `docs/standards/collaboration-standard.md`
+> - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > **Editing protocol:** Code owns the repo and all Standard sources; **Cowork proposes,
 > Code applies** — any edit Steve asks Cowork to make to a repo artifact is converted into

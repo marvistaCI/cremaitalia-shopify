@@ -10,7 +10,7 @@ This folder holds the **canonical source of truth** for how Crema Italia is buil
 |---|---|---|
 | **Brand Standards** (v2.1) | how the store **looks & speaks** — color, type, voice, logo | [`brand-standards/`](brand-standards/) |
 | **Store Operating Standards** (v1.2) | how the store **buys & sells** — pricing, shelves, discounts, fulfilment | [`store-operating-standards.md`](store-operating-standards.md) |
-| **Collaboration Standard** (v1.0) | how **we work** — lanes, source-of-truth model, editing protocol | [`collaboration-standard.md`](collaboration-standard.md) |
+| **Collaboration Standard** (v1.1) | how **we work** — lanes, source-of-truth model, editing protocol, render-trust | [`collaboration-standard.md`](collaboration-standard.md) |
 
 ## The rules that keep these honest
 
@@ -32,7 +32,7 @@ The Markdown Standards render to branded, version-stamped PDFs with:
 
 ```
 py docs/standards/render.py store-operating-standards.md "Store_Operating_Standards_v1.2.pdf"
-py docs/standards/render.py collaboration-standard.md   "Collaboration_Standard_v1.0.pdf"
+py docs/standards/render.py collaboration-standard.md   "Collaboration_Standard_v1.1.pdf"
 ```
 
 `render.py` converts the Markdown source to on-brand HTML (Marcellus/Inter, brand palette) and prints

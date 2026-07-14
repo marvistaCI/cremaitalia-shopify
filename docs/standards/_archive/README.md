@@ -32,3 +32,5 @@ When a Standard is bumped to a new version:
 | Archived file | Superseded by | Date | Why |
 |---|---|---|---|
 | `Store_Operating_Standards_v1.1_ARCHIVED.pdf` | Store Operating Standards **v1.2** | 2026-07-13 | v1.2 replaced additive discount stacking with the no-stacking, highest-wins (`MAX`) model, split the delivery mechanism, marked Referral TBD, and retired the Sorpresa 250g/O250g matrix cells. v1.1's discount section is now wrong. See `CLAUDE.md` §9 (2026-07-13) and Store Operating Standards §3. |
+| `Crema_Italia_Brand_Standards_v2.0_ARCHIVED.pdf` | Brand Standards **v2.1** | 2026-07-14 | v2.1 added the no-em-dash customer-facing voice rule (copy-only minor bump; color/type/logo unchanged). See `CLAUDE.md` §9 (2026-07-14) and Brand Standards §9 (Voice). |
+| `Collaboration_Standard_v1.0_ARCHIVED.pdf` | Collaboration Standard **v1.1** | 2026-07-14 | v1.1 added §9 (Render distribution & the trust certificate) — the `Standards\` render folder, Code-produces-and-delivers rule, and the `RENDER_TRUST.md` badge. §1–§8 unchanged. See `CLAUDE.md` §9 (2026-07-14) and Collaboration Standard §9. |
