@@ -12,8 +12,35 @@ If [output.pdf] is omitted, writes <source>.pdf beside the source file.
 Relative URLs in the HTML (brand CSS, fonts.css, .ttf files, images) resolve
 from the source file's own directory, so keep the source in the project tree.
 """
+import os
 import sys
 from pathlib import Path
+
+
+def _ensure_native_libs() -> None:
+    """Put the GTK/Pango/Cairo DLLs on the Windows DLL search path.
+
+    WeasyPrint needs native libs (libgobject, libpango, libcairo, libharfbuzz)
+    that Windows doesn't ship. We install them via MSYS2
+    (`pacman -S mingw-w64-x86_64-pango` -> C:\\msys64\\mingw64\\bin) and add that
+    directory here at runtime, so rendering works without touching the global
+    PATH. Extend/override with WEASYPRINT_DLL_DIRECTORIES (os.pathsep-separated).
+    No-op on non-Windows, where the system package manager handles this.
+    """
+    if os.name != "nt":
+        return
+    env = os.environ.get("WEASYPRINT_DLL_DIRECTORIES", "")
+    candidates = [p for p in env.split(os.pathsep) if p] + [
+        r"C:\msys64\mingw64\bin",
+        r"C:\msys64\ucrt64\bin",
+        r"C:\Program Files\GTK3-Runtime Win64\bin",
+    ]
+    for d in candidates:
+        try:
+            if d and Path(d).is_dir():
+                os.add_dll_directory(d)
+        except OSError:
+            pass
 
 
 def main() -> int:
@@ -35,12 +62,21 @@ def main() -> int:
         else src.with_suffix(".pdf")
     )
 
+    _ensure_native_libs()
     try:
         from weasyprint import HTML
-    except ImportError:
+    except (ImportError, OSError) as exc:
         print(
-            "WeasyPrint is not installed.\n"
-            "Install it with:  pip install weasyprint --break-system-packages"
+            "WeasyPrint could not load.\n"
+            f"  {exc}\n\n"
+            "If the Python package is missing:\n"
+            "  pip install weasyprint --break-system-packages\n\n"
+            "If native libs are missing (libgobject/libpango/libcairo), install\n"
+            "them via MSYS2:\n"
+            "  winget install MSYS2.MSYS2\n"
+            r"  C:\msys64\usr\bin\pacman -S --needed --noconfirm mingw-w64-x86_64-pango"
+            "\n"
+            r"(this script auto-adds C:\msys64\mingw64\bin to the DLL path.)"
         )
         return 2
 
