@@ -8,7 +8,7 @@ This folder holds the **canonical source of truth** for how Crema Italia is buil
 
 | Standard | Owns | Source |
 |---|---|---|
-| **Brand Standards** (v2.0) | how the store **looks & speaks** — color, type, voice, logo | [`brand-standards/`](brand-standards/) |
+| **Brand Standards** (v2.1) | how the store **looks & speaks** — color, type, voice, logo | [`brand-standards/`](brand-standards/) |
 | **Store Operating Standards** (v1.2) | how the store **buys & sells** — pricing, shelves, discounts, fulfilment | [`store-operating-standards.md`](store-operating-standards.md) |
 | **Collaboration Standard** (v1.0) | how **we work** — lanes, source-of-truth model, editing protocol | [`collaboration-standard.md`](collaboration-standard.md) |
 

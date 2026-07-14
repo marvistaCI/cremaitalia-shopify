@@ -76,7 +76,7 @@ project, and from then on every render is offline and identical.
 
 **Step 3.5 — Brand-current check (mandatory gate).**
 Before rendering, verify the document is on the CURRENT brand. Read the doc's brand-
-version stamp (footer/metadata, e.g. `Built to Brand Standards v2.0`) and compare it to the
+version stamp (footer/metadata, e.g. `Built to Brand Standards v2.1`) and compare it to the
 current version named in the repo `CLAUDE.md` §11 reference index and `references/brand.md`.
 If the stamp is behind — or missing — refresh first: palette hexes (Espresso `#55331B`,
 Crema Gold `#B88348`; never `#3B1F12`/`#C46A1F`), fonts (Marcellus display / Inter body /

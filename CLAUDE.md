@@ -14,7 +14,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > **renders**. A Standard says *what is true now*; this file's §9 + `DECISIONS_LOG.md` say
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
-> - **Brand Standards** (v2.0) — look & voice: `docs/standards/brand-standards/`
+> - **Brand Standards** (v2.1) — look & voice: `docs/standards/brand-standards/`
 > - **Store Operating Standards** (v1.2) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.0) — lanes, source/render model, editing protocol: `docs/standards/collaboration-standard.md`
 >
@@ -275,7 +275,7 @@ leave a document you just touched on a superseded palette, font, or logo.
 
 "Current" is defined by exactly two files, named in the §11 reference index:
 1. **Brand Standards** — the greatest-version `Crema_Italia_Brand_Standards_vX.Y.pdf`
-   (today: **v2.0**).
+   (today: **v2.1**).
 2. **Brand CSS** — `Crema Italia Brand CSS.css` (today: **v1.2**).
 
 **The refresh checklist (run on every edited doc):**
@@ -288,7 +288,7 @@ leave a document you just touched on a superseded palette, font, or logo.
 
 **How we keep it honest — the brand-version stamp.** Every generated doc carries, in
 its footer or metadata, the brand version it was built against, e.g.
-`Built to Brand Standards v2.0`. On the next edit, compare that stamp to the current
+`Built to Brand Standards v2.1`. On the next edit, compare that stamp to the current
 version in §11: if it's behind, refresh before doing anything else. The stamp turns
 "did anyone remember?" into a one-line check anyone (or any agent) can verify.
 
@@ -1161,6 +1161,31 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   batch. **Open (production, not POC):** the real store still needs the entitlement/discount `MAX` in
   Shopify Functions (Standard §11) — the POC math now mirrors it.
 
+- 2026-07-14 — **Brand Standards v2.0 → v2.1: no-em-dash voice rule propagated into the canonical
+  repo source (Cowork-flagged; repo is Code's lane).** The no-em-dash-in-customer-facing-copy rule was
+  added to `CLAUDE.md` §6 on 2026-07-13, but never landed in the actual **Brand Standards source** — so
+  the Standard (what's true now) didn't carry a rule the change list said was in force. Cowork spotted
+  the gap and, since it can't write the repo, routed it to Code. Fix: added the rule as a bullet in the
+  Brand Standards **Voice & tone** section (§9 of the HTML source) — storefront/marketing copy never
+  uses the em-dash; semicolon → spaced hyphen (` - `), trailing thought → ellipsis (`...`), ambiguous →
+  ask; customer-facing only, internal docs exempt. Since color/type/logo/layout are unchanged, this is a
+  **copy-only minor bump** per the Standard's own §10 (2.0 → 2.1). Actions: edited + renamed the source
+  `Crema_Italia_Brand_Standards_v2.0.html` → `_v2.1.html` (git mv, history preserved), bumped every
+  in-doc version stamp (title/cover/sub/footer) and added a "What changed in v2.1" changelog callout;
+  **re-rendered the PDF** to `Crema_Italia_Brand_Standards_v2.1.pdf` via headless Edge (same mechanism as
+  `render.py`; the cover logo was staged from OneDrive `Logo Assets/` for the render, then removed so the
+  repo still doesn't carry logo binaries) — verified 12 pages, "Version 2.1" + the em-dash rule present,
+  no leftover "Version 2.0"; **archived** the old render to `docs/standards/_archive/
+  Crema_Italia_Brand_Standards_v2.0_ARCHIVED.pdf` per the archive convention. Swept the version pointers
+  so nothing drifts: both standards READMEs, the two companion-standard header lines
+  (collaboration/store-operating), this file's top pointer block + §6.1 "today:" + §10 brand note + §11
+  reference index (also re-pointed §11 at the repo as canonical per Option A, noting the OneDrive copy is
+  a now-stale render), and the `crema-italia-pdf-builder` skill's stamp (`template.html`, `brand.md`,
+  `SKILL.md`) so future built docs stamp v2.1. **Cross-surface follow-ups (Cowork/OneDrive lane — flagged
+  to Steve, not editable from Code):** (1) regenerate the OneDrive Brand Standards render to v2.1; (2) add
+  the no-em-dash rule + this bump to `Coordination/DECISIONS_LOG.md` and the OneDrive Brand Standards
+  render's own Voice section so the source-of-truth doesn't drift.
+
 ## 10. Open questions / TODO
 
 **▶ CURRENT STATE — POC8 (as of 2026-07-13) — read this first when resuming.** Latest deployed
@@ -1210,7 +1235,8 @@ draft-naming callout near the top of this file and the §9 2026-07-05 entry).
 `shopify theme dev` and confirmed it lands correctly: taste-profile banner active with
 the right tags, Shop page filtered to matches, nav fully clickable. The batch is vetted.
 
-**Brand (current — Brand Standards v2.0, artist rebrand 2026-07-01).** Palette:
+**Brand (current — Brand Standards v2.1; artist rebrand 2026-07-01 palette/type, no-em-dash
+voice rule 2026-07-14).** Palette:
 Espresso `#55331B`, Crema Gold `#B88348`, hover `#9C6E3C`, green/red/cream unchanged.
 Display font **Marcellus** (Google Font stand-in for the outlined Montecatini wordmark);
 body **Inter**. Finalized artist logo in `assets/ci-logo*.png|svg` (hero uses the
@@ -1321,7 +1347,7 @@ live copy in several places; treat the repo as source of truth over this frozen 
 
 ## 11. Reference index — where things live
 
-- **Brand standards PDF (current, v2.0):** `<OneDrive>/CremaItalia LLC/Brand and Marketing/Crema_Italia_Brand_Standards_v2.0.pdf` — editable source alongside it: `Crema_Italia_Brand_Standards_v2.0.html` (+ `fonts.css`). Built on the new palette/type. (v1.0 archived in `_Archive/Pre-Artist_2026-07/`.)
+- **Brand Standards (current, v2.1) — canonical source is the repo (Option A, 2026-07-13):** `docs/standards/brand-standards/Crema_Italia_Brand_Standards_v2.1.html` (editable source) + its committed render `Crema_Italia_Brand_Standards_v2.1.pdf` (+ `Crema Italia Brand CSS.css`, `fonts.css`, local fonts). Built on the new palette/type. The OneDrive copy under `Brand and Marketing/` is now a **read-only render for Cowork** (currently still the v2.0 render — Cowork to regenerate to v2.1). Superseded repo renders live in `docs/standards/_archive/`; v1.0 archived in OneDrive `_Archive/Pre-Artist_2026-07/`.
 - **Brand CSS:** `<OneDrive>/CremaItalia LLC/Brand and Marketing/Crema Italia Brand CSS.css`
 - **Logo files (production, finalized artist mark 2026-07-01):** `<OneDrive>/CremaItalia LLC/Brand and Marketing/Logo Assets/` — master `.ai` in `Art Files/`; EPS/PDF/SVG/PNG/Web lockups; see `Logo Assets/README.md`.
 - **Prior artwork (archived provenance):** `<OneDrive>/CremaItalia LLC/Brand and Marketing/_Archive/Pre-Artist_2026-07/` (includes the old TM Placement Options).

@@ -1,7 +1,7 @@
 # Crema Italia brand reference (for PDF documents)
 
 The authoritative source is `Brand and Marketing/Crema Italia Brand CSS.css` (v1.2) and
-the current Brand Standards PDF (`Crema_Italia_Brand_Standards_v2.0.pdf`). **Link the
+the current Brand Standards PDF (`Crema_Italia_Brand_Standards_v2.1.pdf`). **Link the
 stylesheet; don't duplicate it.** This file is a quick-reference so you can author
 correctly without reopening everything. Values below reflect the 2026-07-01 artist rebrand.
 

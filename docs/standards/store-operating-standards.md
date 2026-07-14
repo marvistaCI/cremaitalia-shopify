@@ -2,7 +2,7 @@
 
 **Version 1.2 · 2026-07-13**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
-**Companion standards:** Brand Standards v2.0 (look & voice) · Collaboration Standard v1.0 (how we work).
+**Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.0 (how we work).
 
 > **v1.2 (2026-07-13)** replaced additive discount stacking with a **no-stacking, highest-wins (`MAX`)**
 > rule (§3): a customer receives only the single highest discount they qualify for — a founder who is also

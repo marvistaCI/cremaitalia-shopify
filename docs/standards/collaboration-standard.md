@@ -2,7 +2,7 @@
 
 **Version 1.0 · 2026-07-13**
 **Source of truth:** this file (`docs/standards/collaboration-standard.md`) in the theme repo.
-**Companion standards:** Brand Standards v2.0 (look & voice) · Store Operating Standards v1.2 (commerce).
+**Companion standards:** Brand Standards v2.1 (look & voice) · Store Operating Standards v1.2 (commerce).
 
 > **What this document is.** The canonical statement of **how we work** — how truth is recorded,
 > who may edit what, and how the human (Steve) and the AI agents (Claude **Code** in this repo,
