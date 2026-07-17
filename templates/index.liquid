@@ -29,7 +29,6 @@
 
   <nav class="home-jump" aria-label="On this page">
     <button onclick="jumpHome('sec-story')">Our story</button>
-    <button onclick="jumpHome('sec-roasters')">Roasters</button>
     <button onclick="jumpHome('sec-shelves')">Shelves</button>
     <button onclick="jumpHome('sec-promise')">Promise</button>
     <button class="hj-quiz" onclick="openQuiz()">Tasting Quiz</button>
@@ -48,14 +47,14 @@
     <div class="section-head"><p class="eyebrow">Our model</p><h2>Curated, never aggregated.</h2></div>
     <div class="prose" style="max-width:72ch">
       <p>We have carefully hand-selected a small number of roasters whose work represents Italian roasting at its finest. We do not roast, grind, blend, or alter the roasters&rsquo; packaging - instead, shortly after the roaster seals the whole-bean coffee into valve bags, we air-freight it directly into our US fulfillment facility, exactly as they produced and sealed it - fresh and ready to consume.</p>
-      <p>Scroll down to meet our roasters. Do you have a roaster you&rsquo;d like us to consider? <a class="inline-link" href="mailto:roasters@cremaitalia.com">Email me here.</a></p>
+      <p>Meet the full group on our <button class="inline-link" onclick="showPage('roasters')">Roasters page</button>. Do you have a roaster you&rsquo;d like us to consider? <a class="inline-link" href="mailto:roasters@cremaitalia.com">Email me here.</a></p>
     </div>
 
     <!-- Shelves -->
     <div class="section-head" id="sec-shelves"><p class="eyebrow">How the catalog is organized</p><h2>The four coffee shelves.</h2></div>
     <p class="prose" style="max-width:72ch">One shelf for subscriptions and larger formats (<span class="ita">Roccia</span>), one for discovery and gifting (<span class="ita">Sorpresa</span>), one for rare or seasonal roasts (<span class="ita">Selezione</span>), and one for last-chance lots at an honest markdown (<span class="ita">Offerta</span>).</p>
     <div class="card-grid">
-      <div class="shelf-card" onclick="showPage('roccia')"><h3>Roccia</h3><div class="ss2">The Rock · Subscription (and one-time ordering)</div><p>Your preferred coffee, size, and cadence - free shipping and a 10% discount.</p></div>
+      <div class="shelf-card" onclick="showPage('roccia')"><h3>Roccia</h3><div class="ss2">The Rock · Subscription (and one-time ordering)</div><p>Your preferred coffee, size, and cadence. Subscribe for free shipping and a 10% discount.</p></div>
       <div class="shelf-card" onclick="showPage('sorpresa')"><h3>Sorpresa</h3><div class="ss2">Discovery · One-time</div><p>Our curated collection of roasted delights. On-demand 100g Tour bundles - the best way to find your favorite roast subscription.</p></div>
       <div class="shelf-card" onclick="showPage('selezione')"><h3>Selezione</h3><div class="ss2">Premium &amp; Seasonal · One-time</div><p>Roasters' premium and seasonal offerings. Micro-lots and limited imports. When a product sells out, it may not return - once it's gone, it's gone.</p></div>
       <div class="shelf-card" onclick="showPage('offerta')"><h3>Offerta</h3><div class="ss2">The Opportunity · One-time</div><p>Limited-time offers, on sale while inventory lasts. Good coffee approaching its freshness window, priced honestly. Sold as-is.</p></div>
@@ -64,10 +63,6 @@
     <div class="hero-btns" style="margin-top:1.25rem"><button class="btn btn-primary" onclick="showPage('sorpresa')">Begin with a Sorpresa Tour</button></div>
 
     <div class="callout" style="margin-top:2rem"><strong>Still unsure?</strong> Take our simple <button class="inline-link" onclick="openQuiz()">three-question quiz</button> to narrow the selection to the coffees matching your tastes.</div>
-
-    <!-- Roasters -->
-    <div class="section-head" id="sec-roasters"><p class="eyebrow">Our roasters</p><h2>A small group, each with a big story.</h2></div>
-    <div class="card-grid" id="home-roasters"></div>
 
     <!-- Promise -->
     <div class="section-head" id="sec-promise"><p class="eyebrow">The Crema Italia Promise</p><h2>We deliver on these promises.</h2></div>
@@ -98,20 +93,7 @@
       </div></div>
       <div class="filter-group filter-region">
         <div class="filter-label">Region <button class="region-learn" onclick="showPage('regions')">Learn about the regions &rarr;</button></div>
-        <div class="filter-pills">
-          <span class="pill active" onclick="filterRegion(this,'all')">All Regions</span>
-          <span class="pill" onclick="filterRegion(this,'toscana')">Toscana</span>
-          <span class="pill" onclick="filterRegion(this,'emilia')">Emilia-Romagna</span>
-          <span class="pill disabled">Piemonte</span>
-          <span class="pill disabled">Lombardia</span>
-          <span class="pill disabled">Trieste</span>
-          <span class="pill disabled">Lazio</span>
-          <span class="pill disabled">Campania</span>
-          <span class="pill disabled">Puglia</span>
-          <span class="pill disabled">Calabria</span>
-          <span class="pill disabled">Sicilia</span>
-        </div>
-        <p class="region-note">Greyed regions are on the way as we grow - and great roasters sometimes appear in regions not shown here. <button class="inline-link" onclick="showPage('regions')">See the map</button>.</p>
+        {% render 'ci-region-filter' %}
       </div>
     </div>
   </div></div>
@@ -207,6 +189,12 @@
     <p class="eyebrow" style="color:var(--ci-crema-light)">GRUPPO D'ECCELLENZA</p>
     <h1>Our Roasters</h1>
     <p>We are the premier consumer channel for each of these roasters, and we offer their coffee just as they offer it in Italy.</p>
+    <!-- Region filter: opens the ONE shared region object (ci-region-filter). The link toggles
+         Filter By Region (open) / All Regions (clear + close). Same snippet as the Shop hero. -->
+    <button class="region-toggle" id="roaster-region-toggle" aria-expanded="false" onclick="toggleRoasterRegion()">Filter By Region</button>
+    <div class="filter-group filter-region region-panel" id="roaster-region-panel" hidden>
+      {% render 'ci-region-filter' %}
+    </div>
   </div></div>
   <main class="ci-main">
     <div id="roaster-list"></div>
@@ -271,8 +259,16 @@
     <p>Italy doesn&rsquo;t roast one way. From the light, aromatic cups of the north to the dark, bold espresso of the south, each region carries its own centuries-old roasting tradition. We choose roasters from these traditions and bring their coffee to you unchanged. We are in Tuscany now - and reaching, carefully, toward the rest.</p>
   </div></div>
   <main class="ci-main">
+    <!-- Region map: labels in Italian BY DESIGN (Steve). Synced from OneDrive Region_Map_v2.svg
+         (2026-07-15): nine Italian titles, re-anchored leaders, centred legend, Sardinia removed.
+         The em-dashes in the sub-labels are a DELIBERATE exception to the §6 no-em-dash rule,
+         approved by Steve 2026-07-17 ("a map with descriptions - stylistically it works"). Do NOT
+         convert them to hyphens. On mobile the labels/leaders/SVG legend are hidden and the viewBox
+         crops to Italy (see setRegionMapViewBox in ci-storefront.js); the .region-legend list below
+         carries the colour key. -->
     <svg class="region-map" id="region-map-svg" viewBox="0 0 640 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of Italy's nine coffee-roasting regions, from the light arabica-led north to the dark robusta-heavy south">
       <title>Map of Italian coffee-roasting regions and their signature espresso styles</title>
+      <desc>A proportioned outline of Italy (mainland and Sicily) with nine roasting-culture regions marked at their historic hub cities, from Piemonte and Lombardia in the north through Toscana and Lazio to Campania, Puglia, Calabria and Sicilia in the south, each labelled with its dominant roast style.</desc>
       <style>
         #region-map-svg .country{fill:#f3efe9;stroke:#c9beae;stroke-width:1.75;stroke-linejoin:round}
         #region-map-svg .region-dot{stroke:#fff;stroke-width:2.25}
@@ -284,73 +280,80 @@
       </style>
       <path class="country" d="M 206.8 112.6 L 256.2 103.3 L 267.2 119.8 L 272.1 138.3 L 300.5 163.5 L 311.5 174.3 L 340.1 189.5 L 355.8 200.6 L 367.0 205.7 L 386.2 224.0 L 392.3 265.6 L 386.5 286.5 L 400.3 278.7 L 419.8 253.6 L 404.6 233.5 L 412.4 214.7 L 422.3 212.0 L 439.0 224.5 L 447.3 232.0 L 450.0 221.6 L 438.1 206.9 L 414.0 192.5 L 400.8 186.5 L 398.8 172.2 L 392.3 169.2 L 371.9 166.2 L 354.5 152.4 L 339.0 117.7 L 317.8 104.5 L 309.5 93.8 L 311.7 79.4 L 312.4 63.2 L 344.6 56.9 L 340.4 31.5 L 290.5 30.0 L 249.1 37.5 L 239.7 47.1 L 190.0 51.6 L 199.8 85.4 L 206.8 112.6 Z"/>
       <path class="country" d="M 384.4 279.0 L 374.4 300.9 L 378.6 313.7 L 375.5 322.1 L 366.5 325.1 L 317.8 297.9 L 314.9 285.3 L 331.0 279.9 L 384.4 279.0 Z"/>
-      <path class="country" d="M 242.6 189.8 L 253.8 209.6 L 253.1 229.9 L 249.7 250.9 L 225.4 251.8 L 226.0 229.9 L 221.1 209.0 L 242.1 192.2 L 242.6 189.8 Z"/>
       <circle class="region-dot" cx="242.1" cy="62.6" r="7" fill="#7A9E7E"/>
-      <path class="leader" d="M 242.1 62.6 L 26.0 44.0"/>
-      <text class="region-label" x="32.0" y="40.0" text-anchor="start">Lombardia</text>
-      <text class="region-sub" x="32.0" y="56.0" text-anchor="start">Lightest of all - clean,</text>
-      <text class="region-sub" x="32.0" y="70.0" text-anchor="start">aromatic, high arabica</text>
+      <path class="leader" d="M 242.1 62.6 L 178 51"/>
+      <text class="region-label" x="61" y="18" text-anchor="start">Lombardia</text>
+      <text class="region-sub" x="61" y="34" text-anchor="start">Lightest of all — clean,</text>
+      <text class="region-sub" x="61" y="48" text-anchor="start">aromatic, high arabica</text>
       <circle class="region-dot" cx="208.6" cy="74.3" r="7" fill="#7A9E7E"/>
-      <path class="leader" d="M 208.6 74.3 L 26.0 136.0"/>
-      <text class="region-label" x="32.0" y="132.0" text-anchor="start">Piemonte</text>
-      <text class="region-sub" x="32.0" y="148.0" text-anchor="start">Milk &amp; cocoa house - arabica-led,</text>
-      <text class="region-sub" x="32.0" y="162.0" text-anchor="start">bicerin tradition</text>
+      <path class="leader" d="M 208.6 74.3 L 177.2 119"/>
+      <text class="region-label" x="36.2" y="130" text-anchor="start">Piemonte</text>
+      <text class="region-sub" x="36.2" y="146" text-anchor="start">Milk &amp; cocoa house —</text>
+      <text class="region-sub" x="36.2" y="160" text-anchor="start">arabica-led, bicerin tradition</text>
       <circle class="region-dot" cx="288.2" cy="113.2" r="7" fill="#B88348"/>
-      <path class="leader" d="M 288.2 113.2 L 26.0 228.0"/>
-      <text class="region-label" x="32.0" y="224.0" text-anchor="start">Toscana</text>
-      <text class="region-sub" x="32.0" y="240.0" text-anchor="start">Balanced medium roast - artisan</text>
-      <text class="region-sub" x="32.0" y="254.0" text-anchor="start">family torrefazioni</text>
+      <path class="leader" d="M 288.2 113.2 L 172.2 219"/>
+      <text class="region-label" x="36.2" y="230" text-anchor="start">Toscana</text>
+      <text class="region-sub" x="36.2" y="246" text-anchor="start">Balanced medium roast —</text>
+      <text class="region-sub" x="36.2" y="260" text-anchor="start">artisan family torrefazioni</text>
       <circle class="region-dot" cx="316.2" cy="169.2" r="7" fill="#B88348"/>
-      <path class="leader" d="M 316.2 169.2 L 26.0 320.0"/>
-      <text class="region-label" x="32.0" y="316.0" text-anchor="start">Lazio</text>
-      <text class="region-sub" x="32.0" y="332.0" text-anchor="start">Arabica-robusta, pulled</text>
-      <text class="region-sub" x="32.0" y="346.0" text-anchor="start">ristretto, spiced-nutty</text>
+      <path class="leader" d="M 316.2 169.2 L 189.0 319"/>
+      <text class="region-label" x="70.0" y="330" text-anchor="start">Lazio</text>
+      <text class="region-sub" x="70.0" y="346" text-anchor="start">Arabica-robusta, pulled</text>
+      <text class="region-sub" x="70.0" y="360" text-anchor="start">ristretto, spiced-nutty</text>
       <circle class="region-dot" cx="344.6" cy="56.9" r="7" fill="#C9A24B"/>
-      <path class="leader" d="M 344.6 56.9 L 614.0 30.0"/>
-      <text class="region-label" x="608.0" y="26.0" text-anchor="end">Trieste</text>
-      <text class="region-sub" x="608.0" y="42.0" text-anchor="end">Mitteleuropean import hub -</text>
-      <text class="region-sub" x="608.0" y="56.0" text-anchor="end">gentle roast, arabica-led</text>
+      <path class="leader" d="M 344.6 56.9 L 422.0 53"/>
+      <text class="region-label" x="570.0" y="20" text-anchor="end">Trieste</text>
+      <text class="region-sub" x="570.0" y="36" text-anchor="end">Mitteleuropean import hub —</text>
+      <text class="region-sub" x="570.0" y="50" text-anchor="end">gentle roast, arabica-led</text>
       <circle class="region-dot" cx="414.0" cy="192.5" r="7" fill="#55331B"/>
-      <path class="leader" d="M 414.0 192.5 L 614.0 108.0"/>
-      <text class="region-label" x="608.0" y="104.0" text-anchor="end">Puglia</text>
-      <text class="region-sub" x="608.0" y="120.0" text-anchor="end">Dark, robusta-heavy, very strong,</text>
-      <text class="region-sub" x="608.0" y="134.0" text-anchor="end">low acidity</text>
+      <path class="leader" d="M 414.0 192.5 L 480.5 135"/>
+      <text class="region-label" x="598.5" y="102" text-anchor="end">Puglia</text>
+      <text class="region-sub" x="598.5" y="118" text-anchor="end">Dark, robusta-heavy,</text>
+      <text class="region-sub" x="598.5" y="132" text-anchor="end">very strong, low acidity</text>
       <circle class="region-dot" cx="355.8" cy="200.6" r="7" fill="#55331B"/>
-      <path class="leader" d="M 355.8 200.6 L 614.0 186.0"/>
-      <text class="region-label" x="608.0" y="182.0" text-anchor="end">Campania</text>
-      <text class="region-sub" x="608.0" y="198.0" text-anchor="end">Dark roast, high robusta - thick</text>
-      <text class="region-sub" x="608.0" y="212.0" text-anchor="end">crema, bold &amp; bitter</text>
+      <path class="leader" d="M 355.8 200.6 L 470.0 200.6"/>
+      <text class="region-label" x="608.0" y="184" text-anchor="end">Campania</text>
+      <text class="region-sub" x="608.0" y="200" text-anchor="end">Dark roast, high robusta —</text>
+      <text class="region-sub" x="608.0" y="214" text-anchor="end">thick crema, bold &amp; bitter</text>
       <circle class="region-dot" cx="400.1" cy="246.7" r="7" fill="#55331B"/>
-      <path class="leader" d="M 400.1 246.7 L 614.0 264.0"/>
-      <text class="region-label" x="608.0" y="260.0" text-anchor="end">Calabria</text>
-      <text class="region-sub" x="608.0" y="276.0" text-anchor="end">Darkest of the south -</text>
-      <text class="region-sub" x="608.0" y="290.0" text-anchor="end">robusta-forward, intense</text>
+      <path class="leader" d="M 400.1 246.7 L 473.5 255"/>
+      <text class="region-label" x="598.5" y="266" text-anchor="end">Calabria</text>
+      <text class="region-sub" x="598.5" y="282" text-anchor="end">Darkest of the south —</text>
+      <text class="region-sub" x="598.5" y="296" text-anchor="end">robusta-forward, intense</text>
       <circle class="region-dot" cx="335.4" cy="282.3" r="7" fill="#55331B"/>
-      <path class="leader" d="M 335.4 282.3 L 614.0 342.0"/>
-      <text class="region-label" x="608.0" y="338.0" text-anchor="end">Sicilia</text>
-      <text class="region-sub" x="608.0" y="354.0" text-anchor="end">Dark but sweet - almond &amp; granita</text>
-      <text class="region-sub" x="608.0" y="368.0" text-anchor="end">coffee culture</text>
-      <text class="legend-title" x="230" y="404">Roast intensity, north &#8594; south</text>
-      <circle cx="230" cy="422" r="5.5" fill="#7A9E7E"/>
-      <text class="legend-text" x="242" y="426">Light–medium (Arabica-led)</text>
-      <circle cx="420" cy="422" r="5.5" fill="#C9A24B"/>
-      <text class="legend-text" x="432" y="426">Medium (Trieste import blend)</text>
-      <circle cx="230" cy="440" r="5.5" fill="#B88348"/>
-      <text class="legend-text" x="242" y="444">Medium-dark (balanced)</text>
-      <circle cx="420" cy="440" r="5.5" fill="#55331B"/>
-      <text class="legend-text" x="432" y="444">Dark–very dark (Robusta-heavy)</text>
+      <path class="leader" d="M 335.4 282.3 L 437.0 337"/>
+      <text class="region-label" x="570.0" y="348" text-anchor="end">Sicilia</text>
+      <text class="region-sub" x="570.0" y="364" text-anchor="end">Dark but sweet — almond</text>
+      <text class="region-sub" x="570.0" y="378" text-anchor="end">&amp; granita coffee culture</text>
+      <g class="svg-legend">
+        <text class="legend-title" x="320" y="404" text-anchor="middle">Roast intensity, north &#8594; south</text>
+        <circle cx="136.0" cy="422" r="5.5" fill="#7A9E7E"/>
+        <text class="legend-text" x="148.0" y="426">Light–medium (Arabica-led)</text>
+        <circle cx="324.5" cy="422" r="5.5" fill="#C9A24B"/>
+        <text class="legend-text" x="336.5" y="426">Medium (Trieste import blend)</text>
+        <circle cx="136.0" cy="440" r="5.5" fill="#B88348"/>
+        <text class="legend-text" x="148.0" y="444">Medium-dark (balanced)</text>
+        <circle cx="324.5" cy="440" r="5.5" fill="#55331B"/>
+        <text class="legend-text" x="336.5" y="444">Dark–very dark (Robusta-heavy)</text>
+      </g>
     </svg>
+    <ul class="region-legend" aria-label="Roast intensity key, north to south">
+      <li><span class="rl-dot" style="background:#7A9E7E"></span>Light&ndash;medium (Arabica-led)</li>
+      <li><span class="rl-dot" style="background:#C9A24B"></span>Medium (Trieste import blend)</li>
+      <li><span class="rl-dot" style="background:#B88348"></span>Medium-dark (balanced)</li>
+      <li><span class="rl-dot" style="background:#55331B"></span>Dark&ndash;very dark (Robusta-heavy)</li>
+    </ul>
     <div class="section-head"><p class="eyebrow">Nine traditions, north to south</p><h2>The regions</h2></div>
     <div class="region-list">
-      <div class="region-row"><h3>Lombardia</h3><p class="region-meta">Milan &middot; Light&ndash;medium &middot; Fruit &amp; Floral</p><p class="region-desc">Italy&rsquo;s lightest, most aromatic style - smooth, with minimal bitterness.</p></div>
-      <div class="region-row"><h3>Piemonte</h3><p class="region-meta">Turin &middot; Light&ndash;medium &middot; Sweet &amp; Chocolate</p><p class="region-desc">A milk-and-cocoa culture; the <span class="ita">bicerin</span> - espresso, chocolate, cream - began here in the 18th century.</p></div>
+      <div class="region-row"><h3>Lombardy <span class="ita">(Lombardia)</span></h3><p class="region-meta">Milan &middot; Light&ndash;medium &middot; Fruit &amp; Floral</p><p class="region-desc">Italy&rsquo;s lightest, most aromatic style - smooth, with minimal bitterness.</p></div>
+      <div class="region-row"><h3>Piedmont <span class="ita">(Piemonte)</span></h3><p class="region-meta">Turin &middot; Light&ndash;medium &middot; Sweet &amp; Chocolate</p><p class="region-desc">A milk-and-cocoa culture; the <span class="ita">bicerin</span> - espresso, chocolate, cream - began here in the 18th century.</p></div>
       <div class="region-row"><h3>Trieste</h3><p class="region-meta">Friuli &middot; Medium &middot; Fruit &amp; Floral / Sweet &amp; Chocolate</p><p class="region-desc">Italy&rsquo;s historic coffee port and a Mitteleuropean roasting tradition - gentler than the south.</p></div>
-      <div class="region-row is-here"><h3>Toscana <span class="region-here">Where we are now</span></h3><p class="region-meta">Medium &middot; Sweet &amp; Chocolate</p><p class="region-desc">Family <span class="ita">torrefazioni</span> and the balanced middle of the national spectrum. Our founding region.</p></div>
+      <div class="region-row is-here"><h3>Tuscany <span class="ita">(Toscana)</span> <span class="region-here">Where we are now</span></h3><p class="region-meta">Medium &middot; Sweet &amp; Chocolate</p><p class="region-desc">Family <span class="ita">torrefazioni</span> and the balanced middle of the national spectrum. Our founding region.</p></div>
       <div class="region-row"><h3>Lazio</h3><p class="region-meta">Rome &middot; Medium-dark &middot; Bold &amp; Spiced</p><p class="region-desc">Pulled <span class="ita">ristretto</span> - toasty, dark-caramel, with a spice note from centuries of trade.</p></div>
       <div class="region-row"><h3>Campania</h3><p class="region-meta">Naples &middot; Dark &middot; Bold &amp; Spiced</p><p class="region-desc">The archetype of &ldquo;strong Italian coffee&rdquo; - thick crema, bold and bitter, served very hot.</p></div>
       <div class="region-row"><h3>Puglia</h3><p class="region-meta">Dark &middot; Bold &amp; Spiced</p><p class="region-desc">Strong, low-acidity, and robusta-forward.</p></div>
       <div class="region-row"><h3>Calabria</h3><p class="region-meta">Very dark &middot; Bold &amp; Spiced</p><p class="region-desc">The darkest, most intense style on the mainland.</p></div>
-      <div class="region-row"><h3>Sicilia</h3><p class="region-meta">Dark &middot; Bold &amp; Spiced / Sweet &amp; Chocolate</p><p class="region-desc">A dark roast tied to almond and <span class="ita">granita</span> coffee culture - it reads sweeter than the Calabrian and Neapolitan extreme.</p></div>
+      <div class="region-row"><h3>Sicily <span class="ita">(Sicilia)</span></h3><p class="region-meta">Dark &middot; Bold &amp; Spiced / Sweet &amp; Chocolate</p><p class="region-desc">A dark roast tied to almond and <span class="ita">granita</span> coffee culture - it reads sweeter than the Calabrian and Neapolitan extreme.</p></div>
     </div>
     <p class="afd">Region describes where a coffee is <strong>roasted</strong> - a Crema Italia curatorial choice - not where the bean was <strong>grown</strong>. Our catalog grows one region at a time; today, that is Tuscany.</p>
   </main>
@@ -381,7 +384,7 @@
   <main class="ci-main">
     <!-- PROD: copy below is provisional - Steve to provide final language for each tile. -->
     <div class="section-head" style="margin-top:0"><p class="eyebrow">Chi siamo</p><h2>Our company</h2></div>
-    <div class="founder-grid">
+    <div class="founder-grid" id="company-grid">
       <div class="founder-col">
         <img class="founder-photo" src="{{ 'ci-company.jpg' | asset_url }}" alt="A view of Tuscany" width="200" height="200">
         <p class="person-role">Tuscany</p>
@@ -393,7 +396,7 @@
       <div class="prose">
         <p>Crema Italia, LLC imports curated whole-bean coffee from a small, named group of artisan Italian roasters, stores it in our Florida warehouse, and ships it to American customers&hellip; unchanged. We bring their coffee to you just as if you were there, in Italy.</p>
         <p>We import; we never interfere. Each roaster&rsquo;s coffee reaches you exactly as they roast and seal it - nothing re-roasted, re-ground, or re-bagged. We are the U.S. Agent for FDA food-facility registration on behalf of our roaster partners.</p>
-        <h3>The Three P&rsquo;s</h3>
+        <h3 id="company-3ps">The Three P&rsquo;s</h3>
         <div class="beats">
           <p><strong>Place.</strong> Italy is the home of espresso and of great coffee - a fact recognized worldwide.</p>
           <p><strong>Product.</strong> We import a carefully selected collection of roasted beans. Why beans? Because when you grind them fresh, you open a fresh bit of Italy in your cup.</p>
@@ -470,7 +473,7 @@
 <!-- ============================== PROMISE ============================== -->
 <div class="page" id="page-promise">
   <div class="dark-hero"><div class="dark-hero-inner">
-    <p class="eyebrow" style="color:var(--ci-crema-light)">What we mean</p>
+    <p class="eyebrow" style="color:var(--ci-crema-light)">Our commitment to you</p>
     <h1>The Crema Italia Promise</h1>
   </div></div>
   <main class="ci-main">
@@ -501,7 +504,7 @@
     <div class="section-head" style="margin-top:0"><p class="eyebrow">Logistics</p><h2>Shipping</h2></div>
     <div class="prose" style="max-width:72ch">
       <p>U.S.-only at launch. We do not ship internationally yet.</p>
-      <p><strong>Free</strong> on every Roccia shipment, and free on one-time orders of $55 or more. A flat <strong>$8.50</strong> applies to one-time orders under $55.</p>
+      <p><strong>Free</strong> on every Roccia <strong>subscription</strong> shipment, and free on one-time orders of $55 or more. A flat <strong>$8.50</strong> applies to one-time orders under $55.</p>
       <p>Carriers: USPS Ground Advantage under 1 lb; UPS Ground at 1 lb and above. Transit times - East and Southeast 2–3 business days, Midwest and Mountain 3–4, West Coast 4–5.</p>
     </div>
   </main>
@@ -524,6 +527,48 @@
       <h3>How fresh is the coffee?</h3>
       <p>Best within 60 days of the roast date, which we always show. Sorpresa Tours are assembled on-demand so every bag ships fresh.</p>
     </div>
+  </main>
+</div>
+
+<!-- ============================== CONTACT ============================== -->
+<div class="page" id="page-contact">
+  <main class="ci-main">
+    <button class="back-btn" onclick="goBack()">&larr; Back</button>
+    <div class="section-head" style="margin-top:0"><p class="eyebrow">Get in touch</p><h2>Contact us</h2></div>
+    <div class="prose" style="max-width:60ch">
+      <p>Questions about an order, a roaster, or anything else... send a note and it reaches the right desk. We read every message.</p>
+    </div>
+    <!-- PROD: this send is MOCKED (no backend in the POC). Wire the real send one of two ways:
+         (a) a form/contact app that routes by the "reason" value to info@ / support@ / contact@, or
+         (b) Shopify's native contact-form tag (form 'contact') to a single inbox (contact@) with the
+         reason carried in the subject/body for a mail filter to fan out. Mailboxes contact@/info@/support@
+         must exist. Radio (one destination), default "Other". See docs/POC9_change_list.md. -->
+    <form class="contact-form" id="contact-form" onsubmit="return submitContact(event)" novalidate>
+      <div class="cf-field">
+        <label for="cf-name">Name</label>
+        <input id="cf-name" name="name" type="text" required autocomplete="name">
+      </div>
+      <div class="cf-field">
+        <label for="cf-email">Email</label>
+        <input id="cf-email" name="email" type="email" required autocomplete="email">
+      </div>
+      <div class="cf-field">
+        <label for="cf-phone">Phone <span class="cf-opt">(optional)</span></label>
+        <input id="cf-phone" name="phone" type="tel" autocomplete="tel">
+      </div>
+      <fieldset class="cf-field cf-reason">
+        <legend>How can we help?</legend>
+        <label class="cf-radio"><input type="radio" name="reason" value="info"> More info</label>
+        <label class="cf-radio"><input type="radio" name="reason" value="support"> I need help</label>
+        <label class="cf-radio"><input type="radio" name="reason" value="other" checked> Other</label>
+      </fieldset>
+      <div class="cf-field">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" rows="5" required></textarea>
+      </div>
+      <p class="cf-error" id="cf-error" role="alert" hidden></p>
+      <button type="submit" class="btn btn-primary">Send</button>
+    </form>
   </main>
 </div>
 

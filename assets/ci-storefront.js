@@ -213,14 +213,8 @@
       '<div class="card-footer"><span class="cp">' + money(priceFrom(p)) + '</span><span class="csz">' + esc(p.category || '') + '</span></div>' +
       '</div>';
   }
-  function roasterHomeCard(r) {
-    return '<div class="card" onclick="openRoaster(\'' + r.handle + '\')">' +
-      '<div class="card-img ' + (r.portrait_cls || '') + '"' + (r.portrait_style ? ' style="' + r.portrait_style + '"' : '') + '>' + esc(r.label) + '</div>' +
-      '<div class="card-body"><span class="eyebrow">' + esc(r.town) + '</span><h3>' + esc(r.name) + '</h3><p>' + esc(r.blurb) + '</p></div>' +
-      '</div>';
-  }
   function roasterRow(r) {
-    return '<div class="roaster-row" onclick="openRoaster(\'' + r.handle + '\')">' +
+    return '<div class="roaster-row" data-region="' + esc(r.region || '') + '" onclick="openRoaster(\'' + r.handle + '\')">' +
       '<div class="roaster-portrait ' + (r.portrait_cls || '') + '"' + (r.portrait_style ? ' style="' + r.portrait_style + '"' : '') + '>' + esc(r.label) + '</div>' +
       '<div><span class="eyebrow">' + esc(r.region_label) + ' · founded ' + r.founded + '</span><h3>' + esc(r.name) + '</h3>' +
       '<p style="color:var(--ci-ink-soft);font-size:.92rem;margin:0">' + esc(r.blurb) + '</p></div></div>';
@@ -230,7 +224,6 @@
 
   // ---------- initial render ----------
   function renderAll() {
-    if ($('home-roasters')) $('home-roasters').innerHTML = CATALOG.roasters.map(roasterHomeCard).join('');
     if ($('roaster-list')) $('roaster-list').innerHTML = CATALOG.roasters.map(roasterRow).join('');
     if ($('shop-grid')) $('shop-grid').innerHTML = CATALOG.products
       .filter(function (p) { return p.shelf !== 'bottega'; }).map(productCard).join('');
@@ -265,6 +258,11 @@
     if (['roccia', 'selezione', 'offerta'].indexOf(name) !== -1) applyTasteToGrid('grid-' + name);
     // The ribbon shows only on shopping surfaces, and only when a profile exists.
     updateRibbon(name);
+    // Region filter is ephemeral per-surface: clear it on entering Shop or Roasters so a choice
+    // on one surface never carries to the other (decision D).
+    if (name === 'shop' || name === 'roasters') resetRegionFilterState(name);
+    // Align the About "Three P's" block once its page is visible.
+    if (name === 'about') alignThreePs();
   };
 
   // Smooth in-page scroll for the home-page sticky jump-chips.
@@ -272,6 +270,39 @@
     var e = document.getElementById(id);
     if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
+
+  // Regions map responsiveness: on phones the side-labels/leaders/SVG-legend are hidden by CSS,
+  // so crop the viewBox to the Italy outline (+ its dots) instead of the full 640x460 canvas that
+  // reserved space for the label columns. Desktop keeps the full canvas. Kept in JS because SVG
+  // viewBox is an attribute, not a CSS property.
+  var regionMapMQ = window.matchMedia('(max-width:640px)');
+  function setRegionMapViewBox() {
+    var svg = document.getElementById('region-map-svg');
+    if (svg) svg.setAttribute('viewBox', regionMapMQ.matches ? '176 16 288 322' : '0 0 640 460');
+  }
+
+  // About "Our company": nudge the "Three P's" block down so its top aligns with the top of the
+  // second (caff&egrave;-door) image in the left column - a polish tweak (Steve). Measured, not a
+  // magic number, so it survives copy reflow. Two-column layout only (>760px); on the mobile
+  // single-column stack the margin is cleared. Must run while #page-about is visible (offsets are
+  // 0 when the page is display:none).
+  var twoColMQ = window.matchMedia('(min-width:761px)');
+  function alignThreePs() {
+    var h3 = document.getElementById('company-3ps'), grid = document.getElementById('company-grid');
+    if (!h3 || !grid) return;
+    h3.style.marginTop = '';
+    if (!twoColMQ.matches) return;                 // single-column stack: leave natural flow
+    var img = grid.querySelector('.founder-stack img');
+    if (!img || !img.getClientRects().length) return;
+    h3.style.marginTop = '0px';                     // zero baseline to measure the push needed
+    var delta = img.getBoundingClientRect().top - h3.getBoundingClientRect().top;
+    if (delta <= 0) { h3.style.marginTop = ''; return; }
+    h3.style.marginTop = Math.round(delta) + 'px';
+    // The h3 top-margin collapses with the preceding paragraph's bottom-margin, swallowing part of
+    // the push - correct with a second pass so the top lands exactly on the image.
+    var resid = img.getBoundingClientRect().top - h3.getBoundingClientRect().top;
+    if (resid > 0) h3.style.marginTop = Math.round(delta + resid) + 'px';
+  }
 
   window.openRoaster = function (handle) {
     var r = roasterByHandle[handle];
@@ -494,8 +525,66 @@
   // the taste axis is currently applied; `savedTaste != null` means a profile EXISTS
   // (which is what makes the ribbon appear at all — no profile, no ribbon).
   var ALL_TASTE = { roast: 'all', flavor: 'all', caffeine: 'all' };
-  window.filterRegion = function (el, val) { activeRegion = val; setActive(el); applyFilters(); };
+  // Region is applied to whichever surface is on screen: the Shop product grid OR the Roasters
+  // list. Same shared filter object (snippets/ci-region-filter.liquid) drives both; navCurrent
+  // decides the target. Selection does NOT carry across surfaces — resetRegionFilterState()
+  // clears it whenever you enter Shop or Roasters (see showPage).
+  window.filterRegion = function (el, val) {
+    activeRegion = val; setActive(el);
+    if (navCurrent === 'roasters') applyRoasterFilter(); else applyFilters();
+  };
   window.filterShelf = function (el, val) { activeShelf = val; setActive(el); applyFilters(); };
+
+  function applyRoasterFilter() {
+    var rows = document.querySelectorAll('#roaster-list .roaster-row');
+    for (var i = 0; i < rows.length; i++) {
+      var show = activeRegion === 'all' || inFacet(rows[i].dataset.region, activeRegion);
+      rows[i].style.display = show ? '' : 'none';
+    }
+  }
+
+  // Roasters "Filter By Region" toggle: closed -> open the shared filter (link reads "All
+  // Regions"); open -> clear the filter and close (link reads "Filter By Region"). Steve's spec.
+  window.toggleRoasterRegion = function () {
+    var panel = $('roaster-region-panel'), tog = $('roaster-region-toggle');
+    if (!panel || !tog) return;
+    if (panel.hasAttribute('hidden')) {
+      panel.removeAttribute('hidden');
+      tog.textContent = 'All Regions';
+      tog.classList.add('is-open');
+      tog.setAttribute('aria-expanded', 'true');
+    } else {
+      activeRegion = 'all';
+      resetRegionPills();
+      applyRoasterFilter();
+      panel.setAttribute('hidden', '');
+      tog.textContent = 'Filter By Region';
+      tog.classList.remove('is-open');
+      tog.setAttribute('aria-expanded', 'false');
+    }
+  };
+
+  // Reset the active pill to "All Regions" in EVERY rendered instance of the shared filter.
+  function resetRegionPills() {
+    var wraps = document.querySelectorAll('.filter-region .filter-pills');
+    for (var i = 0; i < wraps.length; i++) {
+      var pills = wraps[i].querySelectorAll('.pill');
+      for (var j = 0; j < pills.length; j++) pills[j].classList.remove('active');
+      var first = wraps[i].querySelector('.pill'); // "All Regions" is always first
+      if (first) first.classList.add('active');
+    }
+  }
+
+  // Clear region selection when entering Shop or Roasters so a choice on one surface never
+  // silently filters the other (decision D). Also collapses the Roasters panel back to closed.
+  function resetRegionFilterState(name) {
+    activeRegion = 'all';
+    resetRegionPills();
+    var panel = $('roaster-region-panel'), tog = $('roaster-region-toggle');
+    if (panel) panel.setAttribute('hidden', '');
+    if (tog) { tog.textContent = 'Filter By Region'; tog.classList.remove('is-open'); tog.setAttribute('aria-expanded', 'false'); }
+    if (name === 'roasters') applyRoasterFilter(); else applyFilters();
+  }
 
   function tasteTagsHtml(t) {
     var lbl = { roast: { light: 'Light Roast', medium: 'Medium Roast', dark: 'Dark Roast' }, flavor: FLAVOR_LABEL, caffeine: { full: 'Caffeinated', decaf: 'Decaf' } };
@@ -1088,6 +1177,34 @@
     window.__ciToast = setTimeout(function () { t.classList.remove('show'); }, 2600);
   };
 
+  // ---------- contact form (mock) ----------
+  // Validates and shows a confirmation toast. PROD: actually deliver name/email/phone/message to
+  // the routed inbox (info@ / support@ / contact@) per the reason radio - see the Contact page
+  // markup + docs/POC9_change_list.md. The route table below mirrors that routing so a future
+  // real send is a drop-in.
+  var CONTACT_ROUTE = { info: 'info@cremaitalia.com', support: 'support@cremaitalia.com', other: 'contact@cremaitalia.com' };
+  window.submitContact = function (e) {
+    if (e && e.preventDefault) e.preventDefault();
+    var f = $('contact-form'); if (!f) return false;
+    var err = $('cf-error');
+    function fail(m) { if (err) { err.textContent = m; err.hidden = false; } return false; }
+    var name = (f.name.value || '').trim();
+    var email = (f.email.value || '').trim();
+    var message = (f.message.value || '').trim();
+    if (!name) return fail('Please add your name.');
+    if (!email || email.indexOf('@') < 1 || email.indexOf('.', email.indexOf('@')) < 0) return fail('Please add a valid email address.');
+    if (!message) return fail('Please add a message.');
+    if (err) err.hidden = true;
+    var picked = f.querySelector('input[name="reason"]:checked');
+    var reason = picked ? picked.value : 'other';
+    var to = CONTACT_ROUTE[reason] || CONTACT_ROUTE.other;
+    // PROD seam: replace with a real send to `to`. Console line lets us verify routing in the POC.
+    console.log('[contact mock] would send to', to, { name: name, email: email, phone: (f.phone.value || '').trim(), message: message });
+    toast('Thanks - your message has been sent. We will reply by email soon.');
+    f.reset();
+    return false;
+  };
+
   // ---------- boot ----------
   function boot() {
     // Close any modal on overlay click — routed through each modal's own close
@@ -1105,6 +1222,15 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') { closeQuiz(); closeSignin(); }
     });
+
+    // Crop the regions map to Italy on phones, and re-crop on viewport/orientation change.
+    setRegionMapViewBox();
+    if (regionMapMQ.addEventListener) regionMapMQ.addEventListener('change', setRegionMapViewBox);
+    else if (regionMapMQ.addListener) regionMapMQ.addListener(setRegionMapViewBox); // older Safari
+
+    // Re-crop the regions map and re-align the About "Three P's" on any viewport change (covers
+    // contexts that don't fire matchMedia 'change' on resize).
+    window.addEventListener('resize', function () { setRegionMapViewBox(); alignThreePs(); });
 
     // Quiz is invitation-only (brand decision 2026-07-10): it launches from the hero
     // CTA and the sticky "Take the quiz" chip, never as an unbidden first-visit modal.

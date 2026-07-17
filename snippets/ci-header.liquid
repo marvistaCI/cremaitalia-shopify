@@ -1,7 +1,9 @@
 {%- comment -%}
   ci-header.liquid — sticky storefront header.
   Nav: Shop (dropdown: All Shelves · Roccia · Sorpresa · Selezione · Offerta) · Bottega · Roasters · Journal · About
-  Right: search · cart · sign-in. SPA navigation handled by ci-storefront.js (showPage).
+  Right: cart · sign-in. SPA navigation handled by ci-storefront.js (showPage).
+  (Search removed in POC9 - the icon promised a search field but only routed to Shop;
+  real site-wide search returns at production via Shopify native predictive search.)
 {%- endcomment -%}
 <header class="ci-header">
   <div class="flag-strip flag-top" aria-hidden="true"><div></div><div></div><div></div></div>
@@ -30,10 +32,6 @@
         <button onclick="showPage('journal')" id="nav-journal">Journal</button>
         <button onclick="showPage('about')" id="nav-about">About</button>
       </nav>
-      <button class="icon-btn" title="Search" aria-label="Search" onclick="showPage('shop')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
-        <span class="btn-label">Search</span>
-      </button>
       <button class="icon-btn" title="Cart" aria-label="Cart" onclick="showPage('cart')" style="position:relative">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M6 6 5 3H2"></path></svg>
         <span class="btn-label">Cart</span>

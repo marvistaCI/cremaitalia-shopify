@@ -1,0 +1,25 @@
+{%- comment -%}
+  ci-region-filter.liquid — the ONE canonical region filter (POC9, Steve 2026-07-17).
+  Single source of truth for the region pill set + the "as we grow" note. Rendered wherever
+  the region filter appears: the Shop hero (always open) and the Roasters hero (toggled open
+  via "Filter By Region"). Do NOT copy this pill list anywhere else — edit here and every
+  surface updates in lockstep (Steve: "the same filter object ... no multiple branches").
+
+  Vocabulary is the locked Italian set. Active regions today: Toscana + Emilia-Romagna; the
+  rest are greyed "as we grow". filterRegion() (ci-storefront.js) applies the selection to the
+  CURRENT surface — the Shop product grid or the Roasters list — reading navCurrent.
+{%- endcomment -%}
+<div class="filter-pills">
+  <span class="pill active" onclick="filterRegion(this,'all')">All Regions</span>
+  <span class="pill" onclick="filterRegion(this,'toscana')">Toscana</span>
+  <span class="pill" onclick="filterRegion(this,'emilia')">Emilia-Romagna</span>
+  <span class="pill disabled">Piemonte</span>
+  <span class="pill disabled">Lombardia</span>
+  <span class="pill disabled">Trieste</span>
+  <span class="pill disabled">Lazio</span>
+  <span class="pill disabled">Campania</span>
+  <span class="pill disabled">Puglia</span>
+  <span class="pill disabled">Calabria</span>
+  <span class="pill disabled">Sicilia</span>
+</div>
+<p class="region-note">Greyed regions are on the way as we grow - and great roasters sometimes appear in regions not shown here. <button class="inline-link" onclick="showPage('regions')">See the map</button>.</p>

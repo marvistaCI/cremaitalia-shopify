@@ -1235,6 +1235,49 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   uncommitted). **Open (Cowork lane, flagged):** nothing blocking — the OneDrive `Standards\` Brand copy
   is current (v2.1 WeasyPrint); the old `Brand and Marketing\` v2.0 was already retired to `_Archive\`.
 
+- 2026-07-17 — **POC9 batch built + verified end-to-end (9 items); committed, NOT yet deployed
+  or pushed.** Interactive plan-then-build session; Steve reviewed each ask, made the calls, then
+  authorized the build ("go with these"). Detailed ledger + locked decisions in
+  `docs/POC9_change_list.md`; durable summary here. **(1) Regions map synced to OneDrive
+  `Region_Map_v2.svg`** (nine Italian titles, re-anchored leaders, centred legend, **Sardinia
+  removed** → 2 country paths) and made **responsive**: on phones (≤640px) the side-labels/leaders/
+  SVG-legend hide, the viewBox JS-crops to Italy (`setRegionMapViewBox`, `176 16 288 322`), and an
+  HTML `.region-legend` carries the colour key; desktop keeps the full labelled 640×460 canvas. Map
+  labels stay **Italian by design**; the sub-label **em-dashes are a deliberate exception to the §6
+  no-em-dash rule** (Steve's call — documented in an in-file comment so no sweep "fixes" them). **(2)
+  Regions list → English-first**: `Tuscany (Toscana)` etc. for the four with distinct English names
+  (Lombardy/Piedmont/Tuscany/Sicily), single name for the identical ones (Trieste/Lazio/Campania/
+  Puglia/Calabria — Puglia+Lazio kept, not Apulia/Latium). **(3) Home "Our roasters" grid removed**
+  (it grew 1:1 with the roster → runaway scroll + off-brand "aggregation"); replaced by a "Roasters
+  page" link in Our Model; the orphaned "Roasters" home-jump chip + `sec-roasters` anchor + dead
+  `roasterHomeCard` removed. **(4) Header search icon removed** (it promised a search field but only
+  routed to Shop); native Shopify predictive search noted for production. **(5) Promise page eyebrow**
+  "What we mean" → **"Our commitment to you"**. **(6) ONE shared region filter object**
+  (`snippets/ci-region-filter.liquid`) now rendered on both the Shop hero (always open) and the new
+  Roasters hero **"Filter By Region"** toggle (opens the panel / label swaps to "All Regions" which
+  clears + closes); `filterRegion` applies to the on-screen surface (products vs `#roaster-list`, via
+  `navCurrent` + new `applyRoasterFilter`); **selection is per-surface** — `resetRegionFilterState`
+  clears region on entering Shop or Roasters so a pick on one never filters the other (decision D,
+  verified). Roaster rows gained `data-region`. **(7) About "Our company"**: the "Three P's" block is
+  JS-aligned to the top of the second (caffè-door) image at the 2-col width (measured, self-correcting
+  for margin-collapse — lands at delta ≈0; cleared on the mobile stack). **(8) Shipping** reworded so
+  free shipping is a **Roccia _subscription_** benefit (one-time Roccia is not auto-free); the home
+  Roccia shelf card tightened to match. **(9) Contact**: new footer **Contact** link → `#page-contact`
+  with a **mocked** form (Name/Email/Phone/Message + radio reason routing **More info→info@ / I need
+  help→support@ / Other→contact@**, default Other; Name/Email/Message required, phone optional); PROD
+  seam documented (real send via a routing form-app or native `form 'contact'` to contact@ with the
+  reason in subject/body; mailboxes info@/support@ still to be created). **Verification:** `node
+  --check` + `JSON.parse` clean; `shopify theme check` = same 2 pre-existing `ImgWidthAndHeight`
+  baseline errors, **0 new offenses**; then driven live in `shopify theme dev` (DOM/geometry — the
+  screenshot tool was wedged again, as in prior sessions) confirming every item, including the region
+  filter counts (1 Emilia / 4 Toscana), no cross-contamination, contact validation + routing console
+  line, and the mobile/desktop map + alignment states. **Two real bugs caught by driving it** (not by
+  theme-check): a literal `{% form 'contact' %}` inside an HTML comment parsed as an unclosed Liquid
+  tag (neutralised), and the mobile HTML legend hidden by a later equal-specificity rule (fixed with
+  `.ci-main .region-legend`); also fixed the alignment margin-collapse + a resize-handler viewBox
+  refresh. **NEXT:** push to GitHub + deploy to a new **"Crema Italia POC9 Preview"** theme (needs
+  Steve's go-ahead), per the draft-theme naming rule. Storefront password still OFF (friend-testing).
+
 ## 10. Open questions / TODO
 
 **▶ CURRENT STATE — POC8 (as of 2026-07-13) — read this first when resuming.** Latest deployed

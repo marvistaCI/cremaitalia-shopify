@@ -447,6 +447,11 @@ nav button.active{color:var(--ci-crema);font-weight:600}
   .tour-hero{padding:1.5rem}
   .shop-menu{position:static;box-shadow:none;min-width:0}
   .cart-line{grid-template-columns:48px 1fr}
+  /* Region map on phones: labels/leaders/SVG legend can't render legibly at 640-unit scale,
+     so hide them; the viewBox crops to Italy (setRegionMapViewBox) and the HTML .region-legend
+     below carries the colour key. */
+  #region-map-svg .region-label,#region-map-svg .region-sub,#region-map-svg .leader,#region-map-svg .svg-legend{display:none}
+  .ci-main .region-legend{display:flex}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
@@ -456,7 +461,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .home-jump button:hover{border-color:var(--ci-crema);color:var(--ci-crema)}
 .home-jump .hj-quiz{background:var(--ci-crema);color:var(--ci-cream);border-color:var(--ci-crema)}
 .home-jump .hj-quiz:hover{background:var(--ci-crema-light);border-color:var(--ci-crema-light);color:var(--ci-coffee)}
-#sec-story,#sec-shelves,#sec-roasters,#sec-promise{scroll-margin-top:118px}
+#sec-story,#sec-shelves,#sec-promise{scroll-margin-top:118px}
 .founder-signature{display:block;width:184px;max-width:56%;height:auto;margin:1.1rem 0 .05rem}
 .founder-sign{font-family:var(--ci-font-display);font-style:italic;color:var(--ci-mute);margin-top:.1rem}
 /* Clear the compact mobile/tablet header (62px) so the sticky jump-bar isn't buried under it,
@@ -509,9 +514,37 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .region-learn:hover{text-decoration:underline}
 .filter-region{width:100%}
 .region-note{font-size:.8rem;color:var(--ci-mute);margin:.6rem 0 0;max-width:64ch}
+/* Roasters "Filter By Region" toggle + collapsible panel (POC9). The panel reuses the shared
+   region filter; [hidden] needs an explicit rule because .filter-group sets display:flex. */
+.region-toggle{background:none;border:none;cursor:pointer;font-family:var(--ci-font-body);font-weight:600;font-size:.82rem;letter-spacing:.02em;color:var(--ci-crema-light);margin-top:1rem;padding:.5rem 0;text-align:left;min-height:44px}
+.region-toggle:hover{text-decoration:underline}
+.region-toggle::before{content:"\203A\00a0";display:inline-block;transition:transform 200ms}
+.region-toggle.is-open::before{transform:rotate(90deg)}
+.region-panel{margin-top:.9rem}
+.region-panel[hidden]{display:none}
+
+/* ---- contact form (POC9) ---- */
+.contact-form{max-width:520px;margin-top:.5rem;display:flex;flex-direction:column;gap:1.1rem}
+.cf-field{display:flex;flex-direction:column;gap:.35rem}
+.cf-field label,.cf-reason legend{font-size:.8rem;font-weight:600;color:var(--ci-espresso);letter-spacing:.02em}
+.cf-opt{font-weight:400;color:var(--ci-mute)}
+.contact-form input,.contact-form textarea{font-family:var(--ci-font-body);font-size:.95rem;color:var(--ci-espresso);background:#fff;border:1px solid var(--ci-hairline);border-radius:8px;padding:.6rem .7rem;width:100%}
+.contact-form input:focus,.contact-form textarea:focus{outline:none;border-color:var(--ci-crema);box-shadow:0 0 0 2px rgba(184,131,72,.2)}
+.contact-form textarea{resize:vertical;min-height:120px}
+.cf-reason{border:none;padding:0;margin:0}
+.cf-reason legend{margin-bottom:.55rem;padding:0}
+.cf-radio{display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;font-weight:400;color:var(--ci-ink-soft);margin:0 1.1rem .3rem 0;cursor:pointer}
+.cf-radio input{width:auto;min-height:0;accent-color:var(--ci-crema)}
+.cf-error{color:#C8342B;font-size:.85rem;margin:0}
+.contact-form .btn-primary{align-self:flex-start}
 
 /* ---- roasting regions page (POC5+) ---- */
 .region-map{display:block;width:100%;max-width:640px;margin:0 auto 1.75rem;height:auto}
+/* HTML colour key — hidden on desktop (the SVG carries its own legend), shown on phones where
+   the SVG labels/legend are hidden (see the 640px media query). */
+.region-legend{display:none;flex-wrap:wrap;gap:.4rem 1.25rem;list-style:none;margin:-.5rem auto 1.75rem;padding:0;max-width:420px;justify-content:center}
+.region-legend li{display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--ci-ink-soft)}
+.region-legend .rl-dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto;box-shadow:0 0 0 1.5px #fff}
 .region-list{display:flex;flex-direction:column;gap:1.05rem;max-width:72ch}
 .region-row.is-here{border-left:3px solid var(--ci-crema);padding-left:1rem}
 .region-row h3{font-family:var(--ci-font-display);font-weight:600;font-size:1.12rem;color:var(--ci-coffee);margin:0 0 .1rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}

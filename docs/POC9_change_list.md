@@ -1,10 +1,16 @@
 # POC9 change list — Regions page refresh + responsive map
 
-> ▶ **NEXT SESSION — START HERE.** This batch is **NOT built yet.** Captured 2026-07-15;
-> build resumes when Steve is ready (targeted 2026-07-16). Steve explicitly said he is
-> *not* ready to build POC9 — this file preserves the ask, the analysis, and the open
-> questions so tomorrow's session picks up cleanly. Do not write theme code until the
-> open questions below are answered.
+> ✅ **BUILT 2026-07-17** (all 9 items) — committed, verified end-to-end in `shopify theme
+> dev`. **NOT yet deployed** to a preview theme (awaiting Steve's go-ahead) and **not yet
+> pushed to GitHub** at time of writing. Locked decisions (Steve): A dots+legend map on
+> mobile · B English-first names (single name for identical regions; keep Puglia/Lazio) ·
+> C remove header search · D one region filter object, per-surface selection (resets between
+> Shop/Roasters) · E contact radios, default Other, Name/Email/Message required · F shelf
+> card tightened too · em-dash exception kept on the map. Below is the original spec + the
+> build notes per item.
+>
+> _(Original planning banner, for context:)_ Captured 2026-07-15; the ask, analysis, and
+> open questions were preserved here before the build.
 
 ## The ask (Steve, 2026-07-15)
 Three things, all on the storefront **"Roasting Regions of Italy"** page (`#page-regions`):
