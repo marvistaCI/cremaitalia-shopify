@@ -510,7 +510,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .bom-cue{color:var(--ci-crema);font-weight:600;font-size:.72rem;letter-spacing:.02em;margin-top:.15rem}
 /* ---- shop: region line (POC5+); .tc-groups is the taste-console modal's group wrapper ---- */
 .tc-groups{display:flex;flex-wrap:wrap;gap:1.1rem 2rem}
-.region-learn{background:none;border:none;color:var(--ci-crema);font-weight:600;font-size:.72rem;letter-spacing:normal;text-transform:none;cursor:pointer;margin-left:.5rem;font-family:var(--ci-font-body)}
+.region-learn{background:none;border:none;color:var(--ci-crema);font-weight:600;font-size:.72rem;letter-spacing:normal;text-transform:none;cursor:pointer;margin:0;padding:0;text-align:left;align-self:start;font-family:var(--ci-font-body)}
 .region-learn:hover{text-decoration:underline}
 .filter-region{width:100%}
 .region-note{font-size:.8rem;color:var(--ci-mute);margin:.6rem 0 0;max-width:64ch}

@@ -1,7 +1,10 @@
 # POC9 change list — Regions page refresh + responsive map
 
 > ✅ **BUILT 2026-07-17** (all 9 items) — committed, verified end-to-end in `shopify theme
-> dev`. **NOT yet deployed** to a preview theme (awaiting Steve's go-ahead) and **not yet
+> dev`. **Correction (same day, folded into POC9, not POC10):** moved the "Learn about the
+> regions →" link **into the shared `ci-region-filter` snippet** so the Roasters filter carries
+> it too (Steve noticed it was only on Shop). Single source, no duplication — Shop's label is
+> now just "Region" with the link just below it. **NOT yet deployed** to a preview theme (awaiting Steve's go-ahead) and **not yet
 > pushed to GitHub** at time of writing. Locked decisions (Steve): A dots+legend map on
 > mobile · B English-first names (single name for identical regions; keep Puglia/Lazio) ·
 > C remove header search · D one region filter object, per-surface selection (resets between
