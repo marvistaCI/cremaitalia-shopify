@@ -1278,6 +1278,60 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   refresh. **NEXT:** push to GitHub + deploy to a new **"Crema Italia POC9 Preview"** theme (needs
   Steve's go-ahead), per the draft-theme naming rule. Storefront password still OFF (friend-testing).
 
+- 2026-07-24 — **POC9 readiness review (skeptic pass) + live-theme copy fix deployed + two platform
+  corrections.** Steve asked for a hard-nosed "are we ready to build the real store?" review before
+  committing to the production build. **Verdict: the decision layer is genuinely closed — no
+  substantive business decision is open — but four *platform-reality* assumptions were never verified
+  against Shopify, and those are the ones that would force revisions mid-build.** Recommended a
+  one-session platform-validation spike before writing production code.
+  **Two of the four were resolved on the spot this session:**
+  (a) **Shopify Functions are available on ALL plans** (Basic included) — they replaced the old
+  Plus-only Scripts. The entitlement/`MAX`-discount engine (Standard §11) is therefore **not**
+  plan-gated. This corrects an earlier concern raised in the same review; no license wall exists.
+  (b) **Store Operating Standards §10's "No visible promo-code field at checkout" is NOT achievable
+  below Shopify Plus.** Hiding that field requires Checkout UI extensions, which are Plus-only. Plan
+  costs verified from shopify.com/pricing: Basic $29/39, Grow $79/105, Advanced $299/399, **Plus from
+  $2,300/mo** — roughly **$24k/yr over Advanced** purely to hide one field. **Recommendation (NOT yet
+  decided by Steve): amend §10** rather than buy Plus — the rule's intent (never train customers to
+  hunt for codes) survives because standing subscriber/founder benefits already auto-apply server-side;
+  residual risk is campaign codes leaking, mitigated by unique single-use codes. **This is an open
+  Standard amendment awaiting Steve's call — see §10 TODO.** Also noted: Basic allows **0** extra staff
+  accounts, so **Grow** is the practical floor given the Lucia/Asia/Lauren team; Advanced only pays for
+  itself on card-rate savings around $70–80k/yr revenue.
+  **The remaining two unverified risks** (carried to §10 TODO): the **Loop × Shopify Functions discount
+  interplay** is untested — Loop's selling-plan subscription discount and our Function-applied benefit
+  could collide or double-apply, the highest-risk integration in the design; and **new vs legacy Shopify
+  customer accounts** has never been chosen — the POC's rich account page (Membership tile, founder
+  number, Loop portal slot) is buildable in Liquid on *legacy* accounts but only via UI extensions on
+  *new* hosted accounts, and Loop's portal integration differs between them. Also flagged: no bundle app
+  has been evaluated against Standard §7's BOM requirements.
+  **Live-theme copy fix DEPLOYED (the one code change this session).** A full 13-file diff of the live
+  theme (`150557294761`) against the repo found it **stale in exactly 4 files** — `templates/index.liquid`,
+  `layout/theme.liquid`, `templates/password.liquid`, `layout/password.liquid` — all containing
+  **em-dashes predating the 2026-07-13 §6 sweep**, including the page `<title>` and the Open Graph /
+  Twitter share titles. Everything else (CSS, JS, footer snippet, 404, locales, config, both PNGs) was
+  already byte-identical. Deployed via two scoped pushes (`--path live-theme --only …` for the homepage
+  pair, plain `--only …` for the password pair, both `--allow-live`). **Verified:** all 4 files now
+  byte-match the repo, the theme still holds all 13 files (nothing deleted), and a **cookie-less
+  `curl` of cremaitalia.com returns HTTP 200 with ZERO customer-visible em-dashes**; `og:title` and
+  `twitter:title` now read "Crema Italia - Italian coffee, brought over whole." The 8 em-dashes still on
+  the theme are all inside **HTML comments** (§6-exempt, correctly untouched). Net: the live store is
+  fully current with the repo, and **the password toggle is now purely a friend-testing decision** — copy
+  quality is correct in both states.
+  **Permissions note (new failure mode, worth remembering).** The live push was **denied by Claude Code's
+  auto-mode classifier**, despite the user-level allowlist carrying a blanket `Bash(shopify theme *)` rule
+  that had silently permitted every prior live push (2026-07-05, 2026-07-07). The classifier is a *second*
+  layer that judges a command's semantics rather than matching a glob, and it stops `--allow-live` writes
+  to the published storefront. Code did **not** reroute around it; Steve ran both commands himself in
+  PowerShell. **Expect this again on every future live push** (POC9 deploy, launch). Also observed: that
+  allowlist has grown to ~150 entries, mostly dead one-off scratchpad paths with stale session UUIDs, and
+  carries unqualified `Bash(git push *)` / `Bash(git add *)` / `Bash(shopify theme *)` — worth a deliberate
+  prune; the recommendation is to **narrow, not widen**, and keep live-store writes human-initiated.
+  **Note:** the Shopify CLI warns "doesn't seem like you're running in a theme directory" on the
+  `--path live-theme` push — that is **expected and safe** (`live-theme/` deliberately holds only 2 files);
+  answer yes. Confirmed non-destructive both by the 2026-07-07 precedent and by this session's post-push
+  13-file count.
+
 ## 10. Open questions / TODO
 
 **▶ CURRENT STATE — POC8 (as of 2026-07-13) — read this first when resuming.** Latest deployed
@@ -1373,9 +1427,41 @@ resuming; the POC4 batch's cross-surface-relevant decisions (account data-model 
 catalog schema additions) should be logged there too.
 
 **OPEN / TO VET:**
+
+**▶ PRE-PRODUCTION PLATFORM SPIKE (added 2026-07-24 — do these BEFORE the production build).**
+These are not decisions; they are unverified assumptions about how Shopify actually behaves.
+Each one, if wrong, forces a spec revision mid-build — which is exactly the outcome Steve
+asked to avoid. Full context in the §9 2026-07-24 entry.
+- [ ] **DECIDE: amend Store Operating Standards §10 ("no visible promo-code field").** It is
+  **not achievable below Shopify Plus** (~$24k/yr over Advanced just for that). Recommended:
+  amend the Standard, keep the intent via auto-applied benefits + unique single-use campaign
+  codes. **Steve's call — the Standard currently asserts something we cannot build.**
+- [ ] **TEST: Loop × Shopify Functions discount interplay.** Highest-risk integration in the
+  whole design. Loop's selling-plan subscription discount vs our Function-applied founder/
+  subscriber benefit — verify they don't collide or double-apply. Best done on a dev store.
+- [ ] **CHOOSE: new vs legacy Shopify customer accounts.** The POC's account page (Membership
+  tile, founder number, Loop portal slot) is buildable in Liquid on *legacy*; on *new* hosted
+  accounts it needs UI extensions, and Loop's portal integration differs. Not yet in any Standard.
+- [ ] **EVALUATE: a bundle app against Standard §7's BOM requirements** (component-derived
+  facets, component-gated availability incl. the freshness window, per-order pick-pack BOM to
+  the 3PL). Native Shopify Bundles covers component inventory but not freshness or facet
+  derivation. If nothing fits, the fallback (what's automated vs manual) changes the build.
+- [ ] **CHOOSE a Shopify plan.** Basic allows **0** extra staff accounts, so **Grow** ($79/mo
+  annual) is the practical floor for the Lucia/Asia/Lauren team. Advanced only pays for itself
+  on card-rate savings around $70–80k/yr revenue. **Plus is not justifiable** — see §9.
+- [ ] Also still open and launch-gating, though not build-blocking: pricing numbers never
+  validated against real landed costs (Standard §12.3); real catalog data + photography;
+  3PL not selected (blocks the no-waste Promise copy, and the transit/$8.50 claims); email
+  platform not chosen (win-back, abandoned-cart, 60-day-grace campaigns all assume one);
+  info@ / support@ mailboxes not created (POC9's contact routing needs them); and the legal
+  pages checkout requires (privacy, terms, refund, shipping) do not exist anywhere in the repo.
+
 - [ ] **Turn storefront password protection back ON** (Online Store > Preferences)
   once Steve's friend-testing round is done — see the ⚠️ callout at the top of this
   file. This is the one open item from the whole 2026-07-05/06 investigation.
+  **Note (2026-07-24):** this is now purely a friend-testing decision — the live theme's
+  copy is correct in BOTH states after the 2026-07-24 push, so it is no longer a
+  copy-quality tradeoff.
 - [x] ~~Steve to visually QA the POC4 batch in an actual browser.~~ Done 2026-07-05 —
   quiz → sign-in → Shop flow confirmed working via `shopify theme dev` (see Deployment
   status above).
