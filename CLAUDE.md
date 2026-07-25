@@ -250,6 +250,14 @@ lowercase-with-hyphens for CSS classes (`.hero-section__title`), camelCase for J
 - **Never** re-typeset the wordmark; always use the supplied logo files
 - **Never** apply the (R) symbol to the logo — Crema Italia is not federally registered yet
 - **Never** push directly to the live store without committing to git first
+- **Never** push or deploy to Shopify — any theme, live or preview — without FIRST running
+  `shopify theme list` and `git log origin/main..HEAD`, and never state what is deployed from
+  a document. **Live output beats every document, including this file**; when they disagree the
+  document is stale and gets corrected in the same pass. (2026-07-24: a week-old "not yet
+  deployed" line in a change list was trusted over a live check — which had already contradicted
+  it that same session — and created a duplicate Shopify theme.) For a full POC batch deploy use
+  the **`crema-poc-deploy`** skill, which makes this its first step; this rule still binds for
+  one-off, scoped, and live pushes that the skill does not cover.
 - **Never** delete or rename anything under `<OneDrive>/CremaItalia LLC/` without
   asking — that's the operations folder, not the code folder
 - **Never** use emoji in copy or commit messages (Steve hasn't asked for emoji)
@@ -1433,6 +1441,8 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 > will push, deploy, or make a claim about what is deployed, run BOTH:
 > `shopify theme list` and `git log origin/main..HEAD --oneline`.
 > Live output wins over every document, including this one; correct the document in the same pass.
+> This is also §6's ninth "Never", and for a full POC batch deploy the **`crema-poc-deploy`** skill
+> encodes the whole ritual with this as step 0.
 > The scheduled coordinator **cannot** do this for you — the Shopify CLI is unavailable in its
 > sandbox (confirmed 2026-07-25), so its deployment reporting is always UNVERIFIED.
 > **This rule exists because it was violated on 2026-07-24** (see §9): a stale "not yet deployed"
