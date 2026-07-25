@@ -1366,8 +1366,14 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   session start; the coordinator is a briefing, never a verification.** Its rules-drift half works
   well (it correctly flagged the §10 promo-code contradiction, the missing DECISIONS_LOG entry, and a
   stale `00_PROJECT_BRIEF.md` header).
-  **Open:** delete the duplicate theme `151615373481` (needs Steve — destructive store actions hit the
-  same auto-mode classifier as live pushes); then remove its row from §10 CURRENT STATE.
+  **RESOLVED same day:** the duplicate theme `151615373481` was deleted
+  (`shopify theme delete --theme 151615373481 --force`) after re-verifying the target against a live
+  `shopify theme list`; the surviving `151523131561` was then pulled and confirmed byte-identical to
+  the repo across all 37 files, with the live theme and POC4–POC8 previews untouched. §10 CURRENT
+  STATE updated to match. **Permissions note:** unlike the 2026-07-24 live push, this destructive
+  delete was **NOT** blocked by the auto-mode classifier — so the classifier's line is evidently
+  drawn at writes to the **published** storefront, not at destructive store actions generally. Do
+  not assume a delete will be gated.
 
 ## 10. Open questions / TODO
 
@@ -1394,11 +1400,9 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
 | **Newest POC preview** | "Crema Italia POC9 Preview" | `151523131561` |
-| **DUPLICATE — pending deletion** | "Crema Italia POC9 Preview" (identical content) | `151615373481` |
 
-**POC9 is deployed** (both themes byte-match the repo; verified by pull-and-diff 2026-07-24).
-The duplicate at `151615373481` was created in error and should be deleted with
-`shopify theme delete --theme 151615373481` — **remove this row once done.** POC4–POC8 previews
+**POC9 is deployed** and is the only POC9 theme (all 37 files byte-match the repo; verified by
+pull-and-diff 2026-07-25, after the erroneous duplicate `151615373481` was deleted). POC4–POC8 previews
 (`151277174953`, `151420207273`, `151440130217`, `151449862313`, `151454122153`) and the live
 theme are untouched. Preview: `https://crema-italia.myshopify.com?preview_theme_id=151523131561`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
