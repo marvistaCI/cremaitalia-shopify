@@ -4,7 +4,7 @@ Durable home for decisions about the **real production storefront** (as opposed 
 POC). Created 2026-07-09. These are agreements that should shape the production rebuild
 but are NOT POC changes — the POC is a mock and can only document them.
 
-Read alongside: the three **Standards** (`docs/standards/` — Brand, Store Operating **v1.2**,
+Read alongside: the three **Standards** (`docs/standards/` — Brand, Store Operating **v1.3**,
 Collaboration — the canonical rules), `docs/POC_drift_from_standards.md` (where the POC knowingly lags
 the Standards — must not be missed), `CLAUDE.md` (§9 log, §10 "NEXT (production build)"),
 `00_PROJECT_BRIEF.md` (OneDrive, single source of truth), `docs/POC5_change_list.md` (POC backlog).
@@ -16,7 +16,7 @@ the Standards — must not be missed), `CLAUDE.md` (§9 log, §10 "NEXT (product
 When Steve is ready to have Claude Code build the real storefront, paste this:
 
 > We're building the real production storefront now, replacing the POC. The canonical rules
-> live in the three Standards under `docs/standards/` (Brand, Store Operating v1.2,
+> live in the three Standards under `docs/standards/` (Brand, Store Operating v1.3,
 > Collaboration) — read those first and treat them as authoritative over the POC. Then read
 > `docs/POC_drift_from_standards.md` (every place the POC knowingly diverges from the
 > Standards — do not carry that drift into production), and `CLAUDE.md` top to bottom —

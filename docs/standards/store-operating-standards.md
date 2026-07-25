@@ -1,9 +1,20 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.2 · 2026-07-13**
+**Version 1.3 · 2026-07-25**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
 
+> **v1.3 (2026-07-25)** replaced the unachievable **"No visible promo-code field at checkout"** exclusion
+> (§10) with the rule we can actually hold: **we issue no discount codes at all.** Checkout's code field
+> is visible and functional on every plan below Shopify Plus — it cannot be hidden, disabled, or made
+> read-only without Plus (~$24k/yr over Advanced for that one field; **Steve declined**). It is instead
+> **permanently inert in practice, because no valid code exists anywhere.** Every discount — standing and
+> campaign alike — is computed **server-side** and applies automatically. This **supersedes v1.2's
+> "campaign discounts apply via URL parameter or personalized email link"** (§3): a `/discount/CODE` link
+> *is* a real Shopify code, readable straight out of the URL and postable to a coupon site, which is the
+> leak this closes. **Policy is locked; the mechanism (§11) is the intended implementation and is NOT yet
+> verified against the platform** — see §12.7 and §12.8.
+>
 > **v1.2 (2026-07-13)** replaced additive discount stacking with a **no-stacking, highest-wins (`MAX`)**
 > rule (§3): a customer receives only the single highest discount they qualify for — a founder who is also
 > a first-time buyer gets **12%** (not 17%); a first-time buyer who earns the 3-bag volume tier gets **10%**
@@ -120,23 +131,39 @@ others are obviated. This deliberately protects margin on thin per-bag markups: 
 first-time buyer gets **12%** (not 17%); a first-time buyer who earns the 3-bag volume tier gets **10%**
 (not 15%). There is **no additive stacking and no separate combined cap — the `MAX` rule is the cap.**
 
-**Delivery mechanism (LOCKED):** there is **NO visible promo-code field at checkout.** Discounts reach the
-customer by kind: the **standing subscriber / founder benefit applies automatically, server-side**, whenever
-the customer is signed in and benefits are on (Shopify Functions reading the entitlement tag, §11);
-**campaign discounts** (first-time, volume, abandoned-cart, win-back, BFCM) apply via **URL parameter or
-personalized email link**. Whichever mechanism fires, the customer still receives only the single highest
-applicable rate (the `MAX` rule above).
+**Delivery mechanism — POLICY (LOCKED 2026-07-25): we issue NO discount codes, of any kind, ever.**
+Every discount in the table below — standing *and* campaign — is **computed server-side and applied
+automatically**. No customer is ever given a code, a coupon, or a `/discount/…` link, and none is ever
+published, promoted, printed, or referenced in any marketing.
+
+Consequences, all deliberate:
+
+- **The checkout code field stays visible.** It cannot be hidden, disabled, or made read-only below
+  Shopify Plus, and Plus is not justifiable for it (§10). It is **inert in practice** — nothing a
+  customer types can produce a discount, because no valid code exists to type.
+- **Nothing can leak.** A `/discount/CODE` link carries a real, reusable Shopify code in plain sight;
+  anyone can read it out of the URL and post it publicly. Issuing none removes that surface entirely.
+  This is why v1.2's "URL parameter or personalized email link" wording is retired.
+- **Campaign emails link to the store, not to a discount.** Eligibility already sits on the customer
+  (a tag) or in the cart, so the offer applies on arrival with nothing to redeem.
+- **One evaluator owns `MAX`.** Because every discount is computed in the same place, the single
+  highest applicable rate is enforced by construction. Mixing codes with server-side discounts would
+  hand that decision to Shopify's own combination rules — exactly what the `MAX` rule forbids.
+
+> **Policy above is locked. The *mechanism* that implements it lives in §11 and is NOT yet verified
+> against the platform** (§12.7, §12.8). If the platform forces a change, §11 changes — this policy
+> does not.
 
 | Discount | Rate | Applies to | Notes (every row competes in the `MAX`; none stack) |
 |---|---|---|---|
 | **Founding Member** | 12% | Roccia, Sorpresa, Selezione | Auto when benefits on. Founder tier of the subscriber benefit — see §4. |
 | **Active subscriber** | 10% | Roccia, Sorpresa, Selezione | Auto when benefits on (regular tier). |
-| **Win-back** | 15% | All shelves | 30 days post-Roccia-cancel; one email link. Wins over the standing benefit by design. |
+| **Win-back** | 15% | All shelves | 30 days post-Roccia-cancel; time-boxed customer tag, email links to the store. Wins over the standing benefit by design. |
 | **Volume** | 2 bags 5% / 3+ bags 10% | Coffee shelves except Offerta/Bottega | Competes in the `MAX`; for a subscriber the 10/12% already wins. |
 | **First-time buyer** | 5% | All shelves except Bottega | One-time, detected server-side (zero prior orders). A first-time founder/subscriber still gets 12/10% (higher). |
 | **BFCM** | 5% | All shelves incl. Offerta/Bottega | Manual admin toggle, site banner. A **flat** candidate in the `MAX` (no longer additive) — mainly benefits customers who hold no higher discount. |
-| **Abandoned cart** | 5% | All shelves | Email #3 link only; once per customer per 90 days. |
-| **Referral** | **TBD** | **TBD** | Referral capture is **not built yet**; reward + mechanism are open (§12.6). The former "free 100g bag" is void — 100g exists only inside Tours (§1), so there is no standalone 100g SKU to gift. |
+| **Abandoned cart** | 5% | All shelves | Triggered at email #3 as a time-boxed customer tag (the email links to the store, not to a code); once per customer per 90 days. |
+| **Referral** | **TBD** | **TBD** | Referral capture is **not built yet**; reward + mechanism are open (§12.6). The former "free 100g bag" is void — 100g exists only inside Tours (§1), so there is no standalone 100g SKU to gift. **Whatever form it takes, it must not require issuing a code** (the no-codes policy above). |
 
 ### 3.1 Subscriber benefits & how long they last (LOCKED 2026-07-13)
 
@@ -280,7 +307,14 @@ damage replacement, the freshness window, and the no-waste pledge (Feeding Tampa
 - **No roast-day shipping-cadence claims** — pallets travel on a 6–10-week cadence.
 - **No countdown timers, fake stock counts, or manufactured urgency** — real low-inventory and real
   freshness windows only.
-- **No visible promo-code field** at checkout.
+- **No discount codes.** We never issue, publish, promote, or reference one (§3). Checkout's code
+  field **is** visible — it cannot be hidden below Shopify Plus, and Plus is not justifiable for it
+  (from $2,300/mo vs Advanced at $299; ~$24k/yr for one field — **declined 2026-07-25**). The field is
+  inert in practice because no valid code exists. *This replaces v1.2's "No visible promo-code field at
+  checkout," which asserted something we cannot build.*
+- **No "have a promo code?" prompts, banners, or fields** anywhere **we** control — the storefront,
+  emails, print, or packaging. The intent of the retired rule survives here: never train a customer to
+  go hunting for a code.
 - **No sitewide percentage-off promotional sales.**
 - **No emoji. No exclamation marks. No "amazing/best/you'll love it" copy.**
 - **No em-dashes in customer-facing copy** (2026-07-13) — see Brand Standards / `CLAUDE.md` §6 for the
@@ -296,6 +330,25 @@ inherit the shelf/size matrix), `days_to_offerta` (Int), `offerta_transition_dat
 (Date), `current_shelf` (SingleSelect: Roccia|Sorpresa|Selezione|Offerta), `Referral_Gift_Allowed`
 (Boolean), plus taxonomy: `roast_level`, `flavor_profile`, `caffeine`, `shelf`, `region`,
 `roaster_handle`, `best_by_date`. Extend with a structured component-SKU BOM field on bundles (§7).
+
+**The discount engine — INTENDED IMPLEMENTATION, NOT YET VERIFIED (2026-07-25).** §3's no-codes policy
+is locked; *this* is how we currently intend to deliver it, and it is the part that may change if the
+platform disagrees (§12.7, §12.8). Nothing else in this Standard depends on these details.
+
+- **One Shopify Function evaluates every discount** and returns the single highest applicable rate
+  (`MAX`, §3). One evaluator is deliberate: split the work between a Function and any code- or
+  automatic-discount, and Shopify's own combination rules decide what stacks — which `MAX` forbids.
+- **Its inputs** are (a) the **customer's tags/metafields** — founder number, subscription state,
+  first-time, win-back and abandoned-cart windows; (b) the **cart** itself, for the volume tiers, which
+  need no customer state at all; and (c) a **shop-level toggle** for a date-boxed campaign such as BFCM.
+- **Tags are maintained by Shopify Flow + Loop webhooks**, never by the theme — a customer can cancel
+  from an email link and never touch storefront UI, so entitlement must be server-side (see the account
+  split below).
+- **Campaign eligibility is a time-boxed tag, not a code.** A win-back email links to the store; the
+  15% is already attached to that customer for 30 days.
+- **Unverified:** that a discount Function can read customer tags/metafields in its input query
+  (§12.7), and how this Function coexists with **Loop's own selling-plan subscription discount** —
+  the one remaining discount source we do not author (§12.8).
 
 **Customer tags:** `founding-member-NNN` (durable; set at signup, removed only on account closure —
 NO `founding_rate_forfeited`, retired per §4), plus subscription-state tags derived from Loop
@@ -349,8 +402,18 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    built, and the former "free 100g bag" reward is void (no standalone 100g SKU — 100g exists only inside
    Tours, §1). Both the reward form (e.g. a 250g bag, account credit) and the capture/tracking tooling are
    open; decide before any referral discount is enabled. The §3 table carries Referral as **TBD** until then.
+   **Constraint added v1.3:** the chosen form must not require issuing a discount code (§3).
+7. **UNVERIFIED — can a Shopify discount Function read customer tags/metafields?** The whole §11 engine
+   assumes yes. Confidence is reasonable, not established. **Verify on a free development store before
+   the production build** — a minimal Function that reads one tag and takes 10% off is enough to settle
+   it. If the answer is no, §11's mechanism changes; §3's policy does not.
+8. **UNVERIFIED — how does our discount Function coexist with Loop's selling-plan subscription
+   discount?** Loop is the only discount source in the system we do not author, so it is the one place
+   `MAX` could be violated without us doing anything wrong: a Loop selling-plan discount and our
+   Function could collide or double-apply. **Highest-risk integration in the design.** Verify on the
+   same dev store, with a real Loop subscription, before the production build.
 
 ---
 
-*Store Operating Standards v1.2 · 2026-07-13 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.3 · 2026-07-25 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
