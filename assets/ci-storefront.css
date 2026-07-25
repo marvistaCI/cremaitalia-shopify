@@ -14,6 +14,11 @@
   --ci-radius:8px;--ci-page-max:1120px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+/* Stop the mobile pull-to-refresh gesture from reloading the page mid-review. This is a
+   TESTING aid, not a model of production behaviour: the POC keeps session/cart in memory, so
+   an accidental reload wipes them. Production uses real Shopify session cookies and is
+   unaffected. (Android Chrome; iOS Safari 16+.) */
+html,body{overscroll-behavior-y:contain}
 html{-webkit-text-size-adjust:100%}
 body{background:var(--ci-cream);color:var(--ci-coffee);font-family:var(--ci-font-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
@@ -446,7 +451,19 @@ nav button.active{color:var(--ci-crema);font-weight:600}
   .dark-hero{padding:2rem 1rem 1.5rem}
   .tour-hero{padding:1.5rem}
   .shop-menu{position:static;box-shadow:none;min-width:0}
-  .cart-line{grid-template-columns:48px 1fr}
+  /* Cart line on phones: 2 columns, so the third child (price + Remove) would otherwise wrap
+     into the 48px thumbnail column and get crushed. Span it across its own row instead, and
+     align to the top so the thumbnail sits level with the product title rather than floating
+     centred against a much taller info block. */
+  .cart-line{grid-template-columns:48px 1fr;align-items:start;column-gap:.85rem;row-gap:.6rem}
+  /* The thumbnail must match its grid column: at the desktop 64px it overflowed the 48px
+     column and overlapped the title, which is the "smashed against the thumbnail" symptom. */
+  .cart-line-img{width:48px;height:48px}
+  .cart-line > div:last-child{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-top:.6rem;border-top:1px solid var(--ci-hairline)}
+  .cart-line > div:last-child .cp{font-size:1rem}
+  /* "Tasting Quiz" overflows the sticky chip bar at phone widths; the chip is a primary CTA
+     so it must not be clipped. Desktop keeps the full label. */
+  .hj-word{display:none}
   /* Region map on phones: labels/leaders/SVG legend can't render legibly at 640-unit scale,
      so hide them; the viewBox crops to Italy (setRegionMapViewBox) and the HTML .region-legend
      below carries the colour key. */

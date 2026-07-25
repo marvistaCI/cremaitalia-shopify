@@ -800,8 +800,17 @@
   // Both quiz-result choices route through sign-in first — we want to capture the
   // customer's taste profile into their account whenever possible, regardless of
   // which browsing option they pick. See docs/POC_v4_change_list.md.
-  window.chooseQuizMatches = function () { pendingQuizAction = 'matches'; closeQuiz(); openSignin(); };
-  window.chooseQuizEverything = function () { pendingQuizAction = 'everything'; closeQuiz(); openSignin(); };
+  // Already signed in: carry out the choice straight away and save to the account. Only a
+  // signed-OUT customer routes through sign-in first (the sign-in success handler and the
+  // dismissed-modal guest fallback both replay pendingQuizAction the same way).
+  window.chooseQuizMatches = function () {
+    if (session.signedIn) { applyProfileAndClose(); renderAccount(); return; }
+    pendingQuizAction = 'matches'; closeQuiz(); openSignin();
+  };
+  window.chooseQuizEverything = function () {
+    if (session.signedIn) { showEverythingFromQuiz(); renderAccount(); return; }
+    pendingQuizAction = 'everything'; closeQuiz(); openSignin();
+  };
   // "Clear filters" (from the no-results empty state): drop the ephemeral Shelf/Region
   // navigation and turn taste filtering off, so everything shows again. The saved
   // profile is KEPT (the ribbon stays, in its off state) — clearing filters is not the

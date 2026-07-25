@@ -30,6 +30,31 @@ Everything below is what that prompt pulls in.
 
 ---
 
+## 0. POC scope — model only what we will render (LOCKED — Steve, 2026-07-25)
+
+**The rule.** The POC models **only the surfaces we will write code for** in production. Anything
+Shopify supplies and we have no code control over is **not** modelled — building a mock of someone
+else's control teaches us nothing and costs real time. **The single exception:** model it if its
+absence *blocks testing the POC itself*, and then only as a testing aid, labelled as such in a code
+comment so nobody mistakes it for a production design.
+
+**The boundary that actually trips people up — cart vs checkout:**
+
+| Surface | Who renders it | In POC scope? |
+|---|---|---|
+| **Cart** (`/cart`, cart drawer) | **Ours.** `templates/cart.liquid` / a cart section we write. Shopify supplies only the *data* (Cart AJAX API, `cart` Liquid object) — zero presentation. | **YES.** Layout, thumbnails, qty stepper, Remove, free-ship progress bar are all hand-built, and the POC CSS carries forward as the design system. |
+| **Checkout** | **Shopify's.** Not themeable below Plus. We render none of it. | **NO.** Never model it — including the promo-code field (see §10 of the Store Operating Standard and the pending amendment). |
+| **Sign-in / account pages** | **UNDECIDED** — depends on the open *new vs legacy customer accounts* decision (CLAUDE.md §10 spike). Legacy = Liquid, ours. New = Shopify-hosted, theirs. | **CONDITIONAL.** Until that decision lands we do not know whether the POC's account surface is ours to build. Resolve it before investing further there. |
+
+*Worked examples from the 2026-07-25 mobile review:* the broken mobile cart-line grid **was** fixed
+(ours, and the CSS ships to production); persisting the mocked sign-in session to `localStorage`
+was **declined** (it emulates a Shopify session cookie we get free); a mock of the checkout
+promo-code field was **declined** (pure checkout). The one testing-aid exception taken was a single
+`overscroll-behavior-y:contain` CSS line, to stop an accidental pull-to-refresh wiping a tester's
+in-memory session mid-review.
+
+---
+
 ## 1. Data-driven content — the umbrella rule
 
 All content that **grows over time** comes from a Shopify data source and is
