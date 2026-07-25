@@ -1427,6 +1427,46 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   pull-and-diff (all 37 files match) and by re-listing (exactly one POC10 theme). POC4–POC9 previews
   and the live theme untouched. Detail: `docs/POC10_change_list.md`.
 
+- 2026-07-25 — **Platform-validation dev store created; first three findings, one of which reverses a
+  design assumption.** Steve created a free Partners development store,
+  **`crema-italia-development.myshopify.com`** (simulating **Basic** deliberately — validate against the
+  lowest plan we would launch on, so nothing passes on a feature Basic lacks; **Plus was explicitly not
+  chosen**, since on Plus the checkout is customizable and the promo-field test would have returned a
+  false pass). Test data enabled — it seeds customers **with order history**, which the first-time-buyer
+  5% test needs. Existing Shopify CLI auth already covers the store (`shopify theme list` works).
+  **Finding 1 — customer accounts are no longer a choice.** §10's "CHOOSE new vs legacy" was the wrong
+  question: a store created today runs **new customer accounts only.** Settings → Customer accounts
+  offers Configurations / Authentication / self-serve returns / store credit / URL and **no classic
+  option anywhere** (Authentication is only Shop / Google / Facebook sign-in). `/account` and
+  `/account/login` **302 off-domain** to `shopify.com/82039013600/account`. **Consequence:** the POC's
+  account page — Membership tile, founder number, taste-profile card, Loop portal slot, Recent Orders —
+  **is not buildable in Liquid**; that surface is Shopify-hosted and extensible only via customer-account
+  UI extensions. Under the POC-scope rule locked earlier the same day
+  (`production_build_spec.md` §0), the POC has therefore been **modelling a surface we do not own** —
+  §0's table updated from CONDITIONAL to SHOPIFY'S. **The business rules are untouched** (durable founder
+  status, the honorific, the 60-day grace — Standard §3.1/§4); only the rendering surface changes. The
+  replacement open item is **scoping what UI extensions can actually render**, now the largest open
+  consequence for the production build.
+  **Finding 2 — v1.3's promo-code amendment is CONFIRMED, not merely assumed.** Published hours earlier
+  on "fairly confident," now empirical: on Basic, Checkout settings exposes field-level control for
+  **only** full name / company / address line 2 / shipping phone; there is no discount-field control on
+  that page or under Advanced preferences. The **Checkout Editor** does list
+  `Order summary → Discounts → Discount or gift card` in its structure tree — which briefly looked like
+  a contradiction and was flagged as one before being checked — but the tree is **advisory and
+  non-interactive** for native elements: no visibility toggle, no removal. The field cannot be hidden
+  below Plus. Steve's call to proceed on reasonable confidence rather than block was right, and the
+  confirmation cost one click.
+  **Finding 3 — checkout/cart rules come from apps.** "Checkout rules: there are no apps installed with
+  rules for checkout or cart." Same extension surface a bundle app would use — relevant to the §7 BOM
+  evaluation (spike item 4).
+  **Still unverified:** Standard §12.7 (can a discount Function read customer tags/metafields) and
+  §12.8 (Loop × our Function) — neither is touched by today's findings. **Next:** scaffold a minimal
+  discount-function app for §12.7, then Loop for §12.8. Per the spike principle the app is throwaway and
+  belongs **outside this repo** (`~/code/crema-validation`, its own git repo, deleted after); what
+  survives is the written findings. **Caveat carried forward:** a dev store is not a perfect mirror of
+  production — anything surprising in the Loop test should be confirmed with Loop support before being
+  treated as fact.
+
 ## 10. Open questions / TODO
 
 **▶ CURRENT STATE — POC10 (verified live 2026-07-25) — read this first when resuming.**
@@ -1568,16 +1608,34 @@ catalog schema additions) should be logged there too.
 These are not decisions; they are unverified assumptions about how Shopify actually behaves.
 Each one, if wrong, forces a spec revision mid-build — which is exactly the outcome Steve
 asked to avoid. Full context in the §9 2026-07-24 entry.
-- [ ] **DECIDE: amend Store Operating Standards §10 ("no visible promo-code field").** It is
-  **not achievable below Shopify Plus** (~$24k/yr over Advanced just for that). Recommended:
-  amend the Standard, keep the intent via auto-applied benefits + unique single-use campaign
-  codes. **Steve's call — the Standard currently asserts something we cannot build.**
+- [x] ~~**DECIDE: amend Store Operating Standards §10 ("no visible promo-code field").**~~
+  **DONE 2026-07-25 — Standard v1.2 → v1.3, and since VERIFIED on the dev store.** Steve declined
+  Plus; §10 now states the achievable rule (**we issue no discount codes at all**, so the visible
+  field is inert because nothing valid exists to type), and v1.2's "campaign discounts via URL
+  parameter or personalized email link" was retired as a leak Steve identified — a `/discount/CODE`
+  link carries a real, readable code. **Empirical confirmation:** on a Basic-plan dev store, the
+  Checkout settings page exposes field-level control only for name / company / address line 2 /
+  phone, and the Checkout Editor lists `Order summary → Discounts → Discount or gift card` as
+  **advisory, non-interactive structure** — no visibility toggle, no removal. The field genuinely
+  cannot be hidden below Plus.
 - [ ] **TEST: Loop × Shopify Functions discount interplay.** Highest-risk integration in the
   whole design. Loop's selling-plan subscription discount vs our Function-applied founder/
   subscriber benefit — verify they don't collide or double-apply. Best done on a dev store.
-- [ ] **CHOOSE: new vs legacy Shopify customer accounts.** The POC's account page (Membership
-  tile, founder number, Loop portal slot) is buildable in Liquid on *legacy*; on *new* hosted
-  accounts it needs UI extensions, and Loop's portal integration differs. Not yet in any Standard.
+- [x] ~~**CHOOSE: new vs legacy Shopify customer accounts.**~~ **NOT A CHOICE — settled by the
+  platform, verified 2026-07-25.** A store created today runs **new customer accounts only**;
+  Settings → Customer accounts offers Configurations / Authentication / returns / store credit /
+  URL, and **no classic option anywhere** (Authentication is just Shop / Google / Facebook sign-in).
+  `/account` and `/account/login` **redirect off-domain** to `shopify.com/<store-id>/account`, so
+  **the theme renders none of the account experience.**
+- [ ] **NEW, replaces the above: SCOPE what customer-account UI extensions can actually do.** The
+  POC's account page (Membership tile + founder number, taste-profile card, Loop portal slot,
+  Recent Orders) is **not buildable in Liquid** — that surface is Shopify-hosted and extensible only
+  via customer-account UI extensions. Establish what an extension can render and where, then decide
+  how much of the POC's account design survives. **This is the largest open consequence for the
+  production build**, and under the POC-scope rule (`production_build_spec.md` §0) it also means the
+  POC's account page has been modelling a surface we do not own. The *business rules* are unaffected
+  — durable founder status, the numbered honorific, and the 60-day benefit grace live in Store
+  Operating Standards §3.1/§4 and are unchanged; only the rendering surface and technique change.
 - [ ] **EVALUATE: a bundle app against Standard §7's BOM requirements** (component-derived
   facets, component-gated availability incl. the freshness window, per-order pick-pack BOM to
   the 3PL). Native Shopify Bundles covers component inventory but not freshness or facet
