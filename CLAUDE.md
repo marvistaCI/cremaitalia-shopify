@@ -1375,9 +1375,53 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   drawn at writes to the **published** storefront, not at destructive store actions generally. Do
   not assume a delete will be gated.
 
+- 2026-07-25 — **POC10 built + deployed: mobile-review fixes, and the POC-scope rule LOCKED.**
+  Steve ran the long-queued full-site mobile pass on POC9 on a real device and raised five findings.
+  **The durable outcome is a scoping decision, not the fixes:** **the POC models only the surfaces we
+  will write production code for; anything Shopify supplies and we have no code control over is not
+  modelled — the sole exception being when its absence blocks testing the POC itself, and then only
+  as a labelled testing aid** (Steve, "not to model portions that we're absolutely sure we have no
+  code-control of, unless it blocks testing the POC"). Recorded as `docs/production_build_spec.md`
+  **§0**, which also fixes the boundary that caused the confusion: **the cart is OURS**
+  (`templates/cart.liquid` / a cart section we write — Shopify supplies only the Cart AJAX data,
+  zero presentation), **checkout is SHOPIFY'S** (not themeable below Plus, never modelled), and the
+  **sign-in/account surface is UNDECIDED** pending the open new-vs-legacy customer-accounts spike —
+  which this rule promotes in priority, since on *new* hosted accounts much of the POC's account page
+  is modelling someone else's control.
+  **Built (3 of 5, all code we own):** (1) the real bug — `chooseQuizMatches()`/`chooseQuizEverything()`
+  called `openSignin()` **unconditionally**, so an already-signed-in customer finishing the quiz hit a
+  sign-in wall instead of saving to their account; the `session.signedIn` guard that
+  `saveProfileChanges()` already had had never been propagated to the quiz path. Both now act directly
+  when signed in and leave the signed-out `pendingQuizAction` flow untouched. (2) the clipped
+  "Tasting Quiz" home chip (four chips ≈400px against a 375px viewport) now renders **"Quiz"** on
+  phones via a `.hj-word` span hidden under the existing 640px query; desktop unchanged. (3) the cart
+  line on phones — **three separate causes**: `.cart-line-img` kept its desktop `64px` inside a `48px`
+  grid column and overlapped the title by 2px (the "smashed", pre-existing); the third child
+  (price + Remove) wrapped **into that 48px column** because the mobile rule declared only two columns,
+  so it now spans its own full-width row; and inherited `align-items:center` floated the thumbnail
+  below the title, now `align-items:start`. Plus a one-line `overscroll-behavior-y:contain` testing
+  aid (commented as such) so an accidental pull-to-refresh stops wiping the in-memory session.
+  **Declined under the new rule:** persisting the mocked session to `localStorage` (emulates a Shopify
+  session cookie we get free) and any mock of the checkout promo-code field (pure checkout).
+  **Also advised (Steve's question):** hiding the promo field by colour-matching + read-only is not
+  buildable below Plus (no checkout CSS injection, no readonly hook), is a dark pattern inconsistent
+  with the posture that already rejected the quiz auto-launch, and fails accessibility — recommended
+  amending Standard §10 instead, **still an open decision**, ideally after Steve looks at his own
+  real checkout and the Checkout Editor.
+  **Verified** end-to-end in `shopify theme dev` via DOM geometry at 375×812 and 1280×900 (screenshot
+  tool still unreliable): both quiz buttons signed-in and signed-out; a worst-case cart line (qty 2,
+  three children in the meta row) measuring `thumbTop − titleTop = 0`, 13px gap, no overlap, meta row
+  full-width and not overflowing; desktop confirmed unchanged. `node --check` + `JSON.parse` clean;
+  `shopify theme check` = the same 2 baseline `ImgWidthAndHeight` errors, **0 new offenses**.
+  Committed (`dd0cbf1`) + pushed. **Deployed** to a NEW unpublished theme **"Crema Italia POC10
+  Preview" (id `151624024233`)** — and this time `shopify theme list` was run **before** the push,
+  confirming no name collision, per the rule added after the 2026-07-24 duplicate. Verified by
+  pull-and-diff (all 37 files match) and by re-listing (exactly one POC10 theme). POC4–POC9 previews
+  and the live theme untouched. Detail: `docs/POC10_change_list.md`.
+
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC9 (verified live 2026-07-24) — read this first when resuming.**
+**▶ CURRENT STATE — POC10 (verified live 2026-07-25) — read this first when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
 > `docs/POC*_change_list.md` banners, and any "NEXT: deploy…" line are **historical narrative** —
@@ -1399,20 +1443,29 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC9 Preview" | `151523131561` |
+| **Newest POC preview** | "Crema Italia POC10 Preview" | `151624024233` |
+| Prior preview | "Crema Italia POC9 Preview" | `151523131561` |
 
-**POC9 is deployed** and is the only POC9 theme (all 37 files byte-match the repo; verified by
-pull-and-diff 2026-07-25, after the erroneous duplicate `151615373481` was deleted). POC4–POC8 previews
-(`151277174953`, `151420207273`, `151440130217`, `151449862313`, `151454122153`) and the live
-theme are untouched. Preview: `https://crema-italia.myshopify.com?preview_theme_id=151523131561`
+**POC10 is deployed** and is the only POC10 theme (all 37 files byte-match the repo; verified by
+pull-and-diff 2026-07-25; `theme list` was run **before** the push per the rule above, confirming no
+name collision). POC4–POC9 previews (`151277174953`, `151420207273`, `151440130217`, `151449862313`,
+`151454122153`, `151523131561`) and the live theme are untouched. The erroneous POC9 duplicate
+`151615373481` was deleted 2026-07-25. Preview:
+`https://crema-italia.myshopify.com?preview_theme_id=151624024233`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
-2026-07-06). To refresh: `shopify theme push --theme 151523131561`.
+2026-07-06). To refresh: `shopify theme push --theme 151624024233`.
 
 **The live theme is current with the repo** as of the 2026-07-24 push (all 13 files byte-match;
 zero customer-visible em-dashes verified by cookie-less fetch). **Storefront password still OFF**
 (friend-testing) — now purely a friend-testing decision, not a copy-quality one.
 
-**What POC9 is:** the same custom-Liquid SPA as POC5–POC8 with a 9-item batch on top (regions map
+**What POC10 is:** POC9 plus the 2026-07-25 mobile-review fixes (quiz no longer forces a sign-in on
+an already-signed-in customer; the clipped "Tasting Quiz" chip renders as "Quiz" on phones; the cart
+line's thumbnail, spacing, and alignment fixed on phones; one `overscroll-behavior` testing aid).
+Two findings were **deliberately not built** under the new POC-scope rule — see
+`docs/POC10_change_list.md` and `docs/production_build_spec.md` §0.
+
+**What POC9 was:** the same custom-Liquid SPA as POC5–POC8 with a 9-item batch on top (regions map
 sync + mobile treatment, English-first region list, one shared region-filter object across Shop and
 Roasters, home roasters grid removed, header search removed, Promise eyebrow, About Three-P's
 alignment, shipping copy corrected to subscription-only free shipping, and a mocked contact form
