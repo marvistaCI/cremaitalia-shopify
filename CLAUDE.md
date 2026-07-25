@@ -1332,20 +1332,89 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   answer yes. Confirmed non-destructive both by the 2026-07-07 precedent and by this session's post-push
   13-file count.
 
+- 2026-07-25 — **Duplicate POC9 theme created by trusting a stale doc over live state; root-caused and
+  the process hardened.** Steve asked Code to "deploy POC9 to a new preview theme." Code ran the usual
+  pre-deploy validation (JS syntax, catalog JSON, `theme check` — clean, baseline 2 errors only) and
+  pushed to a new unpublished theme, then ran `shopify theme list` **afterwards** and found a
+  **"Crema Italia POC9 Preview" already existed** (`151523131561`). POC9 had already been deployed and
+  pushed to GitHub — by Steve or another Code session, **unlogged**. Result: two identically-named
+  themes, byte-identical to each other and to the repo (`151615373481` is the redundant one).
+  **Root cause — not a knowledge gap.** `docs/POC9_change_list.md` states "NOT yet deployed... and not
+  yet pushed to GitHub" (written 2026-07-17). In its FIRST tool call of the 2026-07-24 session Code ran
+  `git log origin/main..HEAD` and got **empty output** — proving the "not yet pushed" half false. Code
+  then **repeated the doc's claim as fact** in the readiness review ("committed but not pushed... not
+  deployed"), which is partly why Steve ordered the deploy. The contradiction was on screen and unread;
+  `shopify theme list` was run at the wrong end of the operation. **A live command had already
+  disproven the document and the document was believed anyway.**
+  **Structural cause:** deployment state was claimed in three places (§10 CURRENT STATE, §9 entries,
+  each change list), all present-tense, none owned, none expiring. Nobody logged the earlier deploy, so
+  all three lied confidently. The 2026-07-04 two-sessions rule anticipated concurrent *file edits*, not
+  drifting *deployment state*.
+  **Fixes applied this session:** (1) §10 CURRENT STATE rewritten as the **single authoritative
+  deployment-state block**, refreshed to POC9, carrying a mandatory verify-before-acting rule
+  (`shopify theme list` + `git log origin/main..HEAD` at session start, live output beats every
+  document *including that block*) and demoting §9/change-list state claims to historical narrative.
+  (2) The scheduled **coordinator prompt** gained a fifth drift check (contradicted state claims), a
+  factual deployment block, and a capture-never-diagnose guardrail.
+  **Coordinator finding (2026-07-25) — it cannot close this gap.** The revised prompt was run and
+  **reproduced the same failure**: with the Shopify CLI unavailable in its sandbox it **backfilled the
+  deployment block from `CLAUDE.md`** and reported "newest preview = POC8; POC9 not yet deployed" as
+  fact, disclosing the sourcing only in a separate "Could not verify" line below. So: **Cowork/the
+  coordinator structurally cannot verify Shopify deployment state** (CLI absent in scheduled runs) —
+  its deployment reporting is permanently UNVERIFIED and the prompt now says so and forbids
+  substituting a document for a failed live query. **Verifying deployment state is Code's job at
+  session start; the coordinator is a briefing, never a verification.** Its rules-drift half works
+  well (it correctly flagged the §10 promo-code contradiction, the missing DECISIONS_LOG entry, and a
+  stale `00_PROJECT_BRIEF.md` header).
+  **Open:** delete the duplicate theme `151615373481` (needs Steve — destructive store actions hit the
+  same auto-mode classifier as live pushes); then remove its row from §10 CURRENT STATE.
+
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC8 (as of 2026-07-13) — read this first when resuming.** Latest deployed
-preview is **"Crema Italia POC8 Preview" (id `151454122153`)**, pushed 2026-07-13 (commit `6b0a8ed`).
-POC8 is a **narrow drift-fix batch**, not a feature batch: it made the POC's mocked cart discounts
-honest to **Store Operating Standards v1.2** (no-stacking, per-line `MAX` — the customer receives only
-the single highest rate they qualify for, never a sum; a founding subscriber who is also first-time
-gets 12%, not 17%), and reworded the guest banner / FAQ / Roccia-toggle copy to match (see §9
-2026-07-13 POC8 + `docs/POC8_change_list.md` + `docs/POC_drift_from_standards.md`, now all-Resolved).
-Everything below still describes the POC accurately — POC5→POC8 are the same custom-Liquid SPA with
-successive batches on top; the architecture, brand system, and production seams are unchanged. Preview:
-`https://crema-italia.myshopify.com?preview_theme_id=151454122153`. To refresh: `shopify theme push
---theme 151454122153`. POC7 (`151449862313`) and the live coming-soon theme (`150557294761`) are
-untouched. Storefront password still OFF (friend-testing — the one open action from 2026-07-05/06).
+**▶ CURRENT STATE — POC9 (verified live 2026-07-24) — read this first when resuming.**
+
+> **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
+> `docs/POC*_change_list.md` banners, and any "NEXT: deploy…" line are **historical narrative** —
+> they describe a past moment and their "not yet deployed / not yet pushed" claims **expire the
+> instant someone acts**. Never infer current state from them.
+>
+> **MANDATORY — verify before acting, do not trust this block either.** It is accurate as of the
+> date stamped above and can be stale the moment anyone deploys. At the start of any session that
+> will push, deploy, or make a claim about what is deployed, run BOTH:
+> `shopify theme list` and `git log origin/main..HEAD --oneline`.
+> Live output wins over every document, including this one; correct the document in the same pass.
+> The scheduled coordinator **cannot** do this for you — the Shopify CLI is unavailable in its
+> sandbox (confirmed 2026-07-25), so its deployment reporting is always UNVERIFIED.
+> **This rule exists because it was violated on 2026-07-24** (see §9): a stale "not yet deployed"
+> line in `docs/POC9_change_list.md` was trusted over a live check, producing a duplicate Shopify
+> theme. `git log origin/main..HEAD` had already come back empty that same session — the
+> contradiction was visible and went unread.
+
+| What | Theme | Id |
+|---|---|---|
+| **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
+| **Newest POC preview** | "Crema Italia POC9 Preview" | `151523131561` |
+| **DUPLICATE — pending deletion** | "Crema Italia POC9 Preview" (identical content) | `151615373481` |
+
+**POC9 is deployed** (both themes byte-match the repo; verified by pull-and-diff 2026-07-24).
+The duplicate at `151615373481` was created in error and should be deleted with
+`shopify theme delete --theme 151615373481` — **remove this row once done.** POC4–POC8 previews
+(`151277174953`, `151420207273`, `151440130217`, `151449862313`, `151454122153`) and the live
+theme are untouched. Preview: `https://crema-italia.myshopify.com?preview_theme_id=151523131561`
+(open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
+2026-07-06). To refresh: `shopify theme push --theme 151523131561`.
+
+**The live theme is current with the repo** as of the 2026-07-24 push (all 13 files byte-match;
+zero customer-visible em-dashes verified by cookie-less fetch). **Storefront password still OFF**
+(friend-testing) — now purely a friend-testing decision, not a copy-quality one.
+
+**What POC9 is:** the same custom-Liquid SPA as POC5–POC8 with a 9-item batch on top (regions map
+sync + mobile treatment, English-first region list, one shared region-filter object across Shop and
+Roasters, home roasters grid removed, header search removed, Promise eyebrow, About Three-P's
+alignment, shipping copy corrected to subscription-only free shipping, and a mocked contact form
+with reason-based routing). Architecture, brand system, and production seams are unchanged from
+POC5. See §9 2026-07-17 + `docs/POC9_change_list.md`. **Still not done: the full-site mobile pass
+on a real device** — POC9's responsive regions map has only ever been verified via DOM inspection.
 
 **POC4 — the batch that set the current architecture (as of 2026-07-05).**
 
