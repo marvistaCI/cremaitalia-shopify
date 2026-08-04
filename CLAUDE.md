@@ -1467,6 +1467,57 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   production — anything surprising in the Loop test should be confirmed with Loop support before being
   treated as fact.
 
+- 2026-08-03 — **Both PDF renderers now gate their own output; a latent async-write bug in the
+  Standards renderer found and fixed; and a rule locked for taking Cowork's code (commit
+  `6aa894f`).** Cowork proposed a hardened `render_pdf.py` after finding that the render path had
+  no font gate: a missing `@font-face` file does not error, the renderer falls back to a generic
+  serif, and you get a clean-looking, off-brand PDF at exit 0. Its diagnosis was correct and is
+  now closed — but **the file it offered was not installed**, for a reason that matters more than
+  the fix. **(1) Port, never copy — the rule.** Cowork keeps its own fork of this repo's skills at
+  OneDrive `CremaItalia LLC\.claude\skills\`; its `crema-italia-pdf-builder` copy was built on a
+  **pre-2026-07-14 baseline** (its `render_pdf_v1_ORIGINAL.py.bak` is 2,007 bytes with zero
+  `_ensure_native_libs` / `OSError` occurrences), so it had already lost the MSYS2 Windows DLL fix
+  from commit `619dfae` and would have broken WeasyPrint on this machine; its `SKILL.md` also still
+  stamped Brand Standards v2.0 against the repo's v2.1. Cowork cannot read the repo, so it has no
+  way to notice it is working from a stale base. **Steve's call: repo is canonical, Cowork's copy
+  is a render** — and any code Cowork proposes is taken as a **specification, ported onto the repo's
+  current file and diffed first**, never copied in. **(2) The gates.** New
+  `.claude/skills/crema-italia-pdf-builder/scripts/pdf_gates.py` is the single home for the gate
+  logic, imported by **both** renderers so the two cannot drift: `render_pdf.py` (Brand Standards,
+  WeasyPrint) and `docs/standards/render.py` (Store Operating + Collaboration, headless Edge) —
+  Cowork's module covered only the first, which is one of three Standards. Gates: **0** output is a
+  complete PDF (`%%EOF`), not caught mid-write (exit 6); **1a** source ends `</html>` with tags
+  closed, blocking a truncated write (3); **1b** every linked CSS/`.ttf`/image resolves, *including
+  assets referenced from inside a stylesheet* (3); **2** Marcellus + Inter actually embedded, no
+  fallback face (4); **3** the PDF contains the end of the source (5). Consolas is exempt from
+  fallback detection (code spans are monospace on purpose). Gate 1a must run on the **source** —
+  a truncated source renders faithfully, so no comparison of the finished PDF against that same
+  source can ever see the loss (Cowork's insight, and its own first draft got this wrong). Gate 4,
+  looking at every page, is not automatable; `--preview` emits page images but needs `pdftoppm`,
+  which is not installed. **(3) The bug nobody was looking for.** Porting surfaced a real
+  pre-existing defect in `render.py`: **headless Edge writes the PDF *after* `subprocess.run`
+  returns, and exits 0 either way.** The script trusted that exit code, so it stat'd a file that was
+  absent or half-flushed — mid-session it produced two *different* Standards at an identical
+  **59,677 bytes with only `SegoeUI` embedded**. Confirmed pre-existing by running the original
+  script from git (fails the same way) and by watching the ordering directly: our check reports
+  "NO FILE", then Edge writes. `render.py` now deletes the stale output first and waits for a
+  complete, size-stable file; renders are deterministic again (209,025 bytes every run). This is the
+  same silent-artifact class Cowork was hardening against, sitting in Code's lane the whole time,
+  and it would have read as "the fonts are broken" and sent someone hunting the wrong bug.
+  **(4) Trust closed at the right layer.** `crema-std-publish` step 4 now treats a non-zero exit as
+  a **stop**, before delivery to OneDrive. This closes a hole `RENDER_TRUST.md` structurally cannot
+  see: md5-comparing the repo render against the OneDrive copy reads **MATCH** when both are copies
+  of the same bad render — the badge proves the two copies are *identical*, never that either is
+  *correct*. **Verified:** 3 positive controls; 7 negative controls (missing stylesheet, `.ttf`
+  missing inside the CSS, source truncated to 60%, required family absent, a genuine silent
+  Marcellus→Times fallback, the same on the Markdown path, and `--allow-fallback` downgrading
+  correctly) — all returning the intended exit codes. **Audited clean:** all three OneDrive
+  delivered renders and the committed Brand PDF are complete with correct fonts, so the bug was
+  **latent, not realised**; re-rendering Brand produced a byte-identical PDF (WeasyPrint is
+  deterministic). **Open (Cowork/Steve lane, flagged not done):** retire or repoint Cowork's forked
+  skill; remove OneDrive `_to_delete\`; add a `DECISIONS_LOG.md` line for this protocol and a line
+  in the coordinator prompt recording that the trust badge proves identity, not correctness.
+
 ## 10. Open questions / TODO
 
 **▶ CURRENT STATE — POC10 (verified live 2026-07-25) — read this first when resuming.**
