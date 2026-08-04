@@ -1518,6 +1518,32 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   skill; remove OneDrive `_to_delete\`; add a `DECISIONS_LOG.md` line for this protocol and a line
   in the coordinator prompt recording that the trust badge proves identity, not correctness.
 
+- 2026-08-04 — **A companion Standard's render can go stale without its version number moving,
+  and the version-stamp check can never see it — found, fixed, and closed in `crema-std-publish`.**
+  The coordinator's 2026-08-04 run started diffing **extracted PDF text** instead of version
+  headers and caught a real 10-day staleness: OneDrive's `Collaboration_Standard_v1.1.pdf` read
+  "Store Operating Standards **v1.2**" while its repo source read v1.3. Cause: commit `f9ffcb1`
+  (2026-07-25) published Store Operating v1.3 and correctly updated the Collaboration Standard's
+  companion-pointer line — but only the Standard *being published* was re-rendered and delivered.
+  Collaboration's own version stayed 1.1, correctly (§1–§8 unchanged), so **every prior coordinator
+  run certified it MATCH by comparing "Version 1.1" to "Version 1.1."** This is the same shape as
+  the 2026-08-03 finding one level up: that entry established the badge proves two copies are
+  *identical*, never *correct*; this one shows a version stamp proves two documents share a
+  *number*, never the same *content*. **Fixed** (verified pass, exit 0 on both): re-rendered
+  Collaboration and Store Operating via `render.py`, delivered both to OneDrive `Standards\`, and
+  confirmed all three Standards now md5-match repo↔OneDrive with the delivered Collaboration copy
+  reading v1.3. **Root cause closed in the skill** — `crema-std-publish` steps 3/4/6 now say every
+  source touched in step 3 gets re-rendered *and* redelivered, "touched" being the trigger rather
+  than "bumped," with the `f9ffcb1` incident recorded inline so the reasoning survives; the
+  `all`/`repair` path's verification was upgraded from a version-stamp comparison to md5 plus a
+  `pdftotext` diff (headless Edge stamps a `CreationDate`, so Edge renders are **not**
+  byte-reproducible run to run — WeasyPrint's are, so a Brand render still round-trips identical).
+  **Non-finding, checked:** the coordinator also flagged the two Markdown Standards' PDFs as
+  regenerated with no matching commit — they are `.gitignore`d by design (`/docs/standards/*.pdf`,
+  regenerable from source; only `_archive/` renders and Brand's are committed), and the working
+  tree is clean. Also backfilled the `DECISIONS_LOG.md` entry the same run flagged as missing for
+  commit `11a3946` (the §6 verify-before-deploy prohibition + `crema-poc-deploy` skill).
+
 ## 10. Open questions / TODO
 
 **▶ CURRENT STATE — POC10 (verified live 2026-07-25) — read this first when resuming.**

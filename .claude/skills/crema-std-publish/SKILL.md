@@ -68,21 +68,39 @@ See the source/render/trust protocol in the **Collaboration Standard §3 and §9
    version. Customer-facing wording follows the no-em-dash rule (`CLAUDE.md` §6); internal
    Standard prose is exempt but keep the voice clean.
 3. **Update every cross-reference to that Standard's version — "what's true now" only, never a dated log entry:**
-   - the other two Standards' **`**Companion standards:**`** header lines
+   - the other two Standards' **`**Companion standards:**`** header lines — **note which
+     sources you touched here; steps 4 and 6 apply to every one of them, not just the
+     Standard being published** (see the callout under step 6)
    - `docs/standards/README.md` — the three-Standards table
    - `CLAUDE.md` — the top **pointer block** (the `- **X Standard** (vN)` bullets) and the
      `§6.1` / `§11` "today:" / "current" version values where they name this Standard
    - Do **not** edit `CLAUDE.md` §9 log entries or `DECISIONS_LOG.md` history — those are
      immutable records of what was true *then*.
-4. **Re-render the PDF** with the command from the table above, named `..._vX.Y.pdf`.
-   **Confirm it exited 0 and every gate printed "pass".** A non-zero exit is a stop, not a
+4. **Re-render the PDF — for every source step 3 touched**, with the command from the table
+   above, each named `..._v<its own current version>.pdf`. A companion Standard keeps its
+   own version number (its rules did not change) but its **content did**, so its render is
+   now stale and must be regenerated too.
+   **Confirm each exited 0 and every gate printed "pass".** A non-zero exit is a stop, not a
    warning: fix the cause and re-render before going near step 5. Report the gate lines.
 5. **Archive the superseded render.** Move the previous PDF into `docs/standards/_archive/`
    with an `_ARCHIVED` suffix and add a line to `_archive/README.md`. Archived renders are
    committed (frozen history); live renders stay git-ignored. (Brand's committed PDF is the
    exception — its render sits beside its HTML source and the old one archives the same way.)
-6. **Deliver the fresh render to OneDrive** `...\CremaItalia LLC\Standards\`, replacing the
-   prior copy for that Standard. Keep exactly one current PDF per Standard in that folder.
+6. **Deliver every fresh render to OneDrive** `...\CremaItalia LLC\Standards\`, replacing the
+   prior copy for each Standard re-rendered in step 4. Keep exactly one current PDF per
+   Standard in that folder.
+
+> **A companion Standard's render goes stale without its version number changing — and no
+> version-stamp check will ever see it.** This happened for real: commit `f9ffcb1`
+> (2026-07-25) bumped Store Operating Standards to v1.3 and correctly fixed the Collaboration
+> Standard's companion-pointer line, but only the Store Operating render was regenerated and
+> delivered. The OneDrive Collaboration render sat 10 days saying "Store Operating Standards
+> **v1.2**" while its own source said v1.3 — and every coordinator run certified it MATCH,
+> because "Version 1.1" equals "Version 1.1." Caught 2026-08-04 only when the coordinator
+> started diffing **extracted PDF text** instead of version headers. **The rule: every source
+> you edit in step 3 gets re-rendered in step 4 and redelivered in step 6, version bump or
+> not.** Same-version content edits are the blind spot; treat "touched" as the trigger, never
+> "bumped."
 7. **Commit** the repo changes (source + cross-refs + archived render + this run's notes).
    Do not push unless Steve asks. OneDrive deliveries are not in the repo.
 8. **Remind Steve of the two things this skill does NOT do:**
@@ -99,7 +117,10 @@ Use when RENDER_TRUST.md reports STALE/MISSING, or renders are otherwise suspect
 1. For each of the three Standards, re-render from the **current** source (no version bump —
    this is a regeneration, not a decision) to its `..._v<current>.pdf`.
 2. Deliver all three fresh renders into `...\CremaItalia LLC\Standards\`, overwriting.
-3. Confirm each OneDrive copy's version stamp equals its repo source version.
+3. Confirm each OneDrive copy matches its repo render **by content, not by version stamp** —
+   `md5sum` the pair, and where they differ, `pdftotext` both and diff the text (headless
+   Edge stamps a `CreationDate`, so its renders are not byte-reproducible; WeasyPrint's are).
+   A matching version number proves nothing — see the callout under step 6.
 4. Report the before/after per Standard. Remind Steve he may re-run the coordinator to flip
    the badge green. No source edit, no version bump, no new DECISIONS_LOG entry needed
    (nothing changed but the copies) — unless the repair *revealed* a real drift, which is a
