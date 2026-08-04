@@ -38,6 +38,23 @@ See the source/render/trust protocol in the **Collaboration Standard §3 and §9
 - `render.py` reads the version from the source's `**Version X.Y · DATE**` line and stamps
   the footer "render — do not edit". Markdown renders are git-ignored (they churn); the
   committed durable copies live only under `_archive/` once superseded.
+
+> **Both renderers gate themselves (since 2026-08-03) — a non-zero exit STOPS the publish.**
+> Never deliver a render whose command exited non-zero, and never work around it with
+> `--allow-fallback` / `--skip-tail-check` without saying so to Steve. The failures these
+> catch are silent: the renderer returns 0 and hands you a clean-looking, wrong PDF.
+>
+> | Exit | Meaning |
+> |---|---|
+> | 3 | source truncated, or a linked stylesheet/font/image did not resolve |
+> | 4 | Marcellus/Inter not embedded, or a fallback face appeared — the render is off-brand |
+> | 5 | the PDF does not contain the end of the source |
+> | 6 | the render never produced a complete PDF |
+>
+> This closes a hole `RENDER_TRUST.md` structurally cannot see: md5-comparing the repo
+> render against the OneDrive copy reads **MATCH** when both are copies of the same bad
+> render. Trust has to be established at render time, here — the badge only proves the two
+> copies are identical, never that either one is right.
 - OneDrive read-only copies live in **`C:\Users\marvi\OneDrive\Pre-Vault\CremaItalia LLC\Standards\`**
   (one PDF per Standard, current version only) plus a `README.txt` explaining they are renders.
 
@@ -58,6 +75,8 @@ See the source/render/trust protocol in the **Collaboration Standard §3 and §9
    - Do **not** edit `CLAUDE.md` §9 log entries or `DECISIONS_LOG.md` history — those are
      immutable records of what was true *then*.
 4. **Re-render the PDF** with the command from the table above, named `..._vX.Y.pdf`.
+   **Confirm it exited 0 and every gate printed "pass".** A non-zero exit is a stop, not a
+   warning: fix the cause and re-render before going near step 5. Report the gate lines.
 5. **Archive the superseded render.** Move the previous PDF into `docs/standards/_archive/`
    with an `_ARCHIVED` suffix and add a line to `_archive/README.md`. Archived renders are
    committed (frozen history); live renders stay git-ignored. (Brand's committed PDF is the

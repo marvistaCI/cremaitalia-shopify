@@ -84,7 +84,7 @@ Montecatini logo-art-only; never Cormorant/Lora), current logo lockup, ™ not �
 large-only. Then set/refresh the stamp to the current version. If a full refresh is truly
 out of scope, flag the drift to Steve rather than shipping stale.
 
-**Step 4 — Render.**
+**Step 4 — Render (the script gates itself).**
 ```bash
 pip install weasyprint --break-system-packages   # once, if not present
 python scripts/render_pdf.py <source.html>        # writes <source>.pdf next to it
@@ -92,10 +92,33 @@ python scripts/render_pdf.py <source.html>        # writes <source>.pdf next to 
 The script resolves relative paths (CSS, fonts, images) from the HTML's own
 folder, so keep the source in the project tree near its assets.
 
+**As of 2026-08-03 it verifies its own work and exits non-zero on failure.** You do
+not have to remember these, but you must not paste past a failure:
+
+| Gate | What it proves | Exit |
+|---|---|---|
+| 1a | source ends with `</html>`, `<html>`/`<body>` closed (blocks a truncated write) | 3 |
+| 1b | every linked CSS / `.ttf` / image resolves — including assets referenced *inside* a stylesheet | 3 |
+| 2 | Marcellus + Inter actually embedded, no DejaVu/Times/Segoe fallback face | 4 |
+| 3 | the PDF contains the end of the source | 5 |
+| 0 | the output is a complete PDF (`%%EOF`), not one caught mid-write | 6 |
+
+Gate 1 runs *before* rendering, because a missing stylesheet does not error — the
+renderer falls back to a generic serif and ships a clean-looking, off-brand PDF.
+Gate 1a must likewise be checked on the **source**: a truncated source renders
+faithfully, so no comparison of the finished PDF against that same source can ever
+see the loss.
+
+The gate logic lives in `scripts/pdf_gates.py`, shared with
+`docs/standards/render.py` so the two renderers cannot drift apart. Flags:
+`--preview` (page images for the visual gate), `--require FAM,FAM`,
+`--allow-fallback`, `--skip-tail-check`. The last two are escape hatches — use them
+only deliberately, and say so out loud in your report.
+
 **Step 5 — Save both, verify, report.**
-Confirm the PDF opened to the expected page count and that headings render in Marcellus
-(not a serif fallback). Hand the user the PDF, and tell them the source filename
-so they know it is editable.
+Gates 1–3 are automated; **gate 4, looking at every page, is not and never will be.**
+Confirm the page count is what you expected and that headings render in Marcellus.
+Hand the user the PDF, and tell them the source filename so they know it is editable.
 
 **Step 6 — Version and pair correctly.**
 Follow the project versioning rules: minor bump for typography/copy tweaks, major

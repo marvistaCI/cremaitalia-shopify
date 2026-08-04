@@ -10,10 +10,27 @@ No native dependencies: Markdown -> branded HTML -> PDF via headless Edge/Chrome
 (both ship on Windows). Fonts (Marcellus display + Inter body) load locally from
 the re-homed Brand Standards, so every render is offline and identical.
 
+Since 2026-08-03 this script gates its own output. The failures it catches are
+SILENT: a missing .ttf still produces a valid file:// URL, Edge falls back to a
+generic serif, and you get a clean-looking off-brand PDF at exit 0. The gates
+are shared with the Brand renderer via `pdf_gates.py` so the two cannot drift.
+
 Usage:
     py render.py store-operating-standards.md
     py render.py collaboration-standard.md "Collaboration_Standard_v1.0.pdf"
+
+Options:
+    --require FAM[,FAM]   Families that must be embedded (default: Marcellus,Inter)
+    --allow-fallback      Downgrade the font gate to a warning. Must be explicit.
+    --skip-tail-check     Downgrade the tail gate to a warning. Must be explicit.
+    --preview             Also write page images beside the PDF (needs pdftoppm)
+
+Exit codes:
+    0 pass · 1 usage/source · 3 GATE 1 (font file missing) · 4 GATE 2 (font not
+    embedded / fallback detected) · 5 GATE 3 (PDF missing the end of the source)
+    · 6 the render never produced a complete PDF
 """
+import argparse
 import re
 import subprocess
 import sys
@@ -25,7 +42,21 @@ import markdown
 HERE = Path(__file__).resolve().parent
 FONT_DIR = HERE / "brand-standards" / "assets" / "fonts"
 
-# Brand tokens (Brand Standards v2.0)
+# The gate module lives with the PDF-builder skill; one copy, both renderers.
+sys.path.insert(
+    0, str(HERE.parent.parent / ".claude" / "skills" / "crema-italia-pdf-builder" / "scripts")
+)
+import pdf_gates  # noqa: E402
+
+FONT_FILES = (
+    "Marcellus-Regular.ttf",
+    "Inter-Regular.ttf",
+    "Inter-Medium.ttf",
+    "Inter-SemiBold.ttf",
+    "Inter-Italic.ttf",
+)
+
+# Brand tokens (Brand Standards v2.1)
 ESPRESSO = "#55331B"
 GOLD = "#B88348"
 CREAM = "#FBF8F1"
@@ -122,21 +153,51 @@ def build_html(md_path: Path) -> tuple[str, str]:
 
 
 def main() -> int:
-    if len(sys.argv) < 2:
-        print(__doc__)
-        return 1
-    md_path = (HERE / sys.argv[1]).resolve() if not Path(sys.argv[1]).is_absolute() else Path(sys.argv[1])
+    ap = argparse.ArgumentParser(add_help=True, description=__doc__)
+    ap.add_argument("source")
+    ap.add_argument("output", nargs="?")
+    ap.add_argument("--require", default=",".join(pdf_gates.DEFAULT_REQUIRED))
+    ap.add_argument("--allow-fallback", action="store_true")
+    ap.add_argument("--skip-tail-check", action="store_true")
+    ap.add_argument("--preview", action="store_true")
+    ap.add_argument("--preview-dpi", type=int, default=135)
+    args = ap.parse_args()
+
+    required = tuple(f.strip() for f in args.require.split(",") if f.strip())
+
+    md_path = (HERE / args.source).resolve() if not Path(args.source).is_absolute() else Path(args.source)
     if not md_path.exists():
         print(f"Source not found: {md_path}")
         return 1
+    if not md_path.read_text(encoding="utf-8").strip():
+        print(f"Source is empty: {md_path}")
+        return 1
 
     default_out = md_path.stem.replace("-", "_").title().replace("_", "_") + ".pdf"
-    out = (HERE / (sys.argv[2] if len(sys.argv) > 2 else default_out)).resolve()
+    out = (HERE / (args.output if args.output else default_out)).resolve()
+
+    # ---- GATE 1: the fonts must exist BEFORE we render ----
+    # Path.as_uri() happily builds a file:// URL for a file that isn't there;
+    # Edge then falls back to a generic serif and exits 0. Checked here or never.
+    missing = pdf_gates.gate_assets_exist([FONT_DIR / f for f in FONT_FILES])
+    if missing:
+        print("GATE 1 FAILED - brand fonts are not where this script expects them:")
+        for m in missing:
+            print(f"  - {m}")
+        print("\nRendering now would silently produce an off-brand PDF.")
+        return 3
+    print("GATE 1 pass - all brand font files resolve.")
 
     html, stamp = build_html(md_path)
+    source_text = pdf_gates.visible_text_from_html(html)
+
     with tempfile.NamedTemporaryFile("w", suffix=".html", delete=False, encoding="utf-8") as f:
         f.write(html)
         tmp_html = Path(f.name)
+
+    # Remove any previous render first: if this run fails we must not stat a
+    # stale file and report it as fresh output.
+    out.unlink(missing_ok=True)
 
     browser = find_browser()
     subprocess.run(
@@ -144,14 +205,43 @@ def main() -> int:
          f"--print-to-pdf={out}", tmp_html.as_uri()],
         check=True, capture_output=True, timeout=120,
     )
-    tmp_html.unlink(missing_ok=True)
 
-    size = out.stat().st_size
-    print(f"Rendered: {out.name}  ({size:,} bytes)")
+    # Edge writes the PDF AFTER this process returns - its exit code is not
+    # proof the file is on disk, let alone complete. Statting immediately gets
+    # either nothing or a half-flushed document that looks like a font failure.
+    ok = pdf_gates.wait_for_pdf(out)
+    tmp_html.unlink(missing_ok=True)
+    if not ok:
+        print(f"Render did not produce a complete PDF: {out}")
+        print("  Headless Edge returned success but never finished writing.")
+        print("  Re-run; if it persists, check that Edge can run headless on this machine.")
+        return 6
+
+    print(f"Rendered: {out.name}  ({out.stat().st_size:,} bytes)")
     print(f"  from source: {md_path.name}")
     print(f"  stamp: {stamp}")
-    if size < 8_000:
-        print("  WARNING: PDF unusually small — check fonts/CSS resolved.")
+
+    # ---- GATES 2 + 3: on the finished PDF ----
+    code = pdf_gates.report(
+        out,
+        source_text,
+        required=required,
+        allow_fallback=args.allow_fallback,
+        skip_tail_check=args.skip_tail_check,
+    )
+    if code:
+        return code
+
+    if args.preview:
+        imgs, err = pdf_gates.emit_previews(out, args.preview_dpi)
+        if err:
+            print(f"  GATE 4 - could not emit page images: {err}")
+        else:
+            print(f"  GATE 4 - wrote {len(imgs)} page image(s). Read every one, "
+                  "then delete them before committing.")
+    else:
+        print("  GATE 4 - not automated. Re-run with --preview to emit page images.")
+
     return 0
 
 
