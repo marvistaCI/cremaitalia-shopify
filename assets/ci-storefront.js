@@ -664,7 +664,7 @@
     r.classList.toggle('is-active', filterOn);
     var s = $('tr-status'), tg = $('tr-tags'), tb = $('tr-toggle');
     if (s) s.textContent = filterOn
-      ? 'Your taste profile is active - shelves are filtered to your preferences.'
+      ? 'Your taste profile is active - shelves are filtered.'
       : 'Your profile is not active - all items are shown.';
     if (tb) tb.textContent = filterOn ? 'Show everything' : 'Apply profile';
     if (tg) { tg.innerHTML = tasteTagsHtml(activeTaste); tg.classList.toggle('muted', !filterOn); }
