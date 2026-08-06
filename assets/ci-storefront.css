@@ -168,12 +168,30 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .taste-ribbon.ribbon-visible{display:block}
 .tr-tags.muted{opacity:.5}
 .taste-ribbon-inner{max-width:var(--ci-page-max);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem 1.5rem;flex-wrap:wrap;padding:.7rem 1.25rem;min-height:2.6rem}
-.tr-main{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+/* A wrapping flex container wraps BEFORE it shrinks, so leaving this on wrap meant .tr-main
+   dropped to its own line and then grew to fill it - the shrink on .tr-main never engaged.
+   nowrap is what actually keeps the controls beside the status.
+
+   The 860px floor is measured at both settings, not guessed. Ribbon height, wrapped vs
+   nowrap: 1440px 92/79, 900px 135/119, 870px 135/119, 830px 135/150, 760px 135/150.
+   The crossover sits between 830 and 870: above it squeezing .tr-main is cheaper than a
+   second row, below it the status wraps to three lines and nowrap costs MORE than wrapping.
+   Re-measure this number if the status copy or the control set changes. */
+@media(min-width:860px){.taste-ribbon-inner{flex-wrap:nowrap}}
+/* min-width:0 defeats the default min-content floor on a flex item, so the status block
+   can give way and the controls stay on the ribbon's first line. Without it, .tr-main held
+   its full ~823px and pushed .tr-actions onto a second row once the third control was added
+   (POC12). Pairs with the flex-shrink:0 on .tr-actions below. */
+.tr-main{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;flex:1 1 auto;min-width:0}
 .tr-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--ci-crema);background:transparent;transition:background 200ms,box-shadow 200ms}
 .taste-ribbon.is-active .tr-dot{background:var(--ci-crema);box-shadow:0 0 0 3px rgba(184,131,72,.25)}
 .tr-status{font-size:.85rem;color:#e8dccb;margin:0}
 .tr-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+/* Where the ribbon runs nowrap the controls hold their width and the status yields to them.
+   Below that they drop to their own line, which is the better outcome - see the note on
+   .taste-ribbon-inner. */
 .tr-actions{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+@media(min-width:860px){.tr-actions{flex-shrink:0}}
 .tr-edit{background:none;border:none;color:var(--ci-cream);font-family:var(--ci-font-body);font-size:.8rem;text-decoration:underline;text-underline-offset:2px;cursor:pointer;padding:0}
 .tr-toggle{background:none;border:1px solid rgba(255,255,255,.35);color:var(--ci-cream);font-family:var(--ci-font-body);font-weight:600;font-size:.78rem;padding:.35rem .85rem;border-radius:var(--ci-radius);cursor:pointer;white-space:nowrap;transition:background 200ms}
 .tr-toggle:hover{background:rgba(255,255,255,.12)}
