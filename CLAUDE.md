@@ -82,6 +82,17 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > missing entirely (see 2026-07-05 entry in §9). Same id, new name each time the
 > POC version it holds changes.
 >
+> **Keep at most THREE POC preview themes (Steve, 2026-08-06).** Pruning is a step in the
+> `crema-poc-deploy` skill (Step 5), run right after a deploy is proven and before the
+> stale-id sweep. Candidates are only themes named exactly `Crema Italia POC<N> Preview`
+> **and** with role `unpublished` — that pair of tests protects the live theme, `Horizon`,
+> the throwaway `Development (...)` theme, and any hand-named backup by construction rather
+> than by blocklist. Keep the three highest POC numbers, delete the rest **on Steve's
+> explicit go, listed by name and id**: deletion is irreversible and the auto-mode
+> permission classifier does *not* block theme deletes (2026-07-25). Duplicate names halt
+> the prune rather than being absorbed. Nothing is lost by pruning — each POC batch is a
+> commit and can be redeployed from git.
+>
 > **Connectivity check — use the `reconnect-check` skill first (Steve, 2026-07-04).**
 > If a session opens after a reboot, or GitHub/Shopify CLI access to this repo seems
 > off, run the `reconnect-check` skill (`.claude/skills/reconnect-check/`) before doing

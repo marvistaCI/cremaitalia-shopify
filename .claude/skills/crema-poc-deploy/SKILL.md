@@ -47,7 +47,7 @@ Then answer these in writing before proceeding:
    and diff — see Step 4). Ask whether he wants to refresh it in place (`--theme <id>`) or whether
    the deploy was already done. Creating a second theme with the same name is the exact failure
    this skill prevents.
-2. **Are there unpushed commits?** Note them. They must be pushed to GitHub (Step 5) — but their
+2. **Are there unpushed commits?** Note them. They must be pushed to GitHub (Step 6.5) — but their
    presence or absence says nothing about deployment state, and vice versa. Never infer one from
    the other.
 3. **Does `CLAUDE.md` §10 CURRENT STATE agree with what you just saw?** If not, the document is
@@ -126,7 +126,52 @@ faithful stand-in for a browser and it will silently return the live coming-soon
 (diagnosed 2026-07-06, hit again 2026-07-24). Pull-and-diff is the reliable proof; a real browser
 is the only valid visual check.
 
-## Step 5 — Record it, in the one authoritative place
+## Step 5 — Prune old preview themes (keep 3)
+
+**Policy (Steve, POC13): keep at most the three newest POC previews.** Older ones are dead
+weight — the store reached 11 themes before the 2026-08-06 cleanup, and Shopify caps a store at
+20. A pruned POC is not lost work: every batch is a commit, so it can be redeployed from git if
+it is ever wanted back. That is only true if the batch is actually on GitHub, which Step 0
+already confirmed (`git log origin/main..HEAD` empty).
+
+Run this **after** Step 4 has proven the new push, so the theme you just deployed is one of the
+three you keep. Run it **before** Step 6, because pruning is what creates the stale theme ids
+that Step 6.4 sweeps for.
+
+**Selection rule — by construction, not by blocklist.** A theme is a prune candidate only if
+**both** hold:
+- its name matches exactly `^Crema Italia POC(\d+) Preview$`, and
+- its `role` is `unpublished`.
+
+Everything else is protected without needing to be named: the live theme, `Horizon`, the
+throwaway `Development (...)` theme, and any hand-named theme like a backup. The `role` test is
+what protects against the catastrophic case — a *published* theme that happens to match the
+naming pattern is never a candidate. Sort the candidates by POC number descending, keep the
+first three, prune the rest.
+
+```bash
+shopify theme list --json
+```
+
+Compute the KEEP/PRUNE split from that JSON (parse it — do not eyeball the ids).
+
+**Two hard stops:**
+1. **Duplicate names halt the prune.** If two themes share a POC name, stop and tell Steve.
+   A duplicate is the signature of the 2026-07-24 incident, and silently absorbing it lets the
+   duplicate eat two keep-slots and push a real POC out of the window. Resolve the duplicate
+   first, then prune.
+2. **Get Steve's explicit go before deleting**, listing each theme by **name and id**. Deletion
+   is irreversible, and the auto-mode permission classifier does **not** block theme deletes
+   (confirmed 2026-07-25) — so nothing else is standing between a selection bug and a real
+   theme. This was how the 2026-08-06 cleanup was done and it is the standard here.
+
+```bash
+shopify theme delete --theme <id> --force
+```
+
+Then re-run `shopify theme list` and confirm the survivors are exactly the three expected.
+
+## Step 6 — Record it, in the one authoritative place
 
 1. **`CLAUDE.md` §10 CURRENT STATE** — the *only* authoritative statement of deployment state.
    Update the table (POC number, theme name, id), the "verified live <date>" stamp, and the
@@ -136,7 +181,8 @@ is the only valid visual check.
 3. **`docs/POC<N>_change_list.md`** — the build record. **Do not write deployment-state claims
    here.** Point at §10 instead. Stale banners in these files caused the 2026-07-24 duplicate.
 4. **Sweep the repo for theme ids that just went stale.** Creating a theme is safe; **deleting
-   one silently breaks anything still pointing at it.** Run:
+   one silently breaks anything still pointing at it** — so this is where Step 5's prune gets
+   paid for. Run:
 
    ```bash
    grep -rn "15[0-9]\{10\}" --include="*.md" --include="*.cmd" --include="*.json" --include="*.liquid" --include="*.js" . | grep -v node_modules
@@ -158,7 +204,7 @@ is the only valid visual check.
    every reconnect.)*
 5. `git push` so GitHub matches.
 
-## Step 6 — Hand off
+## Step 7 — Hand off
 
 Give Steve the preview URL, tell him to open it in a **real browser** (not curl), and name the
 specific things worth checking on-device for this batch.
@@ -170,6 +216,7 @@ specific things worth checking on-device for this batch.
 - [ ] `theme list` + `git log origin/main..HEAD` run **before** the push, and no name collision
 - [ ] Batch committed; validation clean against the documented baseline
 - [ ] Pushed; **pull-and-diff proves** all files match; exactly one theme of that name
+- [ ] Pruned to the three newest POC previews, on Steve's explicit go, by name+id
 - [ ] §10 CURRENT STATE updated and accurate; §9 logged; change list carries no state claims
 - [ ] Repo swept for theme ids broken by any theme **deletion** this round (executable files and
       present-tense claims fixed; historical narrative left alone)
