@@ -32,6 +32,16 @@
     <div class="hero-btns" style="margin-top:1.5rem"><button class="btn btn-primary" onclick="openQuiz()">Take our tasting quiz</button></div>
   </div></div>
 
+  <!-- PROD: photography slot 1 of 3. Replace this div with the real <img>.
+       This one exists to answer the loudest review finding about the landing page: five
+       screens pass with nothing to look at. It is the first thing below the fold. -->
+  <div class="photo-slot photo-band" style="margin-top:1.75rem">
+    <p class="ps-eyebrow">Photography</p>
+    <p class="ps-brief">An Italian bar counter mid-morning service. Cups on saucers, steam,
+      hands at work. Nobody posing for the camera.</p>
+    <p class="ps-spec">21:9 landscape &middot; ~2200x950 &middot; natural light, low saturation, narrow depth of field</p>
+  </div>
+
   <!-- Jump chips are now purely navigational: every one scrolls to a section. The quiz chip used
        to sit here, which made it the odd one out twice over - it opened a modal rather than
        scrolling, and its gold fill was byte-identical to .pill.active, so it read as "selected"
@@ -45,11 +55,21 @@
   <main class="ci-main">
     <!-- Our story / founder confession -->
     <div class="section-head" id="sec-story" style="margin-top:0"><p class="eyebrow">Our story</p><h2>A full confession.</h2></div>
-    <div class="prose" style="max-width:72ch">
-      <p>I&rsquo;ve fallen in love with Italy, and all things Italian - especially the caff&egrave; culture. On a recent trip to Tuscany a friend gave me a parting gift: a bag of decaf beans. I ground exactly 17g, pulled a shot (<span class="ita">un caff&egrave;</span>), and was blown away. So I looked for the roaster online to order more, and found they didn&rsquo;t ship.</p>
-      <p>That shot was the inspiration, and it is now our mission: to find Italian roasters like that one and bring their coffee here, unchanged. Perhaps you have already discovered Italy and want to rekindle a memory. Maybe you simply want high-quality beans to grind and savor. Either way, I hope you find it here.</p>
-      <img class="founder-signature" src="{{ 'ci-signature.png' | asset_url }}" alt="Steve Roberts" width="184">
-      <p class="founder-sign">Steve Roberts, Founder</p>
+    <div class="story-grid">
+      <div class="prose" style="max-width:72ch">
+        <p>I&rsquo;ve fallen in love with Italy, and all things Italian - especially the caff&egrave; culture. On a recent trip to Tuscany a friend gave me a parting gift: a bag of decaf beans. I ground exactly 17g, pulled a shot (<span class="ita">un caff&egrave;</span>), and was blown away. So I looked for the roaster online to order more, and found they didn&rsquo;t ship.</p>
+        <p>That shot was the inspiration, and it is now our mission: to find Italian roasters like that one and bring their coffee here, unchanged. Perhaps you have already discovered Italy and want to rekindle a memory. Maybe you simply want high-quality beans to grind and savor. Either way, I hope you find it here.</p>
+        <img class="founder-signature" src="{{ 'ci-signature.png' | asset_url }}" alt="Steve Roberts" width="184">
+        <p class="founder-sign">Steve Roberts, Founder</p>
+      </div>
+      <!-- PROD: photography slot 2 of 3. Replace this div with the real <img>.
+           The story is written in the first person; a face is what earns that register. -->
+      <div class="photo-slot photo-portrait">
+        <p class="ps-eyebrow">Photography</p>
+        <p class="ps-brief">Steve at a caff&egrave; table in Campiglia or Sarteano. Candid,
+          mid-conversation, not looking at the lens.</p>
+        <p class="ps-spec">4:5 portrait &middot; ~1000x1250</p>
+      </div>
     </div>
 
     <!-- Our model -->
@@ -57,6 +77,16 @@
     <div class="prose" style="max-width:72ch">
       <p>We have carefully hand-selected a small number of roasters whose work represents Italian roasting at its finest. We do not roast, grind, blend, or alter the roasters&rsquo; packaging - instead, shortly after the roaster seals the whole-bean coffee into valve bags, we air-freight it directly into our US fulfillment facility, exactly as they produced and sealed it - fresh and ready to consume.</p>
       <p>Meet the full group on our <button class="inline-link" onclick="showPage('roasters')">Roasters page</button>. Do you have a roaster you&rsquo;d like us to consider? <a class="inline-link" href="mailto:roasters@cremaitalia.com">Email me here.</a></p>
+    </div>
+    <!-- PROD: photography slot 3 of 3. Replace this div with the real <img>.
+         This is the PRODUCT shot - the review's "no product visible anywhere on the landing
+         page". It also illustrates the claim it sits under: the roaster's own sealed bag,
+         untouched by us. -->
+    <div class="photo-slot photo-wide">
+      <p class="ps-eyebrow">Photography</p>
+      <p class="ps-brief">A roaster&rsquo;s own valve bag, sealed, label facing. Close enough to
+        read the roaster&rsquo;s name. Loose beans alongside if you have them.</p>
+      <p class="ps-spec">3:2 landscape &middot; ~1500x1000</p>
     </div>
 
     <!-- Quiz offered BEFORE the catalog, not after the Sorpresa CTA (Steve, 2026-08-06). Placed

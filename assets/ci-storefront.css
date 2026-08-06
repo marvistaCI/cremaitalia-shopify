@@ -175,6 +175,34 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .profile-banner p{font-size:.85rem;color:#d4c4b8;margin:0}
 .profile-tags{display:flex;gap:.4rem;flex-wrap:wrap}
 
+/* ---- photography placeholders (POC13) ----
+   PROD: each .photo-slot is a stand-in for a real photograph and ships NOWHERE near live.
+   Replace the whole <div class="photo-slot ..."> with an <img> at the stated ratio (keep
+   width/height attributes - theme check's ImgWidthAndHeight wants them) and delete these
+   rules once all three are shot. Briefs live in the markup, not here, so the person
+   sourcing the photo reads them next to the section they belong to.
+   Deliberately styled as an obvious placeholder - dashed hairline, no photo-like fill -
+   so nobody mistakes an empty slot for a finished design in a review. Per Brand Standards
+   3.5 every one of these wants natural light, low saturation, narrow depth of field;
+   never posed baristas, never bean-border decoration. */
+.photo-slot{background:var(--ci-ivory);border:1px dashed var(--ci-hairline);border-radius:var(--ci-radius);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.4rem;padding:1.25rem}
+.photo-slot .ps-eyebrow{font-family:var(--ci-font-body);font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ci-crema)}
+.photo-slot .ps-brief{font-family:var(--ci-font-body);font-size:.85rem;line-height:1.45;color:var(--ci-ink-soft);max-width:44ch;margin:0}
+.photo-slot .ps-spec{font-family:var(--ci-font-body);font-size:.72rem;color:var(--ci-mute)}
+/* The wide band sits outside .ci-main so it can run the full content width, like .taste-ribbon */
+.photo-band{width:calc(100% - 3rem);max-width:var(--ci-page-max);margin:0 auto;aspect-ratio:21/9}
+.photo-wide{aspect-ratio:3/2;max-width:72ch;margin-top:1.5rem}
+.photo-portrait{aspect-ratio:4/5}
+/* Story runs text-beside-photo on desktop and stacks on phones. align-items:start keeps the
+   photo from stretching to the prose's full height. */
+.story-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:2rem;align-items:start}
+@media(max-width:860px){
+  .story-grid{grid-template-columns:1fr;gap:1.5rem}
+  .story-grid .photo-portrait{max-width:320px;margin-left:auto;margin-right:auto;width:100%}
+  .photo-band{aspect-ratio:16/9}
+  .photo-slot .ps-brief{font-size:.8rem}
+}
+
 /* ---- POC6 taste-profile ribbon ---- */
 .taste-ribbon{display:none;width:calc(100% - 3rem);max-width:var(--ci-page-max);margin:1.25rem auto;background:linear-gradient(135deg,#2a1208,#6B4A38);color:var(--ci-cream);border-radius:var(--ci-radius);overflow:hidden}
 .taste-ribbon.ribbon-visible{display:block}
