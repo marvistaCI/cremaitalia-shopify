@@ -107,7 +107,8 @@ change — worth knowing, since that copy **is currently live** on cremaitalia.c
 is) and the FAQ's "the first 222 subscribers at launch" (cap language, not consumption).
 
 ### A3. Operations vocabulary sweep
-**Agreed by Steve 2026-08-06 ("we'll address this in later prompts").**
+**DONE 2026-08-06.** Rule applied: **say the customer-visible consequence, not the mechanism.**
+Every passage kept its honesty; only the vocabulary changed.
 
 Internal supply-chain language leaking onto customer-facing pages. Confirmed instances:
 
@@ -119,12 +120,29 @@ Internal supply-chain language leaking onto customer-facing pages. Confirmed ins
 | Bottega | "the rest go through our 3PL" |
 | Roccia | "We order freshly roasted beans by the pallet" |
 
-Rule to apply: **say the customer-visible consequence, not the mechanism.** "A hard cap that
-prevents overselling" → "when it is gone, it is gone." Keep the honesty, drop the ERP.
+**Representative rewrites:**
 
-Note: some of this is deliberate transparency and should survive in softened form — the
-freshness-gating explanation on Sorpresa is genuinely reassuring. This is a rewrite, not a
-deletion.
+| Was | Now |
+|---|---|
+| "a hard cap that prevents overselling" | "we will not sell you something we cannot ship" |
+| "Supply is pallet-bound ... depending on the next pallet" | "may or may not come back, depending on what our roasters send next" |
+| "**Freshness-gated availability.** ... all three components ... " | "**Why a Tour sometimes disappears.** ... all three of its coffees ..." |
+| "reached their Offerta threshold" | "getting on in age but still well inside its freshness window" |
+| "set by markup tier, not by a percentage-off blast" | "set one coffee at a time, not by a blanket percentage off" |
+| "the rest go through our 3PL" | "may arrive separately from your coffee" |
+| "We order freshly roasted beans by the pallet" | "Fresh coffee arrives from Italy about every six weeks" |
+| "new Selezione SKUs 48 hours before the public listing" | "new Selezione coffees 48 hours before anyone else" |
+
+**Four leaks were missed by the first pass** and caught only by sweeping the rendered DOM with
+every page force-activated: `Selezione SKUs`, and two card badges living in `ci-catalog.json`
+(`"Freshness-gated · assembled to order"` → "Boxed for you when you order"; `"This pallet only"`
+→ "This shipment only"). **Lesson:** the first sweep read `document.body.innerText` *after*
+re-hiding each page, so hidden text returned empty and the sweep falsely reported clean. Any
+future copy sweep on this SPA must activate all `.page` elements and keep them active while
+reading.
+
+**Deliberately kept:** "sold as-is" (8 instances) — brand language for the Offerta guarantee,
+not ops jargon.
 
 ---
 
@@ -139,13 +157,26 @@ you find your coffee than win an argument" — is the one that faces outward.
 the **commercial** surfaces: shelf cards, Roccia/Sorpresa intros, cart, product pages.
 
 ### B2. Consolidate the discount explanation
-The subscriber/founder/first-purchase rules are restated in **seven** places in seven phrasings
-(home Roccia card, Roccia page ×3 paragraphs, cart banner, cart footer, FAQ, account tile,
-product page). Substantively consistent since POC8's `MAX` fix — but the repetition itself reads
-as anxiety.
+**DONE 2026-08-06.**
 
-**To do:** one canonical statement (Roccia page), short consistent references elsewhere.
-Pairs naturally with A1 since both touch the same strings.
+The worst of it was the Roccia page stating "10%" three times in three consecutive blocks. Split
+so each block has one job and they no longer overlap:
+
+- **Intro** now says what Roccia *is* (any roast, any roaster, 4/6/8-week cadence, three bag
+  sizes) and ends on free shipping. The 10% was removed from here.
+- **Callout** now carries the benefit in full and only here: *"Your subscriber benefit is 10% off
+  Roccia, Sorpresa, and Selezione - on your subscription shipments, and on anything else you
+  order from those three shelves. Offerta and Bottega are priced as-is and are never
+  discounted."* This replaces the vaguer "In addition, active Roccia subscribers unlock 10%
+  savings ... even one-off purchases."
+- **Founding banner** unchanged (distinct fact).
+
+**Deliberately left alone** — each remaining mention now has a distinct job rather than being a
+restatement: the home shelf card (one-line teaser), the FAQ (the only place the `MAX` no-stacking
+rule is actually explained, which is what an FAQ is for), and the short contextual references on
+the product page, cart banner, sign-in modal, and account tile.
+
+Net: five site-wide mentions of "10%", none redundant.
 
 ### B3. Team micro-bios — **needs 2 sentences each from Steve**
 About gives the founder ~400 words and two photos; Lucia, Asia, Lauren, and Partner 1 get a name
