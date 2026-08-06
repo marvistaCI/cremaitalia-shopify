@@ -113,10 +113,11 @@ Pull the theme you just wrote and diff every file against the repo:
 shopify theme pull --theme <new-id> --path <scratchpad>/verify
 ```
 
-Then compare all files under `assets config layout locales snippets templates`. Expect **all 36 to
-match** (was 37 until `assets/ci-founder-dog.jpg` was deleted on 2026-08-06 — update this number
-here whenever the theme's file set legitimately changes). Also re-run `shopify theme list` and
-confirm there is now **exactly one** theme with that name.
+Then compare all files under `assets config layout locales snippets templates`. Expect **all 39 to
+match** (37 → 36 when `assets/ci-founder-dog.jpg` was deleted 2026-08-06, then 36 → 39 with POC13's
+three temporary landing-page photos `ci-temp-lp1..3.jpg` — update this number here whenever the
+theme's file set legitimately changes). Also re-run `shopify theme list` and confirm there is now
+**exactly one** theme with that name.
 
 Note `--path` must point at a directory that **already exists**; the CLI errors out rather than
 creating it.

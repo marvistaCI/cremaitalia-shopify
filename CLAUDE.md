@@ -1700,11 +1700,88 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   between a bordered button and a plain link is **vertical centring, not a wrap**. On this codebase
   the method needs as much scrutiny as the finding.
 
+- 2026-08-06 — **POC13 built and deployed the same day as POC11/POC12 — a mobile/interaction batch,
+  the first photography on the landing page, and three process fixes born of a broken launcher.**
+  Ledger: `docs/POC13_change_list.md`. **(1) The account dropdown was nearly unusable with a mouse,
+  and worse on touch.** Steve: *"unless you hard click the signed in name again, it is hard to get
+  into the dropdown menu. You have to move at a perfect speed otherwise it closes."* Cause:
+  `.account-menu` carried `margin-top:.35rem`, and `:hover` covers an element plus its descendants
+  but **not the margin between them** — probing `elementFromPoint` every 1px showed the element under
+  the cursor in that 5.6px strip is `.header-inner`, outside `.account-wrap`, so any `mousemove`
+  sampled there closed the menu. `.shop-menu` never had it (flush, no margin) — that asymmetry
+  recurs below and is the tell that the account dropdown was added later and never got Shop's
+  treatment. Fixed with a transparent `::before` bridging the gap: 0 breaks along three probe paths,
+  was 30, visual gap unchanged. The POC6 force-close/re-arm logic was checked first and is **not**
+  implicated. **On touch it was worse:** the mobile overrides for `.account-wrap`/`.account-menu`
+  were being **discarded wholesale**, because the dropdown's base rules sit near the END of the
+  stylesheet, AFTER the mobile header block, and **media queries add no specificity** — so at equal
+  specificity the later desktop rules won. Measured at 375px: position `absolute` not `static`,
+  `min-width` 170px not 0, desktop border/shadow/margin all intact, and the submenu rendering as a
+  170px absolutely-positioned box **hanging ~155px below the open panel**. Fixed by scoping the two
+  rules to `.ci-header`, with a comment not to "simplify" them back. **(2) Taste ribbon 262 → 139px**
+  at 375 (signed-out worst case), across three steps: de-buttoned the filter tags (chips → plain
+  text, scoped to `.tr-tags` so the account card keeps its filled chips); lifted the state dot out of
+  its own row into a padding gutter (it was costing 18.6px because `.tr-status` is a full-width flex
+  item and wrapped below it); and **Steve's structural fix — bury "Edit profile" as a link on the
+  word "profile"** in the status sentence, removing a control instead of compressing one. Toggle
+  shortened to **"Show all"**. Worth recording *why* Steve's beat mine: I had measured every label
+  and correctly reported that only "Save"/"Save it" fit one row — true, and the wrong problem. Also
+  note the toggle has **two** labels, so shortening one state alone would have left "Apply profile"
+  wrapping and the band jumping height on every toggle. Signed-out now equals signed-in at every
+  width. Two traps recorded: a `<button>` is `inline-block` and **Chrome forces that even under
+  `display:inline`**, so padding meant to grow the tap target inflated the line box (cancelled with
+  an equal negative margin — hit area 42x30, zero layout cost); and the shortened status copy moved
+  the wrap/nowrap crossover the CSS comment warns about, **860 → 790**, re-measured at both settings
+  across seven widths. **(3) About "Place"** stopped asserting Italy's coffee primacy as settled
+  fact — a claim contested in exactly the specialty-coffee circles most likely to become advocates.
+  Steve's replacement: *"Espresso was born in Italy, and coffee lovers worldwide recognize Italian
+  roasts as balanced, refined, and delicious."* **(4) First photography on the landing page** — the
+  page ran 533 words and five screens with nothing to look at, the loudest GTM-review finding and
+  the one real barrier to a younger visitor (the editorial voice is the differentiator and stays).
+  Three slots, not five, and deliberately **not** on the four shelf cards (four thumbnails in a row
+  is the e-commerce grid the brand avoids): a 21:9 band under the hero (16:9 on phones, where 21:9
+  is a letterbox slit), a 4:5 founder portrait beside the confession, and a 3:2 **product** shot in
+  "Our model" — the one the review said was missing anywhere on the page. Now filled with Steve's
+  **temporary** stand-ins, named `ci-temp-*` so one grep finds everything that must go before
+  launch; each slot keeps its brief for the real shot in a `PROD:` comment. One file per slot serves
+  both desktop and phone crops via `object-fit:cover` with per-slot `object-position`. Images
+  re-encoded q82 progressive and **stripped of all metadata** (no GPS was present, but phone photos
+  entering a git repo and a public theme get stripped regardless). **Two recorded reasons these
+  cannot ship:** the band is a US specialty café (English chalkboard, dollar prices, matcha), and
+  the product shot shows **third-party trademarks** (Lavazza, a US roaster) — Lavazza being
+  mass-market, the opposite of the artisan sourcing the surrounding copy claims. **(5) Process, all
+  triggered by one broken file:** `dev.cmd` had pinned `--theme 151277174953` (POC4 Preview) since
+  2026-07-05 and broke silently when POC4–POC9 were deleted. Rewritten with **no theme id at all**
+  (plain `shopify theme dev` reuses the throwaway Development theme) — an id-free launcher cannot go
+  stale — plus a tracked `dev.cmd.example` since `dev.cmd` is gitignored, both now `cd /d "%~dp0"`.
+  The same deletion had also broken the **`reconnect-check` skill**, which listed POC4 Preview among
+  the themes it expects *and* told the agent to flag any difference as "a real change, not a
+  connectivity artifact" — a guaranteed false alarm on every reconnect; and the ⚠️ password callout
+  atop this file, which named POC4's preview link. Both now defer to §10. Encoded as
+  `crema-poc-deploy` **Step 6.4**: after any theme **deletion**, grep the repo for theme ids and
+  judge each hit **by tense, not by age** — historical narrative (§9, change lists) is *supposed* to
+  name dead ids and is left alone; executable files and present-tense claims get fixed, preferring
+  to delete the id over updating it. Steve also locked **keep at most three POC previews**, now
+  `crema-poc-deploy` Step 5, selecting candidates by name pattern **and** `role:unpublished` so the
+  live theme, `Horizon`, the Development theme and any hand-named backup are protected *by
+  construction*; duplicate names halt the prune (the 2026-07-24 signature), and deletes need Steve's
+  explicit go by name+id. **Verified** at 360/375/700/1280 via DOM geometry — the browser screenshot
+  tool was wedged the entire session, so the photo crops were checked by rendering the exact
+  `object-fit:cover` results offline with Pillow and viewing those. `theme check` at the documented
+  baseline (17 offenses / 2 errors / **0 new**). **Deployed** via the `crema-poc-deploy` skill to a
+  NEW unpublished theme **"Crema Italia POC13 Preview" (id `151800610985`)**: `theme list` +
+  `git log origin/main..HEAD` run **first** (no collision), then **pull-and-diff proved** the push —
+  both sides **39** files (36 → 39 with the three temp photos), zero mismatches, nothing on only one
+  side. **POC10 (`151624024233`) pruned** on Steve's explicit go under the new cap, its id
+  re-verified against live immediately before the delete; its batch is commit `dd0cbf1` on GitHub
+  and redeployable. POC11, POC12 and the live theme untouched. Preview:
+  `https://crema-italia.myshopify.com?preview_theme_id=151800610985`
+
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC12 (verified live 2026-08-06) — read this first when resuming.**
+**▶ CURRENT STATE — POC13 (verified live 2026-08-06) — read this first when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
 > `docs/POC*_change_list.md` banners, and any "NEXT: deploy…" line are **historical narrative** —
@@ -1728,22 +1805,26 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC12 Preview" | `151798841513` |
+| **Newest POC preview** | "Crema Italia POC13 Preview" | `151800610985` |
+| Prior preview | "Crema Italia POC12 Preview" | `151798841513` |
 | Prior preview | "Crema Italia POC11 Preview" | `151797727401` |
-| Prior preview | "Crema Italia POC10 Preview" | `151624024233` |
 
-**POC12 is deployed** and is the only POC12 theme (all **36** files byte-match the repo — verified by
-pull-and-diff 2026-08-06, both sides 36 files, zero content mismatches, nothing present on only one
+**POC13 is deployed** and is the only POC13 theme (all **39** files byte-match the repo — verified by
+pull-and-diff 2026-08-06, both sides 39 files, zero content mismatches, nothing present on only one
 side; `theme list` was run **before** the push per the rule above, confirming no name collision).
-POC10 and POC11 previews and the live theme are untouched. Preview:
-`https://crema-italia.myshopify.com?preview_theme_id=151798841513`
+The file count moved 36 → 39 with the three temporary landing-page photos (`ci-temp-lp1..3.jpg`).
+POC11 and POC12 previews and the live theme are untouched. Preview:
+`https://crema-italia.myshopify.com?preview_theme_id=151800610985`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
-2026-07-06). To refresh: `shopify theme push --theme 151798841513`.
+2026-07-06). To refresh: `shopify theme push --theme 151800610985`.
 
-**Only POC10, POC11 and POC12 previews now exist.** POC4–POC9 (`151277174953`, `151420207273`,
-`151440130217`, `151449862313`, `151454122153`, `151523131561`) were **deleted 2026-08-06** on
-Steve's explicit go, after verifying the six ids against a live `theme list --json`; the store went
-from 11 themes to 5. The erroneous POC9 duplicate `151615373481` was deleted 2026-07-25.
+**Only POC11, POC12 and POC13 previews now exist** — the three-newest cap Steve set on 2026-08-06,
+now enforced as `crema-poc-deploy` Step 5. **POC10 (`151624024233`) was deleted 2026-08-06** on
+Steve's explicit go, after re-verifying the id against a live `theme list --json` immediately before
+the delete; its batch is commit `dd0cbf1` on GitHub and can be redeployed from git if ever wanted.
+POC4–POC9 (`151277174953`, `151420207273`, `151440130217`, `151449862313`, `151454122153`,
+`151523131561`) were deleted earlier the same day. The erroneous POC9 duplicate `151615373481` was
+deleted 2026-07-25.
 
 A `Development (0585b1-SteveR-AsymPlatPC)` theme (`151795564713`) may also appear in `theme list` —
 that is the throwaway created by `shopify theme dev`, not a deploy. Ignore it.
@@ -1752,7 +1833,21 @@ that is the throwaway created by `shopify theme dev`, not a deploy. Ignore it.
 zero customer-visible em-dashes verified by cookie-less fetch). **Storefront password still OFF**
 (friend-testing) — now purely a friend-testing decision, not a copy-quality one.
 
-**What POC12 is:** POC11 plus the fixes its review produced (4 commits, `3551e40`..`1f0d7c1`).
+**What POC13 is:** POC12 plus a mobile/interaction batch and the first photography (6 commits,
+`19548c0`..`baff5e9`). Headlines: the **account dropdown was nearly unusable** — a 5.6px dead strip
+between trigger and panel (`margin-top:.35rem`) broke the `:hover` chain, so you could only enter by
+moving fast enough that no `mousemove` sampled the gap; and on touch the whole mobile treatment for
+that dropdown was being **discarded by the cascade** (its base rules sit after the mobile block), so
+the submenu rendered as a 170px floating box hanging below the open panel. The **taste ribbon went
+262 → 139px** at 375: de-buttoned tags, the state dot lifted out of its own row, and — Steve's
+call — **"Edit profile" buried as a link on the word "profile"** in the status sentence, removing a
+control rather than compressing one, with the toggle shortened to "Show all". About's "Place" beat
+stopped asserting Italy's coffee primacy as settled fact. And the landing page got **three
+photography slots** (band / founder portrait / product) now filled with **temporary** stand-ins —
+every `ci-temp-*` asset must be replaced before launch, and two of them carry recorded reasons they
+cannot ship (a US café; third-party trademarks). Detail: `docs/POC13_change_list.md`.
+
+**What POC12 was:** POC11 plus the fixes its review produced (4 commits, `3551e40`..`1f0d7c1`).
 Headline: **the quiz now pays off before it asks.** POC11 made the quiz the hero CTA but its result
 buttons still routed through sign-in, so a stranger's first action ended at a login form headed
 "Your Account" with no guest option and a subscriber-discount benefit they could not use. Both
