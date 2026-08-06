@@ -44,6 +44,10 @@
   };
   var SHELF_BADGE = {
     roccia:    { cls: 'sr', tag: 'Roccia · Subscription', shelfTag: 'Roccia' },
+    // Badges do a different job from the shelf headers: they identify which shelf a tile belongs
+    // to while you scan a mixed grid, so the Italian name leads and the gloss stays short. The
+    // full "The Surprise · Curated Discovery" form is deliberately NOT used here (Steve,
+    // 2026-08-06) - it would swamp the coffee's own name on the tile.
     sorpresa:  { cls: 'ss', tag: 'Sorpresa · Discovery',   shelfTag: 'Sorpresa' },
     selezione: { cls: 'sl', tag: 'Selezione · Premium',    shelfTag: 'Selezione' },
     offerta:   { cls: 'so', tag: 'Offerta · Opportunity',  shelfTag: 'Offerta' },

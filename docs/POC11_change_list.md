@@ -167,9 +167,33 @@ A3 was built on and Code under-applied it:
   standing house position rather than two unrelated remarks.
 
 ### A4. Shelf names now carry their English translation
-**DONE 2026-08-06 — Steve's find.** Roccia and Offerta already glossed themselves ("The Rock",
-"The Opportunity") but Sorpresa and Selezione did not. Two of four were simply missing the
-pattern. Now "Surprise Discovery · One-time" and "Select Premium & Seasonal · One-time".
+**DONE 2026-08-06 — Steve's find, then Steve's format.** Roccia and Offerta already glossed
+themselves ("The Rock", "The Opportunity") but Sorpresa and Selezione did not. Steve then
+standardised all four on Roccia's shape - **`The <English name> · <what is on the shelf>`**:
+
+| Shelf | Header (home card + shelf-page eyebrow) |
+|---|---|
+| Roccia | The Rock · Subscription (and one-time ordering) |
+| Sorpresa | The Surprise · Curated Discovery |
+| Selezione | The Selection · Premium & Seasonal |
+| Offerta | The Offer · Limited Time and Inventory |
+
+Note Offerta's English gloss changed from "The Opportunity" to **"The Offer"** - a more literal
+and more accurate rendering of *Offerta*.
+
+**The parenthetical stays on Roccia only.** Steve's draft had "(one time ordering)" on all four;
+dropped from the other three because Roccia's is informative *precisely as the exception* - it
+is the one shelf where purchase mode is a real question and the answer is surprising (the
+subscription shelf also sells one-off). On the other three, one-time is the unremarkable
+default, and a parenthetical on every shelf would strip the signal value from Roccia's. The
+information is not lost: the Selezione body already states "One-time purchase only, never a
+subscription."
+
+**Correction to the argument that was made for this at the time:** a second reason offered was
+that dropping the parenthetical would keep Sorpresa and Selezione at one line on mobile. That
+turned out to be wrong - measured after the build, **all four wrap to two lines at 375px**
+(the threshold is around 30 characters at the eyebrow's letter-spacing). The decision stands on
+the exception-signal reasoning alone; the line-count argument did not hold.
 
 This is the fix for the "five Italian words is a comprehension tax" finding in the POC10 review
 — the review named the problem, Steve solved it, and the solution is better than anything
@@ -179,10 +203,16 @@ proposed there because it teaches the vocabulary in place rather than restructur
 eyebrows**, which carry the same statement; fixing only one would have created a fresh
 inconsistency. Verified as exactly two occurrences each.
 
-**Deliberately NOT applied, flagged for Steve:** the product-card badges in `SHELF_BADGE`
-(`ci-storefront.js`) still read `Sorpresa · Discovery` / `Selezione · Premium`. In a small
-uppercase badge sitting directly under the shelf name, "SORPRESA · SURPRISE DISCOVERY" reads
-redundantly. Open.
+**Product-card badges deliberately excluded** (Steve, 2026-08-06). They do a different job from
+the shelf headers: they identify which shelf a tile belongs to while you scan a mixed grid, so
+the Italian name leads and the gloss stays short. The long form was tried and reverted -
+"SORPRESA · SURPRISE DISCOVERY" swamps the coffee's own name on a tile. Badges remain
+`Roccia · Subscription` / `Sorpresa · Discovery` / `Selezione · Premium` / `Offerta ·
+Opportunity`, with a comment in `SHELF_BADGE` recording why so it is not "harmonised" later.
+
+**OPEN, minor, raised not decided:** renaming Offerta's gloss to "The Offer" leaves its badge
+reading `Offerta · Opportunity` - a third term for the same shelf. Either align the badge to
+"Offer" or accept the badge vocabulary as independent. Steve's call.
 
 ### A5. Shop page: shelf-context note replaces the static shelf list
 **DONE 2026-08-06 — Steve's design.** Removed "Organized into four shelves - Roccia · Sorpresa ·
