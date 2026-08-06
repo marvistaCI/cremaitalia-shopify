@@ -290,8 +290,56 @@ everything under it. The passage is now two beats (origin, then the turn outward
   sentence **no recipient at all** and let the following sentences welcome. "Here, unchanged"
   also quietly restates the import position at the moment the company's purpose is stated.
 
-**Still open in B1:** the commercial surfaces (shelf cards, Roccia/Sorpresa intros, cart, product
-pages) have not been touched yet.
+**DONE 2026-08-06 - commercial surfaces, and the job was far smaller than the review implied.**
+Measured pronoun balance (we/I vs you) per surface before writing anything:
+
+| Surface | we/I | you | Ratio |
+|---|---|---|---|
+| Offerta | 1 | **0** | no second person at all |
+| Selezione | 4 | 2 | 2.00 |
+| Shop | 3 | 2 | 1.50 |
+| Home | 25 | 17 | 1.47 |
+| Promise | 12 | 9 | 1.33 |
+| Sorpresa | 7 | 6 | 1.17 |
+| **Roccia** | 4 | **8** | **0.50** |
+| Bottega / Cart | 0 | 1 / 2 | fine |
+
+**Roccia - the most important commercial page - was already twice as much "you" as "we",** so
+B1's premise as written in the review was mostly wrong. This became three targeted sentences,
+not a sweep:
+
+1. **Offerta intro:** "*We show* the original price..." -> "**You see** the original price..."
+   Same fact, reader as subject, and a better claim: what they get rather than what we do.
+2. **Offerta "Sold as-is":** every verb was passive and it read as terms and conditions
+   ("purchases carry a modified guarantee", "is disclosed", "is removed"). Rewritten active with
+   the reader present: "we will replace a bag that is genuinely defective, but not one you simply
+   wish were fresher. You will see the freshness window before you buy." Every fact survives, and
+   it retires "age-related palate preferences" - ops-speak of exactly the kind A3 stripped.
+3. **Sorpresa:** "every bag is fresh *at shipment*" -> "fresh **when it reaches you**." A stronger
+   claim, not just a warmer one: "at shipment" quietly concedes the clock starts before delivery.
+
+**Caught by the verification sweep, not by the plan:** the Offerta guarantee is stated in **two**
+places, and fixing only the Offerta page left the **Promise** page still reading "modified
+guarantee ... no exchanges for age-related palate preferences". Aligned to the same plain wording.
+Worth remembering that policy copy on this site is duplicated across the shelf page and the
+Promise page, so a change to one needs a grep for the other.
+
+**Deliberately NOT changed, to avoid writing to the metric:**
+- **Roccia** (0.50) - already you-dominant; touching it would be change for its own sake.
+- **Selezione** (2.00) - the ratio is high only because the text is short. Its key sentence is
+  already "We tell you when fewer than twelve bags remain, and we will not sell you something we
+  cannot ship", which is a **promise**, where first person is correct.
+- **Home** (1.47) and **Promise** (1.33) - the founder story is meant to be first-person and the
+  Promise is by definition a list of what *we* commit to. Both ratios are right for what those
+  pages are.
+
+**Result:** Offerta 1/0 -> **0.25**, Sorpresa 1.17 -> **1.00**, Promise 1.33 -> **1.08**.
+
+**Pattern worth recording about the POC10 review itself:** three of its findings proved inflated
+once measured - the "buried" 17g sentence (42 words in, ~0.8 screens), "the page buries the
+category" (the hero names coffee and the shelves are reachable in the first screen), and "the
+commercial surfaces are we-heavy" (Roccia was not). The direction was useful; the magnitude was
+consistently overstated. Discount the adjectives, trust the measurements.
 
 ### B2. Consolidate the discount explanation
 **DONE 2026-08-06.**
