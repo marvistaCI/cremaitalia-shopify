@@ -13,6 +13,12 @@
       <div class="profile-tags tr-tags" id="tr-tags"></div>
     </div>
     <div class="tr-actions">
+      {%- comment -%}
+        Shown to signed-OUT visitors only (renderRibbon toggles it). This is where the
+        account ask lives now: AFTER the quiz result has proven useful, not before it.
+        POC12 removed the sign-in gate that used to sit at the quiz payoff.
+      {%- endcomment -%}
+      <button class="tr-save" id="tr-save" onclick="saveProfileFromRibbon()" hidden>Save to my account</button>
       <button class="tr-edit" onclick="openTasteConsole()">Edit profile</button>
       <button class="tr-toggle" id="tr-toggle" onclick="toggleProfileFilter()">Apply profile</button>
     </div>

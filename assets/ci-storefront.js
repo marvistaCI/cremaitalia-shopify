@@ -31,7 +31,7 @@
   var cart = [];
   // filterOn = taste filtering currently applied; savedTaste != null = a profile exists.
   var filterOn = false, savedTaste = null, pendingSaveProfile = false;
-  var pendingQuizAction = null; // null | 'matches' | 'everything' — set by the quiz result buttons
+  // (pendingQuizAction retired in POC12 — the quiz no longer routes through sign-in at all.)
 
   var FREE_SHIP_THRESHOLD = 55;
 
@@ -668,7 +668,16 @@
       : 'Your profile is not active - all items are shown.';
     if (tb) tb.textContent = filterOn ? 'Show everything' : 'Apply profile';
     if (tg) { tg.innerHTML = tasteTagsHtml(activeTaste); tg.classList.toggle('muted', !filterOn); }
+    // The account ask, offered only to a signed-out visitor and only once a profile exists.
+    var sv = $('tr-save'); if (sv) sv.hidden = session.signedIn;
   }
+  // Persist the current profile to an account. Signed in: commit straight away. Signed out:
+  // route through sign-in, and simulateSignIn()'s pendingSaveProfile branch commits on success.
+  // Declining costs the visitor nothing — the profile already works for this session.
+  window.saveProfileFromRibbon = function () {
+    if (session.signedIn) { commitProfile(); toast('Saved to your taste profile.'); renderAccount(); renderRibbon(); }
+    else { pendingSaveProfile = true; openSignin(); }
+  };
   function updateRibbon(pageName) {
     var r = $('taste-ribbon'); if (!r) return;
     var show = !!savedTaste && SHOP_PAGES.indexOf(pageName) !== -1;
@@ -856,19 +865,23 @@
     applyTasteEverywhere();
     updateRibbon('shop');
   }
-  // Both quiz-result choices route through sign-in first — we want to capture the
-  // customer's taste profile into their account whenever possible, regardless of
-  // which browsing option they pick. See docs/POC_v4_change_list.md.
-  // Already signed in: carry out the choice straight away and save to the account. Only a
-  // signed-OUT customer routes through sign-in first (the sign-in success handler and the
-  // dismissed-modal guest fallback both replay pendingQuizAction the same way).
+  // Quiz result choices deliver the payoff IMMEDIATELY — no sign-in gate (POC12, Steve
+  // 2026-08-06). This AMENDS the POC4 lock ("both result buttons route through sign-in first
+  // to capture the taste profile"). That lock was written when the quiz was a quiet inline
+  // link taken by someone already deep in the page. Promoting it to the hero CTA (POC11)
+  // changed who arrives here: a stranger, roughly 90 seconds in, who has not yet seen a
+  // product. Charging admission at the moment we promised a free reward is the surest way to
+  // lose exactly the first-time visitor the promotion was built to capture.
+  // The capture attempt is NOT abandoned — it moves to the ribbon ("Save to my account"),
+  // where it is asked AFTER the result has proven useful. See saveProfileFromRibbon().
+  // A signed-in visitor additionally gets the profile written to their account (renderAccount).
   window.chooseQuizMatches = function () {
-    if (session.signedIn) { applyProfileAndClose(); renderAccount(); return; }
-    pendingQuizAction = 'matches'; closeQuiz(); openSignin();
+    applyProfileAndClose();
+    if (session.signedIn) renderAccount();
   };
   window.chooseQuizEverything = function () {
-    if (session.signedIn) { showEverythingFromQuiz(); renderAccount(); return; }
-    pendingQuizAction = 'everything'; closeQuiz(); openSignin();
+    showEverythingFromQuiz();
+    if (session.signedIn) renderAccount();
   };
   // "Clear filters" (from the no-results empty state): drop the ephemeral Shelf/Region
   // navigation and turn taste filtering off, so everything shows again. The saved
@@ -945,13 +958,8 @@
   window.openSignin = function () { if (window.closeMobileMenu) window.closeMobileMenu(); $('signin-modal').classList.add('active'); };
   window.closeSignin = function () {
     $('signin-modal').classList.remove('active');
-    // Dismissed without signing in: still let the customer see the coffee — carry
-    // out their quiz choice as a guest instead of stranding them. See item on
-    // "capture the user in a profile, if at all possible" in the change list.
-    if (pendingQuizAction) {
-      var action = pendingQuizAction; pendingQuizAction = null;
-      if (action === 'matches') applyProfileAndClose(); else showEverythingFromQuiz();
-    }
+    // The quiz-dismissal fallback that used to live here is gone (POC12): the quiz never
+    // opens this modal any more, so there is no stranded customer to rescue.
   };
   window.switchTab = function (tab) {
     var tabs = document.querySelectorAll('.signin-tab');
@@ -966,16 +974,8 @@
     $('signin-btn').classList.add('signed-in');
     $('signin-label').textContent = session.name;
     var w = $('account-wrap'); if (w) w.classList.add('is-signed-in');
-    // Clear the pending quiz action before closeSignin() runs, so its guest-fallback
-    // branch doesn't also fire now that sign-in succeeded.
-    var quizAction = pendingQuizAction; pendingQuizAction = null;
     closeSignin();
     renderCart();
-    if (quizAction) {
-      if (quizAction === 'matches') applyProfileAndClose(); else showEverythingFromQuiz();
-      renderAccount();
-      return;
-    }
     if (pendingSaveProfile) { pendingSaveProfile = false; commitProfile(); toast('Saved to your taste profile.'); renderAccount(); showPage('shop'); return; }
     if (quizAnswers.roast || quizAnswers.flavor || quizAnswers.caffeine) { applyProfileAndClose(); renderAccount(); }
     else { renderAccount(); showPage('account'); }
@@ -1169,7 +1169,7 @@
       '</div>' +
       '<div class="section-head" id="acct-subs"><p class="eyebrow">Roccia subscription</p><h2>Manage your subscription</h2></div>' +
       subscriptionBlock() +
-      '<div class="loop-slot" style="margin-top:1.25rem"><strong>On the live store, this is Loop\'s hosted portal.</strong> Pause, skip, swap roaster / SKU / bag-size (up to 48 h before lock), change cadence, or cancel, and manage ship-to + payment, plus your subscription reminders and delivery notifications - self-service, no fee. Passwordless login, embedded as a theme app block. ' +
+      '<div class="loop-slot" style="margin-top:1.25rem"><strong>On the live store, this is Loop\'s hosted portal.</strong> Pause, skip, swap roaster, coffee, or bag size (up to 48 h before lock), change cadence, or cancel, and manage ship-to + payment, plus your subscription reminders and delivery notifications - self-service, no fee. Passwordless login, embedded as a theme app block. ' +
       '<!-- LOOP: replace this slot with the Loop customer-portal app block / link. -->' +
       '<!-- PROD: entitlement is a Shopify Function driven by Loop webhooks — NOT theme state. Founder status is a DURABLE account tag (set at signup, removed only on account closure); the benefit rate is 12% (founder) / 10% (regular) while >=1 subscription actively ships OR within the 60-day post-cancel/pause grace, else 0%. No permanent forfeiture. See Store Operating Standards §3.1/§4. This POC fakes the subscribed-vs-not states client-side. --></div>';
   }

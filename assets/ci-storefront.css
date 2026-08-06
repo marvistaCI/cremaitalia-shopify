@@ -177,6 +177,13 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .tr-edit{background:none;border:none;color:var(--ci-cream);font-family:var(--ci-font-body);font-size:.8rem;text-decoration:underline;text-underline-offset:2px;cursor:pointer;padding:0}
 .tr-toggle{background:none;border:1px solid rgba(255,255,255,.35);color:var(--ci-cream);font-family:var(--ci-font-body);font-weight:600;font-size:.78rem;padding:.35rem .85rem;border-radius:var(--ci-radius);cursor:pointer;white-space:nowrap;transition:background 200ms}
 .tr-toggle:hover{background:rgba(255,255,255,.12)}
+/* The account ask. Deliberately a quiet link, not a button: the visitor has already been
+   given the result, so this is an offer rather than a toll. Gold marks it as the one
+   forward action among the ribbon's controls without competing with .tr-toggle.
+   [hidden] needs an explicit rule because .tr-actions is a flex container. */
+.tr-save{background:none;border:none;color:var(--ci-crema-light);font-family:var(--ci-font-body);font-weight:600;font-size:.8rem;text-decoration:underline;text-underline-offset:2px;cursor:pointer;padding:0}
+.tr-save:hover{color:var(--ci-cream)}
+.tr-save[hidden]{display:none}
 
 /* ---- shop hero filters (Shelf + Region, dark band) ---- */
 .hero-filters{display:flex;flex-direction:column;gap:1.1rem;margin-top:1.5rem}
@@ -508,6 +515,8 @@ nav button.active{color:var(--ci-crema);font-weight:600}
   /* taste ribbon controls */
   .tr-toggle{min-height:40px;display:inline-flex;align-items:center}
   .tr-edit{padding:.5rem 0;min-height:40px;display:inline-flex;align-items:center}
+  .tr-save{padding:.5rem 0;min-height:40px;display:inline-flex;align-items:center}
+  .tr-save[hidden]{display:none}
   /* modal close gets a real tap area */
   .modal-close{width:44px;height:44px;display:flex;align-items:center;justify-content:center;top:.5rem;right:.5rem}
 }
