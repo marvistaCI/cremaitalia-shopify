@@ -24,7 +24,8 @@ build/
 *.key
 *.p12
 
-# Local dev-server launch script — carries the storefront password, never commit
+# Local dev-server launch script — may carry the storefront password, never commit.
+# The tracked template is dev.cmd.example (no password); copy it to dev.cmd to set up.
 dev.cmd
 
 # IDE / editor noise

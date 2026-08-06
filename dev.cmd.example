@@ -1,0 +1,28 @@
+@echo off
+REM ---------------------------------------------------------------------------
+REM Template for dev.cmd - local preview of whatever is in this working tree.
+REM
+REM SETUP: copy this file to dev.cmd (same folder), then run dev.cmd.
+REM   copy dev.cmd.example dev.cmd
+REM
+REM dev.cmd itself is gitignored because it may carry the storefront password.
+REM This template is tracked so a fresh clone still has a working launcher.
+REM ---------------------------------------------------------------------------
+REM
+REM Deliberately carries NO theme id. `shopify theme dev` creates (and then reuses)
+REM a throwaway "Development (<host>-<user>)" theme and serves the local files at
+REM http://127.0.0.1:9292 - it never writes to a POC preview or to the live theme.
+REM An id-free launcher cannot go stale; dev.cmd used to pin --theme 151277174953
+REM (POC4 Preview), which was deleted 2026-08-06 and broke the script silently.
+REM
+REM STOREFRONT PASSWORD: while "Restrict access to visitors with the password" is
+REM OFF (Online Store > Preferences), no --store-password is needed. When it goes
+REM back ON - see the open TODO in CLAUDE.md §10 - comment out the plain line below
+REM and uncomment the second one, substituting the real password.
+REM
+REM Port 9292 busy? A previous dev server is still running. Find and stop it:
+REM   powershell -Command "Get-NetTCPConnection -LocalPort 9292 -State Listen | Select-Object OwningProcess"
+REM
+cd /d "%~dp0"
+shopify theme dev
+REM shopify theme dev --store-password YOUR_STOREFRONT_PASSWORD
