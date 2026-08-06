@@ -1639,11 +1639,60 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   shelf headers. **Deferred as unanswerable until photography exists:** whether a price or product
   should appear above the fold.
 
+- 2026-08-06 — **POC12 built and deployed the same day as POC11, straight out of POC11's review.
+  One locked decision AMENDED, with Steve's explicit authorization.** Ledger:
+  `docs/POC12_change_list.md`. **The headline: the quiz now pays off before it asks.** POC11 made
+  the quiz the hero CTA (first action 3.9 screens → 0.6, and free), but its result buttons still
+  routed through sign-in — so a stranger's *first* action ended at a login form headed "Your
+  Account", which never explained itself, offered **no visible guest option** (dismissal was the
+  `×` only), and whose sole stated benefit was a **subscriber discount they cannot use yet**.
+  Dismissible, so a speed bump rather than a wall, but sitting at the exact moment of reward for
+  the exact audience the promotion was built to capture. **AMENDS the POC4 lock** ("both result
+  buttons route through sign-in first to capture the taste profile"): that lock was right when the
+  quiz was a quiet inline link taken by someone already deep in the page; promoting it to the hero
+  changed *who arrives there*. Both buttons now act immediately; `pendingQuizAction` and its two
+  dead branches retired. **The capture attempt is not abandoned, it moves** — a quiet gold "Save to
+  my account" link in the ribbon, shown to signed-out visitors only, asked *after* the result has
+  proven useful. Verified by driving all four paths (guest matches / guest save→sign-in→commit /
+  signed-in / "show me everything").
+  **Also landed:** the **Shop nav dropdown** got the glosses A4 missed — Selezione and Offerta had
+  **no English gloss at all** and Sorpresa said "Surprises" against the headers' "The Surprise",
+  which combined with A5's pill gloss had left **Sorpresa described five different ways**. Decision:
+  the dropdown keeps **sentences** rather than adopting the eyebrow format, making it the place the
+  vocabulary is *taught* while the headers are where it is *stated*. The **FAQ** stopped promising
+  "volume discounts", which appeared exactly once site-wide and contradicted the answer directly
+  above it. An ops leak the A3 sweep missed (**"swap roaster / SKU / bag-size"** on the account
+  page) was fixed. The About people cards gained a visible **"Bio"** tell — a real `<button>`, not
+  styled text, because the cards are `div`s with `onclick` and **could not be tabbed to at all**;
+  sized 36×40px for touch (it was 20×16px as bare text); Lauren and Partner 1 got "Bio under
+  construction." placeholders rather than special-case logic (Steve: no team member or partner
+  ships without full data).
+  **Ribbon layout, and a lesson in flexbox:** the third control pushed the ribbon 51 → 92px at
+  1440. Steve chose to let `.tr-main` shrink. `min-width:0` alone **did nothing** — the fix that
+  mattered was `flex-wrap:nowrap`, because **a wrapping flex container wraps before it shrinks**,
+  so `.tr-main` was dropping to its own line and then *growing* to fill it. The 860px breakpoint is
+  **measured at both settings** (1440 92/79, 900 135/119, 870 135/119, 830 135/150, 760 135/150);
+  below the crossover, forcing the controls inline costs *more* than wrapping. An earlier attempt
+  guessed 1100px and carried a CSS comment comparing two different viewports; both corrected, with
+  the real table left in the CSS.
+  **Housekeeping:** POC4–POC9 preview themes **deleted** on Steve's explicit go after verifying the
+  six ids against a live `theme list --json` — the store went from 11 themes to 5.
+  **Deployed** to **"Crema Italia POC12 Preview" (`151798841513`)** via the `crema-poc-deploy`
+  ritual: `theme list` + `git log origin/main..HEAD` **first** (no collision), validation at the
+  documented baseline (17 offenses / 2 errors / 0 new), then **pull-and-diff proved** the push —
+  both sides 36 files, zero mismatches. POC10, POC11 and the live theme untouched.
+  **Verification-method lessons worth keeping** (three checks reported wrong while the code was
+  fine): hidden `.page` elements return empty `innerText`, so a sweep must keep pages active while
+  reading; `text-transform:uppercase` defeats case-sensitive matching; and leaf-only scanning misses
+  text nodes sitting beside child elements — use a `TreeWalker`. Also, a few px of difference
+  between a bordered button and a plain link is **vertical centring, not a wrap**. On this codebase
+  the method needs as much scrutiny as the finding.
+
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC11 (verified live 2026-08-06) — read this first when resuming.**
+**▶ CURRENT STATE — POC12 (verified live 2026-08-06) — read this first when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
 > `docs/POC*_change_list.md` banners, and any "NEXT: deploy…" line are **historical narrative** —
@@ -1667,19 +1716,22 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC11 Preview" | `151797727401` |
+| **Newest POC preview** | "Crema Italia POC12 Preview" | `151798841513` |
+| Prior preview | "Crema Italia POC11 Preview" | `151797727401` |
 | Prior preview | "Crema Italia POC10 Preview" | `151624024233` |
 
-**POC11 is deployed** and is the only POC11 theme (all **36** files byte-match the repo — verified by
+**POC12 is deployed** and is the only POC12 theme (all **36** files byte-match the repo — verified by
 pull-and-diff 2026-08-06, both sides 36 files, zero content mismatches, nothing present on only one
 side; `theme list` was run **before** the push per the rule above, confirming no name collision).
-The file count moved 37 → 36 because `assets/ci-founder-dog.jpg` was deleted in this batch.
-POC4–POC10 previews (`151277174953`, `151420207273`, `151440130217`, `151449862313`, `151454122153`,
-`151523131561`, `151624024233`) and the live theme are untouched. The erroneous POC9 duplicate
-`151615373481` was deleted 2026-07-25. Preview:
-`https://crema-italia.myshopify.com?preview_theme_id=151797727401`
+POC10 and POC11 previews and the live theme are untouched. Preview:
+`https://crema-italia.myshopify.com?preview_theme_id=151798841513`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
-2026-07-06). To refresh: `shopify theme push --theme 151797727401`.
+2026-07-06). To refresh: `shopify theme push --theme 151798841513`.
+
+**Only POC10, POC11 and POC12 previews now exist.** POC4–POC9 (`151277174953`, `151420207273`,
+`151440130217`, `151449862313`, `151454122153`, `151523131561`) were **deleted 2026-08-06** on
+Steve's explicit go, after verifying the six ids against a live `theme list --json`; the store went
+from 11 themes to 5. The erroneous POC9 duplicate `151615373481` was deleted 2026-07-25.
 
 A `Development (0585b1-SteveR-AsymPlatPC)` theme (`151795564713`) may also appear in `theme list` —
 that is the throwaway created by `shopify theme dev`, not a deploy. Ignore it.
@@ -1688,7 +1740,21 @@ that is the throwaway created by `shopify theme dev`, not a deploy. Ignore it.
 zero customer-visible em-dashes verified by cookie-less fetch). **Storefront password still OFF**
 (friend-testing) — now purely a friend-testing decision, not a copy-quality one.
 
-**What POC11 is:** POC10 plus a copy-and-CTA batch built off a GTM/brand review of POC10 (11
+**What POC12 is:** POC11 plus the fixes its review produced (4 commits, `3551e40`..`1f0d7c1`).
+Headline: **the quiz now pays off before it asks.** POC11 made the quiz the hero CTA but its result
+buttons still routed through sign-in, so a stranger's first action ended at a login form headed
+"Your Account" with no guest option and a subscriber-discount benefit they could not use. Both
+result buttons now act immediately; the account ask moved to a quiet **"Save to my account"** link
+in the ribbon, asked after the result has proven useful. **This AMENDS the POC4 lock** ("both
+result buttons route through sign-in first"). Also: the **Shop nav dropdown** got the English
+glosses A4 missed (Selezione and Offerta had none; Sorpresa said "Surprises" against the headers'
+"The Surprise"); the FAQ stopped promising a **volume discount** that appeared nowhere else on the
+site; an ops-vocabulary leak (**"swap roaster / SKU / bag-size"**) the A3 sweep had missed was
+fixed; and the About people cards gained a visible **"Bio"** button — a real `<button>`, because
+the cards are `div`s with `onclick` and were unreachable by keyboard, with placeholders for Lauren
+and Partner 1. Detail: `docs/POC12_change_list.md`.
+
+**What POC11 was:** POC10 plus a copy-and-CTA batch built off a GTM/brand review of POC10 (11
 commits, `2ea5427`..`2a833d7`). Headlines: the **promo-code copy was factually wrong** and now
 pre-empts the checkout field honestly; **"172 of 222 founding slots"** removed as an untrue social
 proof claim; **ops vocabulary stripped** from customer copy; **all four shelf headers standardised**
