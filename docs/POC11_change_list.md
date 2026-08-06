@@ -257,8 +257,41 @@ Home page is 507 words centred on the founder's experience. The customer appears
 of enthusiasm rather than the subject. The strongest line on the site — "We would rather help
 you find your coffee than win an argument" — is the one that faces outward.
 
-**Not** a rewrite of the founder story (which is an asset and stays first-person). This is about
-the **commercial** surfaces: shelf cards, Roccia/Sorpresa intros, cart, product pages.
+**Original plan said "not a rewrite of the founder story."** That changed 2026-08-06 - Steve
+opened B1 *at* the founder story, and it turned out to be the right place to start, because the
+story's closing sentence was where the reader was most abstracted.
+
+**DONE 2026-08-06 - founder story closing.** The old closer read *"That was the inspiration.
+Crema Italia was born to give the US market access to these excellent producers and their
+products."* "The US market" is a category, not a person. Replaced with a second paragraph that
+turns outward:
+
+> That shot was the inspiration, and it is now our mission: to find Italian roasters like that
+> one and bring their coffee here, unchanged. Perhaps you have already discovered Italy and want
+> to rekindle a memory. Maybe you simply want high-quality beans to grind and savor. Either way,
+> I hope you find it here.
+
+"A full confession." is **kept** as the heading - it sets the first-person register that licenses
+everything under it. The passage is now two beats (origin, then the turn outward) rather than one.
+
+**Rejected along the way, and worth recording because the reasoning generalises:**
+- A draft ending in a site directory ("Check out our four coffee shelves, our Bottega, and our
+  brand promise...") was cut. It turns the most personal passage on the site into a table of
+  contents, and it duplicates the jump chips above it and the shelves section directly below.
+- *"I hope that you are here because you love drinking and preparing espresso based beverages"*
+  was cut for asserting the reader's motive, and for "espresso based beverages" being the same
+  category-speak A3 stripped off the shelf pages.
+- **"You" vs "those".** Steve tried "those who care deeply about what goes into their cup",
+  worried "you" presumed too much. Reverted, for three reasons: the presumption lived in
+  *asserting the reader's motives* (already cut), not in the pronoun; a qualifying phrase like
+  "those who care deeply" makes the reader audition for membership, which presumes **more**, not
+  less; and mixing "those" (sentence 1) with "you" (sentences 2-4) describes the reader from
+  outside then turns and addresses them, inside four sentences. The fix was to give the mission
+  sentence **no recipient at all** and let the following sentences welcome. "Here, unchanged"
+  also quietly restates the import position at the moment the company's purpose is stated.
+
+**Still open in B1:** the commercial surfaces (shelf cards, Roccia/Sorpresa intros, cart, product
+pages) have not been touched yet.
 
 ### B2. Consolidate the discount explanation
 **DONE 2026-08-06.**
@@ -295,7 +328,43 @@ that the four read consistently.
 ## 3. Track C — Working sessions (design together first, no build)
 
 ### C1. Landing page + CTA hierarchy
-**Steve 2026-08-06: "let's spend more time on the CTA and landing page. No action yet."**
+**STARTED 2026-08-06.** Working interactively against a local `theme dev` server.
+
+**DONE - hero "Benvenuto" sizing.** Steve: "the font seems aggressively large." It was rendering
+at **68.8px**, which is effectively the brand *Hero* size (72px) - but this is an H1, and the
+brand scale in `CLAUDE.md` §3.3 sets **H1 at 40px**. The line had been sitting one full step up
+the scale from where it belonged. Now `clamp(1.625rem, 4vw, 2.5rem)` = 26px on phones, 40px on
+desktop, i.e. **1.79x the question above it** (was 3.07x).
+
+It also now holds **one line at every width**, which it did not before - and it was missing by
+only **11px** at 1440 (771px of text against 760px available), which is the worst kind of wrap:
+a second line carrying almost nothing. The clamp is chosen so one line is guaranteed rather than
+lucky - the string measures a consistent **11.2x its font-size** in Marcellus, so the max must
+stay under 760/11.2 = 67px and the min under 327/11.2 = 29px at 375px. That arithmetic is in a
+CSS comment so a future size bump does not silently reintroduce the wrap.
+
+`line-height` went 1.08 -> 1.15 (1.08 was tuned for a two-line block and reads cramped on one),
+and `text-wrap:balance` was added as insurance if the string is ever edited longer.
+
+**Banner height fell out of it, no spacing work needed:** 616 -> **513px** at 1440, **492px** at
+768, **430px** at 375. Steve had also flagged the logo-to-question gap looking larger than the
+question-to-headline gap; after the resize he judged it resolved by eye, so **no spacing change
+was made**. (For the record, the CSS gaps measured 8px and 6px - nearly equal - so the perceived
+imbalance was transparent padding baked into `ci-logo-knockout.png`, whose ink ends well above
+the image's bottom edge. If it ever needs fixing, that is where it lives, not in the CSS.)
+
+**Still open in C1 - the questions with real conversion consequence:**
+- Is **story before product** the deliberate posture, or an accident of how the page grew?
+  Everything else follows from this answer.
+- The taste quiz is introduced as **"Still unsure?"** - framing the best zero-cost onboarding
+  asset on the site as a consolation prize for the indecisive. Promote it?
+- Should a price or a product ever appear above the fold?
+- **The "17g" sentence is still the third sentence in.** It is the only sensory writing anywhere
+  on the site. Moving it forward is a small structural change with an outsized effect on whether
+  a first-time visitor feels anything early. Not done - it changes the story's chronology.
+
+**Original framing (Steve, earlier on 2026-08-06): "let's spend more time on the CTA and landing
+page. No action yet."**
 
 Bring to the session (measured on POC10, 375×812 phone — these are structural, not data-dependent):
 

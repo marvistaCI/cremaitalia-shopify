@@ -208,7 +208,11 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .hero-inner{max-width:760px;margin:0 auto}
 .hero-logo{display:block;height:300px;width:auto;margin:0 auto 0.5rem;max-width:98%}
 @media(max-width:640px){.hero-logo{height:196px;margin-bottom:0.35rem}}
-.hero h1{font-family:var(--ci-font-display);font-size:clamp(2.5rem,7vw,4.3rem);font-weight:600;color:var(--ci-cream);line-height:1.08;margin-bottom:0}
+/* The payoff line answering the question above it, so it is sized as an H1 (brand scale: H1
+   40px), not at the Hero 72px it used to render at. Sized to stay on ONE line at every width -
+   the string is 11.2x its font-size in Marcellus, so the clamp max must stay under
+   (hero-inner 760px / 11.2) = 67px, and the min under (327px / 11.2) = 29px at 375px. */
+.hero h1{font-family:var(--ci-font-display);font-size:clamp(1.625rem,4vw,2.5rem);font-weight:600;color:var(--ci-cream);line-height:1.15;margin-bottom:0;text-wrap:balance}
 .hero h1 em{font-style:italic;color:var(--ci-crema-light)}
 .hero .subhead{font-family:var(--ci-font-display);font-style:italic;font-size:clamp(1.1rem,2.5vw,1.4rem);color:var(--ci-crema-light);margin:.75rem auto 1rem;max-width:560px}
 /* Green-white-red tricolore divider: 3 equal segments, aligned, on dark panels. */
