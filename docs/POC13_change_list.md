@@ -79,13 +79,187 @@ unchanged, no horizontal overflow, no overlap in the phone stack. `node --check`
 The browser screenshot tool was wedged again (as in POC6/7/9/12), so verification was DOM
 geometry throughout.
 
-### Open, not built
+### Open, not built — BOTH RESOLVED, see item 3
 
-- On a phone the remaining bulk is the **signed-out action stack**: "Save to my account",
-  "Edit profile" and the toggle wrap to two rows, 96px of the 224. That is the POC12
-  three-control layout, not part of this ask. Flagged to Steve, not touched.
-- The `.tr-dot` sits on its own row above the status on phones (status is a full-width flex
-  item, so it wraps below the dot). Pre-existing, unaffected by this change.
+Left open at the time of writing, then closed the same day. Recorded rather than deleted so
+the sequence stays legible:
+
+- ~~On a phone the remaining bulk is the **signed-out action stack**: "Save to my account",
+  "Edit profile" and the toggle wrap to two rows, 96px of the 224.~~ Steve came back on it;
+  fixed in item 3 by removing a control rather than shrinking one.
+- ~~The `.tr-dot` sits on its own row above the status on phones.~~ Fixed in item 3.
+
+---
+
+## 2. Account dropdown — a 5.6px gap, and a whole mobile treatment silently discarded
+
+Steve, on Windows: *"Unless you hard click the signed in name again, it is hard to get into
+the dropdown menu. You have to move at a perfect speed otherwise it closes."* Then: *"I have
+no idea what happens on a touch device."* Both instincts were right, and the touch one was
+worse. Commit `19548c0`.
+
+**Desktop.** The menu opens on `.account-wrap:hover`, and `:hover` covers the wrap plus its
+descendants — but **not the margin between them**. `.account-menu` carried
+`margin-top:.35rem`, leaving a **5.6px strip** in which the element under the cursor is
+`.header-inner`, outside the wrap. Probing `elementFromPoint` every 1px down the travel path
+showed exactly where it broke:
+
+| Probe point | Element under cursor | Inside `.account-wrap`? |
+|---|---|---|
+| Inside trigger | `BUTTON.sign-in-btn` | yes |
+| **Gap midpoint** | **`DIV.header-inner`** | **no** |
+| Inside menu | `DIV.account-menu` | yes |
+
+So any `mousemove` sampled inside the strip dropped the hover and closed the menu; crossing
+fast enough that no sample landed there was the only way in. That is precisely the "perfect
+speed" symptom, and it is a mechanism, not a feel.
+
+**`.shop-menu` never had it** — it sits flush (`top:100%`, no margin). That asymmetry is the
+tell, and it recurs below: the account dropdown was added later than Shop and never got the
+same treatment.
+
+Fixed with a transparent `::before` bridging the gap. Hover chain contiguous, visual gap
+unchanged. Probed along three x positions from trigger to menu: **0 breaks, was 30.**
+
+The force-close/re-arm logic (POC6) was checked first and is **not** implicated — it re-arms
+on the first outside `pointermove`.
+
+**Touch — the worse half.** The mobile overrides for `.account-wrap`/`.account-menu` were
+being discarded **wholesale**. The account dropdown's base rules sit near the END of the
+stylesheet, AFTER the mobile header block, and media queries add no specificity, so at equal
+specificity the later desktop rules won. Measured at 375px with the panel open and signed in:
+
+| Property | Mobile intends | Actually computed |
+|---|---|---|
+| `.account-wrap` position | `static` | `relative` |
+| `.account-menu` position | `static` | `absolute` |
+| `min-width` | `0` | `170px` |
+| `margin-top` | `0` | `5.6px` |
+| border / shadow | none | desktop border + shadow |
+
+Net effect: the submenu rendered as a **170px absolutely-positioned box hanging ~155px below
+the open panel**, wearing its full desktop chrome. `.shop-menu` was fine because its base
+rules sit *above* the block.
+
+Fixed by scoping the two rules to `.ci-header` (0,0,2,0), so source order stops mattering —
+with a comment saying not to "simplify" them back. Now full-width, inline, inside the panel's
+scroll flow, 48px rows; confirmed the panel scrolls to reveal it.
+
+## 3. Ribbon to one row — Steve's structural fix beat the one I was measuring
+
+**The good bit is the reasoning, not the CSS.** Asked to shorten the signed-out stack, I
+measured every label that could fit and reported that only "Save" (30.3px) or "Save it"
+(41.4px) actually did — true, and the wrong problem. Steve: *"bury the edit profile into
+'Your taste profile is active' by hyperlinking profile into the edit. Then you only have the
+one button on the right."* **Removing a control beats compressing one.** Commits `19548c0`,
+`13c4315`.
+
+Two structural changes:
+
+1. **The dot stopped taking a whole row.** `.tr-status` is a full-width flex item, so it
+   wrapped *below* the dot, costing 9px + 9.6px gap. The dot now hangs in a padding gutter,
+   optically centred on the first line (centre 22.8 vs line centre 22.7). Plus gap trimming.
+   Scoped to `max-width:789px`, matching where the ribbon wraps.
+2. **"Edit profile" moved into the sentence** as a link on the word *profile*, so
+   `.tr-actions` carries two controls signed-out and one signed-in. Toggle shortened to
+   **"Show all"** per Steve; the other state stays "Apply profile".
+
+**Why "Show all" alone would not have worked, and why it still earns its place.** The toggle
+has *two* labels. "Show all" (79.7px) fits; its partner "Apply profile" (106.6px) does not —
+so shortening one state would have left the other wrapping and the band would have **jumped
+height on every toggle**. With the edit removed, both fit at 375 *and* 360 at the original
+16px gap. "Show all" is then the only label that survives a 320px screen ("Apply profile"
+over by 11.9, "Show everything" by 36.4).
+
+### Height, signed-out worst case (three tags)
+
+| Viewport | POC12 | item 1 | dot fix | item 3 |
+|---|---|---|---|---|
+| 375px | 262 | 224 | 187.3 | **139.3** |
+| 360px | — | — | 217.2 | **169.2** |
+| 1280px | 79 | 52 | 51.6 | **51.6** |
+
+Signed-out now equals signed-in at every width — the band no longer changes height when you
+sign in or toggle.
+
+### The tap-target trap, worth remembering
+
+Vertical padding to grow the in-text link's tap target **inflated the line box** and pushed
+the status 42 → 51px. Cause: a `<button>` is `inline-block`, and **Chrome forces that even
+under `display:inline`** — so the usual "padding on an inline extends hit area only" trick
+does not apply to a button. Cancelled with an equal negative margin: padding still counts as
+hit area (**42x30** vs ~42x16 bare), zero layout cost.
+
+Kept as a real `<button>`, not styled text — same reason as POC12's About "Bio" tell:
+keyboard reachable, announced as a control. `aria-label="Edit your taste profile"`, since
+"profile" alone does not say what it does. Steve on the treatment: *"The underline is fine."*
+
+Dead `.tr-edit` rules swept (base + touch override); no references left.
+
+## 4. About "Place" — stop asserting Italy's coffee primacy as settled fact
+
+Carried over from the GTM review, which flagged it as the one objection still standing.
+Commit `d1a197e`.
+
+The beat read *"Italy is the home of espresso and of great coffee - a fact recognized
+worldwide."* The second half states as settled a claim that is actively contested in
+specialty-coffee circles — exactly the audience most likely to become advocates. Asserting it
+invites the argument.
+
+Steve's replacement, applied verbatim: **"Espresso was born in Italy, and coffee lovers
+worldwide recognize Italian roasts as balanced, refined, and delicious."**
+
+Espresso's Italian origin is uncontested, and the second clause now describes how the roasts
+are *received* rather than ranking them. Nothing left to argue with.
+
+## 5. Three photography placeholders on the landing page
+
+The landing page runs 533 words and five screens with **nothing to look at**. Commit
+`4f734af`. Steve asked for placeholders he could shop his own photo library against; these
+are sourcing briefs, sized to their final crop.
+
+| # | Where | Ratio | Brief |
+|---|---|---|---|
+| 1 | Under the hero, above the jump chips | 21:9, **16:9 on phones** | Italian bar counter mid-morning service; cups, steam, hands at work |
+| 2 | In "Our story", beside the confession | 4:5 | Steve at a caffè table, candid, not looking at the lens |
+| 3 | In "Our model" | 3:2 | A roaster's own sealed valve bag, label readable |
+
+**Three, not five** — more and the page reads as a catalogue rather than a story. **Not on
+the four shelf cards:** four thumbnails in a row is the e-commerce grid look the brand avoids,
+and it would compete with Shop.
+
+Slot 3 is the priority. It is the **product shot** the review said was missing anywhere on the
+page, and it illustrates the exact sentence it sits under ("we import; we never interfere").
+
+The band drops to 16:9 on phones because at 375px a 21:9 box is a 327x140 letterbox slit that
+nothing reads in. Briefs live in the markup beside their section, so whoever sources the photo
+reads them in context; each inherits Brand Standards 3.5 (natural light, low saturation,
+narrow depth of field; no posed baristas). Styled as obvious placeholders — dashed hairline,
+no photo-like fill — so an empty slot is never mistaken for finished design in a review.
+
+Sizes to shoot/crop: ~2200x950, ~1000x1250, ~1500x1000. Replacing a slot means swapping the
+`div` for an `<img>` with width/height attributes (theme check's `ImgWidthAndHeight`).
+
+## 6. Review findings confirmed STALE — do not re-fix
+
+Two items in the carried-over GTM review no longer exist. Verified against current code, not
+assumed:
+
+- **"The sign-in interruption is the primary funnel's failure point."** Removed in POC12.
+  Re-drove all four quiz paths this session: guest → "Show my matches" lands on a filtered
+  Shop with no gate.
+- **"Two of four shelves explain themselves and two don't."** All four now carry glosses, plus
+  "All Shelves" — Roccia/Sorpresa/Selezione/Offerta each read *"The X: ..."* in
+  `snippets/ci-header.liquid`. Fixed by POC12's A4. The review predates it.
+
+**On the 30–50 segment** (Steve asked whether to chase it): the barrier is not the editorial
+voice, it is that five screens pass with nothing to look at — which item 5 addresses without
+spending brand equity. Recommended *against* loosening the voice, adding urgency, or putting a
+product grid above the fold: that trades the 50–70 core, who are the ones actually paying $38
+for 250g, for a segment that may not convert anyway. The quiz-as-hero-CTA (POC11) and the
+sign-in removal (POC12) were already the right moves for that segment; mobile quality is the
+third. The **entry price rung stays parked** — the current ladder is invented fixture data, so
+no affordability conclusion is evidence yet (POC11 §0).
 
 ---
 
@@ -114,6 +288,17 @@ Split out here because it changed no storefront behaviour.
 
 ---
 
-## 2. (next item)
+## Still open in POC13
 
-Awaiting Steve's next review finding.
+- **Real photography** for the three slots in item 5 (Steve to source from his own library).
+  Until then the landing page still has nothing to look at, which is the one substantive
+  barrier identified for a younger visitor.
+- **Full-site mobile pass on a real device** — long-deferred. POC9's responsive regions map
+  has only ever been verified via DOM inspection, never actually seen. Note this batch is
+  heavily mobile: everything above was measured, not viewed, because the browser screenshot
+  tool was wedged throughout.
+- Carried from POC11: **B3** team/partner bios (administrative feature, waiting on a signed
+  partner agreement and Lauren engaging) and **C2** the entry price rung (parked pending real
+  landed costs).
+
+Deployment state for this batch lives in `CLAUDE.md` §10 CURRENT STATE, not here.
