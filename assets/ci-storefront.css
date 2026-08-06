@@ -377,7 +377,15 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .person-card.is-link{cursor:pointer}
 .person-card.is-link .person-photo{transition:border-color 150ms}
 .person-card.is-link h4{transition:color 150ms}
+/* The visible tell that a card opens a bio. The whole card is clickable, but that is only
+   discoverable by hovering, which a touch or keyboard user never does. A real <button> also
+   makes the bio keyboard-reachable - the card itself is a div with onclick and cannot be
+   tabbed to at all. */
+.person-bio{display:inline-block;margin:.3rem 0 0;padding:0;background:none;border:none;font-family:var(--ci-font-body);font-size:.8rem;font-weight:600;color:var(--ci-crema);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.person-bio:hover{color:var(--ci-espresso)}
+.person-bio:focus-visible{outline:2px solid var(--ci-crema);outline-offset:3px;border-radius:2px}
 .person-card.is-link:hover h4{color:var(--ci-crema)}
+.person-card.is-link:hover .person-bio{color:var(--ci-espresso)}
 .person-card.is-link:hover .person-photo{border-color:var(--ci-crema)}
 .founder-col{width:200px}
 .founder-photo{width:200px;aspect-ratio:1;object-fit:cover;border-radius:var(--ci-radius);border:1px solid var(--ci-hairline);display:block}
@@ -535,6 +543,9 @@ nav button.active{color:var(--ci-crema);font-weight:600}
   .tr-edit{padding:.5rem 0;min-height:40px;display:inline-flex;align-items:center}
   .tr-save{padding:.5rem 0;min-height:40px;display:inline-flex;align-items:center}
   .tr-save[hidden]{display:none}
+  /* "Bio" is only ~20x16px as bare text - far under the touch floor. The card behind it is
+     tappable either way, but the link itself has to be hittable on its own. */
+  .person-bio{min-height:40px;padding:.5rem 1rem .5rem 0;display:inline-flex;align-items:center}
   /* modal close gets a real tap area */
   .modal-close{width:44px;height:44px;display:flex;align-items:center;justify-content:center;top:.5rem;right:.5rem}
 }

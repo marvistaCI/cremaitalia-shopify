@@ -446,15 +446,15 @@
     <div class="section-head"><p class="eyebrow">La nostra squadra eccellente</p><h2>Our excellent team members</h2></div>
     <!-- PROD: static list below - becomes an admin-managed collection/metafield (photo, name, role, bio) once real team data exists. Names/roles are real; photos are placeholders. -->
     <div class="people-grid">
-      <div class="person-card is-link" onclick="openPerson('lucia-calo')"><div class="person-photo" style="background:center/cover no-repeat url('{{ 'ci-lucia.jpg' | asset_url }}')"></div><h4>Lucia Calò</h4><p class="person-role">Operations Manager - Italy</p></div>
-      <div class="person-card is-link" onclick="openPerson('asia-chirdo')"><div class="person-photo" style="background:center/cover no-repeat url('{{ 'ci-asia.jpg' | asset_url }}')"></div><h4>Asia Chirdo</h4><p class="person-role">Board Advisor - Italy</p></div>
-      <div class="person-card"><div class="person-photo">Lauren<br>Roberts</div><h4>Lauren Roberts</h4><p class="person-role">Operations Manager - US</p></div>
+      <div class="person-card is-link" onclick="openPerson('lucia-calo')"><div class="person-photo" style="background:center/cover no-repeat url('{{ 'ci-lucia.jpg' | asset_url }}')"></div><h4>Lucia Calò</h4><p class="person-role">Operations Manager - Italy</p><button class="person-bio" onclick="event.stopPropagation();openPerson('lucia-calo')">Bio</button></div>
+      <div class="person-card is-link" onclick="openPerson('asia-chirdo')"><div class="person-photo" style="background:center/cover no-repeat url('{{ 'ci-asia.jpg' | asset_url }}')"></div><h4>Asia Chirdo</h4><p class="person-role">Board Advisor - Italy</p><button class="person-bio" onclick="event.stopPropagation();openPerson('asia-chirdo')">Bio</button></div>
+      <div class="person-card is-link" onclick="openPerson('lauren-roberts')"><div class="person-photo">Lauren<br>Roberts</div><h4>Lauren Roberts</h4><p class="person-role">Operations Manager - US</p><button class="person-bio" onclick="event.stopPropagation();openPerson('lauren-roberts')">Bio</button></div>
     </div>
 
     <div class="section-head"><p class="eyebrow">I nostri partner</p><h2>Our partners</h2></div>
     <!-- PROD: static list below - becomes an admin-managed collection/metafield (photo/logo, name, type, blurb) once real partner data exists. Partner name is a placeholder; type is the partner's role/category. -->
     <div class="people-grid">
-      <div class="person-card"><div class="person-photo">Partner 1</div><h4>Partner 1</h4><p class="person-role">Freight Forwarder - Italy</p></div>
+      <div class="person-card is-link" onclick="openPerson('partner-1')"><div class="person-photo">Partner 1</div><h4>Partner 1</h4><p class="person-role">Freight Forwarder - Italy</p><button class="person-bio" onclick="event.stopPropagation();openPerson('partner-1')">Bio</button></div>
     </div>
   </main>
 </div>

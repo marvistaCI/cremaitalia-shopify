@@ -480,6 +480,26 @@
       "bio": [
         "Silvia Asia Chirdo is a restaurant and hospitality consultant with 25 years of experience across the Italian food and HORECA industry. Since 2008, she has advised restaurants, food retail concepts, and hospitality brands in Italy and across Europe, with projects in Rome, Milan, and beyond. Her core strength lies in brand creation, launch, and development - building concepts from the ground up, defining identity and positioning, and guiding them through startup into sustainable growth."
       ]
+    },
+    {
+      "id": "lauren-roberts",
+      "name": "Lauren Roberts",
+      "role": "Operations Manager - US",
+      "group": "team",
+      "photo": "",
+      "bio": [
+        "Bio under construction."
+      ]
+    },
+    {
+      "id": "partner-1",
+      "name": "Partner 1",
+      "role": "Freight Forwarder - Italy",
+      "group": "partner",
+      "photo": "",
+      "bio": [
+        "Bio under construction."
+      ]
     }
   ]
 }
