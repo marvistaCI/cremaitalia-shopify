@@ -56,18 +56,19 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > ⚠️ **Storefront password protection is currently OFF (Steve, 2026-07-05/06) — turn
 > it back ON when friend-testing is done.** Online Store > Preferences >
 > "Restrict access to visitors with the password" is unchecked right now, on purpose,
-> so friends can open the POC4 preview link without hitting the storefront password
-> gate first (see the 2026-07-06 entry in §9 for the full why). While it's off, anyone
+> so friends can open the current POC preview link without hitting the storefront
+> password gate first (see the 2026-07-06 entry in §9 for the full why). While it's off, anyone
 > who visits cremaitalia.com directly now sees the **current, on-brand coming-soon
 > homepage** (`live-theme/templates/index.liquid` + `live-theme/layout/theme.liquid`,
 > pushed 2026-07-07 — see that day's §9 entry) rather than the old stale placeholder,
 > so this is lower-stakes than it was — but it should still go back ON once
 > friend-testing wraps up, because the password is the only thing standing between a
-> stray click on the POC4 preview link
-> (`https://crema-italia.myshopify.com/?preview_theme_id=151277174953`) and the mocked
-> storefront (fake checkout, invented roaster contact info, simulated sign-in) being
-> casually discoverable by the public. Check this box first if you're picking this
-> project back up and aren't sure of current state.
+> stray click on a POC preview link (the current one is named in §10 CURRENT STATE —
+> deliberately not repeated here, since preview themes are created and deleted every
+> batch and this callout used to name POC4's `151277174953`, deleted 2026-08-06) and
+> the mocked storefront (fake checkout, invented roaster contact info, simulated
+> sign-in) being casually discoverable by the public. Check this box first if you're
+> picking this project back up and aren't sure of current state.
 >
 > **Draft-theme naming — version the Shopify draft to match what it holds (Steve,
 > 2026-07-05).** Whenever a new POC batch is pushed into an existing (or new)

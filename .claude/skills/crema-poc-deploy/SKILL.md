@@ -135,7 +135,28 @@ is the only valid visual check.
    theme id. This is narrative; state lives in §10.
 3. **`docs/POC<N>_change_list.md`** — the build record. **Do not write deployment-state claims
    here.** Point at §10 instead. Stale banners in these files caused the 2026-07-24 duplicate.
-4. `git push` so GitHub matches.
+4. **Sweep the repo for theme ids that just went stale.** Creating a theme is safe; **deleting
+   one silently breaks anything still pointing at it.** Run:
+
+   ```bash
+   grep -rn "15[0-9]\{10\}" --include="*.md" --include="*.cmd" --include="*.json" --include="*.liquid" --include="*.js" . | grep -v node_modules
+   ```
+
+   Judge each hit by tense, not by age:
+   - **Historical narrative** (`CLAUDE.md` §9 entries, `docs/POC*_change_list.md`) — leave it.
+     It describes a past moment and is *supposed* to name a now-dead id.
+   - **Present-tense claims and anything executable** — fix it. These are the ones that rot:
+     `dev.cmd`, the `reconnect-check` skill's expected-theme list, the ⚠️ callouts at the top
+     of `CLAUDE.md`, any script or doc that says "the current preview is `<id>`".
+
+   Prefer deleting the id over updating it. A file that names no theme id cannot go stale —
+   point at §10 CURRENT STATE instead. That is why `dev.cmd` no longer passes `--theme`.
+
+   *(Added POC13. `dev.cmd` had pinned `--theme 151277174953` since 2026-07-05; POC4–POC9 were
+   deleted 2026-08-06 and the launcher broke silently. The `reconnect-check` skill had the same
+   id in its expected-theme list, where it would have fired a false "real change" alarm on
+   every reconnect.)*
+5. `git push` so GitHub matches.
 
 ## Step 6 — Hand off
 
@@ -150,4 +171,6 @@ specific things worth checking on-device for this batch.
 - [ ] Batch committed; validation clean against the documented baseline
 - [ ] Pushed; **pull-and-diff proves** all files match; exactly one theme of that name
 - [ ] §10 CURRENT STATE updated and accurate; §9 logged; change list carries no state claims
+- [ ] Repo swept for theme ids broken by any theme **deletion** this round (executable files and
+      present-tense claims fixed; historical narrative left alone)
 - [ ] Pushed to GitHub; preview URL handed over with what to check

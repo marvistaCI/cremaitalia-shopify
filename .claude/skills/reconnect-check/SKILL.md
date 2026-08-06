@@ -45,14 +45,17 @@ shopify version
 cd ~/code/cremaitalia-shopify && shopify theme list
 ```
 - **Success** = `theme list` returns without prompting, showing (at minimum) these
-  three known themes on `crema-italia.myshopify.com`:
+  two durable themes on `crema-italia.myshopify.com`:
   - `crema-italia-coming-soon-theme` — `#150557294761` — **[live]**
   - `Horizon` — `#150473375913` — [unpublished]
-  - `Crema Italia POC4 Preview` — `#151277174953` — [unpublished] (renamed from
-    "POC3 Preview" 2026-07-05 — same theme id, holds whichever POC batch is
-    current; rename it again alongside the next POC batch, see `CLAUDE.md` §9)
-  If the theme names/ids/roles differ from this list, flag it — that's a real change,
-  not a connectivity artifact.
+  If either of those two is missing or has changed role, flag it — that's a real
+  change, not a connectivity artifact.
+- **Do NOT hardcode the POC preview themes here.** They are created and deleted every
+  batch, so any list written into this skill is stale within days and turns every
+  reconnect into a false alarm. (This skill used to pin `Crema Italia POC4 Preview`
+  `#151277174953`, which was deleted 2026-08-06.) The POC previews that *should* exist
+  are named in `CLAUDE.md` §10 CURRENT STATE — compare against that block, and if the
+  live output disagrees with it, the live output wins and §10 gets corrected.
 - **Failure** = it prompts for login or errors. Fix: `shopify auth login` (browser
   flow), then re-run `shopify theme list`.
 - If `shopify version` shows a newer release available, mention it but don't
