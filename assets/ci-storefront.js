@@ -533,7 +533,22 @@
     activeRegion = val; setActive(el);
     if (navCurrent === 'roasters') applyRoasterFilter(); else applyFilters();
   };
-  window.filterShelf = function (el, val) { activeShelf = val; setActive(el); applyFilters(); };
+  // Plain-English gloss shown beside the Shop shelf pills, so the Italian shelf names teach
+  // themselves as you browse. Keys must match the filterShelf values in templates/index.liquid.
+  var SHELF_NOTE = {
+    all:       'Every coffee we carry',
+    roccia:    'Our rock-solid coffee subscriptions',
+    sorpresa:  'Our surprising coffee tour collections',
+    selezione: 'Select premium and seasonal coffees',
+    offerta:   'Limited time and inventory coffees'
+  };
+
+  window.filterShelf = function (el, val) {
+    activeShelf = val; setActive(el);
+    var note = $('shelf-note');
+    if (note) note.textContent = SHELF_NOTE[val] || '';
+    applyFilters();
+  };
 
   function applyRoasterFilter() {
     var rows = document.querySelectorAll('#roaster-list .roaster-row');

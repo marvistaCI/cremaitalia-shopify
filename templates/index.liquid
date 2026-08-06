@@ -55,8 +55,8 @@
     <p class="prose" style="max-width:72ch">One shelf for subscriptions and larger formats (<span class="ita">Roccia</span>), one for discovery and gifting (<span class="ita">Sorpresa</span>), one for rare or seasonal roasts (<span class="ita">Selezione</span>), and one for last-chance lots at an honest markdown (<span class="ita">Offerta</span>).</p>
     <div class="card-grid">
       <div class="shelf-card" onclick="showPage('roccia')"><h3>Roccia</h3><div class="ss2">The Rock · Subscription (and one-time ordering)</div><p>Your preferred coffee, size, and cadence. Subscribe for free shipping and a 10% discount.</p></div>
-      <div class="shelf-card" onclick="showPage('sorpresa')"><h3>Sorpresa</h3><div class="ss2">Discovery · One-time</div><p>Our curated collection of roasted delights. On-demand 100g Tour bundles - the best way to find your favorite roast subscription.</p></div>
-      <div class="shelf-card" onclick="showPage('selezione')"><h3>Selezione</h3><div class="ss2">Premium &amp; Seasonal · One-time</div><p>Roasters' premium and seasonal offerings. Micro-lots and limited imports. When a product sells out, it may not return - once it's gone, it's gone.</p></div>
+      <div class="shelf-card" onclick="showPage('sorpresa')"><h3>Sorpresa</h3><div class="ss2">Surprise Discovery · One-time</div><p>Our curated collection of roasted delights. On-demand 100g Tour bundles - the best way to find your favorite roast subscription.</p></div>
+      <div class="shelf-card" onclick="showPage('selezione')"><h3>Selezione</h3><div class="ss2">Select Premium &amp; Seasonal · One-time</div><p>Roasters' premium and seasonal offerings. Micro-lots and limited imports. When a product sells out, it may not return - once it's gone, it's gone.</p></div>
       <div class="shelf-card" onclick="showPage('offerta')"><h3>Offerta</h3><div class="ss2">The Opportunity · One-time</div><p>Limited-time offers, on sale while inventory lasts. Good coffee approaching its freshness window, priced honestly. Sold as-is.</p></div>
     </div>
     <div class="callout" style="margin-top:1.75rem"><strong>Your first purchase is our introduction.</strong> You may already know the roaster by reputation and are ready to subscribe. If not, try Sorpresa - we&rsquo;ll introduce you to a roaster you&rsquo;ll fall in love with, and hope that a Roccia subscription will soon follow.</div>
@@ -82,14 +82,17 @@
   <div class="dark-hero"><div class="dark-hero-inner">
     <p class="eyebrow" style="color:var(--ci-crema-light)">All shelves</p>
     <h1>Shop all our Coffee</h1>
-    <p>Organized into four shelves - <span class="ita">Roccia</span> &middot; <span class="ita">Sorpresa</span> &middot; <span class="ita">Selezione</span> &middot; <span class="ita">Offerta</span>.</p>
     <div class="hero-filters">
+      <!-- The shelf note to the right of the pills names what the current selection means, so
+           the four Italian shelf names teach themselves as you browse. Text is driven by
+           SHELF_NOTE in ci-storefront.js (filterShelf); keep the two in sync. -->
       <div class="filter-group"><div class="filter-label">Shelf</div><div class="filter-pills">
         <span class="pill active" onclick="filterShelf(this,'all')">All</span>
         <span class="pill" onclick="filterShelf(this,'roccia')">Roccia</span>
         <span class="pill" onclick="filterShelf(this,'sorpresa')">Sorpresa</span>
         <span class="pill" onclick="filterShelf(this,'selezione')">Selezione</span>
         <span class="pill" onclick="filterShelf(this,'offerta')">Offerta</span>
+        <span class="shelf-note" id="shelf-note">Every coffee we carry</span>
       </div></div>
       <div class="filter-group filter-region">
         <div class="filter-label">Region</div>
@@ -114,7 +117,7 @@
     <p class="eyebrow" style="color:var(--ci-crema-light)">The Rock · Subscription (and one-time ordering)</p>
     <h1>Roccia</h1>
     <p class="sub">Our rock-solid subscription plan.</p>
-    <p>Choose any roast from any roaster and receive it on your cadence - every 4, 6, or 8 weeks. Bag sizes 250g, 500g, and 1kg. Every subscription shipment ships free within the U.S.</p>
+    <p>Choose any roast from any roaster and receive it on your cadence - every 4, 6, or 8 weeks. Bag sizes 250g, 500g, and 1kg. All subscriptions ship free within the U.S.</p>
     <div class="cn"><strong>Self-service, always.</strong> Pause anytime, skip anytime, swap roaster or bag up to 48 hours before the order locks, cancel anytime. No minimum commitment. No cancel fee.</div>
   </div></div>
   <main class="ci-main">
@@ -130,7 +133,7 @@
 <div class="page" id="page-sorpresa">
   <div class="dark-hero"><div class="dark-hero-inner">
     <button class="back-btn" style="color:var(--ci-crema-light)" onclick="goBack()">&larr; Back</button>
-    <p class="eyebrow" style="color:var(--ci-crema-light)">Discovery · One-time</p>
+    <p class="eyebrow" style="color:var(--ci-crema-light)">Surprise Discovery · One-time</p>
     <h1>Sorpresa</h1>
     <p class="sub">Our curated collection of roasted delights.</p>
     <p>Named Tour bundles, our choice - three different 100g bags assembled on-demand so that every bag is fresh at shipment. Each Tour includes a printed tasting card naming each roaster in the tour and their tasting notes. The aim of a Tour is simple: to lead you to the roaster you will want on a Roccia subscription. Tour bundles make excellent gifts for your coffee-loving friends.</p>
@@ -146,7 +149,7 @@
       </div>
       <div class="tour-bags"><div class="tour-bag">Gardelli<br>Ethiopia</div><div class="tour-bag">La Sosta<br>Guatemala</div><div class="tour-bag">Fusari<br>Colombia</div></div>
     </div>
-    <div class="callout"><strong>Why a Tour sometimes disappears.</strong> We offer a Tour only while all three of its coffees are in stock and freshly roasted. If one of them runs low or ages out, the Tour comes off the site until we can make it properly again. If we do have to swap a coffee after you order, we pair you with something close from the same roaster and say so in your confirmation.</div>
+    <div class="callout"><strong>Why a Tour sometimes disappears.</strong> A Tour is only available while all three of its coffees are in stock and within our freshly roasted promise window. If we do have to swap a coffee after you order, we pair you with something close from the same roaster and say so in your confirmation.</div>
     <div class="afd">The selection is ours, not the roaster's, because curating is our job. Every Tour is three 100g bags, never mixed sizes.</div>
   </main>
 </div>
@@ -155,10 +158,10 @@
 <div class="page" id="page-selezione">
   <div class="dark-hero"><div class="dark-hero-inner">
     <button class="back-btn" style="color:var(--ci-crema-light)" onclick="goBack()">&larr; Back</button>
-    <p class="eyebrow" style="color:var(--ci-crema-light)">Premium &amp; Seasonal · One-time</p>
+    <p class="eyebrow" style="color:var(--ci-crema-light)">Select Premium &amp; Seasonal · One-time</p>
     <h1>Selezione</h1>
     <p class="sub">Roasters' premium and seasonal offerings.</p>
-    <p>Micro-lots, single-origin specialty bags, and limited imports. One-time purchase only, never a subscription. When one of these sells out it may or may not come back, depending on what our roasters send next. We tell you when fewer than twelve bags remain, and we will not sell you something we cannot ship. No countdown timers.</p>
+    <p>Micro-lots, single-origin specialty bags, and limited imports. One-time purchase only, never a subscription. When one of these sells out it may or may not come back, depending on what our roasters send next. We tell you when fewer than twelve bags remain, and we will not sell you something we cannot ship. No fake urgency, no countdown timers.</p>
     <div class="cn"><strong>Subscriber early access.</strong> Active Roccia subscribers see new Selezione coffees 48 hours before anyone else.</div>
   </div></div>
   <main class="ci-main">
@@ -173,7 +176,7 @@
     <p class="eyebrow" style="color:var(--ci-crema-light)">The Opportunity · One-time</p>
     <h1>Offerta</h1>
     <p class="sub">Limited-time offers, on sale while inventory lasts.</p>
-    <p>Coffee that is getting on in age but is still well inside its freshness window, priced down honestly. We show the original price, the new price, and exactly how many days of freshness are left. No fake urgency, no countdown timers.</p>
+    <p>Coffee that is aging and is still well inside its freshness window, priced down honestly. We show the original price, the new price, and exactly how many days of freshness are left. No fake urgency, no countdown timers.</p>
     <div class="cn"><strong>Sold as-is.</strong> Offerta purchases carry a modified guarantee - material defects only. Freshness window is disclosed at purchase; no exchanges for age-related palate preferences. Coffee that falls outside its freshness window is removed from sale entirely and donated to Feeding Tampa Bay.</div>
   </div></div>
   <main class="ci-main">
@@ -243,7 +246,7 @@
   </div></div>
   <main class="ci-main">
     <div class="card-grid" id="grid-bottega"></div>
-    <div class="afd">Bottega has its own simple pricing and is never subscriber-discounted. Some items ship direct from the maker, so they may arrive separately from your coffee.</div>
+    <div class="afd">Bottega items are priced separately from coffee and are not subscriber-discounted. Bottega purchases are shipped separately from coffee shipments, often directly from the source.</div>
   </main>
 </div>
 

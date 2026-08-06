@@ -146,6 +146,80 @@ not ops jargon.
 
 ---
 
+### A3b. Steve's review pass on the A3 rewrites
+**DONE 2026-08-06.** Steve walked the A3 changes on a local `shopify theme dev` server and
+revised five of them. His wording shipped verbatim in each case:
+
+| Page | Code's A3 draft | Steve's revision |
+|---|---|---|
+| Roccia | "Every subscription shipment ships free within the U.S." | "All subscriptions ship free within the U.S." |
+| Sorpresa | "...in stock and freshly roasted. If one of them runs low or ages out, the Tour comes off the site until we can make it properly again." | "...in stock and within our freshly roasted promise window." (middle sentence cut) |
+| Selezione | "No countdown timers." | "No fake urgency, no countdown timers." |
+| Offerta | "Coffee that is getting on in age but is..." | "Coffee that is aging and is..." |
+| Bottega | "...its own simple pricing... so they may arrive separately from your coffee." | "Bottega items are priced separately from coffee and are not subscriber-discounted. Bottega purchases are shipped separately from coffee shipments, often directly from the source." |
+
+Two of these are worth keeping in mind as voice guidance, because they are the same instinct
+A3 was built on and Code under-applied it:
+- The Sorpresa cut removed an explanation of **our** inventory mechanics, which is exactly what
+  A3 was supposed to be stripping. "Our freshly roasted promise window" also points at the
+  Promise page instead of re-explaining freshness locally.
+- The Selezione fix makes Selezione and Offerta close on the identical phrase, so it reads as a
+  standing house position rather than two unrelated remarks.
+
+### A4. Shelf names now carry their English translation
+**DONE 2026-08-06 — Steve's find.** Roccia and Offerta already glossed themselves ("The Rock",
+"The Opportunity") but Sorpresa and Selezione did not. Two of four were simply missing the
+pattern. Now "Surprise Discovery · One-time" and "Select Premium & Seasonal · One-time".
+
+This is the fix for the "five Italian words is a comprehension tax" finding in the POC10 review
+— the review named the problem, Steve solved it, and the solution is better than anything
+proposed there because it teaches the vocabulary in place rather than restructuring the IA.
+
+**Applied to both** the home shelf cards (Steve specified these) **and the shelf-page hero
+eyebrows**, which carry the same statement; fixing only one would have created a fresh
+inconsistency. Verified as exactly two occurrences each.
+
+**Deliberately NOT applied, flagged for Steve:** the product-card badges in `SHELF_BADGE`
+(`ci-storefront.js`) still read `Sorpresa · Discovery` / `Selezione · Premium`. In a small
+uppercase badge sitting directly under the shelf name, "SORPRESA · SURPRISE DISCOVERY" reads
+redundantly. Open.
+
+### A5. Shop page: shelf-context note replaces the static shelf list
+**DONE 2026-08-06 — Steve's design.** Removed "Organized into four shelves - Roccia · Sorpresa ·
+Selezione · Offerta" from the Shop hero (it cost a line and said nothing the pills below it did
+not). In its place, a gloss to the right of the shelf pills that changes with the selection:
+
+| Selection | Note |
+|---|---|
+| All | Every coffee we carry |
+| Roccia | Our rock-solid coffee subscriptions |
+| Sorpresa | Our surprising coffee tour collections |
+| Selezione | Select premium and seasonal coffees |
+| Offerta | Limited time and inventory coffees |
+
+Text lives in `SHELF_NOTE` (`ci-storefront.js`), driven by `filterShelf`; the initial DOM value
+in `index.liquid` must match the `all` entry. "rock-solid" is hyphenated to match "Our rock-solid
+subscription plan" already on the Roccia page.
+
+**Styling, after Steve's second look** (his first read: too close to the Offerta pill, too white,
+too big, above centre):
+- Gap 12px → **26px**; font 13.1px → **11.8px** (now smaller than the 12.8px pills, so it reads
+  as secondary to what it describes).
+- Colour is the **brand cream token at 58% opacity**, not a new grey — composites to `#b5a597`
+  at **4.69:1** against the hero brown. Note there is little headroom left: dimmer than this
+  drops below the 4.5:1 readability floor at this size.
+- **+1px optical nudge.** The note measured *perfectly* centred (0.0px box delta, 0.2px glyph
+  delta) yet read high, because bare lowercase text with descenders sits optically high beside
+  capsule pills with cap-height-dominant labels. Corrected optically, not by changing the
+  centring, and commented in the CSS so it is not "fixed" back.
+
+**Known limitation, open:** the note lives inside the wrapping pill row, so below roughly 1100px
+it wraps to its own line beneath the pills rather than sitting beside them. Graceful, but not
+the approved layout. Making it always-inline needs a different structure (lifting it out of the
+pill row).
+
+---
+
 ## 2. Track B — Voice and structure (buildable now, needs content from Steve)
 
 ### B1. "We/I" → "you" rebalance

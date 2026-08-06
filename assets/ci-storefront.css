@@ -278,6 +278,13 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .pill:hover{border-color:var(--ci-crema);color:var(--ci-crema)}
 .pill.active{background:var(--ci-crema);color:var(--ci-cream);border-color:var(--ci-crema)}
 .pill.disabled{opacity:.4;cursor:default;font-style:italic}
+/* Gloss beside the Shop shelf pills. Sits in the same flex row so it trails the pills on
+   desktop and wraps to its own full-width line on phones. Colour is the brand cream token at
+   reduced opacity (not a new colour) so it reads as secondary to the pills it describes.
+   The 1px nudge is an optical correction: bare lowercase text with descenders reads high
+   against capsule pills even when its box is mathematically centred. */
+.shelf-note{align-self:center;position:relative;top:1px;margin-left:1.25rem;font-size:.74rem;letter-spacing:.01em;color:rgba(251,248,241,.58)}
+@media (max-width:640px){.shelf-note{width:100%;margin-left:0;margin-top:.25rem;top:0}}
 
 /* ---- freshness + badges ---- */
 .freshness{display:inline-flex;align-items:center;gap:.3rem;font-size:.78rem;font-weight:600;color:var(--ci-green);background:rgba(14,122,58,.08);padding:.2rem .5rem;border-radius:3px}
