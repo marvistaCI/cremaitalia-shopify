@@ -1061,7 +1061,7 @@
       '<div class="row total"><span>Total</span><span>' + money(total) + '</span></div>' +
       '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="toast(\'This is a preview - checkout is Shopify Checkout on the live store.\')">Checkout</button>' +
       (!session.signedIn ? '<p class="note" style="text-align:center;margin-top:.6rem">You can check out as a guest, or create an account to keep your 5% and manage subscriptions.</p>' : '') +
-      '<p class="note" style="text-align:center">No promo code field - earned discounts apply automatically when signed in or via a personal link.</p>' +
+      '<p class="note" style="text-align:center">We do not issue discount codes. Any benefit you have earned is already in the prices above when you are signed in, so the code field at checkout stays empty.</p>' +
       '</div>';
     el.innerHTML = html;
   }
