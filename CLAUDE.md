@@ -1606,21 +1606,44 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   2026-07-10 stays removed; Steve: "at least we don't PUSH the quiz as a start-up device, which
   can be irritating." Dead `.hj-quiz`/`.hj-word` CSS swept (this also retires POC10's mobile
   chip-truncation fix, now moot).
-  **Not pushed to GitHub, not deployed** — POC10 Preview (`151624024233`) and the live theme are
-  untouched. Steve: "there is more to do."
-  **Still open in POC11:** the B1 rebalance on commercial surfaces (shelf cards, cart, product
-  pages); team bios (needs Steve's words); the **entry price rung** — the Sorpresa Tour is the
-  recommended first purchase at ~$117/lb against ~$69/lb for a bag, which is the 100g-only-inside-
-  Tours rule in Standard §1 and therefore a **Standard** question, not a POC one; fixture-date
-  refresh; and whether the "17g" sentence (the only sensory writing on the site) should move
-  nearer the front of the founder story. **Deferred as unanswerable until photography exists:**
-  whether a price or product should appear above the fold.
+  **Also landed later the same day:** **B1** turned out to be three sentences, not a sweep —
+  pronoun balance was measured per surface first, and **Roccia was already twice as much "you" as
+  "we"** (0.50), so the review's premise was mostly wrong; the real gap was **Offerta**, which had
+  **zero** second person in 187 words. Fixing it surfaced that the Offerta guarantee is written in
+  **two** places (shelf page + Promise page), so policy copy here needs a grep for its twin.
+  **E1** was solved structurally rather than by re-stamping: the catalog keeps **absolute** dates
+  (production's shape) and a POC-only `rebaseCatalogDates()` shifts the set **on load** so the
+  freshest coffee is always 10 days old, preserving each product's spacing — the flagship went
+  from *46 days past roast with 14 left* to *11 days old with 49 left*, and the Offerta lot from
+  expired to 27 days remaining. Marked `PROD:` for deletion. The **founder dog photo** was removed
+  (and its asset deleted) so the founder tile carries one photo like each team card.
+  **Deployed** to a NEW unpublished theme **"Crema Italia POC11 Preview" (id `151797727401`)** via
+  `shopify theme push --unpublished --theme "Crema Italia POC11 Preview" --json`, following the
+  `crema-poc-deploy` skill: `theme list` + `git log origin/main..HEAD` run **first** (no
+  collision), validation at the documented baseline (17 offenses / 2 errors / 0 new), then
+  **pull-and-diff proved** the push — both sides 36 files, zero content mismatches, nothing on
+  only one side. File count moved 37 → 36 with the deleted photo; the skill's baseline was updated
+  in the same pass. POC4–POC10 previews and the live theme untouched. Preview:
+  `https://crema-italia.myshopify.com?preview_theme_id=151797727401`
+  **Three POC10-review findings proved inflated once measured** and the corrections are recorded:
+  the "buried" 17g sentence (42 words in, ~0.8 screens — the reorder was drafted and **rejected**,
+  since it is a punchline that depends on its setup), "the page buries the category" (it does not),
+  and "the commercial surfaces are we-heavy" (Roccia was not). Direction useful, magnitude
+  overstated — trust the measurements over the adjectives.
+  **Still open after POC11:** **B3** team/partner bios — **re-filed** on Steve's correction as an
+  *administrative* feature (sections + blocks, `production_build_spec.md` §2) so he can add people
+  without republishing, waiting on a signed partner agreement and Lauren engaging; **C2** the entry
+  price rung — **parked**, because the ~$117/lb-vs-$69/lb ratio that raised it comes from invented
+  prices and is not evidence until real landed costs exist. **Decided, no change:** product-card
+  shelf badges keep their own short vocabulary (`Offerta · Opportunity`) independent of the new
+  shelf headers. **Deferred as unanswerable until photography exists:** whether a price or product
+  should appear above the fold.
 
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC10 (verified live 2026-07-25) — read this first when resuming.**
+**▶ CURRENT STATE — POC11 (verified live 2026-08-06) — read this first when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
 > `docs/POC*_change_list.md` banners, and any "NEXT: deploy…" line are **historical narrative** —
@@ -1644,27 +1667,44 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC10 Preview" | `151624024233` |
-| Prior preview | "Crema Italia POC9 Preview" | `151523131561` |
+| **Newest POC preview** | "Crema Italia POC11 Preview" | `151797727401` |
+| Prior preview | "Crema Italia POC10 Preview" | `151624024233` |
 
-**POC10 is deployed** and is the only POC10 theme (all 37 files byte-match the repo; verified by
-pull-and-diff 2026-07-25; `theme list` was run **before** the push per the rule above, confirming no
-name collision). POC4–POC9 previews (`151277174953`, `151420207273`, `151440130217`, `151449862313`,
-`151454122153`, `151523131561`) and the live theme are untouched. The erroneous POC9 duplicate
+**POC11 is deployed** and is the only POC11 theme (all **36** files byte-match the repo — verified by
+pull-and-diff 2026-08-06, both sides 36 files, zero content mismatches, nothing present on only one
+side; `theme list` was run **before** the push per the rule above, confirming no name collision).
+The file count moved 37 → 36 because `assets/ci-founder-dog.jpg` was deleted in this batch.
+POC4–POC10 previews (`151277174953`, `151420207273`, `151440130217`, `151449862313`, `151454122153`,
+`151523131561`, `151624024233`) and the live theme are untouched. The erroneous POC9 duplicate
 `151615373481` was deleted 2026-07-25. Preview:
-`https://crema-italia.myshopify.com?preview_theme_id=151624024233`
+`https://crema-italia.myshopify.com?preview_theme_id=151797727401`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
-2026-07-06). To refresh: `shopify theme push --theme 151624024233`.
+2026-07-06). To refresh: `shopify theme push --theme 151797727401`.
+
+A `Development (0585b1-SteveR-AsymPlatPC)` theme (`151795564713`) may also appear in `theme list` —
+that is the throwaway created by `shopify theme dev`, not a deploy. Ignore it.
 
 **The live theme is current with the repo** as of the 2026-07-24 push (all 13 files byte-match;
 zero customer-visible em-dashes verified by cookie-less fetch). **Storefront password still OFF**
 (friend-testing) — now purely a friend-testing decision, not a copy-quality one.
 
-**What POC10 is:** POC9 plus the 2026-07-25 mobile-review fixes (quiz no longer forces a sign-in on
-an already-signed-in customer; the clipped "Tasting Quiz" chip renders as "Quiz" on phones; the cart
-line's thumbnail, spacing, and alignment fixed on phones; one `overscroll-behavior` testing aid).
-Two findings were **deliberately not built** under the new POC-scope rule — see
-`docs/POC10_change_list.md` and `docs/production_build_spec.md` §0.
+**What POC11 is:** POC10 plus a copy-and-CTA batch built off a GTM/brand review of POC10 (11
+commits, `2ea5427`..`2a833d7`). Headlines: the **promo-code copy was factually wrong** and now
+pre-empts the checkout field honestly; **"172 of 222 founding slots"** removed as an untrue social
+proof claim; **ops vocabulary stripped** from customer copy; **all four shelf headers standardised**
+on `The <English name> · <what is on the shelf>`; the **Shop hero** gained a shelf gloss that tracks
+the selected pill; the **founder story turned outward**; the hero headline dropped from the Hero
+scale to the brand **H1 scale** and now holds one line at every width; and the **taste quiz became
+the hero CTA**, moving the first call to action from 3.9 screens down to 0.58 and making it free.
+That last one **amends the 2026-07-10 CTA lock** with Steve's explicit authorization — see the §9
+entry. Fixture dates now **rebase on load** so the demo stops aging out. Detail:
+`docs/POC11_change_list.md`.
+
+**What POC10 was:** POC9 plus the 2026-07-25 mobile-review fixes (quiz no longer forces a sign-in on
+an already-signed-in customer; the clipped "Tasting Quiz" chip renders as "Quiz" on phones — that
+chip no longer exists as of POC11; the cart line's thumbnail, spacing, and alignment fixed on
+phones; one `overscroll-behavior` testing aid). Two findings were **deliberately not built** under
+the POC-scope rule — see `docs/POC10_change_list.md` and `docs/production_build_spec.md` §0.
 
 **What POC9 was:** the same custom-Liquid SPA as POC5–POC8 with a 9-item batch on top (regions map
 sync + mobile treatment, English-first region list, one shared region-filter object across Shop and

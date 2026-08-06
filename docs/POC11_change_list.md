@@ -1,7 +1,12 @@
 # POC11 — working outline
 
-**Status: OUTLINE / NOT STARTED.** Nothing in here is built. This is the working document for
-the POC11 batch, drafted 2026-08-06 from the POC10 site review + Steve's responses to it.
+**This file is the BUILD RECORD for the POC11 batch** — what changed and why, drafted 2026-08-06
+from the POC10 site review and Steve's responses to it, then filled in as items landed.
+
+> **It deliberately makes NO claim about what is deployed.** Deployment state lives in exactly one
+> place: **`CLAUDE.md` §10 CURRENT STATE**. A stale "not yet deployed" banner in a file like this
+> one is what produced a duplicate Shopify theme on 2026-07-24. Check §10, and verify §10 itself
+> against `shopify theme list` before acting on it.
 
 **Read the scope boundary first (below) before treating any item as a defect.**
 
