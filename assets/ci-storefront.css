@@ -472,9 +472,6 @@ nav button.active{color:var(--ci-crema);font-weight:600}
   .cart-line-img{width:48px;height:48px}
   .cart-line > div:last-child{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-top:.6rem;border-top:1px solid var(--ci-hairline)}
   .cart-line > div:last-child .cp{font-size:1rem}
-  /* "Tasting Quiz" overflows the sticky chip bar at phone widths; the chip is a primary CTA
-     so it must not be clipped. Desktop keeps the full label. */
-  .hj-word{display:none}
   /* Region map on phones: labels/leaders/SVG legend can't render legibly at 640-unit scale,
      so hide them; the viewBox crops to Italy (setRegionMapViewBox) and the HTML .region-legend
      below carries the colour key. */
@@ -487,8 +484,6 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .home-jump{position:sticky;top:68px;z-index:80;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;padding:.6rem 1rem;background:rgba(251,248,241,.9);backdrop-filter:blur(6px);border-bottom:1px solid var(--ci-hairline)}
 .home-jump button{font-family:var(--ci-font-body);font-size:.8rem;font-weight:600;color:var(--ci-espresso);background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:999px;padding:.35rem .95rem;cursor:pointer;transition:all 150ms}
 .home-jump button:hover{border-color:var(--ci-crema);color:var(--ci-crema)}
-.home-jump .hj-quiz{background:var(--ci-crema);color:var(--ci-cream);border-color:var(--ci-crema)}
-.home-jump .hj-quiz:hover{background:var(--ci-crema-light);border-color:var(--ci-crema-light);color:var(--ci-coffee)}
 #sec-story,#sec-shelves,#sec-promise{scroll-margin-top:118px}
 .founder-signature{display:block;width:184px;max-width:56%;height:auto;margin:1.1rem 0 .05rem}
 .founder-sign{font-family:var(--ci-font-display);font-style:italic;color:var(--ci-mute);margin-top:.1rem}

@@ -1544,6 +1544,80 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   tree is clean. Also backfilled the `DECISIONS_LOG.md` entry the same run flagged as missing for
   commit `11a3946` (the §6 verify-before-deploy prohibition + `crema-poc-deploy` skill).
 
+- 2026-08-06 — **POC11 in progress: a GTM/brand review of deployed POC10, then a copy-and-CTA
+  batch off the back of it. Two locked decisions were AMENDED, deliberately.** Steve asked for a
+  brutally honest go-to-market review of POC10 in a real browser. Working ledger:
+  `docs/POC11_change_list.md`; durable summary here. **The most important thing the review
+  produced was a scope rule, not a finding:** several of its conclusions turned out to be
+  critiques of **Code-invented fixture data** (roaster names, prices, tasting notes, roast dates)
+  rather than of the business — the roasters are still being wooed and no photography exists.
+  `POC11_change_list.md` §0 now carries a real-vs-fixture table, and no review may draw
+  conclusions about catalog credibility, price ladder, or roaster prominence until real roasters
+  sign. One review finding was **void outright**: "the Journal teasers are dead ends" — Journal is
+  native Shopify Blog + Articles per `production_build_spec.md` §3 and is deliberately not
+  modelled. Do not wire them up.
+  **Shipped (commits `2ea5427`, `4a840f4`, `6a606d1`, `f18aba8`, `b72a26e`, + this one):**
+  (a) **Promo-code copy was factually wrong** and is fixed — the FAQ answered "Is there a promo
+  code box at checkout?" with "No" and the cart promised "no promo code field ... or via a
+  personal link", both contradicting Store Operating Standards **v1.3** and the 2026-07-25
+  dev-store verification (the field cannot be hidden below Plus; personal links were retired as a
+  code leak). Steve chose to **pre-empt** the field rather than stay silent. (b) **"Only 172 of
+  222 founding slots remain" removed** — it asserted 50 subscribers existed pre-launch, which is
+  untrue and is precisely the manufactured urgency the brand disavows. Now states the cap
+  ("limited to 222 and does not reopen"), true on day one. The 172 was Code fixture data, not
+  Steve's. (c) **Ops vocabulary stripped from customer copy** (pallet-bound, hard cap /
+  overselling, markup tier, Offerta threshold, 3PL, freshness-gated, components, SKUs) on the
+  rule *say the customer-visible consequence, not the mechanism*, keeping every passage's
+  honesty. (d) **Discount rules de-duplicated** — the Roccia page stated 10% three times in three
+  consecutive blocks. (e) **All four shelf headers standardised** on Roccia's shape — `The
+  <English name> · <what is on the shelf>`: The Rock / The Surprise / The Selection / The Offer
+  (Offerta's gloss moved off "The Opportunity"). This is Steve's answer to the review's "five
+  Italian shelf names are a comprehension tax" finding and is better than what the review
+  proposed, because it teaches the vocabulary in place instead of restructuring the IA. Applied
+  to home cards + shelf-page eyebrows but **deliberately NOT to the product-card badges**, which
+  identify a tile's shelf while scanning and must stay short. (f) **Shop hero** lost the static
+  "Organized into four shelves" line in favour of a **gloss beside the shelf pills that changes
+  with the selection**. (g) **Founder story turned outward** — the old closer gave "the US
+  market" access; it now reads "...bring their coffee here, unchanged" followed by two "perhaps /
+  maybe" sentences that welcome without characterising the reader. "A full confession." is kept
+  as the heading; it sets the first-person register.
+  **AMENDMENT 1 — the hero headline is an H1, not a Hero.** "Benvenuto - welcome in." rendered at
+  **68.8px**, effectively the brand *Hero* size (72px), when §3.3 sets **H1 at 40px**. It had sat
+  one full step up the scale since POC5. Now `clamp(1.625rem,4vw,2.5rem)` and **one line at every
+  width** — it had been missing one line by only 11px at 1440, the worst kind of wrap. The string
+  measures a constant **11.2x its font-size** in Marcellus; that arithmetic is in a CSS comment so
+  a later size bump cannot silently reintroduce the wrap. Banner height fell 616 → 513px at 1440
+  with no spacing work.
+  **AMENDMENT 2 — the quiz is now the hero CTA, reversing the 2026-07-10 lock (Steve authorized
+  explicitly).** 2026-07-10 locked "no hero button", "Sorpresa is the one primary button", and
+  "quiz is a quiet inline link". All three are amended: the quiz gets a **primary gold button in
+  the hero**, above the fold on both phone and desktop. **Why Steve authorized it: to increase
+  first-time-visitor capture.** Supporting evidence: the quiz chip's gold fill was
+  **byte-identical** to `.pill.active` (`background/color/border-color`, same tokens), so on a
+  site whose Shop filters teach gold = *currently selected*, the home page used that exact signal
+  to mean *special* — it read as selected rather than selectable; and it was the only chip in a
+  row of scroll-links that opened a modal, making it the odd one out functionally as well as
+  visually. Removing it leaves the jump nav internally consistent (three chips, all scroll).
+  The mid-page link moved from **after** the Sorpresa CTA to **before** the shelves and was
+  reworded "Still unsure?" → **"Find a roast to love."** — after the CTA it read as a fallback for
+  people who had declined to buy; before the catalog it reads as help arriving as four shelves
+  appear. Net funnel change: the first call to action moved from **3.9 screens down to 0.58**, and
+  it is **free**. **The quiz stays invitation-only** — the first-visit auto-launch removed on
+  2026-07-10 stays removed; Steve: "at least we don't PUSH the quiz as a start-up device, which
+  can be irritating." Dead `.hj-quiz`/`.hj-word` CSS swept (this also retires POC10's mobile
+  chip-truncation fix, now moot).
+  **Not pushed to GitHub, not deployed** — POC10 Preview (`151624024233`) and the live theme are
+  untouched. Steve: "there is more to do."
+  **Still open in POC11:** the B1 rebalance on commercial surfaces (shelf cards, cart, product
+  pages); team bios (needs Steve's words); the **entry price rung** — the Sorpresa Tour is the
+  recommended first purchase at ~$117/lb against ~$69/lb for a bag, which is the 100g-only-inside-
+  Tours rule in Standard §1 and therefore a **Standard** question, not a POC one; fixture-date
+  refresh; and whether the "17g" sentence (the only sensory writing on the site) should move
+  nearer the front of the founder story. **Deferred as unanswerable until photography exists:**
+  whether a price or product should appear above the fold.
+
+---
+
 ## 10. Open questions / TODO
 
 **▶ CURRENT STATE — POC10 (verified live 2026-07-25) — read this first when resuming.**

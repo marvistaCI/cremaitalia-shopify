@@ -353,12 +353,50 @@ was made**. (For the record, the CSS gaps measured 8px and 6px - nearly equal - 
 imbalance was transparent padding baked into `ci-logo-knockout.png`, whose ink ends well above
 the image's bottom edge. If it ever needs fixing, that is where it lives, not in the CSS.)
 
-**Still open in C1 - the questions with real conversion consequence:**
-- Is **story before product** the deliberate posture, or an accident of how the page grew?
-  Everything else follows from this answer.
-- The taste quiz is introduced as **"Still unsure?"** - framing the best zero-cost onboarding
-  asset on the site as a consolation prize for the indecisive. Promote it?
-- Should a price or a product ever appear above the fold?
+**RESOLVED - story-first is the deliberate posture, and stays.** Re-measured after the hero
+resize rather than argued: the hero question already says "delicious, fresh coffee beans" and the
+jump chips sit at 0.6 screens, so a visitor knows the category and can reach the shelves within
+the first screen. The POC10 review overstated this ("the category is buried"); correcting that
+here. What was actually wrong was the CTA hierarchy, fixed below.
+
+**DONE - the quiz is now the hero CTA (Steve authorized the amendment explicitly).** This
+reverses three parts of the 2026-07-10 lock: "no hero button", "Sorpresa is the one primary
+button", "quiz is a quiet inline link". Steve's reason: **increase first-time-visitor capture.**
+
+Steve's own observation drove it, and it is demonstrable rather than a matter of taste - the two
+rules were **byte-identical**:
+
+```css
+.home-jump .hj-quiz { background:var(--ci-crema); color:var(--ci-cream); border-color:var(--ci-crema) }
+.pill.active        { background:var(--ci-crema); color:var(--ci-cream); border-color:var(--ci-crema) }
+```
+
+On a site whose Shop filters teach *gold fill = currently selected*, the home page used that
+exact signal to mean *special*. It read as selected because it **was** styled as selected.
+
+A second defect supported the same move: it was the only chip in a row of scroll-links that
+opened a **modal**, so it was the odd one out functionally as well as visually. Moving it out
+leaves the jump nav internally consistent - three chips, all scrolling.
+
+The mid-page link moved from **after** the Sorpresa CTA to **before** the shelves, and
+"Still unsure?" became **"Find a roast to love."** After the CTA it read as a fallback for
+someone who had declined to buy; before the catalog it reads as help arriving just as four
+shelves appear. Same link, opposite psychology.
+
+**Net funnel change (375x812):** first call to action moved from **3.9 screens to 0.58**, above
+the fold on phone and desktop, and it is **free**. Sorpresa stays a primary button at 4.1 screens
+- far enough away not to compete, and at a genuinely different commitment level.
+
+**The quiz stays invitation-only.** The first-visit auto-launch removed on 2026-07-10 stays
+removed. Steve: "at least we don't PUSH the quiz as a start-up device, which can be irritating."
+
+Dead `.hj-quiz` / `.hj-word` CSS swept. Note this **retires POC10's mobile fix** for the clipped
+"Tasting Quiz" chip - that chip no longer exists.
+
+**Still open in C1:**
+- **Should a price or a product ever appear above the fold?** **Deferred as unanswerable** - there
+  are no product photographs and will not be until roasters sign (Track D). Not worth debating
+  before then.
 - **The "17g" sentence is still the third sentence in.** It is the only sensory writing anywhere
   on the site. Moving it forward is a small structural change with an outsized effect on whether
   a first-time visitor feels anything early. Not done - it changes the story's chronology.

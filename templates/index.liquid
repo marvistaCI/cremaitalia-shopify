@@ -25,13 +25,21 @@
     <img class="hero-logo" src="{{ 'ci-logo-knockout.png' | asset_url }}" alt="Crema Italia">
     <p class="subhead" style="max-width:58ch;margin:0 auto .35rem">Do you love Espresso, Italy, and the Italian Bar (Caff&egrave;) culture? Or are you simply looking for delicious, fresh coffee beans?</p>
     <h1>Benvenuto - welcome&nbsp;in.</h1>
+    <!-- The quiz is the hero CTA (Steve, 2026-08-06) - it is free, it is the lowest-commitment
+         way in, and it is the only onboarding asset that works before real photography exists.
+         This AMENDS the 2026-07-10 lock ("no hero button"; Sorpresa primary, quiz a quiet inline
+         link). It is invitation-only - the first-visit auto-launch stays removed. -->
+    <div class="hero-btns" style="margin-top:1.5rem"><button class="btn btn-primary" onclick="openQuiz()">Take our tasting quiz</button></div>
   </div></div>
 
+  <!-- Jump chips are now purely navigational: every one scrolls to a section. The quiz chip used
+       to sit here, which made it the odd one out twice over - it opened a modal rather than
+       scrolling, and its gold fill was byte-identical to .pill.active, so it read as "selected"
+       rather than "selectable". It now lives in the hero above. -->
   <nav class="home-jump" aria-label="On this page">
     <button onclick="jumpHome('sec-story')">Our story</button>
     <button onclick="jumpHome('sec-shelves')">Shelves</button>
     <button onclick="jumpHome('sec-promise')">Promise</button>
-    <button class="hj-quiz" onclick="openQuiz()"><span class="hj-word">Tasting </span>Quiz</button>
   </nav>
 
   <main class="ci-main">
@@ -51,6 +59,11 @@
       <p>Meet the full group on our <button class="inline-link" onclick="showPage('roasters')">Roasters page</button>. Do you have a roaster you&rsquo;d like us to consider? <a class="inline-link" href="mailto:roasters@cremaitalia.com">Email me here.</a></p>
     </div>
 
+    <!-- Quiz offered BEFORE the catalog, not after the Sorpresa CTA (Steve, 2026-08-06). Placed
+         here it reads as help arriving just as four shelves appear; after the CTA it read as a
+         fallback for people who had already declined to buy. -->
+    <div class="callout" style="margin-top:2rem"><strong>Find a roast to love.</strong> Take our <button class="inline-link" onclick="openQuiz()">three-question quiz</button> and we will show you the coffees that match your taste.</div>
+
     <!-- Shelves -->
     <div class="section-head" id="sec-shelves"><p class="eyebrow">How the catalog is organized</p><h2>The four coffee shelves.</h2></div>
     <p class="prose" style="max-width:72ch">One shelf for subscriptions and larger formats (<span class="ita">Roccia</span>), one for discovery and gifting (<span class="ita">Sorpresa</span>), one for rare or seasonal roasts (<span class="ita">Selezione</span>), and one for last-chance lots at an honest markdown (<span class="ita">Offerta</span>).</p>
@@ -62,8 +75,6 @@
     </div>
     <div class="callout" style="margin-top:1.75rem"><strong>Your first purchase is our introduction.</strong> You may already know the roaster by reputation and are ready to subscribe. If not, try Sorpresa - we&rsquo;ll introduce you to a roaster you&rsquo;ll fall in love with, and hope that a Roccia subscription will soon follow.</div>
     <div class="hero-btns" style="margin-top:1.25rem"><button class="btn btn-primary" onclick="showPage('sorpresa')">Begin with a Sorpresa Tour</button></div>
-
-    <div class="callout" style="margin-top:2rem"><strong>Still unsure?</strong> Take our simple <button class="inline-link" onclick="openQuiz()">three-question quiz</button> to narrow the selection to the coffees matching your tastes.</div>
 
     <!-- Promise -->
     <div class="section-head" id="sec-promise"><p class="eyebrow">The Crema Italia Promise</p><h2>We deliver on these promises.</h2></div>
