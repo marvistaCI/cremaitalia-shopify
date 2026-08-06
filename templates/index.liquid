@@ -32,14 +32,16 @@
     <div class="hero-btns" style="margin-top:1.5rem"><button class="btn btn-primary" onclick="openQuiz()">Take our tasting quiz</button></div>
   </div></div>
 
-  <!-- PROD: photography slot 1 of 3. Replace this div with the real <img>.
-       This one exists to answer the loudest review finding about the landing page: five
-       screens pass with nothing to look at. It is the first thing below the fold. -->
-  <div class="photo-slot photo-band" style="margin-top:1.75rem">
-    <p class="ps-eyebrow">Photography</p>
-    <p class="ps-brief">An Italian bar counter mid-morning service. Cups on saucers, steam,
-      hands at work. Nobody posing for the camera.</p>
-    <p class="ps-spec">21:9 landscape &middot; ~2200x950 &middot; natural light, low saturation, narrow depth of field</p>
+  <!-- PROD: photography slot 1 of 3. TEMPORARY IMAGE - ci-temp-lp1.jpg is a visualization
+       stand-in, NOT final art, and every ci-temp-* asset must be replaced before launch.
+       BRIEF for the real shot: an Italian bar counter mid-morning service. Cups on saucers,
+       steam, hands at work. Nobody posing. 21:9, ~2200x950, natural light, low saturation,
+       narrow depth of field (Brand Standards 3.5).
+       NOTE the stand-in is a US specialty cafe with an English chalkboard menu and dollar
+       prices, so it reads American rather than Italian - fine for judging layout, wrong for
+       the story this section tells. -->
+  <div class="photo-slot photo-band is-filled" style="margin-top:1.75rem">
+    <img src="{{ 'ci-temp-lp1.jpg' | asset_url }}" alt="A cafe counter during morning service" width="1543" height="778">
   </div>
 
   <!-- Jump chips are now purely navigational: every one scrolls to a section. The quiz chip used
@@ -62,13 +64,12 @@
         <img class="founder-signature" src="{{ 'ci-signature.png' | asset_url }}" alt="Steve Roberts" width="184">
         <p class="founder-sign">Steve Roberts, Founder</p>
       </div>
-      <!-- PROD: photography slot 2 of 3. Replace this div with the real <img>.
+      <!-- PROD: photography slot 2 of 3. TEMPORARY IMAGE - ci-temp-lp2.jpg is a stand-in.
+           BRIEF for the real shot: Steve at a caffe table in Campiglia or Sarteano. Candid,
+           mid-conversation, not looking at the lens. 4:5, ~1000x1250.
            The story is written in the first person; a face is what earns that register. -->
-      <div class="photo-slot photo-portrait">
-        <p class="ps-eyebrow">Photography</p>
-        <p class="ps-brief">Steve at a caff&egrave; table in Campiglia or Sarteano. Candid,
-          mid-conversation, not looking at the lens.</p>
-        <p class="ps-spec">4:5 portrait &middot; ~1000x1250</p>
+      <div class="photo-slot photo-portrait is-filled">
+        <img src="{{ 'ci-temp-lp2.jpg' | asset_url }}" alt="Steve Roberts at a cafe table" width="1200" height="1600">
       </div>
     </div>
 
@@ -78,15 +79,17 @@
       <p>We have carefully hand-selected a small number of roasters whose work represents Italian roasting at its finest. We do not roast, grind, blend, or alter the roasters&rsquo; packaging - instead, shortly after the roaster seals the whole-bean coffee into valve bags, we air-freight it directly into our US fulfillment facility, exactly as they produced and sealed it - fresh and ready to consume.</p>
       <p>Meet the full group on our <button class="inline-link" onclick="showPage('roasters')">Roasters page</button>. Do you have a roaster you&rsquo;d like us to consider? <a class="inline-link" href="mailto:roasters@cremaitalia.com">Email me here.</a></p>
     </div>
-    <!-- PROD: photography slot 3 of 3. Replace this div with the real <img>.
+    <!-- PROD: photography slot 3 of 3. TEMPORARY IMAGE - ci-temp-lp3.jpg is a stand-in.
+         BRIEF for the real shot: one of OUR roasters' own valve bags, sealed, label facing,
+         close enough to read the roaster's name. Loose beans alongside. 3:2, ~1500x1000.
          This is the PRODUCT shot - the review's "no product visible anywhere on the landing
-         page". It also illustrates the claim it sits under: the roaster's own sealed bag,
-         untouched by us. -->
-    <div class="photo-slot photo-wide">
-      <p class="ps-eyebrow">Photography</p>
-      <p class="ps-brief">A roaster&rsquo;s own valve bag, sealed, label facing. Close enough to
-        read the roaster&rsquo;s name. Loose beans alongside if you have them.</p>
-      <p class="ps-spec">3:2 landscape &middot; ~1500x1000</p>
+         page" - and it illustrates the claim it sits under: the roaster's own sealed bag,
+         untouched by us.
+         NOTE the stand-in shows third-party brands (Lavazza, a US roaster) - fine for layout,
+         but it must not ship: it puts other companies' trademarks on our landing page, and
+         Lavazza is mass-market, the opposite of the artisan sourcing this section claims. -->
+    <div class="photo-slot photo-wide is-filled">
+      <img src="{{ 'ci-temp-lp3.jpg' | asset_url }}" alt="Sealed whole-bean coffee bags" width="1200" height="759">
     </div>
 
     <!-- Quiz offered BEFORE the catalog, not after the Sorpresa CTA (Steve, 2026-08-06). Placed

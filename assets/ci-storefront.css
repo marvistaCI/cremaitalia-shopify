@@ -186,6 +186,18 @@ nav button.active{color:var(--ci-crema);font-weight:600}
    3.5 every one of these wants natural light, low saturation, narrow depth of field;
    never posed baristas, never bean-border decoration. */
 .photo-slot{background:var(--ci-ivory);border:1px dashed var(--ci-hairline);border-radius:var(--ci-radius);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.4rem;padding:1.25rem}
+/* A slot holding a TEMPORARY visualization image (see the PROD notes in index.liquid).
+   The wrapper keeps its aspect-ratio and the image covers it, so one file serves both the
+   desktop crop and the narrower phone crop without a second asset. object-position is set
+   per slot below because "center" throws away the wrong part of each of these three. */
+.photo-slot.is-filled{display:block;padding:0;border:none;background:none;overflow:hidden}
+.photo-slot.is-filled img{display:block;width:100%;height:100%;object-fit:cover;border-radius:var(--ci-radius)}
+/* Band: desktop 21:9 crops height off a 1.98 source, so bias DOWN to keep the counter and
+   the people and lose ceiling. On phones the box is 16:9, wider than tall relative to the
+   source, so it crops width instead and the horizontal centre is what matters. */
+.photo-band.is-filled img{object-position:center 70%}
+/* Portrait: 4:5 box against a 3:4 source crops ~6% of height; bias UP so the face is safe. */
+.photo-portrait.is-filled img{object-position:center 40%}
 .photo-slot .ps-eyebrow{font-family:var(--ci-font-body);font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ci-crema)}
 .photo-slot .ps-brief{font-family:var(--ci-font-body);font-size:.85rem;line-height:1.45;color:var(--ci-ink-soft);max-width:44ch;margin:0}
 .photo-slot .ps-spec{font-family:var(--ci-font-body);font-size:.72rem;color:var(--ci-mute)}
