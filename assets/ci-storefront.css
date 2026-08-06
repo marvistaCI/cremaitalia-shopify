@@ -102,11 +102,23 @@ nav button.active{color:var(--ci-crema);font-weight:600}
   .icon-btn svg{width:20px;height:20px}
   .btn-label{display:inline;font-size:1rem;font-weight:500}
   .cart-count{margin:0 0 0 .1rem}
-  /* account: sign-in row, and (when signed in) the account links inline */
-  .account-wrap{width:100%;position:static}
+  /* account: sign-in row, and (when signed in) the account links inline.
+     These two are scoped to .ci-header (specificity 0,0,2,0) ON PURPOSE. The account
+     dropdown's base rules live near the END of this file, AFTER this media block, so at
+     equal specificity they won the cascade and this whole mobile treatment was silently
+     discarded: the submenu rendered as a 170px absolutely-positioned box hanging ~155px
+     BELOW the open panel, with its desktop border, shadow and 5.6px margin intact.
+     .shop-menu never had the problem because its base rules sit above this block.
+     Raising specificity fixes it regardless of source order - do not "simplify" these
+     back to bare class selectors. Verified at 375px: position/min-width/margin/border/
+     shadow all take the mobile values. */
+  .ci-header .account-wrap{width:100%;position:static}
   .sign-in-btn{width:100%;justify-content:flex-start;border:none;border-radius:0;min-height:48px;padding:.55rem 1.25rem;font-size:1rem}
-  .account-menu{display:none;position:static;box-shadow:none;border:none;min-width:0;margin:0;padding:0;background:transparent}
+  .ci-header .account-menu{display:none;position:static;box-shadow:none;border:none;min-width:0;margin:0;padding:0;background:transparent}
   .account-wrap.is-signed-in .account-menu{display:block}
+  /* No hover gap to bridge here - the menu is static inside the tap-open panel, and an
+     absolutely-positioned ::before would anchor to some other ancestor. Off. */
+  .account-menu::before{display:none}
   .account-menu a{min-height:48px;padding:.55rem 1.25rem .55rem 2.1rem;display:flex;align-items:center;font-size:1rem}
 }
 
@@ -210,6 +222,21 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .tr-save{background:none;border:none;color:var(--ci-crema-light);font-family:var(--ci-font-body);font-weight:600;font-size:.8rem;text-decoration:underline;text-underline-offset:2px;cursor:pointer;padding:0}
 .tr-save:hover{color:var(--ci-cream)}
 .tr-save[hidden]{display:none}
+/* Below 790 the ribbon wraps (see .taste-ribbon-inner), and the stack got tall - worst case
+   is signed-out, where a third control pushes the actions onto two rows.
+   Where the height actually went, measured at 375 signed-out with all three tags: the DOT
+   was taking a whole row of its own (9px + 9.6px gap = 18.6px) because .tr-status is a
+   full-width flex item, so it wrapped below the dot. Lifting the dot out of flow and
+   hanging it in a padding gutter recovers that row outright. The rest is gap trimming.
+   Deliberately NOT bought by shortening "Save to my account" - only "Save" or "Save it"
+   actually fit one row (measured), and both discard the point of the copy, which is that
+   an account is involved. */
+@media(max-width:789px){
+  .tr-main{position:relative;padding-left:1.05rem;gap:.4rem}
+  .tr-dot{position:absolute;left:0;top:.38rem}
+  .taste-ribbon-inner{gap:.6rem 1.5rem}
+  .tr-actions{gap:.5rem 1rem}
+}
 
 /* ---- shop hero filters (Shelf + Region, dark band) ---- */
 .hero-filters{display:flex;flex-direction:column;gap:1.1rem;margin-top:1.5rem}
@@ -458,6 +485,15 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .account-wrap{position:relative}
 .account-menu{display:none;position:absolute;top:100%;right:0;background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);box-shadow:0 8px 24px rgba(59,31,18,.12);min-width:170px;padding:.4rem;z-index:200;margin-top:.35rem}
 .account-wrap.is-signed-in:hover .account-menu,.account-wrap.is-signed-in:focus-within .account-menu{display:block}
+/* The menu opens on .account-wrap:hover, and :hover covers the wrap plus its descendants -
+   but NOT the margin between them. margin-top:.35rem left a 5.6px strip where the element
+   under the cursor is .header-inner (measured), so any mousemove sampled inside it dropped
+   the hover and the menu vanished. You could only get in by crossing fast enough that no
+   mousemove landed in the gap, which is exactly the "move at a perfect speed" symptom Steve
+   reported. .shop-menu never had this because it sits flush (top:100%, no margin).
+   This transparent bridge spans the gap so the hover chain is contiguous; the visual gap is
+   unchanged. Keep its height equal to .account-menu's margin-top - if one changes, both do. */
+.account-menu::before{content:"";position:absolute;top:-.35rem;left:0;right:0;height:.35rem}
 .account-wrap.menu-force-closed .account-menu{display:none!important}
 .account-menu a{display:block;padding:.5rem .7rem;border-radius:6px;cursor:pointer;text-decoration:none;font-size:.85rem;color:var(--ci-espresso)}
 .account-menu a:hover{background:var(--ci-cream);color:var(--ci-crema)}
