@@ -35,6 +35,46 @@
 
   var FREE_SHIP_THRESHOLD = 55;
 
+  /* ---------- POC-only: keep fixture dates plausible relative to today ----------
+     The catalog carries ABSOLUTE roast/best-by dates because that is the shape production
+     will have (real crema_italia.* metafields on real products). But a frozen fixture ages
+     badly: by 2026-08-06 the demo was showing its flagship Roccia 46 days past roast with
+     14 days of window left, an Offerta lot already expired, and an account subscription
+     that had "shipped" 16 days earlier. Anyone shown the POC reads that as a broken store.
+
+     Rather than re-stamping the file by hand every few weeks, shift the whole set on load
+     so the freshest coffee is FRESH_ANCHOR_DAYS old. Every product keeps its ORIGINAL
+     spacing relative to the others, which is meaningful - the Offerta lot is deliberately
+     the oldest, and the shelves are deliberately staggered.
+     PROD: delete this block. Real dates come from the metafields. ---------- */
+  var FRESH_ANCHOR_DAYS = 10;
+  var DAY_MS = 86400000;
+  function isoDay(ms) { return new Date(ms).toISOString().slice(0, 10); }
+  function isoFromToday(days) { return isoDay(Date.now() + days * DAY_MS); }
+
+  function rebaseCatalogDates(cat) {
+    var dated = (cat.products || []).filter(function (p) { return p.roast_date; });
+    if (!dated.length) return;
+    var newest = dated.reduce(function (m, p) {
+      var t = Date.parse(p.roast_date);
+      return isNaN(t) ? m : Math.max(m, t);
+    }, -Infinity);
+    if (!isFinite(newest)) return;
+    var shift = (Date.now() - FRESH_ANCHOR_DAYS * DAY_MS) - newest;
+    dated.forEach(function (p) {
+      var oldRoast = p.roast_date;
+      p.roast_date = isoDay(Date.parse(oldRoast) + shift);
+      if (p.best_by) p.best_by = isoDay(Date.parse(p.best_by) + shift);
+      // The Offerta blurb quotes its own roast date in prose; keep the two in step.
+      if (p.blurb) p.blurb = p.blurb.split(oldRoast).join(p.roast_date);
+      // Offerta cards show the remaining window in plain words, so recompute it.
+      if (p.shelf === 'offerta' && p.best_by) {
+        var left = Math.round((Date.parse(p.best_by) - Date.now()) / DAY_MS);
+        p.freshness_remaining = left > 0 ? 'Best within ' + left + ' days' : 'Past its window';
+      }
+    });
+  }
+
   var FLAVOR_LABEL = { fruit: 'Fruit & Floral', sweet: 'Sweet & Chocolate', terroir: 'Bold & Spiced', any: '' };
   // Info-only descriptors shown under the selected Flavor filter (curator-assigned tags).
   var FLAVOR_DESC = {
@@ -1109,8 +1149,8 @@
           '<p class="note">Stored to your account and used to pre-filter the Shop.</p></div>' +
         '<div class="acct-card"><h3>Recent orders</h3>' +
           '<div class="order-list">' +
-            orderRow('1042', 'Tour d\'Italia 1', '2026-06-12', '$77.70') +
-            orderRow('1031', 'Gardelli - Ethiopia Bombe · 250g', '2026-05-28', '$38.00') +
+            orderRow('1042', 'Tour d\'Italia 1', isoFromToday(-30), '$77.70') +
+            orderRow('1031', 'Gardelli - Ethiopia Bombe · 250g', isoFromToday(-60), '$38.00') +
           '</div>' +
           '<button class="inline-link" style="margin-top:.7rem" onclick="mockAllOrders()">Show all orders</button>' +
           '<!-- PROD: rows link to the native Shopify ORDER DETAIL page (an order may hold multiple line items); "Order again" re-adds that order\'s line items to the native cart, and for Roccia items can convert to a selling_plan (Loop) subscription with a "you\'re leaving 10-12% + free shipping behind" nudge; "Show all orders" -> native Shopify order-history page. Use "Order #" (Shopify order number), NOT "invoice". Reorder is not 1:1 — production needs a graceful "no longer available, here\'s a similar one" path. -->' +
@@ -1147,7 +1187,7 @@
         '<div class="sub-actions"><button class="btn btn-primary" onclick="mockResume()">Resume</button><button class="btn btn-secondary" onclick="mockStartCancel()">Cancel subscription</button></div>' +
         '<div id="cancel-flow"></div></div>';
     }
-    return '<div class="sub-manage"><div class="sub-line"><div><strong>Gardelli - Ethiopia Bombe</strong><div class="rn">250g · every 4 weeks · next ships 2026-07-20</div></div><span class="status-chip sc-active">Active</span></div>' +
+    return '<div class="sub-manage"><div class="sub-line"><div><strong>Gardelli - Ethiopia Bombe</strong><div class="rn">250g · every 4 weeks · next ships ' + isoFromToday(14) + '</div></div><span class="status-chip sc-active">Active</span></div>' +
       '<div class="sub-actions"><button class="btn btn-secondary" onclick="mockPause()">Pause</button><button class="btn btn-secondary" onclick="mockStartCancel()">Cancel subscription</button></div>' +
       '<div id="cancel-flow"></div></div>';
   }
@@ -1260,14 +1300,16 @@
     // contexts that don't fire matchMedia 'change' on resize).
     window.addEventListener('resize', function () { setRegionMapViewBox(); alignThreePs(); });
 
-    // Quiz is invitation-only (brand decision 2026-07-10): it launches from the hero
-    // CTA and the sticky "Take the quiz" chip, never as an unbidden first-visit modal.
-    // The auto-launch was removed as a mild gimmick inconsistent with the brand.
+    // Quiz is invitation-only (brand decision 2026-07-10): it launches from the hero CTA
+    // and the "Find a roast to love" link above the shelves, never as an unbidden
+    // first-visit modal. The auto-launch was removed as a mild gimmick inconsistent with
+    // the brand. The hero CTA itself is the 2026-08-06 amendment (see CLAUDE.md §9).
 
     var url = window.CI_CATALOG_URL;
     if (!url) { console.warn('CI_CATALOG_URL missing'); return; }
     fetch(url).then(function (r) { return r.json(); }).then(function (data) {
       CATALOG = data;
+      rebaseCatalogDates(CATALOG);
       (CATALOG.products || []).forEach(function (p) { byHandle[p.handle] = p; });
       (CATALOG.roasters || []).forEach(function (r) { roasterByHandle[r.handle] = r; });
       (CATALOG.people || []).forEach(function (pn) { peopleById[pn.id] = pn; });

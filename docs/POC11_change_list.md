@@ -210,9 +210,9 @@ the Italian name leads and the gloss stays short. The long form was tried and re
 `Roccia · Subscription` / `Sorpresa · Discovery` / `Selezione · Premium` / `Offerta ·
 Opportunity`, with a comment in `SHELF_BADGE` recording why so it is not "harmonised" later.
 
-**OPEN, minor, raised not decided:** renaming Offerta's gloss to "The Offer" leaves its badge
-reading `Offerta · Opportunity` - a third term for the same shelf. Either align the badge to
-"Offer" or accept the badge vocabulary as independent. Steve's call.
+**DECIDED 2026-08-06 - no change.** Renaming Offerta's gloss to "The Offer" left its badge reading
+`Offerta · Opportunity`, a third term for the shelf. Steve: "let's keep them as stated." Badge
+vocabulary is independent of the shelf headers. Closed.
 
 ### A5. Shop page: shelf-context note replaces the static shelf list
 **DONE 2026-08-06 — Steve's design.** Removed "Organized into four shelves - Roccia · Sorpresa ·
@@ -363,7 +363,16 @@ the product page, cart banner, sign-in modal, and account tile.
 
 Net: five site-wide mentions of "10%", none redundant.
 
-### B3. Team micro-bios — **needs 2 sentences each from Steve**
+### B3. Team micro-bios — **DEFERRED 2026-08-06, and re-filed**
+**Steve's correction, which is the better framing:** B3 is not a copy task. Team and Partners are
+meant to be an **administrative feature** - sections + blocks per `production_build_spec.md` §2 -
+so Steve can add or edit people **without republishing the site**. Writing placeholder bios into
+the POC's `people[]` array would be authoring content into the wrong surface.
+
+Deferred until there is a **signed partner agreement** and **Lauren engages**. At that point it
+belongs in the production build as the sections+blocks feature, not as POC copy.
+
+*(Original framing below, kept for context.)*
 About gives the founder ~400 words and two photos; Lucia, Asia, Lauren, and Partner 1 get a name
 and a job title. Given coffee's buying demographic, and given the team pages already exist as a
 built pattern (`openPerson()`), two sentences each is a cheap, high-return fill.
@@ -521,10 +530,30 @@ Do not action. Listed so they are not lost.
 
 ## 5. Track E — Housekeeping
 
-- **E1.** Refresh fixture dates so nothing reads as expired (flagship coffee currently shows
-  46 days past roast with 14 days left; account shows a subscription that shipped 16 days ago).
-  **Steve: "stale dates really don't matter, but if you want to refresh the data, I'll give you
-  permission in a later prompt."** — awaiting go, low priority, cosmetic only.
+- **E1. DONE 2026-08-06 - and solved once rather than repeatedly.** The fixtures had aged into
+  nonsense: the flagship Roccia showed **46 days past roast with 14 days left** (and a page that
+  says "for peak flavor brew within 30 days"), the Offerta lot was **already expired**, and the
+  account showed a subscription that had "shipped" **16 days ago**.
+
+  A straight re-stamp would have gone stale again within weeks, so instead the catalog keeps its
+  **absolute** dates (the shape production will have - real `crema_italia.*` metafields) and a
+  POC-only `rebaseCatalogDates()` shifts the whole set **on load** so the freshest coffee is
+  `FRESH_ANCHOR_DAYS` (10) old. Every product keeps its **original spacing** relative to the
+  others, which is meaningful: the Offerta lot is deliberately the oldest and the shelves are
+  deliberately staggered.
+
+  It also recomputes the Offerta card's plain-words remaining window, and rewrites the roast date
+  quoted inside the Offerta **blurb prose** so the two can never disagree. Account order dates and
+  the next-ship date became `isoFromToday(-30 / -60 / +14)`.
+
+  **Verified across all 12 dated products:** none expired, none dated in the future, ages 11-33
+  days, 27-49 days of window remaining, ordering preserved (Offerta oldest at 33 days / 27 left).
+  Flagship went from 46 days old with 14 left to **11 days old with 49 left**.
+
+  `PROD:` marked - delete the block outright when real metafields land.
+
+  Also fixed while in the file: a comment still describing the quiz launching from "the sticky
+  'Take the quiz' chip", which no longer exists after the C1 hero-CTA change.
 - **E2.** Fusari is the only roaster listed without a city. Fixture data; fix only if E1 runs.
 - **E3.** *(Observation, Steve's call, previously locked)* "In bocca al lupo" as the quiz result
   headline is the Italian idiom for luck facing an **ordeal** (exam, audition, surgery; reply
@@ -551,8 +580,8 @@ Do not action. Listed so they are not lost.
 |---|---|---|
 | 1 | A1: mention the checkout code field, or stay silent? | **RESOLVED 2026-08-06 — pre-empt it.** Built. |
 | 2 | A2: drop "172 of 222" for "limited to 222"? | **RESOLVED 2026-08-06 — dropped.** Built. |
-| 3 | C2: is a sub-$25 entry SKU worth re-opening Standard §1's 100g rule? | **OPEN** — a Standard change, not a POC change |
-| 4 | B3: two sentences each for Lauren and Partner 1 | **OPEN** — needs Steve's words |
+| 3 | C2: is a sub-$25 entry SKU worth re-opening Standard §1's 100g rule? | **PARKED 2026-08-06** — Steve: the prices are made up, so the ratio that raised it is not evidence. Revisit when real landed costs exist |
+| 4 | B3: two sentences each for Lauren and Partner 1 | **DEFERRED 2026-08-06** — and re-filed as an admin feature, not copy. See B3 |
 | 5 | A1 follow-on: does Store Operating Standards §10 need the pre-empt language too? | **OPEN** — see below |
 
 **New, raised by A1:** §10 currently records *what we do* (issue no codes). The storefront now
