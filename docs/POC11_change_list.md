@@ -397,9 +397,30 @@ Dead `.hj-quiz` / `.hj-word` CSS swept. Note this **retires POC10's mobile fix**
 - **Should a price or a product ever appear above the fold?** **Deferred as unanswerable** - there
   are no product photographs and will not be until roasters sign (Track D). Not worth debating
   before then.
-- **The "17g" sentence is still the third sentence in.** It is the only sensory writing anywhere
-  on the site. Moving it forward is a small structural change with an outsized effect on whether
-  a first-time visitor feels anything early. Not done - it changes the story's chronology.
+**RESOLVED - the "17g" reorder was proposed, drafted, and REJECTED; the paragraph was tightened
+instead.** The POC10 review claimed the site's only sensory sentence was "buried in paragraph
+one" and should move nearer the front. Steve was unconvinced and asked for a concrete proposal.
+Drafting it settled the question against the proposal, for three reasons worth keeping:
+
+1. **It destroys the mechanism that makes the sentence work.** "Blown away" lands *because* the
+   reader already knows the beans were an unremarkable parting gift, and decaf at that. It is a
+   punchline; its power is entirely dependent on the setup preceding it. Moved to the front it
+   becomes a man describing his morning routine, and the surprise has to be backfilled afterward.
+2. **It opens on an unexplained number.** "I ground exactly 17g" is vivid *in place*, but as a
+   first line it asks the reader to care about a measurement before they know who is speaking.
+   Specificity without context reads as fussy, not vivid.
+3. **It breaks the heading.** "A full confession." sets up "I've fallen in love" as the thing
+   confessed. That has to come first or the heading points at nothing.
+
+**The review's claim was also inflated** and the correction is recorded here: the sentence sat
+**42 words** into the body copy at roughly **0.8 screens** - the third sentence of the first
+paragraph of the first section. That is early, not buried.
+
+**What was done instead:** the runway was shortened rather than reordered. Trimmed "built around
+delicious, roasted beans" from sentence 1, tightened sentence 2's construction, and cut "by the
+taste" from the payoff (taste is already implied, and "was blown away" hits harder). Payoff now
+arrives at **33 words** instead of 42; the paragraph is **61 words** instead of ~80. Same order,
+same structure, same heading logic - the moment simply arrives sooner.
 
 **Original framing (Steve, earlier on 2026-08-06): "let's spend more time on the CTA and landing
 page. No action yet."**
