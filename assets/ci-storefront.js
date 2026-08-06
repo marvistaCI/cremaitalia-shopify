@@ -663,10 +663,16 @@
     var r = $('taste-ribbon'); if (!r) return;
     r.classList.toggle('is-active', filterOn);
     var s = $('tr-status'), tg = $('tr-tags'), tb = $('tr-toggle');
-    if (s) s.textContent = filterOn
-      ? 'Your taste profile is active - shelves are filtered.'
-      : 'Your profile is not active - all items are shown.';
-    if (tb) tb.textContent = filterOn ? 'Show everything' : 'Apply profile';
+    // "profile" is the edit affordance. It used to be a separate "Edit profile" button,
+    // but three controls wrapped .tr-actions onto two rows on every phone; burying the
+    // edit in the sentence gets the ribbon to one row without shortening any label.
+    // A real <button>, not styled text - same reason the About "Bio" tell is one.
+    var edit = '<button type="button" class="tr-edit-link" onclick="openTasteConsole()"'
+      + ' aria-label="Edit your taste profile">profile</button>';
+    if (s) s.innerHTML = filterOn
+      ? 'Your taste ' + edit + ' is active - shelves are filtered.'
+      : 'Your ' + edit + ' is not active - all items are shown.';
+    if (tb) tb.textContent = filterOn ? 'Show all' : 'Apply profile';
     if (tg) { tg.innerHTML = tasteTagsHtml(activeTaste); tg.classList.toggle('muted', !filterOn); }
     // The account ask, offered only to a signed-out visitor and only once a profile exists.
     var sv = $('tr-save'); if (sv) sv.hidden = session.signedIn;

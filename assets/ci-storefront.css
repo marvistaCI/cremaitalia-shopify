@@ -212,7 +212,12 @@ nav button.active{color:var(--ci-crema);font-weight:600}
    .taste-ribbon-inner. */
 .tr-actions{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
 @media(min-width:790px){.tr-actions{flex-shrink:0}}
-.tr-edit{background:none;border:none;color:var(--ci-cream);font-family:var(--ci-font-body);font-size:.8rem;text-decoration:underline;text-underline-offset:2px;cursor:pointer;padding:0}
+/* The edit affordance, inline in the status sentence (replaced the standalone .tr-edit
+   button). Cream + underline keeps the existing hierarchy intact: gold (.tr-save) stays
+   the one forward action, this is the quieter in-text edit. Inherits font-size so it
+   reads as part of the sentence rather than a control dropped into it. */
+.tr-edit-link{background:none;border:none;color:var(--ci-cream);font-family:inherit;font-size:inherit;font-weight:600;text-decoration:underline;text-underline-offset:2px;cursor:pointer;padding:0;vertical-align:baseline}
+.tr-edit-link:hover{color:var(--ci-crema-light)}
 .tr-toggle{background:none;border:1px solid rgba(255,255,255,.35);color:var(--ci-cream);font-family:var(--ci-font-body);font-weight:600;font-size:.78rem;padding:.35rem .85rem;border-radius:var(--ci-radius);cursor:pointer;white-space:nowrap;transition:background 200ms}
 .tr-toggle:hover{background:rgba(255,255,255,.12)}
 /* The account ask. Deliberately a quiet link, not a button: the visitor has already been
@@ -584,7 +589,12 @@ nav button.active{color:var(--ci-crema);font-weight:600}
   .qty-n{min-width:2rem;font-size:1rem}
   /* taste ribbon controls */
   .tr-toggle{min-height:40px;display:inline-flex;align-items:center}
-  .tr-edit{padding:.5rem 0;min-height:40px;display:inline-flex;align-items:center}
+  /* Grow the tap target without growing the sentence. A <button> is inline-block and
+     Chrome forces that even under display:inline, so bare padding inflated the line box
+     and pushed the status block 42 -> 51px. The negative margin cancels the padding in
+     layout while the padding still counts as hit area: ~35px tall to tap, 0px of extra
+     ribbon. Verified - status height unchanged, link box taller. */
+  .tr-edit-link{padding:.45rem 0;margin:-.45rem 0}
   .tr-save{padding:.5rem 0;min-height:40px;display:inline-flex;align-items:center}
   .tr-save[hidden]{display:none}
   /* "Bio" is only ~20x16px as bare text - far under the touch floor. The card behind it is

@@ -18,8 +18,13 @@
         account ask lives now: AFTER the quiz result has proven useful, not before it.
         POC12 removed the sign-in gate that used to sit at the quiz payoff.
       {%- endcomment -%}
+      {%- comment -%}
+        "Edit profile" used to be a third control here. It now lives inside the status
+        sentence as a link on the word "profile" (see renderRibbon) - a third control
+        pushed the actions onto two rows on every phone, and burying the edit in the
+        text is what gets the whole ribbon back to one row without shrinking any label.
+      {%- endcomment -%}
       <button class="tr-save" id="tr-save" onclick="saveProfileFromRibbon()" hidden>Save to my account</button>
-      <button class="tr-edit" onclick="openTasteConsole()">Edit profile</button>
       <button class="tr-toggle" id="tr-toggle" onclick="toggleProfileFilter()">Apply profile</button>
     </div>
   </div>
