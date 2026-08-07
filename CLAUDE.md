@@ -1781,7 +1781,8 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC13 (verified live 2026-08-06) — read this first when resuming.**
+**▶ CURRENT STATE — POC13 (deployed + pull-and-diff proved 2026-08-06; `theme list` re-verified
+live 2026-08-07, unchanged) — read this first when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
 > `docs/POC*_change_list.md` banners, and any "NEXT: deploy…" line are **historical narrative** —
