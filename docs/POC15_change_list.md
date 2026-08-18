@@ -3,7 +3,7 @@
 Built 2026-08-18, on top of deployed POC14. Working ledger; `CLAUDE.md` §9 carries the
 durable summary and §10 carries the authoritative deployment state.
 
-**Origin.** The POC13 close-scrutiny audit scored the site 5.7/10 and left a prioritised
+**Origin.** The POC13 close-scrutiny audit scored the site 5.4/10 and left a prioritised
 open list. POC14 closed six of its findings. This batch takes the next four Steve picked,
 plus one systemic brand breach found by looking at the result.
 
