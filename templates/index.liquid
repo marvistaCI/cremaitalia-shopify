@@ -357,7 +357,12 @@
     <p>Italy doesn&rsquo;t roast one way. From the light, aromatic cups of the north to the dark, bold espresso of the south, each region carries its own centuries-old roasting tradition. We choose roasters from these traditions and bring their coffee to you unchanged. We are in Tuscany now - and reaching, carefully, toward the rest.</p>
   </div></div>
   <main class="ci-main">
-    <!-- Region map: labels in Italian BY DESIGN (Steve). Synced from OneDrive Region_Map_v2.svg
+    <!-- 2026-08-18: .region-label and .legend-title were font-weight:700. Inter loads 400/500/600
+         only, so the browser was FAKING bold on all 10 map labels. Changed to 600 (Inter's real
+         maximum, and the weight the Brand Standards specify for labels). COWORK FOLLOW-UP: the
+         OneDrive source Region_Map_v2.svg still says 700 - it should be brought to 600 so the
+         source and this inlined copy do not drift.
+         Region map: labels in Italian BY DESIGN (Steve). Synced from OneDrive Region_Map_v2.svg
          (2026-07-15): nine Italian titles, re-anchored leaders, centred legend, Sardinia removed.
          The em-dashes in the sub-labels are a DELIBERATE exception to the §6 no-em-dash rule,
          approved by Steve 2026-07-17 ("a map with descriptions - stylistically it works"). Do NOT
@@ -370,11 +375,11 @@
       <style>
         #region-map-svg .country{fill:#f3efe9;stroke:#c9beae;stroke-width:1.75;stroke-linejoin:round}
         #region-map-svg .region-dot{stroke:#fff;stroke-width:2.25}
-        #region-map-svg .region-label{font-family:Inter,Arial,sans-serif;font-size:14px;font-weight:700;fill:#2a2018}
+        #region-map-svg .region-label{font-family:Inter,Arial,sans-serif;font-size:14px;font-weight:600;fill:#2a2018}
         #region-map-svg .region-sub{font-family:Inter,Arial,sans-serif;font-size:11px;fill:#6b5d4d}
         #region-map-svg .leader{stroke:#b8a894;stroke-width:1.1;fill:none}
         #region-map-svg .legend-text{font-family:Inter,Arial,sans-serif;font-size:12px;fill:#6b5d4d}
-        #region-map-svg .legend-title{font-family:Inter,Arial,sans-serif;font-size:13px;font-weight:700;fill:#2a2018}
+        #region-map-svg .legend-title{font-family:Inter,Arial,sans-serif;font-size:13px;font-weight:600;fill:#2a2018}
       </style>
       <path class="country" d="M 206.8 112.6 L 256.2 103.3 L 267.2 119.8 L 272.1 138.3 L 300.5 163.5 L 311.5 174.3 L 340.1 189.5 L 355.8 200.6 L 367.0 205.7 L 386.2 224.0 L 392.3 265.6 L 386.5 286.5 L 400.3 278.7 L 419.8 253.6 L 404.6 233.5 L 412.4 214.7 L 422.3 212.0 L 439.0 224.5 L 447.3 232.0 L 450.0 221.6 L 438.1 206.9 L 414.0 192.5 L 400.8 186.5 L 398.8 172.2 L 392.3 169.2 L 371.9 166.2 L 354.5 152.4 L 339.0 117.7 L 317.8 104.5 L 309.5 93.8 L 311.7 79.4 L 312.4 63.2 L 344.6 56.9 L 340.4 31.5 L 290.5 30.0 L 249.1 37.5 L 239.7 47.1 L 190.0 51.6 L 199.8 85.4 L 206.8 112.6 Z"/>
       <path class="country" d="M 384.4 279.0 L 374.4 300.9 L 378.6 313.7 L 375.5 322.1 L 366.5 325.1 L 317.8 297.9 L 314.9 285.3 L 331.0 279.9 L 384.4 279.0 Z"/>

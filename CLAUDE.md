@@ -112,12 +112,17 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > mcp__Claude_Browser__navigate  {tabId:"tab-1", url:"<preview url>"}
 > mcp__Claude_Browser__computer  {tabId:"tab-1", action:"screenshot"}   # works
 > ```
-> The tab that `preview_start` creates (`tabId: "seed"`) **never composites frames** — it stays in
-> `document.visibilityState === "hidden"` forever, so a screenshot waits 5s for a frame that never
-> arrives and times out. A tab made with `tabs_create` + `navigate` composites normally and
-> screenshots fine. Nothing needs restarting and **Steve does not need to do anything** — this is
-> entirely agent-side. Also call `resize_window` with an explicit `{tabId}`, or the new tab keeps
-> its own default size.
+> **BOTH conditions are required** (corrected twice on 2026-08-18 before landing here):
+> 1. **A `tabs_create` tab.** The tab `preview_start` makes (`tabId: "seed"`) **never** composites,
+>    whatever the pane is doing — proven by querying both at the same instant under identical pane
+>    state: seed reported `hidden`, the `tabs_create` tab reported `visible`.
+> 2. **A displayed Browser pane.** A `tabs_create` tab goes back to `hidden` the moment the pane is
+>    hidden, and screenshots start failing again mid-session. Ask Steve to show the pane.
+>
+> So it is neither purely user-side (first wrong guess) nor purely agent-side (second wrong guess).
+> **Probe `{visibilityState, hidden, hasFocus}` before concluding anything** — `hidden:true` on a
+> `tabs_create` tab means ask for the pane; `hidden:true` on `seed` means make a real tab. Also pass
+> an explicit `{tabId}` to `resize_window`, or the new tab keeps its own default size.
 > **Two things that made this durable.** (1) The error text — "the Browser pane is not displayed" —
 > reads as a user-side problem and sent at least one session (this one, initially) down the wrong
 > path of asking Steve to open a panel; that does not fix it. (2) JS execution is never gated on
