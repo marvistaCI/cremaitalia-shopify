@@ -1897,6 +1897,18 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   pointing at a 404 renders the same bare link as no tag at all.
   `theme check` at the documented baseline, 0 new. Commits `ef0cf74`, `78e8fdc`, `49a0ceb`,
   `1c27c88`.
+  **DEPLOYED** via the `crema-poc-deploy` skill: `theme list` + `git log origin/main..HEAD` run
+  **first** (POC14 theme already existed — refreshed in place with a FULL push rather than creating
+  a second theme, which is the failure that skill exists to prevent), validation at the documented
+  baseline, then **pull-and-diff proved** the push — both sides **39** files, zero content
+  mismatches, nothing present on only one side, exactly one theme of that name, no duplicates.
+  **No prune needed** — three POC previews (11/12/14) against a cap of three, so nothing was
+  deleted and no theme ids went stale. POC11, POC12 and the live theme untouched. Preview:
+  `https://crema-italia.myshopify.com?preview_theme_id=151800610985`
+  **Cowork follow-up raised the same day:** the OneDrive source `Region_Map_v2.svg` still sets its
+  map labels to `font-weight:700`, which Inter does not have, so that copy still fabricates a bold
+  where the theme's inlined copy no longer does. Written up in `Coordination  region-map-fontweight-handoff-2026-08-18.md` with a dated `DECISIONS_LOG.md` entry (status:
+  open). Two characters; no redraw.
   **Process failure worth keeping:** POC14 files were pushed piecemeal onto the theme named "Crema
   Italia POC13 Preview" as a live verification target, which **violated the draft-theme naming rule**
   at the top of this file. Steve caught it. Remedied by renaming the theme to "Crema Italia POC14
@@ -1908,8 +1920,8 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC14 IN PROGRESS (theme renamed + `theme list` verified live 2026-08-18)
-— read this first when resuming.**
+**▶ CURRENT STATE — POC14 (deployed + pull-and-diff proved 2026-08-18) — read this first
+when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
 > `docs/POC*_change_list.md` banners, and any "NEXT: deploy…" line are **historical narrative** —
@@ -1937,28 +1949,26 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 | Prior preview | "Crema Italia POC12 Preview" | `151798841513` |
 | Prior preview | "Crema Italia POC11 Preview" | `151797727401` |
 
-**POC14 is IN PROGRESS on theme `151800610985`, and that theme is NOT a proven deploy.** Read this
-carefully, because it is an unusual state:
-- Theme `151800610985` was "Crema Italia POC13 Preview" until 2026-08-18. During the POC14 build it
-  was used as a **live verification target** and had POC14 files pushed onto it piecemeal
-  (`--only` pushes of `ci-storefront.css`, `ci-storefront.js`, `templates/index.liquid`,
-  `layout/theme.liquid`, `snippets/ci-store-footer.liquid`). That **violated the draft-theme naming
-  rule** at the top of this file — a new batch went into an existing theme and the name was not
-  changed at the same time. Steve caught the discrepancy. The theme was **renamed to "Crema Italia
-  POC14 Preview"** on 2026-08-18 so its name matches what it actually holds, which is the remedy
-  that rule prescribes. Verified against a live `theme list` immediately after.
-- **It has NOT been through the `crema-poc-deploy` ritual and has NOT been pull-and-diff proved.**
-  Treat it as a working preview, not a deployed batch. Run the full skill when POC14 is finished.
-- **POC13's batch no longer exists on any theme.** It is commit `baff5e9` on GitHub and is
-  redeployable from git at any time; Steve confirmed 2026-08-18 he is not concerned about the
-  previews reading 11 / 12 / 14.
+**POC14 is deployed** and is the only POC14 theme (all **39** files byte-match the repo — verified
+by pull-and-diff 2026-08-18, both sides 39 files, zero content mismatches, nothing present on only
+one side; `theme list` was run **before** the push per the rule above). The file count is unchanged
+at 39 — POC14 edited existing files and added none.
+
+Note on how this theme got here, because it is unusual: it was "Crema Italia POC13 Preview" until
+2026-08-18. During the POC14 build it was used as a **live verification target** and had POC14 files
+pushed onto it piecemeal, which **violated the draft-theme naming rule** at the top of this file —
+a new batch went into an existing theme and the name was not changed at the same time. Steve caught
+the discrepancy; the theme was renamed to match what it holds, and the batch has since gone through
+the full `crema-poc-deploy` ritual, so it is now a properly proven deploy rather than a working
+preview. **POC13's batch no longer exists on any theme** — it is commit `baff5e9` on GitHub and
+redeployable at any time; Steve confirmed he is not concerned about the previews reading 11/12/14.
 
 POC11 and POC12 previews and the live theme are untouched. Preview:
 `https://crema-italia.myshopify.com?preview_theme_id=151800610985`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
 2026-07-06). To refresh: `shopify theme push --theme 151800610985`.
 
-**Only POC11, POC12 and POC14 previews now exist** — the three-newest cap Steve set on 2026-08-06,
+**Only POC11, POC12 and POC14 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
 now enforced as `crema-poc-deploy` Step 5. **POC10 (`151624024233`) was deleted 2026-08-06** on
 Steve's explicit go, after re-verifying the id against a live `theme list --json` immediately before
 the delete; its batch is commit `dd0cbf1` on GitHub and can be redeployed from git if ever wanted.
