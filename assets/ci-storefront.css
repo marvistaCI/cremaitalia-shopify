@@ -289,7 +289,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .dark-hero .pill{background:transparent;border:1px solid rgba(255,255,255,.28);color:var(--ci-cream)}
 .dark-hero .pill:hover{border-color:var(--ci-crema-light);color:var(--ci-cream)}
 .dark-hero .pill.active{background:var(--ci-crema);border-color:var(--ci-crema);color:var(--ci-cream)}
-.dark-hero .pill.disabled{opacity:.4;font-style:italic}
+.dark-hero .pill.disabled{opacity:.4}
 .dark-hero .filter-region{width:100%}
 .dark-hero .region-note{color:#d4c4b8;font-size:.8rem;margin:.6rem 0 0}
 .dark-hero .region-learn{color:var(--ci-crema-light)}
@@ -297,7 +297,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 /* ---- taste console modal (opened from the ribbon's Edit profile) ---- */
 .taste-console-modal{max-width:520px}
 .taste-console-modal .tc-groups{display:flex;flex-direction:column;gap:1.15rem;text-align:left;margin-bottom:1.4rem}
-.taste-console-modal .flavor-desc{font-size:.8rem;font-style:italic;color:var(--ci-espresso);margin-top:.4rem;min-height:1rem}
+.taste-console-modal .flavor-desc{font-size:.8rem;color:var(--ci-espresso);margin-top:.4rem;min-height:1rem}
 .tc-modal-foot{display:none;gap:.75rem;justify-content:flex-end;border-top:1px solid var(--ci-hairline);padding-top:1.1rem}
 .tc-modal-foot.dirty{display:flex}
 
@@ -318,7 +318,6 @@ nav button.active{color:var(--ci-crema);font-weight:600}
    the string is 11.2x its font-size in Marcellus, so the clamp max must stay under
    (hero-inner 760px / 11.2) = 67px, and the min under (327px / 11.2) = 29px at 375px. */
 .hero h1{font-family:var(--ci-font-display);font-size:clamp(1.625rem,4vw,2.5rem);font-weight:400;color:var(--ci-cream);line-height:1.15;margin-bottom:0;text-wrap:balance}
-.hero h1 em{font-style:italic;color:var(--ci-crema-light)}
 .hero .subhead{font-family:var(--ci-font-display);font-size:clamp(1.1rem,2.5vw,1.4rem);color:var(--ci-crema-light);margin:.75rem auto 1rem;max-width:560px}
 /* Green-white-red tricolore divider: 3 equal segments, aligned, on dark panels. */
 .hero .tricolore{width:132px;height:4px;margin:0 auto 1.4rem;display:grid;grid-template-columns:1fr 1fr 1fr;overflow:hidden;border-radius:1px;line-height:0}
@@ -386,7 +385,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .pill{border:1px solid var(--ci-hairline);background:var(--ci-cream);color:var(--ci-espresso);font-size:.8rem;font-weight:500;padding:.25rem .7rem;border-radius:20px;cursor:pointer;transition:all 200ms}
 .pill:hover{border-color:var(--ci-crema);color:var(--ci-crema)}
 .pill.active{background:var(--ci-crema);color:var(--ci-cream);border-color:var(--ci-crema)}
-.pill.disabled{opacity:.4;cursor:default;font-style:italic}
+.pill.disabled{opacity:.4;cursor:default}
 /* Gloss beside the Shop shelf pills. Sits in the same flex row so it trails the pills on
    desktop and wraps to its own full-width line on phones. Colour is the brand cream token at
    reduced opacity (not a new colour) so it reads as secondary to the pills it describes.
@@ -421,7 +420,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .dark-hero h1{font-family:var(--ci-font-display);font-size:clamp(2rem,5vw,3rem);font-weight:400;color:var(--ci-cream)}
 .dark-hero .sub{font-size:.9rem;color:var(--ci-crema-light);margin-top:.25rem}
 .dark-hero p{color:#d4c4b8;margin-top:1rem;font-size:.95rem;line-height:1.65;max-width:none}
-.cn{background:rgba(255,255,255,.07);border-left:3px solid var(--ci-crema);padding:1rem 1.25rem;border-radius:0 6px 6px 0;margin-top:1.25rem;font-size:.9rem;color:#e0d0c4;font-style:italic}
+.cn{background:rgba(255,255,255,.07);border-left:3px solid var(--ci-crema);padding:1rem 1.25rem;border-radius:0 6px 6px 0;margin-top:1.25rem;font-size:.9rem;color:#e0d0c4}
 .cn strong{font-style:normal;color:var(--ci-crema-light)}
 
 /* ---- tour hero ---- */
@@ -430,7 +429,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .tour-hero h2{font-family:var(--ci-font-display);font-size:2rem;font-weight:400;color:var(--ci-cream);margin-bottom:.5rem}
 .tour-hero p{color:#d4c4b8;font-size:.95rem;max-width:none}
 .tour-bags{display:flex;gap:.75rem}
-.tour-bag{width:72px;height:96px;background:var(--ci-espresso);border-radius:6px;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--ci-crema-light);text-align:center;padding:.4rem;font-style:italic}
+.tour-bag{width:72px;height:96px;background:var(--ci-espresso);border-radius:6px;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--ci-crema-light);text-align:center;padding:.4rem}
 
 /* ---- promise ---- */
 .promise-list{list-style:none;padding:0;margin:2rem 0;display:flex;flex-direction:column;gap:1.5rem}
@@ -447,7 +446,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .prose a{color:var(--ci-crema);text-decoration:underline;text-underline-offset:2px}
 .prose a:hover{color:var(--ci-crema-hover)}
 .prose h3{font-family:var(--ci-font-display);font-size:1.4rem;font-weight:400;color:var(--ci-coffee);margin:1.5rem 0 .5rem}
-.afd{font-size:.78rem;color:var(--ci-mute);font-style:italic;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--ci-hairline)}
+.afd{font-size:.78rem;color:var(--ci-mute);margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--ci-hairline)}
 
 /* ---- people (team / partners) ---- */
 .people-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.5rem;margin-bottom:1rem}
@@ -523,7 +522,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .founding-banner strong{color:var(--ci-crema-light)}
 
 /* ---- flavor descriptor (info only, shown under selected flavor) ---- */
-.flavor-desc{display:none;font-size:.8rem;font-style:italic;color:var(--ci-espresso);margin-top:.5rem;max-width:46ch}
+.flavor-desc{display:none;font-size:.8rem;color:var(--ci-espresso);margin-top:.5rem;max-width:46ch}
 .flavor-desc.show{display:block}
 
 /* ---- account dropdown (signed-in) ---- */
@@ -550,7 +549,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .ship-bar-track{height:8px;background:var(--ci-hairline);border-radius:4px;margin-top:.5rem;overflow:hidden}
 .ship-bar-fill{height:100%;background:var(--ci-crema);transition:width 300ms}
 .cart-line{display:grid;grid-template-columns:64px 1fr auto;gap:1rem;align-items:center;background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);padding:1rem;margin-bottom:.75rem}
-.cart-line-img{width:64px;height:64px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.62rem;text-align:center;font-style:italic;color:var(--ci-crema-light);padding:.25rem}
+.cart-line-img{width:64px;height:64px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.62rem;text-align:center;color:var(--ci-crema-light);padding:.25rem}
 .cart-line h4{font-family:var(--ci-font-display);font-size:1.05rem;font-weight:400;color:var(--ci-coffee)}
 .qty-stepper{display:inline-flex;align-items:center;gap:.5rem;margin-top:.5rem}
 .qty-stepper button{width:24px;height:24px;border:1px solid var(--ci-hairline);background:var(--ci-cream);border-radius:4px;cursor:pointer;color:var(--ci-coffee);font-size:1rem;line-height:1;display:flex;align-items:center;justify-content:center;padding:0}
@@ -730,8 +729,12 @@ nav button.active{color:var(--ci-crema);font-weight:600}
    "can render", including by synthesis - never "has a real face". Verify with
    [...document.fonts] and look for an entry whose style is actually 'italic'.
 
-   Italic is still used freely on Inter (.afd, .cn, .pill.disabled, em, ...) -
-   that face is real. This block only corrects the display face and faux-bold.
+   Inter's italic is a real face, so italic on Inter is never synthesised. But as of
+   POC15 (2026-08-18) italic is no longer used for "secondary" at all: .afd, .cn,
+   .tour-bag, .pill.disabled, .flavor-desc and .cart-line-img all dropped it, because
+   Brand Standards §3.3 reserves italic for Italian ("italics carry meaning") and the
+   site was spending it 31 times on English. Italic now means exactly one thing: .ita.
+   This block only corrects the display face and faux-bold.
    ============================================================================ */
 
 /* Corrected AT SOURCE (2026-08-18): every rule setting var(--ci-font-display)
