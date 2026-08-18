@@ -1882,9 +1882,21 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   audience line filters for **passion, not capability** ("who love to grind their own beans") because
   discernment is an exclusive claim and affection is not. Two line-break fixes that only looking could
   catch. **(4) Email capture** added to the footer, where the storefront had none at all while the
-  coming-soon page it replaces has one. **Items 3 (3+1 shelf grid) and 6 (Open Graph) were explained,
-  not built**, at Steve's instruction. `theme check` at the documented baseline, 0 new. Commits
-  `ef0cf74`, `78e8fdc`.
+  coming-soon page it replaces has one. **Items 3 and 6 landed later the same day.**
+  (3) The four home shelf cards rendered **3 + 1** at desktop - `.card-grid` is
+  `auto-fill minmax(265px,1fr)`, which resolves to three columns at 1280, so Offerta sat alone with
+  two empty columns beside it directly under a heading reading "The four coffee shelves." Now a 2x2,
+  scoped to `#page-home` because the class is shared with Shop and the shelf pages, where a
+  13-product grid genuinely does want three columns. (6) **Open Graph**: the theme had **zero** tags
+  while the coming-soon page it replaces has nine, so every share of the real storefront rendered as
+  a bare grey link while the placeholder rendered a proper card - and `ci-og-image.png` was already
+  sitting unreferenced in `assets/` at a textbook 1200x630. Now 13 tags, copy aligned to the new
+  hero. Two things worth keeping: `asset_url` returns a **protocol-relative** `//host/...` path that
+  some scrapers will not follow, so the URL is forced absolute behind a conditional; and it was
+  verified by **fetching the image (HTTP 200)**, not just by reading the tag back, because a tag
+  pointing at a 404 renders the same bare link as no tag at all.
+  `theme check` at the documented baseline, 0 new. Commits `ef0cf74`, `78e8fdc`, `49a0ceb`,
+  `1c27c88`.
   **Process failure worth keeping:** POC14 files were pushed piecemeal onto the theme named "Crema
   Italia POC13 Preview" as a live verification target, which **violated the draft-theme naming rule**
   at the top of this file. Steve caught it. Remedied by renaming the theme to "Crema Italia POC14
