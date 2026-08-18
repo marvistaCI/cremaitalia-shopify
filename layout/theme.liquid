@@ -19,6 +19,44 @@
     <meta name="description" content="{{ page_description | escape }}">
   {%- endif -%}
 
+  {%- comment -%}
+    Open Graph / Twitter card, added 2026-08-18. This theme had NONE, while the
+    coming-soon page it replaces (live-theme/layout/theme.liquid) has nine - so every
+    share of the real storefront rendered as a bare grey link while the placeholder
+    rendered a proper card. For a brand that grows by someone texting a friend a link
+    to a roaster, that is the cheapest conversion asset on the list, and the image was
+    already sitting unreferenced in assets/ at a textbook 1200x630.
+
+    Copy is aligned to the current hero (freshness first). Absolute https URL is forced
+    on the image: asset_url returns a protocol-relative //cdn.shopify.com path, and some
+    scrapers will not follow that.
+
+    PROD: this is a single-document SPA, so one static card covers every route. On the
+    real storefront these become per-template - product pages want the product title,
+    its own photograph, og:type=product, and price/availability - plus Product and
+    Organization JSON-LD, which this theme still has none of.
+  {%- endcomment -%}
+  {%- assign ci_og_title = 'Crema Italia - Freshly roasted in Italy' -%}
+  {%- assign ci_og_desc = 'Whole-bean coffee from a small, named group of artisan Italian roasters. Air-freighted so it reaches you weeks from the roast date, not months.' -%}
+  {%- comment -%} asset_url returns a protocol-relative //host/... path; OG scrapers need an
+      absolute one. The conditional keeps this correct if Shopify ever returns absolute. {%- endcomment -%}
+  {%- assign ci_asset = 'ci-og-image.png' | asset_url -%}
+  {%- if ci_asset contains 'http' -%}{%- assign ci_og_image = ci_asset -%}
+  {%- else -%}{%- assign ci_og_image = ci_asset | prepend: 'https:' -%}{%- endif -%}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:title" content="{{ ci_og_title }}">
+  <meta property="og:description" content="{{ ci_og_desc }}">
+  <meta property="og:image" content="{{ ci_og_image }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Crema Italia - Italian artisan coffee">
+  <meta property="og:url" content="{{ shop.url }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ ci_og_title }}">
+  <meta name="twitter:description" content="{{ ci_og_desc }}">
+  <meta name="twitter:image" content="{{ ci_og_image }}">
+
   <link rel="icon" type="image/png" sizes="32x32" href="{{ 'ci-favicon-32.png' | asset_url }}">
   <link rel="icon" type="image/png" sizes="16x16" href="{{ 'ci-favicon-16.png' | asset_url }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ 'ci-apple-touch-icon.png' | asset_url }}">

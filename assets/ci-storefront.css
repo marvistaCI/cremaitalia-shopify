@@ -803,3 +803,17 @@ strong, b { font-weight: 600; }
 .ita { font-style: italic; }
 h1 .ita, h2 .ita, h3 .ita, h4 .ita,
 .hero .subhead .ita, .shop-menu .ita { font-style: normal; }
+
+/* ---------- home shelves: 2x2, not 3 + 1 (item 3, 2026-08-18) ----------
+   .card-grid is auto-fill minmax(265px,1fr), which resolves to THREE columns at
+   1280 - so the four shelf cards rendered 3 + 1, leaving Offerta alone on its own
+   row with two empty columns beside it, directly under a heading reading "The four
+   coffee shelves." It visually demoted Offerta and made a designed set look
+   accidental.
+   Scoped to #page-home deliberately: .card-grid is shared with Shop, the four shelf
+   pages and Bottega, where a 13-product grid genuinely does want 3 columns. Four
+   peers read better as a 2x2 than as 4-across (cramped at ~250px each).
+   Home has exactly one .card-grid (the shelf cards), so this cannot catch anything
+   else - but keep the #page-home scope if that ever changes. */
+#page-home .card-grid{grid-template-columns:repeat(2,1fr)}
+@media (max-width:640px){#page-home .card-grid{grid-template-columns:1fr}}

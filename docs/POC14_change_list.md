@@ -143,7 +143,7 @@ use.**
 
 ---
 
-## 3. Home shelf grid renders 3 + 1 — NOT BUILT (explained only)
+## 3. Home shelf grid rendered 3 + 1 — DONE
 
 Measured at 1280: `grid-template-columns: 344px 344px 344px` with four shelf cards,
 so Offerta sits alone on its own row with two empty columns beside it — directly
@@ -156,6 +156,11 @@ needs a **scoped override on the home shelves grid only**, sitting beside the
 existing `#page-home` rules: `#page-home .card-grid{grid-template-columns:repeat(2,1fr)}`
 with a single column below the existing 640px breakpoint. Four peers read better as
 a 2×2 than as 4-across (cramped at 250px each) or 3+1.
+
+**Built as described.** Measured after: `526px 526px`, two rows of two at desktop;
+single column at 375 (343px cards, no overflow). Home has exactly one `.card-grid`,
+so the scope cannot catch anything else today, but the `#page-home` prefix stays in
+case that changes.
 
 ---
 
@@ -273,7 +278,7 @@ the ESP's embed. **Email platform is still an open launch-gating decision**
 
 ---
 
-## 6. Open Graph / Twitter tags absent — NOT BUILT (explained only)
+## 6. Open Graph / Twitter tags absent — DONE
 
 When a link is pasted into iMessage, WhatsApp, Slack, Facebook or LinkedIn, that app
 fetches the page and reads hidden `<meta>` tags — the **Open Graph** tags — to decide
@@ -287,11 +292,24 @@ layout/password.liquid                 5  og tags
 assets/ci-og-image.png                 present, 66 KB, referenced by nothing
 ```
 
-**Where the fix goes.** Port the nine tags from `live-theme/layout/theme.liquid` into
-`layout/theme.liquid` and update the copy to storefront language (the live ones say
-"Opening late Summer/Fall 2026"). The image asset already exists. Roughly twenty
-minutes, and it matters for a brand whose growth is someone texting a friend a link
-to a roaster.
+**Built.** 13 tags (the live theme's nine, plus `og:site_name`, `og:image:width`,
+`og:image:height`, `og:image:alt`). Copy aligned to the new hero rather than copied
+from the coming-soon page, which still says "Opening late Summer/Fall 2026". The image
+was already in `assets/` at a textbook 1200x630.
+
+**One trap worth knowing:** `asset_url` returns a **protocol-relative** `//host/...`
+path, and some scrapers will not follow that, so the URL is forced absolute. The guard
+is written as a conditional rather than a string trick so it stays correct if Shopify
+ever returns an absolute URL.
+
+**Verified by fetching the image, not just by reading the tag** - `og:image` returns
+HTTP 200. A present tag pointing at a 404 renders exactly the same bare grey link the
+missing tags did.
+
+**PROD:** this is a single-document SPA, so one static card covers every route. On the
+real storefront these become per-template - a product page wants its own title, its own
+photograph, `og:type=product`, price and availability - alongside the Product and
+Organization JSON-LD this theme still lacks.
 
 ---
 
