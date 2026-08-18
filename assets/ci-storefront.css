@@ -785,3 +785,21 @@ strong, b { font-weight: 600; }
    "Exactly" and leaving a full stop mid-line. Line count is unchanged (2 desktop /
    3 mobile) - this only moves where the break falls. (2026-08-18) */
 .hero h1{text-wrap:pretty}
+
+/* ---------- .ita — the Italian-language cue (implemented 2026-08-18) ----------
+   19 spans in the markup carried class="ita" and, outside the Shop dropdown, it
+   styled NOTHING — there was never a bare .ita rule. So the brand's one sanctioned
+   use of italic ("italics are reserved for Italian-language", section 6) was not
+   actually rendered anywhere in body copy.
+
+   It is implementable now and was not before: until the Inter italic axis was loaded
+   this same rule would have produced a browser-synthesised oblique, i.e. faking the
+   very thing the Standard asks for.
+
+   Headings stay ROMAN by deliberate exception. Marcellus has no italic face, so the
+   Brand Standards v2.0 rebuild already moved the EN/IT cue off display type: "Marcellus
+   is roman-only, so the EN/IT cue is now the eyebrow label, not italic display type."
+   .shop-menu .ita is excluded for the same reason - it is set in the display face. */
+.ita { font-style: italic; }
+h1 .ita, h2 .ita, h3 .ita, h4 .ita,
+.hero .subhead .ita, .shop-menu .ita { font-style: normal; }

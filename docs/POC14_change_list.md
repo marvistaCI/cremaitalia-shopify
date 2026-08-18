@@ -295,6 +295,56 @@ to a roaster.
 
 ---
 
+## Verification pass — 2026-08-18
+
+Ran after items 1/2/4/5, fence agreed with Steve: **verify today's changes, do not
+fresh-audit.** All 20 pages swept with each one activated (hidden `.page` elements
+report empty text — the POC12 trap), dynamic pages populated first.
+
+| Check | Result |
+|---|---|
+| Synthesised type, all 20 pages | **0** |
+| Keyboard reachability, all 20 pages | **0 gaps** |
+| Horizontal overflow | none |
+| Collapsed or overflowing headings | none |
+| `theme check` | 17 offenses / 2 errors — baseline, **0 new** |
+
+**Two things the sweep caught that the first pass missed.**
+
+1. **The regions map was still faking bold.** Its inline SVG `<style>` sets
+   `.region-label` and `.legend-title` to `font-weight:700`, which the site-wide CSS
+   transform could not reach, and Inter loads only 400/500/600 — so all 10 map labels
+   were synthesised. Now 600. **COWORK FOLLOW-UP:** the OneDrive source
+   `Region_Map_v2.svg` still says 700 and should be brought to 600 so the source and
+   this inlined copy do not drift.
+2. **`.ita` styled nothing.** 19 spans carry `class="ita"` and there was never a bare
+   `.ita` rule — only `.shop-menu .ita`. So the brand's one sanctioned italic
+   ("italics are reserved for Italian-language", §6) was not rendered anywhere in body
+   copy. Not a regression from this batch; a pre-existing gap that today's font-load
+   fix makes fixable, because before it the same rule would have produced a
+   synthesised oblique. Implemented with headings excluded, per Brand Standards v2.0:
+   *"Marcellus is roman-only, so the EN/IT cue is now the eyebrow label, not italic
+   display type."* Verified: `bicerin` in prose is real Inter italic; `(Lombardia)` in
+   an `h3` stays roman.
+
+**Visual walkthrough** (product detail, quiz modal, About team, regions map). The
+material risk was that headings went 600 → 400, i.e. lighter. **No legibility
+regression found.** Marcellus 400 reads better than the faux-bold did — more refined,
+appropriate presence at every size including the 1rem person-card names, which were
+the highest-risk case. The quiz subtitle losing its fake italic is a clear improvement.
+
+**One taste call for Steve, not a defect:** the quiz option marks (the L / M / D / ?
+circles) lost both italic and weight and are now noticeably more delicate. Legible,
+and arguably more on-brand for a house style that prefers fewer heavy elements, but it
+is a visible change and worth a look.
+
+**New findings, deliberately NOT chased** (outside the verification fence, logged for
+the next audit): product-detail dates render ISO (`2026-08-07`), which reads technical
+to a US consumer where `Aug 7` would not; and the team row mixes two real headshots
+with a brown placeholder tile, which is the known photography gap made visible.
+
+---
+
 ## Still open from the POC13 audit (not in this batch)
 
 - **No structured data** anywhere — no `Organization`, `Product` or `BreadcrumbList`
