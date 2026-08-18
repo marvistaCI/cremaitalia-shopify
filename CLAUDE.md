@@ -102,6 +102,34 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > the lane rule above) — if Cowork suspects a connectivity problem in this repo, it
 > should flag it to Steve/Code rather than attempt its own fix. See `DECISIONS_LOG.md`
 > 2026-07-04.
+>
+> **The browser screenshot tool is NOT broken — don't screenshot the `preview_start` tab
+> (solved 2026-08-18).** Six §9 entries below (POC5, POC6, POC7, POC9, POC12, POC13) record the
+> screenshot tool as "wedged" and fall back to expensive DOM measurement. **It was never wedged.**
+> **THE FIX — two calls:**
+> ```
+> mcp__Claude_Browser__tabs_create              -> returns e.g. tab-1
+> mcp__Claude_Browser__navigate  {tabId:"tab-1", url:"<preview url>"}
+> mcp__Claude_Browser__computer  {tabId:"tab-1", action:"screenshot"}   # works
+> ```
+> The tab that `preview_start` creates (`tabId: "seed"`) **never composites frames** — it stays in
+> `document.visibilityState === "hidden"` forever, so a screenshot waits 5s for a frame that never
+> arrives and times out. A tab made with `tabs_create` + `navigate` composites normally and
+> screenshots fine. Nothing needs restarting and **Steve does not need to do anything** — this is
+> entirely agent-side. Also call `resize_window` with an explicit `{tabId}`, or the new tab keeps
+> its own default size.
+> **Two things that made this durable.** (1) The error text — "the Browser pane is not displayed" —
+> reads as a user-side problem and sent at least one session (this one, initially) down the wrong
+> path of asking Steve to open a panel; that does not fix it. (2) JS execution is never gated on
+> visibility, only throttled, so `javascript_tool` kept returning correct DOM geometry on the dead
+> `seed` tab, which made the measurement workaround look like a sound answer rather than a symptom.
+> **Cost of the error:** POC13 re-rendered `object-fit:cover` crops offline in Pillow to judge
+> photography it could simply have looked at. DOM geometry is authoritative for position, size and
+> keyboard reachability but **cannot** judge crop, colour, composition, or synthesised type — and
+> the first visual pass (2026-08-18) found brand-critical defects in all four categories that six
+> DOM-only passes had missed. **Look at the page; do not only measure it.** The §9 entries are left
+> as written (historical narrative, per `crema-poc-deploy` Step 6.4); this callout is the
+> present-tense truth.
 
 ---
 
@@ -1776,6 +1804,49 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   re-verified against live immediately before the delete; its batch is commit `dd0cbf1` on GitHub
   and redeployable. POC11, POC12 and the live theme untouched. Preview:
   `https://crema-italia.myshopify.com?preview_theme_id=151800610985`
+
+- 2026-08-18 — **"The screenshot tool is wedged" was a six-session misdiagnosis; corrected.**
+  Steve asked the obvious question nobody had asked — *is it wedged, or am I failing to open
+  something?* — and he was right. The tool is fine. The Browser pane was not displayed, so the page
+  sat in `document.visibilityState === "hidden"`, and a hidden page does not composite frames, so
+  the screenshot waited 5s for a frame that never came. Proven live: a `javascript_tool` call
+  returned `{alive:true, visibilityState:"hidden", hidden:true, hasFocus:false}` against POC13 while
+  the screenshot timed out in the same session. **The error message had said so all along** — "the
+  Browser pane is not displayed, so the page is not compositing frames, display the pane and retry"
+  — and six sessions read past it (POC5, POC6, POC7, POC9, POC12, POC13). **Why it was so
+  convincing:** JS execution is never gated on visibility, only throttled, so the DOM-measurement
+  fallback kept returning correct geometry and looked like the right answer rather than a symptom.
+  **What it cost:** POC13 re-rendered `object-fit:cover` crops offline in Pillow to judge photography
+  it could have simply looked at; DOM geometry is authoritative for position, size and keyboard
+  reachability but cannot judge crop, colour, or composition — precisely the remaining work.
+  **Same failure shape as the two incidents already logged here** (the "truncated files" alarm that
+  was a stale `.git/index.lock`, and the stale "not yet deployed" line that produced a duplicate
+  theme): an early wrong diagnosis was written down and inherited instead of re-reading live output.
+  The repo's own rule — live output beats the document — evidently applies to tooling too, not just
+  deployment state. **Fixed:** a present-tense callout at the top of this file. The six
+  §9 entries were **left as written** — historical narrative recording what each session believed,
+  per `crema-poc-deploy` Step 6.4's judge-by-tense rule.
+  **[Corrected later the same day — the remedy above was wrong.]** Displaying the pane does NOT fix
+  it; the first fix written into this file told Steve to open a panel and it changed nothing. The
+  actual cause is narrower: the tab `preview_start` creates (`tabId: "seed"`) never composites at
+  all. Creating a tab with `tabs_create` + `navigate` and passing that `tabId` to the screenshot
+  call works immediately. **Steve never needed to do anything — it was agent-side the whole time.**
+  See the corrected callout at the top of this file for the two-call recipe. Logged this way rather
+  than silently rewritten because the wrong intermediate diagnosis is itself the lesson: the error
+  string blames the display, and believing it cost another round trip.
+  **Also found while fixing this (separate issue, Steve spotted it):** `docs/POC7_kickoff.md` was
+  edited in the same pass on the assumption it was a reusable kickoff template. It is not — it is a
+  **one-shot prompt written 2026-07-13 to start the POC7 session**, with a single commit
+  (`8fa0e25`), never updated, never repeated for POC8-POC13, and referenced by nothing. The edit was
+  reverted. Worse, it carries a present-tense `CURRENT STATE:` block asserting POC6 is the live
+  deployment and naming theme **`151440130217` twice - a theme deleted 2026-08-06**. That is exactly
+  the drift class §10 exists to prevent, and `crema-poc-deploy` **Step 6.4** (after any deletion,
+  grep the repo for theme ids and judge each hit by tense) should have caught it in the POC13 prune
+  and did not - the sweep evidently only covered `CLAUDE.md` and the change lists. **Open decision
+  for Steve:** delete the file (git keeps it at `8fa0e25`), or convert it to a state-free
+  `docs/poc_kickoff_TEMPLATE.md` that says "run `shopify theme list` + `git log origin/main..HEAD`"
+  instead of freezing a snapshot. The kickoff-prompt habit is good; freezing deployment state into
+  it is the bug.
 
 ---
 
