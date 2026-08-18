@@ -180,11 +180,22 @@
   //
   // Precision deliberately matches the Standard's own worked examples (250 g -> 8.82 oz,
   // 1 kg -> 2.20 lb) so the site and the document can never be read as disagreeing.
-  var OZ_PER_G = 0.035274, LB_PER_KG = 2.2046226;
+  //
+  // THE 16 oz RULE (Steve, 2026-08-18): once a converted weight reaches 16 oz, state it in
+  // POUNDS instead. 500 g was rendering as "17.64 oz", which is a number no American holds
+  // in their head - past a pound, a US shopper thinks in pounds, and 1.10 lb is instantly
+  // legible where 17.64 oz has to be divided first. This is the whole point of carrying a
+  // customary unit at all: if the reader still has to do arithmetic, the conversion failed.
+  //
+  // Implemented on the CONVERTED value, not the metric one, so the threshold means exactly
+  // what it says and holds for any future bag size. Everything is normalised to grams first
+  // so a single branch covers both g and kg inputs.
+  var OZ_PER_G = 0.035274, LB_PER_KG = 2.2046226, OZ_PER_LB = 16;
   function convertWeight(n, unit) {
-    if (unit === 'kg') return (n * LB_PER_KG).toFixed(2) + ' lb';
-    if (n >= 1000) return ((n / 1000) * LB_PER_KG).toFixed(2) + ' lb';
-    return (n * OZ_PER_G).toFixed(2) + ' oz';
+    var grams = unit === 'kg' ? n * 1000 : n;
+    var oz = grams * OZ_PER_G;
+    if (oz >= OZ_PER_LB) return ((grams / 1000) * LB_PER_KG).toFixed(2) + ' lb';
+    return oz.toFixed(2) + ' oz';
   }
   // "250g" -> "250 g". Metric only, correctly spaced.
   //
@@ -197,7 +208,7 @@
   // The reasoning, worth keeping because it is not the obvious one: the conversion's job
   // is to give an American a SENSE OF SCALE, not to decorate every weight token. Once a
   // reader is anchored at 250 g = 8.82 oz they know what 500 g and 1 kg mean. Printing
-  // "250 g (8.82 oz) - 500 g (17.64 oz) - 1 kg (2.20 lb)" spends three conversions to
+  // "250 g (8.82 oz) - 500 g (1.10 lb) - 1 kg (2.20 lb)" spends three conversions to
   // deliver one fact, and it pushed the phone size pills onto two rows.
   function sizeShort(sz) {
     return String(sz == null ? '' : sz).replace(/(\d+(?:\.\d+)?)\s*(kg|g)\b/g, '$1 $2');

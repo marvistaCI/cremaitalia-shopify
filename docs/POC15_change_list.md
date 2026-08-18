@@ -77,6 +77,31 @@ deliver one fact.
 Same anchor principle applied to static copy: *"Bag sizes 250 g (8.82 oz), 500 g, and 1 kg."*
 and one conversion per page for the Tour's 100 g, not three.
 
+### The 16 oz rule (Steve, added after the first deploy)
+
+500 g was rendering as **17.64 oz**. Steve's call: past a pound, an American thinks in pounds,
+and `17.64 oz` is a number nobody holds in their head without dividing first. So once a converted
+weight reaches **16 oz, state it in pounds**.
+
+| Size | Before | After |
+|---|---|---|
+| 100 g | 3.53 oz | 3.53 oz |
+| 250 g | 8.82 oz | 8.82 oz |
+| 500 g | **17.64 oz** | **1.10 lb** |
+| 1 kg | 2.20 lb | 2.20 lb |
+
+This is the point of carrying a customary unit at all: if the reader still has to do arithmetic,
+the conversion has failed. It is a good catch against the letter of Brand Standards §9, whose
+worked examples (`8.82 oz`, `2.20 lb`) happen to skip the range where the two units meet.
+
+Implemented on the **converted** value rather than the metric one, so the threshold means exactly
+what it says and holds for any future bag size; inputs are normalised to grams first so one branch
+covers both `g` and `kg`. The boundary is clean: 453 g gives `15.98 oz`, 454 g gives `1.00 lb`.
+
+Precision stays at two decimals, matching the Standard's own examples and the oz values beside it.
+Steve wrote both "x.x" and "1.xx" describing the shape, so this is the reading that keeps the site
+internally consistent - say so if one decimal is wanted instead.
+
 ### Implementation
 
 One helper (`convertWeight` / `sizeShort` / `sizeDual`) at the **render layer**. The catalog
