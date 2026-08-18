@@ -1854,10 +1854,45 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 
 ---
 
+- 2026-08-18 — **POC14 batch (items 1/2/4/5) built and verified BY LOOKING — the first batch in the
+  project's history to be visually reviewed.** Ledger: `docs/POC14_change_list.md`. Grew out of a
+  close-scrutiny review of deployed POC13 (artifact published to Steve), whose central finding was
+  that the site **asked** why the consumer was there and never **answered**. **(1) Keyboard access:**
+  0 of 13 product cards and 0 of 10 quiz options were reachable, so the hero CTA could be opened by a
+  keyboard user and never completed — 49% of all interactive elements were `div onclick`. One
+  delegated handler (`markKeyboardActivable` + a keydown listener) now stamps tabindex/role and turns
+  Enter/Space into a click, re-running after catalog renders; disabled region pills deliberately
+  excluded; visible gold focus ring added. Verified by firing real Enter keys: 13/13 and 10/10, both
+  act. **(2) Synthesised type — 216 usages → 0.** No real italic face was loaded ANYWHERE, and
+  Marcellus 600 / Inter 700 do not exist, so both hero lines, every Marcellus heading, and all 61
+  `.ita` spans (the brand's one sanctioned italic) were browser-drawn fakes. Fixed by loading Inter's
+  real italic axis and correcting all 31 display-font rules **at source** (22 faux-bold, 12
+  faux-italic) rather than via overrides. **The trap that hid it for six weeks:**
+  `document.fonts.check()` returns `true` for faces that do not exist, because it reports "can
+  render", including by synthesis — use `[...document.fonts]`. **The method that caught it:** re-run
+  the audit against the deployed theme and require zero; enumeration alone got only 216 → 38, and the
+  last straggler inherited Marcellus from a parent so a source transform could not see it. **(3) Hero
+  now answers** — Steve's catch that "Italian coffee" is a roasting STYLE, not a date, so freshness
+  leads: *"Freshly roasted in Italy. Exactly as the roaster sealed it."* Four copy drafts; the
+  audience line filters for **passion, not capability** ("who love to grind their own beans") because
+  discernment is an exclusive claim and affection is not. Two line-break fixes that only looking could
+  catch. **(4) Email capture** added to the footer, where the storefront had none at all while the
+  coming-soon page it replaces has one. **Items 3 (3+1 shelf grid) and 6 (Open Graph) were explained,
+  not built**, at Steve's instruction. `theme check` at the documented baseline, 0 new. Commits
+  `ef0cf74`, `78e8fdc`.
+  **Process failure worth keeping:** POC14 files were pushed piecemeal onto the theme named "Crema
+  Italia POC13 Preview" as a live verification target, which **violated the draft-theme naming rule**
+  at the top of this file. Steve caught it. Remedied by renaming the theme to "Crema Italia POC14
+  Preview" — the remedy that rule prescribes — and §10 was corrected to state plainly that the theme
+  is a working preview, NOT a pull-and-diff-proved deploy. The lesson is narrow and worth stating: a
+  verification push is still a push, and the naming rule binds it exactly as it binds a deploy.
+
+---
+
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC13 (deployed + pull-and-diff proved 2026-08-06; `theme list` re-verified
-live 2026-08-07, unchanged) — read this first when resuming.**
+**▶ CURRENT STATE — POC14 IN PROGRESS (theme renamed + `theme list` verified live 2026-08-18)
+— read this first when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
 > `docs/POC*_change_list.md` banners, and any "NEXT: deploy…" line are **historical narrative** —
@@ -1881,20 +1916,32 @@ live 2026-08-07, unchanged) — read this first when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC13 Preview" | `151800610985` |
+| **Newest POC preview** | "Crema Italia POC14 Preview" | `151800610985` |
 | Prior preview | "Crema Italia POC12 Preview" | `151798841513` |
 | Prior preview | "Crema Italia POC11 Preview" | `151797727401` |
 
-**POC13 is deployed** and is the only POC13 theme (all **39** files byte-match the repo — verified by
-pull-and-diff 2026-08-06, both sides 39 files, zero content mismatches, nothing present on only one
-side; `theme list` was run **before** the push per the rule above, confirming no name collision).
-The file count moved 36 → 39 with the three temporary landing-page photos (`ci-temp-lp1..3.jpg`).
+**POC14 is IN PROGRESS on theme `151800610985`, and that theme is NOT a proven deploy.** Read this
+carefully, because it is an unusual state:
+- Theme `151800610985` was "Crema Italia POC13 Preview" until 2026-08-18. During the POC14 build it
+  was used as a **live verification target** and had POC14 files pushed onto it piecemeal
+  (`--only` pushes of `ci-storefront.css`, `ci-storefront.js`, `templates/index.liquid`,
+  `layout/theme.liquid`, `snippets/ci-store-footer.liquid`). That **violated the draft-theme naming
+  rule** at the top of this file — a new batch went into an existing theme and the name was not
+  changed at the same time. Steve caught the discrepancy. The theme was **renamed to "Crema Italia
+  POC14 Preview"** on 2026-08-18 so its name matches what it actually holds, which is the remedy
+  that rule prescribes. Verified against a live `theme list` immediately after.
+- **It has NOT been through the `crema-poc-deploy` ritual and has NOT been pull-and-diff proved.**
+  Treat it as a working preview, not a deployed batch. Run the full skill when POC14 is finished.
+- **POC13's batch no longer exists on any theme.** It is commit `baff5e9` on GitHub and is
+  redeployable from git at any time; Steve confirmed 2026-08-18 he is not concerned about the
+  previews reading 11 / 12 / 14.
+
 POC11 and POC12 previews and the live theme are untouched. Preview:
 `https://crema-italia.myshopify.com?preview_theme_id=151800610985`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
 2026-07-06). To refresh: `shopify theme push --theme 151800610985`.
 
-**Only POC11, POC12 and POC13 previews now exist** — the three-newest cap Steve set on 2026-08-06,
+**Only POC11, POC12 and POC14 previews now exist** — the three-newest cap Steve set on 2026-08-06,
 now enforced as `crema-poc-deploy` Step 5. **POC10 (`151624024233`) was deleted 2026-08-06** on
 Steve's explicit go, after re-verifying the id against a live `theme list --json` immediately before
 the delete; its batch is commit `dd0cbf1` on GitHub and can be redeployed from git if ever wanted.
