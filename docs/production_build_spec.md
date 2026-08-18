@@ -218,3 +218,58 @@ polish item.
   happens in production. The existing **full-site mobile review** (CLAUDE.md §10 to-do) is
   the POC-side pass that will surface the specific breakpoints/components needing work
   (known: the header does not collapse to a hamburger on phones; hover dropdowns on touch).
+
+---
+
+## 9. Structured data (JSON-LD) — REQUIRED at launch (added 2026-08-18, POC15)
+
+**Where the POC got to.** `layout/theme.liquid` now emits an `Organization` + `WebSite`
+`@graph` server-side. That part is real and shippable as-is: it is what earns a logo and a
+knowledge panel beside a search result instead of a bare blue link.
+
+**What the POC deliberately does NOT emit, and why.** `Product` and `AggregateRating`.
+The POC is a single-document SPA — every page is a `div` toggled by `showPage()`, so there
+is exactly one URL. A `Product` node there would either name per-product URLs that 404 or
+describe a product a crawler never renders, and there are no reviews to aggregate. Fake or
+unreachable structured data is worse than none; it is the category of thing Google issues
+manual actions for. So it is specified here rather than mocked.
+
+### 9.1 Product — on the real `templates/product.liquid`
+
+One `Product` node per real product URL. Required fields, all from the live product object,
+none hand-written:
+
+- `name`, `description`, `image` (the real photography, absolute URLs), `sku`, `brand`
+  → the **roaster**, as an `Organization`, not Crema Italia. We import; they roast. Getting
+  this backwards misattributes every product on the site.
+- `offers` → `Offer` per variant (the bag sizes), with `price`, `priceCurrency: "USD"`,
+  `availability`, `url` (the variant URL), and `priceValidUntil`.
+- `additionalProperty` → the `crema_italia.*` metafields worth exposing: roast level,
+  origin, process, region.
+- `weight` → `QuantitativeValue`. Emit metric; Brand Standards §9's dual-unit rule governs
+  *displayed copy*, not machine-readable markup, and schema.org expects one unit value.
+
+### 9.2 AggregateRating — the route to stars, gated on real reviews
+
+`aggregateRating` attaches to the `Product` node and is what puts stars in search results.
+It must **never** be emitted before real reviews exist, and must never be emitted for a
+product with zero reviews. Whatever review mechanism is chosen (see the open social-proof
+decision) has to expose `ratingValue`, `reviewCount`, `bestRating`, `worstRating`.
+
+Note the design tension already recorded against the audit's recommendation: the audit
+argued for **reorder rate and palate-matched feedback** over a global five-star average,
+on the grounds that one person's best coffee is another's "meh". A global average is what
+schema.org's `aggregateRating` models, and it is the only shape Google renders as stars.
+If we go with palate-matched feedback as the *on-site* trust asset, that is a deliberate
+decision to forgo star rich-results, not an oversight — record it either way.
+
+### 9.3 Also worth emitting in production
+
+- `BreadcrumbList` on product and collection pages — meaningless in the SPA (no URLs),
+  genuinely useful once shelves are real collection URLs.
+- `FAQPage` on the FAQ page. The content already exists and is already in Q/A shape.
+- `ItemList` on shelf/collection pages.
+- Revisit `Organization.sameAs` (once social profiles exist), `contactPoint` (once info@
+  and support@ are created), and `WebSite.potentialAction` (only if real search ships).
+  All three are omitted today because claiming them would be false; the omission comments
+  are in `layout/theme.liquid`.

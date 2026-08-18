@@ -22,7 +22,7 @@
      Featured Tour removed from home; quiz is invitation-only (no auto-launch). -->
 <div class="page active" id="page-home">
   <div class="hero"><div class="hero-inner">
-    <img class="hero-logo" src="{{ 'ci-logo-knockout.png' | asset_url }}" alt="Crema Italia">
+    <img class="hero-logo" src="{{ 'ci-logo-knockout.png' | asset_url }}" alt="Crema Italia" width="700" height="490">
     {%- comment -%}
       Hero rewritten 2026-08-18. The old hero ASKED a question ("Do you love Espresso, Italy...?
       Or are you simply looking for delicious, fresh coffee beans?") and then answered it with a
@@ -109,9 +109,19 @@
     <div class="section-head" id="sec-story" style="margin-top:0"><p class="eyebrow">Our story</p><h2>A full confession.</h2></div>
     <div class="story-grid">
       <div class="prose" style="max-width:72ch">
-        <p>I&rsquo;ve fallen in love with Italy, and all things Italian - especially the caff&egrave; culture. On a recent trip to Tuscany a friend gave me a parting gift: a bag of decaf beans. I ground exactly 17g, pulled a shot (<span class="ita">un caff&egrave;</span>), and was blown away. So I looked for the roaster online to order more, and found they didn&rsquo;t ship.</p>
+        {%- comment -%}
+        UNITS: "17g" below is a DELIBERATE exception to Brand Standards §9 (both metric and
+        U.S. customary on every weight reference). Everywhere else on the site now carries
+        both. A brew dose is the one weight that is expressed in grams even in America -
+        every US espresso recipe reads "18 g in, 36 g out" - so "17 g (0.60 oz)" would read
+        as LESS fluent to the exact reader the hero names, "people who love to grind their
+        own beans". It is also a sentence in a personal story, not a product spec.
+        Same shape as the documented em-dash exception on the regions map. Do not "fix" it
+        in a units sweep; if Steve wants it converted, convert it here only.
+      {%- endcomment -%}
+      <p>I&rsquo;ve fallen in love with Italy, and all things Italian - especially the caff&egrave; culture. On a recent trip to Tuscany a friend gave me a parting gift: a bag of decaf beans. I ground exactly 17g, pulled a shot (<span class="ita">un caff&egrave;</span>), and was blown away. So I looked for the roaster online to order more, and found they didn&rsquo;t ship.</p>
         <p>That shot was the inspiration, and it is now our mission: to find Italian roasters like that one and bring their coffee here, unchanged. Perhaps you have already discovered Italy and want to rekindle a memory. Maybe you simply want high-quality beans to grind and savor. Either way, I hope you find it here.</p>
-        <img class="founder-signature" src="{{ 'ci-signature.png' | asset_url }}" alt="Steve Roberts" width="184">
+        <img class="founder-signature" src="{{ 'ci-signature.png' | asset_url }}" alt="Steve Roberts" width="184" height="78" loading="lazy" decoding="async">
         <p class="founder-sign">Steve Roberts, Founder</p>
       </div>
       <!-- PROD: photography slot 2 of 3. TEMPORARY IMAGE - ci-temp-lp2.jpg is a stand-in.
@@ -119,14 +129,23 @@
            mid-conversation, not looking at the lens. 4:5, ~1000x1250.
            The story is written in the first person; a face is what earns that register. -->
       <div class="photo-slot photo-portrait is-filled">
-        <img src="{{ 'ci-temp-lp2.jpg' | asset_url }}" alt="Steve Roberts at a cafe table" width="1200" height="1600">
+        <img src="{{ 'ci-temp-lp2.jpg' | asset_url }}" alt="Steve Roberts at a cafe table" width="1200" height="1600" loading="lazy" decoding="async">
       </div>
     </div>
 
     <!-- Our model -->
     <div class="section-head"><p class="eyebrow">Our model</p><h2>Curated, never aggregated.</h2></div>
     <div class="prose" style="max-width:72ch">
-      <p>We have carefully hand-selected a small number of roasters whose work represents Italian roasting at its finest. We do not roast, grind, blend, or alter the roasters&rsquo; packaging - instead, shortly after the roaster seals the whole-bean coffee into valve bags, we air-freight it directly into our US fulfillment facility, exactly as they produced and sealed it - fresh and ready to consume.</p>
+      {%- comment -%}
+        VOICE: this sentence used to read "We have carefully hand-selected a small number of
+        roasters whose work represents Italian roasting at its finest." That is the Brand
+        Standards' own named anti-pattern, inverted - §9 prints "We hand-pick the world's most
+        exclusive coffee artisans" as the example NOT to write, and §6 of CLAUDE.md bans
+        "hand-picked" and "world-class" outright. The replacement below is the Standard's
+        approved construction, near-verbatim. Do not reintroduce a superlative here: the
+        restraint IS the positioning.
+      {%- endcomment -%}
+      <p>We choose a small number of roasters whose work represents the craft of Italian roasting at its best. We do not roast, grind, blend, or alter the roasters&rsquo; packaging - instead, shortly after the roaster seals the whole-bean coffee into valve bags, we air-freight it directly into our US fulfillment facility, exactly as they produced and sealed it - fresh and ready to grind. We sell whole bean only, never pre-ground.</p>
       <p>Meet the full group on our <button class="inline-link" onclick="showPage('roasters')">Roasters page</button>. Do you have a roaster you&rsquo;d like us to consider? <a class="inline-link" href="mailto:roasters@cremaitalia.com">Email me here.</a></p>
     </div>
     <!-- PROD: photography slot 3 of 3. TEMPORARY IMAGE - ci-temp-lp3.jpg is a stand-in.
@@ -139,7 +158,7 @@
          but it must not ship: it puts other companies' trademarks on our landing page, and
          Lavazza is mass-market, the opposite of the artisan sourcing this section claims. -->
     <div class="photo-slot photo-wide is-filled">
-      <img src="{{ 'ci-temp-lp3.jpg' | asset_url }}" alt="Sealed whole-bean coffee bags" width="1200" height="759">
+      <img src="{{ 'ci-temp-lp3.jpg' | asset_url }}" alt="Sealed whole-bean coffee bags" width="1200" height="759" loading="lazy" decoding="async">
     </div>
 
     <!-- Quiz offered BEFORE the catalog, not after the Sorpresa CTA (Steve, 2026-08-06). Placed
@@ -152,7 +171,7 @@
     <p class="prose" style="max-width:72ch">One shelf for subscriptions and larger formats (<span class="ita">Roccia</span>), one for discovery and gifting (<span class="ita">Sorpresa</span>), one for rare or seasonal roasts (<span class="ita">Selezione</span>), and one for last-chance lots at an honest markdown (<span class="ita">Offerta</span>).</p>
     <div class="card-grid">
       <div class="shelf-card" onclick="showPage('roccia')"><h3>Roccia</h3><div class="ss2">The Rock · Subscription (and one-time ordering)</div><p>Your preferred coffee, size, and cadence. Subscribe for free shipping and a 10% discount.</p></div>
-      <div class="shelf-card" onclick="showPage('sorpresa')"><h3>Sorpresa</h3><div class="ss2">The Surprise · Curated Discovery</div><p>Our curated collection of roasted delights. On-demand 100g Tour bundles - the best way to find your favorite roast subscription.</p></div>
+      <div class="shelf-card" onclick="showPage('sorpresa')"><h3>Sorpresa</h3><div class="ss2">The Surprise · Curated Discovery</div><p>Our curated collection of roasted delights. On-demand 100 g (3.53 oz) Tour bundles - the best way to find your favorite roast subscription.</p></div>
       <div class="shelf-card" onclick="showPage('selezione')"><h3>Selezione</h3><div class="ss2">The Selection · Premium &amp; Seasonal</div><p>Roasters' premium and seasonal offerings. Micro-lots and limited imports. When a product sells out, it may not return - once it's gone, it's gone.</p></div>
       <div class="shelf-card" onclick="showPage('offerta')"><h3>Offerta</h3><div class="ss2">The Offer · Limited Time and Inventory</div><p>Limited-time offers, on sale while inventory lasts. Good coffee approaching its freshness window, priced honestly. Sold as-is.</p></div>
     </div>
@@ -212,11 +231,11 @@
     <p class="eyebrow" style="color:var(--ci-crema-light)">The Rock · Subscription (and one-time ordering)</p>
     <h1>Roccia</h1>
     <p class="sub">Our rock-solid subscription plan.</p>
-    <p>Choose any roast from any roaster and receive it on your cadence - every 4, 6, or 8 weeks. Bag sizes 250g, 500g, and 1kg. All subscriptions ship free within the U.S.</p>
+    <p>Choose any roast from any roaster and receive it on your cadence - every 4, 6, or 8 weeks. Bag sizes 250 g (8.82 oz), 500 g, and 1 kg. All subscriptions ship free within the U.S.</p>
     <div class="cn"><strong>Self-service, always.</strong> Pause anytime, skip anytime, swap roaster or bag up to 48 hours before the order locks, cancel anytime. No minimum commitment. No cancel fee.</div>
   </div></div>
   <main class="ci-main">
-    <div class="callout">Your subscriber benefit is <strong>10% off Roccia, Sorpresa, and Selezione</strong> - on your subscription shipments, and on anything else you order from those three shelves. <em>Offerta and Bottega are priced as-is and are never discounted.</em></div>
+    <div class="callout">Your subscriber benefit is <strong>10% off Roccia, Sorpresa, and Selezione</strong> - on your subscription shipments, and on anything else you order from those three shelves. <strong>Offerta and Bottega are priced as-is and are never discounted.</strong></div>
     <div class="founding-banner"><strong>Founding Members</strong> - the first 222 subscribers receive 12% instead of 10%. Founding Membership is limited to 222 and does not reopen.</div>
     <div class="section-head"><p class="eyebrow">Available now · Toscana</p><h2>Roccia coffees</h2></div>
     <div class="card-grid" id="grid-roccia"></div>
@@ -231,21 +250,21 @@
     <p class="eyebrow" style="color:var(--ci-crema-light)">The Surprise · Curated Discovery</p>
     <h1>Sorpresa</h1>
     <p class="sub">Our curated collection of roasted delights.</p>
-    <p>Named Tour bundles, our choice - three different 100g bags assembled on-demand so every bag is fresh when it reaches you. Each Tour includes a printed tasting card naming each roaster in the tour and their tasting notes. The aim of a Tour is simple: to lead you to the roaster you will want on a Roccia subscription. Tour bundles make excellent gifts for your coffee-loving friends.</p>
+    <p>Named Tour bundles, our choice - three different 100 g (3.53 oz) bags assembled on-demand so every bag is fresh when it reaches you. Each Tour includes a printed tasting card naming each roaster in the tour and their tasting notes. The aim of a Tour is simple: to lead you to the roaster you will want on a Roccia subscription. Tour bundles make excellent gifts for your coffee-loving friends.</p>
   </div></div>
   <main class="ci-main">
     <div class="tour-hero">
       <div class="tour-hero-text">
         <p class="eyebrow" style="color:var(--ci-crema-light)">Published now</p>
         <h2>Tour d'Italia 1</h2>
-        <p>A journey across regions: North, Central, South. Three 100g bags - Gardelli Ethiopia, La Sosta Guatemala, Fusari Colombia - boxed with a tasting card.</p>
-        <p style="margin-top:.5rem;color:var(--ci-crema-light);font-style:italic">$77.70 · assembled to order</p>
+        <p>A journey across regions: North, Central, South. Three 100 g bags - Gardelli Ethiopia, La Sosta Guatemala, Fusari Colombia - boxed with a tasting card.</p>
+        <p style="margin-top:.5rem;color:var(--ci-crema-light)">$77.70 · assembled to order</p>
         <button class="btn btn-primary" style="margin-top:1rem" onclick="openProduct('tour-ditalia-1')">View Tour</button>
       </div>
       <div class="tour-bags"><div class="tour-bag">Gardelli<br>Ethiopia</div><div class="tour-bag">La Sosta<br>Guatemala</div><div class="tour-bag">Fusari<br>Colombia</div></div>
     </div>
     <div class="callout"><strong>Why a Tour sometimes disappears.</strong> A Tour is only available while all three of its coffees are in stock and within our freshly roasted promise window. If we do have to swap a coffee after you order, we pair you with something close from the same roaster and say so in your confirmation.</div>
-    <div class="afd">The selection is ours, not the roaster's, because curating is our job. Every Tour is three 100g bags, never mixed sizes.</div>
+    <div class="afd">The selection is ours, not the roaster's, because curating is our job. Every Tour is three 100 g bags, never mixed sizes.</div>
   </main>
 </div>
 
@@ -489,10 +508,10 @@
     <div class="section-head" style="margin-top:0"><p class="eyebrow">Chi siamo</p><h2>Our company</h2></div>
     <div class="founder-grid" id="company-grid">
       <div class="founder-col">
-        <img class="founder-photo" src="{{ 'ci-company.jpg' | asset_url }}" alt="A view of Tuscany" width="200" height="200">
+        <img class="founder-photo" src="{{ 'ci-company.jpg' | asset_url }}" alt="A view of Tuscany" width="200" height="200" loading="lazy" decoding="async">
         <p class="person-role">Tuscany</p>
         <figure class="story-photo founder-stack">
-          <img src="{{ 'ci-company-door.jpg' | asset_url }}" alt="A weathered caff&egrave; door in Sarteano, Tuscany" width="640" height="901" loading="lazy">
+          <img src="{{ 'ci-company-door.jpg' | asset_url }}" alt="A weathered caff&egrave; door in Sarteano, Tuscany" width="440" height="619" loading="lazy" decoding="async">
           <figcaption>A <span class="ita">caff&egrave;</span> door - Sarteano.</figcaption>
         </figure>
       </div>
@@ -512,7 +531,7 @@
     <div class="section-head"><p class="eyebrow">Il nostro fondatore</p><h2>Our founder</h2></div>
     <div class="founder-grid">
       <div class="founder-col">
-        <img class="founder-photo" src="{{ 'ci-founder.jpg' | asset_url }}" alt="Steve Roberts, Founder" width="200" height="200">
+        <img class="founder-photo" src="{{ 'ci-founder.jpg' | asset_url }}" alt="Steve Roberts, Founder" width="200" height="200" loading="lazy" decoding="async">
         <h4 class="founder-name">Steve Roberts</h4>
         <p class="person-role">Founder</p>
       </div>
@@ -616,7 +635,7 @@
     <div class="section-head" style="margin-top:0"><p class="eyebrow">Questions</p><h2>FAQ</h2></div>
     <div class="prose" style="max-width:72ch">
       <h3>Do you sell ground coffee?</h3>
-      <p>No. Everything is whole bean, because that is what our roasters seal in valve bags at origin. Grind fresh just before you brew.</p>
+      <p>No. Everything is whole bean, because that is what our roasters seal in valve bags at origin. Grind fresh just before you brew. If you do not have a grinder, there is a burr grinder in the <button class="inline-link" onclick="openProduct('bottega-burr-grinder')">Bottega</button>.</p>
       <h3>Do you roast the coffee?</h3>
       <p>No. We import and curate; the roasters roast. We never roast, blend, or repackage.</p>
       <h3>How do subscriber discounts work?</h3>

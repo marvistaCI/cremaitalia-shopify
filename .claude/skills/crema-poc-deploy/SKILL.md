@@ -78,10 +78,16 @@ node -e "JSON.parse(require('fs').readFileSync('assets/ci-catalog.json','utf8'))
 shopify theme check
 ```
 
-**Baseline:** `theme check` currently reports **17 offenses / 2 errors / 15 warnings**. The 2 errors
-are pre-existing `ImgWidthAndHeight` on the hero logo and the founder signature. **0 new offenses**
-is the pass condition — not "0 errors." If the baseline has legitimately moved, update this number
-here in the same pass.
+**Baseline:** `theme check` currently reports **15 offenses / 0 errors / 15 warnings**. **0 new
+offenses** is the pass condition — not "0 errors." If the baseline has legitimately moved, update
+this number here in the same pass.
+
+*Baseline history, because the number moving is normally a red flag and this time was not:* it was
+**17 offenses / 2 errors** from POC10 through POC14. The 2 errors were `ImgWidthAndHeight` on the
+hero logo and the founder signature. POC15 (2026-08-18) added the missing `width`/`height`
+attributes to both while cutting image weight, which cleared them legitimately. Anything that moves
+this number should be explainable in one sentence like that one; if it is not, treat it as a
+regression rather than a new baseline.
 
 ## Step 3 — Push
 

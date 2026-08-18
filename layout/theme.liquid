@@ -57,6 +57,71 @@
   <meta name="twitter:description" content="{{ ci_og_desc }}">
   <meta name="twitter:image" content="{{ ci_og_image }}">
 
+  {%- comment -%}
+    STRUCTURED DATA (JSON-LD), added 2026-08-18 (POC15). The theme had NONE, which is why
+    the site cannot appear as anything but a plain blue link: no knowledge panel, no logo
+    beside the result, and no route to star ratings later.
+
+    WHAT IS DEMONSTRABLY TRUE TODAY is emitted. Everything else is deliberately absent,
+    and the absences matter as much as the presences:
+
+      - NO potentialAction / SearchAction. This site has no search - the header search
+        icon was removed in POC9 because it promised a field and only routed to Shop.
+        Declaring a search endpoint we do not have is a false claim to a crawler.
+      - NO sameAs. No social profiles exist yet. An invented sameAs is worse than none.
+      - NO contactPoint. info@ and support@ are not created yet (CLAUDE.md §10 open
+        items). We do not publish a channel nobody is reading.
+      - NO Product or AggregateRating. This is a single-document SPA: every "page" is a
+        div toggled by showPage(), so there is exactly one URL and no per-product address
+        for a Product node to point at. Emitting Product markup here would either name
+        URLs that 404 or describe a product a crawler never sees, and there are no reviews
+        to aggregate in any case. Product + AggregateRating belong on real per-product
+        templates in production - specified in docs/production_build_spec.md §9, which is
+        also the route to stars in search results.
+
+    Address is town/state/country only. We have not published a street address and do not
+    invent one here.
+  {%- endcomment -%}
+  {%- assign ci_logo_asset = 'ci-logo.png' | asset_url -%}
+  {%- if ci_logo_asset contains 'http' -%}{%- assign ci_logo_url = ci_logo_asset -%}
+  {%- else -%}{%- assign ci_logo_url = ci_logo_asset | prepend: 'https:' -%}{%- endif -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": {{ shop.url | append: '/#organization' | json }},
+        "name": {{ shop.name | json }},
+        "legalName": "Crema Italia, LLC",
+        "url": {{ shop.url | json }},
+        "description": {{ ci_og_desc | json }},
+        "logo": {
+          "@type": "ImageObject",
+          "url": {{ ci_logo_url | json }},
+          "width": 600,
+          "height": 181
+        },
+        "image": {{ ci_og_image | json }},
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Lutz",
+          "addressRegion": "FL",
+          "addressCountry": "US"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": {{ shop.url | append: '/#website' | json }},
+        "url": {{ shop.url | json }},
+        "name": {{ shop.name | json }},
+        "inLanguage": "en-US",
+        "publisher": { "@id": {{ shop.url | append: '/#organization' | json }} }
+      }
+    ]
+  }
+  </script>
+
   <link rel="icon" type="image/png" sizes="32x32" href="{{ 'ci-favicon-32.png' | asset_url }}">
   <link rel="icon" type="image/png" sizes="16x16" href="{{ 'ci-favicon-16.png' | asset_url }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ 'ci-apple-touch-icon.png' | asset_url }}">

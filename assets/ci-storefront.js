@@ -165,17 +165,62 @@
   function imgStyle(img) { return img && img.style ? ' style="' + img.style + '"' : ''; }
   function imgCls(img) { return img && img.cls ? img.cls : ''; }
 
+  // ---------- weight units (added 2026-08-18, POC15) ----------
+  // Brand Standards §9: "Always include both metric (250 g, 1 kg) and U.S. customary
+  // (8.82 oz, 2.20 lb) on weight references." That bullet carries NO scope qualifier,
+  // and the bullets either side of it DO scope themselves (bilingual parity is
+  // roaster-facing; the em-dash ban is customer-facing), so this one binds the
+  // storefront. Until now the theme was metric-only: zero occurrences of "oz" in the
+  // entire build, on a site selling to Americans against a 12 oz default bag.
+  //
+  // The catalog keeps its raw strings ("250g") because they are IDENTIFIERS, not copy:
+  // addToCart matches lines on `size`, and on the real store they become Shopify variant
+  // titles. Conversion is a DISPLAY concern and lives here alone. Change this one
+  // function and every weight on the site moves with it.
+  //
+  // Precision deliberately matches the Standard's own worked examples (250 g -> 8.82 oz,
+  // 1 kg -> 2.20 lb) so the site and the document can never be read as disagreeing.
+  var OZ_PER_G = 0.035274, LB_PER_KG = 2.2046226;
+  function convertWeight(n, unit) {
+    if (unit === 'kg') return (n * LB_PER_KG).toFixed(2) + ' lb';
+    if (n >= 1000) return ((n / 1000) * LB_PER_KG).toFixed(2) + ' lb';
+    return (n * OZ_PER_G).toFixed(2) + ' oz';
+  }
+  // "250g" -> "250 g". Metric only, correctly spaced.
+  //
+  // WHERE EACH FORM GOES (Steve's call, and it is the better read of the rule): the dual
+  // form belongs on the PRICE DENOMINATOR, because that is where the value math happens
+  // - "$38 for how much?" - and because selectSize() rewrites it live, so whichever size
+  // the buyer actually picks is the one they see converted. Size PILLS and the card's
+  // size list stay short.
+  //
+  // The reasoning, worth keeping because it is not the obvious one: the conversion's job
+  // is to give an American a SENSE OF SCALE, not to decorate every weight token. Once a
+  // reader is anchored at 250 g = 8.82 oz they know what 500 g and 1 kg mean. Printing
+  // "250 g (8.82 oz) - 500 g (17.64 oz) - 1 kg (2.20 lb)" spends three conversions to
+  // deliver one fact, and it pushed the phone size pills onto two rows.
+  function sizeShort(sz) {
+    return String(sz == null ? '' : sz).replace(/(\d+(?:\.\d+)?)\s*(kg|g)\b/g, '$1 $2');
+  }
+  // "250g" -> "250 g (8.82 oz)". The compliant form. Works on any string containing a
+  // weight token, so it also handles composite units like the Tour's "/3x100g".
+  function sizeDual(sz) {
+    return String(sz == null ? '' : sz).replace(/(\d+(?:\.\d+)?)\s*(kg|g)\b/g, function (m, n, u) {
+      return n + ' ' + u + ' (' + convertWeight(parseFloat(n), u) + ')';
+    });
+  }
   function priceFrom(p) { return p.sizes && p.sizes.length ? p.sizes[0].price : 0; }
   function sizesLine(p) {
     if (p.shelf === 'sorpresa') return 'One-time';
     if (p.shelf === 'selezione') return p.scarcity || 'One-time';
     if (p.shelf === 'offerta') return 'One-time only';
     if (p.shelf === 'bottega') return p.category || '';
-    return (p.sizes || []).map(function (s) { return s.size; }).join(' · ');
+    return (p.sizes || []).map(function (s) { return sizeShort(s.size); }).join(' · ');
   }
   function priceCell(p) {
     var first = p.sizes && p.sizes[0] ? p.sizes[0] : { price: 0, size: '' };
-    var unit = p.price_unit || ('/' + first.size);
+    var rawUnit = p.price_unit || ('/' + first.size);
+    var unit = sizeDual(rawUnit);
     if (p.shelf === 'offerta' && first.original) {
       return '<span class="po">' + money(first.original) + '</span>' + money(first.price);
     }
@@ -492,15 +537,15 @@
     // size selector
     var sizes = p.sizes || [];
     var sizePills = sizes.map(function (s, i) {
-      return '<span class="pill' + (i === 0 ? ' active' : '') + '" data-size="' + esc(s.size) + '" data-price="' + s.price + '" onclick="selectSize(this)">' + esc(s.size) + '</span>';
+      return '<span class="pill' + (i === 0 ? ' active' : '') + '" data-size="' + esc(s.size) + '" data-price="' + s.price + '" onclick="selectSize(this)">' + esc(sizeShort(s.size)) + '</span>';
     }).join('');
     var sizeSelector = sizes.length > 1
       ? '<div class="filter-group" style="margin:1rem 0"><div class="filter-label">Bag size</div><div class="filter-pills" id="pd-sizes">' + sizePills + '</div></div>'
-      : '<div class="filter-pills" id="pd-sizes" style="margin:1rem 0"><span class="pill active" data-size="' + esc(sizes[0].size) + '" data-price="' + sizes[0].price + '" style="cursor:default">' + esc(sizes[0].size) + '</span></div>';
+      : '<div class="filter-pills" id="pd-sizes" style="margin:1rem 0"><span class="pill active" data-size="' + esc(sizes[0].size) + '" data-price="' + sizes[0].price + '" style="cursor:default">' + esc(sizeShort(sizes[0].size)) + '</span></div>';
 
     var priceHtml = p.shelf === 'offerta' && sizes[0].original
       ? '<p class="pd-price" id="pd-price"><span class="po">' + money(sizes[0].original) + '</span>' + money(sizes[0].price) + '</p>'
-      : '<p class="pd-price" id="pd-price">' + (sizes.length > 1 ? 'From ' : '') + money(sizes[0].price) + ' <span class="cpu">/' + esc(sizes[0].size) + '</span></p>';
+      : '<p class="pd-price" id="pd-price">' + (sizes.length > 1 ? 'From ' : '') + money(sizes[0].price) + ' <span class="cpu">/' + esc(sizeDual(sizes[0].size)) + '</span></p>';
 
     // Roccia subscription toggle (binds to selling_plan_groups in production — LOOP)
     var subBlock = '';
@@ -531,6 +576,15 @@
       priceHtml +
       subBlock +
       '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="addToCartFromDetail(\'' + p.handle + '\')">Add to cart</button>' +
+      // GRINDER EXPECTATION (POC15). Every coffee product already said "whole bean only" in
+      // its `brewing` copy - but that copy renders in the "About this coffee" block BELOW the
+      // buy column, so a buyer could add to cart having never read it. The hero names an
+      // audience that grinds its own beans, and nothing on the buy path confirmed the coffee
+      // arrives unground. That is a returns problem, not a copy nicety. Stated here, at the
+      // decision point, and pointed at the burr grinder we actually stock rather than left
+      // for the buyer to solve.
+      '<p class="afd" style="border:none;margin-top:.75rem"><strong>Whole bean only.</strong> You will need a grinder. ' +
+      'If you do not have one, there is a <button class="inline-link" onclick="openProduct(\'bottega-burr-grinder\')">burr grinder in the Bottega</button>.</p>' +
       '</div></div>' + about;
   }
 
@@ -542,7 +596,7 @@
     el.classList.add('active');
     var price = el.getAttribute('data-price');
     var pd = $('pd-price');
-    if (pd) pd.innerHTML = money(price) + ' <span class="cpu">/' + esc(el.getAttribute('data-size')) + '</span>';
+    if (pd) pd.innerHTML = money(price) + ' <span class="cpu">/' + esc(sizeDual(el.getAttribute('data-size'))) + '</span>';
   };
   window.toggleSub = function (cb) {
     var c = $('pd-cadence');
@@ -1101,7 +1155,7 @@
       html += '<div class="cart-line">' +
         '<div class="cart-line-img card-img ' + imgCls(it.img) + '"' + imgStyle(it.img) + '>' + esc(it.img ? it.img.label.split(' · ')[0] : '') + '</div>' +
         '<div><h4>' + esc(it.title) + '</h4>' +
-        '<div class="rn">' + esc(it.size) + (it.sub ? ' · <span class="tag-pill">Roccia subscription · every ' + esc(it.cadence) + ' weeks</span>' : ' · One-time') + '</div>' +
+        '<div class="rn">' + esc(sizeDual(it.size)) + (it.sub ? ' · <span class="tag-pill">Roccia subscription · every ' + esc(it.cadence) + ' weeks</span>' : ' · One-time') + '</div>' +
         '<div class="qty-stepper"><button onclick="changeQty(' + i + ',-1)" aria-label="Decrease quantity">&minus;</button>' +
         '<span class="qty-n">' + qty + '</span>' +
         '<button onclick="changeQty(' + i + ',1)" aria-label="Increase quantity">+</button></div>' +
@@ -1156,7 +1210,7 @@
         '<div class="acct-card"><h3>Recent orders</h3>' +
           '<div class="order-list">' +
             orderRow('1042', 'Tour d\'Italia 1', isoFromToday(-30), '$77.70') +
-            orderRow('1031', 'Gardelli - Ethiopia Bombe · 250g', isoFromToday(-60), '$38.00') +
+            orderRow('1031', 'Gardelli - Ethiopia Bombe · ' + sizeDual('250g'), isoFromToday(-60), '$38.00') +
           '</div>' +
           '<button class="inline-link" style="margin-top:.7rem" onclick="mockAllOrders()">Show all orders</button>' +
           '<!-- PROD: rows link to the native Shopify ORDER DETAIL page (an order may hold multiple line items); "Order again" re-adds that order\'s line items to the native cart, and for Roccia items can convert to a selling_plan (Loop) subscription with a "you\'re leaving 10-12% + free shipping behind" nudge; "Show all orders" -> native Shopify order-history page. Use "Order #" (Shopify order number), NOT "invoice". Reorder is not 1:1 — production needs a graceful "no longer available, here\'s a similar one" path. -->' +
@@ -1188,12 +1242,12 @@
         '<div class="sub-actions"><button class="btn btn-primary" onclick="mockResubscribe()">Resubscribe</button></div></div>';
     }
     if (session.paused) {
-      return '<div class="sub-manage"><div class="sub-line"><div><strong>Gardelli - Ethiopia Bombe</strong><div class="rn">250g · every 4 weeks</div></div><span class="status-chip sc-paused">Paused</span></div>' +
+      return '<div class="sub-manage"><div class="sub-line"><div><strong>Gardelli - Ethiopia Bombe</strong><div class="rn">' + sizeDual('250g') + ' · every 4 weeks</div></div><span class="status-chip sc-paused">Paused</span></div>' +
         '<p class="note">Paused - your Founding 12% is preserved. Resume anytime.</p>' +
         '<div class="sub-actions"><button class="btn btn-primary" onclick="mockResume()">Resume</button><button class="btn btn-secondary" onclick="mockStartCancel()">Cancel subscription</button></div>' +
         '<div id="cancel-flow"></div></div>';
     }
-    return '<div class="sub-manage"><div class="sub-line"><div><strong>Gardelli - Ethiopia Bombe</strong><div class="rn">250g · every 4 weeks · next ships ' + isoFromToday(14) + '</div></div><span class="status-chip sc-active">Active</span></div>' +
+    return '<div class="sub-manage"><div class="sub-line"><div><strong>Gardelli - Ethiopia Bombe</strong><div class="rn">' + sizeDual('250g') + ' · every 4 weeks · next ships ' + isoFromToday(14) + '</div></div><span class="status-chip sc-active">Active</span></div>' +
       '<div class="sub-actions"><button class="btn btn-secondary" onclick="mockPause()">Pause</button><button class="btn btn-secondary" onclick="mockStartCancel()">Cancel subscription</button></div>' +
       '<div id="cancel-flow"></div></div>';
   }
