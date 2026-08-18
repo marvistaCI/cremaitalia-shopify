@@ -1916,11 +1916,99 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   is a working preview, NOT a pull-and-diff-proved deploy. The lesson is narrow and worth stating: a
   verification push is still a push, and the naming rule binds it exactly as it binds a deploy.
 
+- 2026-08-18 — **POC15 built, verified BY LOOKING, and deployed — four audit items closed plus a
+  systemic brand breach the looking uncovered.** Ledger: `docs/POC15_change_list.md`. Picked up
+  from the POC13 audit's 5.7/10 open list. **Deliberately did NOT re-score POC14 first**: each of
+  its fixes was verified individually, so a fresh scoring pass would have re-derived a backlog
+  already written at the foot of `POC14_change_list.md`. Score once, at the end, on the same rubric.
+  **(1) Voice.** `templates/index.liquid` read "We have carefully hand-selected a small number of
+  roasters whose work represents Italian roasting at its finest" — Brand Standards §9 prints "We
+  hand-pick the world's most exclusive coffee artisans" as the example NOT to write, so the live
+  copy was that anti-pattern with the words rearranged. Replaced with the Standard's approved
+  construction. Swept clean; two near-misses left deliberately as Steve's own wording (the Roasters
+  page's "premier consumer channel", a distribution claim not a superlative; and "carefully chosen,
+  not collected", where the contrast does the work).
+  **(2) U.S. customary weights.** The theme had **zero** occurrences of `oz`. Whether that was a
+  breach turned on scope, so it was checked rather than assumed: the §9 units bullet carries **no
+  scope qualifier** while the bullets either side of it explicitly scope themselves (bilingual
+  parity = roaster-facing, em-dash ban = customer-facing). It binds the storefront. **Steve's call
+  on placement, and it is the better read of the rule:** the dual form goes on the **price
+  denominator**, not the size pills — that is where the value math happens, `selectSize()` rewrites
+  it live so the buyer sees the size they actually picked converted (`$120.00 /1 kg (2.20 lb)`),
+  and it keeps the pills to **one row** on a phone instead of two. The correction underneath it is
+  the durable part: **the conversion's job is to give an American a sense of SCALE, not to decorate
+  every weight token** — once anchored at 250 g = 8.82 oz a reader knows what 500 g and 1 kg mean,
+  so lists stay short. The first implementation spent three conversions per card to deliver one
+  fact. Conversion lives at the **render layer only**; the catalog keeps raw `"250g"` strings
+  because they are cart-matching **identifiers** (and become Shopify variant titles in production).
+  Precision matches the Standard's own worked examples exactly, so site and document cannot be read
+  as disagreeing. **One documented exception:** the founder story's "I ground exactly 17g" stays
+  metric-only — a brew dose is written in grams even in America ("18 g in, 36 g out"), so converting
+  it would read as LESS fluent to precisely the reader the hero names. Commented in place, same
+  shape as the regions map's em-dash exception.
+  **(3) Grinder.** Every coffee already said "whole bean only" in its `brewing` copy — but that
+  renders in the "About this coffee" block BELOW the buy column, so a buyer could add to cart having
+  never read it. That is a returns problem. Now stated directly under **Add to cart** and pointed at
+  the burr grinder we actually stock. Home copy said "fresh and ready to consume", which is not
+  true of a whole bean; now "ready to grind".
+  **(4) JSON-LD.** `Organization` + `WebSite` server-side, validated by parsing the rendered page
+  **and by fetching both image URLs (HTTP 200)** — the POC14 lesson that a tag pointing at a 404
+  renders the same bare link as no tag. `Product`/`AggregateRating` **deliberately not emitted** and
+  specified in `production_build_spec.md` §9 instead: a one-URL SPA has no per-product address, so a
+  Product node would either name URLs that 404 or describe a product no crawler renders, and there
+  are no reviews to aggregate. `SearchAction`, `sameAs` and `contactPoint` omitted because we have
+  no search (removed POC9), no social profiles, and no staffed mailboxes. The spec also records a
+  real tension: **`aggregateRating` only models a global average**, which is exactly what the audit
+  argued against in favour of reorder rate — choosing palate-matched feedback means deliberately
+  forgoing star rich-results.
+  **(5) Image weight.** First-paint image weight **1,257 KB → 361 KB**; theme payload **−954 KB**.
+  Deleted the orphaned 724 KB `ci-cup.png`; the signature was 6.5× oversampled (94→26 KB); the door
+  re-encoded (267→104 KB). **The structural win:** About-page images sit inside `display:none` divs,
+  but an eager `<img>` loads regardless of display — so every About photograph was being fetched
+  during the home page's first paint. All below-fold and hidden-page images are now lazy. Adding the
+  missing intrinsic `width`/`height` cleared **both** long-standing `ImgWidthAndHeight` errors, so
+  `theme check` moved **17 offenses / 2 errors → 15 / 0**; the `crema-poc-deploy` baseline was
+  updated **and annotated with why it moved**, so a future session does not read the change as a
+  regression.
+  **(6) Italic was doing two contradictory jobs — found by LOOKING, not measuring.** The new grinder
+  note inherited `.afd`, which is `font-style:italic`. A sitewide audit then found **31
+  italic-on-English elements** against 11 legitimate `.ita` ones, against Brand Standards §3.3
+  ("italics carry meaning - don't italicize for emphasis") and §6's "Never". **The sharpest case:**
+  the Shop page rendered `Piemonte` italic to mean **disabled** while `un caffè` two sections away is
+  italic to mean **Italian** — one device, two meanings, one screen. Dropped from `.afd`,
+  `.pill.disabled`, `.cn`, `.tour-bag`, `.flavor-desc` and `.cart-line-img`; one `<em>` became
+  `<strong>`. Each already carried its secondary role through size, colour or opacity, so nothing
+  lost legibility — the disabled region pills read **better**, the italic having made them look like
+  a different category rather than a dimmed version of the same one. Also removed an unused
+  `.hero h1 em{font-style:italic}`: `.hero h1` is Marcellus, which has **no italic face**, so that
+  rule was a latent faux-italic landmine of exactly the kind POC14 spent a session eliminating. The
+  POC14 font block's now-false claim that "italic is still used freely on Inter" was corrected in
+  the same pass — a present-tense claim in a live file gets fixed, not left as narrative.
+  **Verification.** `node --check` + `JSON.parse` clean; `theme check` **15/0, 0 new**; banned
+  register 0; italic-on-English **31 → 0**; keyboard **13/13 cards, 10/10 quiz options** and
+  Marcellus faux usages **0** (POC14 regression checks, both intact); card footers at 1280 with no
+  overflow and no horizontal page scroll. **Screenshots worked first try** via the two-call recipe
+  at the top of this file. Two tooling notes learned this session: the pane composites at roughly
+  **a third scale at 1280px** and `zoom` with a region is **not supported** (it returns the full
+  screenshot), so do fine typography judgement at **375px**, where the render is ~1.5× and fully
+  readable, and use DOM geometry for desktop; and `resize_window` needs an explicit `{tabId}`.
+  **DEPLOYED** via the `crema-poc-deploy` skill to a NEW unpublished theme **"Crema Italia POC15
+  Preview" (id `151970840745`)**: `theme list` + `git log origin/main..HEAD` run **first** (no
+  collision), validation at the documented baseline, then **pull-and-diff proved** the push — both
+  sides **38** files (39 → 38 with `ci-cup.png` deleted), zero content mismatches, nothing on only
+  one side, exactly one theme of that name. **POC11 (`151797727401`) pruned** on Steve's explicit go
+  under the three-newest cap, its id re-verified against live immediately before the delete; its
+  batch is commit `2a833d7` on GitHub and redeployable. POC12, POC14 and the live theme untouched.
+  **Concurrency note:** Steve edited `snippets/ci-store-footer.liquid` (footer newsletter copy) in a
+  separate session during this batch. It was left uncommitted rather than absorbed into a POC15
+  commit, per the two-sessions rule; Steve's own session then committed it as `995b11c` before this
+  one could. Nothing was lost and the two never wrote the same file — the rule worked as intended.
+
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC14 (deployed + pull-and-diff proved 2026-08-18) — read this first
+**▶ CURRENT STATE — POC15 (deployed + pull-and-diff proved 2026-08-18) — read this first
 when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
@@ -1945,43 +2033,58 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC14 Preview" | `151800610985` |
+| **Newest POC preview** | "Crema Italia POC15 Preview" | `151970840745` |
+| Prior preview | "Crema Italia POC14 Preview" | `151800610985` |
 | Prior preview | "Crema Italia POC12 Preview" | `151798841513` |
-| Prior preview | "Crema Italia POC11 Preview" | `151797727401` |
 
-**POC14 is deployed** and is the only POC14 theme (all **39** files byte-match the repo — verified
-by pull-and-diff 2026-08-18, both sides 39 files, zero content mismatches, nothing present on only
-one side; `theme list` was run **before** the push per the rule above). The file count is unchanged
-at 39 — POC14 edited existing files and added none.
+**POC15 is deployed** and is the only POC15 theme (all **38** files byte-match the repo — verified
+by pull-and-diff 2026-08-18, both sides 38 files, zero content mismatches, nothing present on only
+one side; `theme list` was run **before** the push per the rule above). The file count moved
+**39 → 38**: POC15 deleted the orphaned `assets/ci-cup.png` and added no files.
 
-Note on how this theme got here, because it is unusual: it was "Crema Italia POC13 Preview" until
-2026-08-18. During the POC14 build it was used as a **live verification target** and had POC14 files
-pushed onto it piecemeal, which **violated the draft-theme naming rule** at the top of this file —
-a new batch went into an existing theme and the name was not changed at the same time. Steve caught
-the discrepancy; the theme was renamed to match what it holds, and the batch has since gone through
-the full `crema-poc-deploy` ritual, so it is now a properly proven deploy rather than a working
-preview. **POC13's batch no longer exists on any theme** — it is commit `baff5e9` on GitHub and
-redeployable at any time; Steve confirmed he is not concerned about the previews reading 11/12/14.
-
-POC11 and POC12 previews and the live theme are untouched. Preview:
-`https://crema-italia.myshopify.com?preview_theme_id=151800610985`
+POC12 and POC14 previews and the live theme are untouched. Preview:
+`https://crema-italia.myshopify.com?preview_theme_id=151970840745`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
-2026-07-06). To refresh: `shopify theme push --theme 151800610985`.
+2026-07-06). To refresh: `shopify theme push --theme 151970840745`.
 
-**Only POC11, POC12 and POC14 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
-now enforced as `crema-poc-deploy` Step 5. **POC10 (`151624024233`) was deleted 2026-08-06** on
-Steve's explicit go, after re-verifying the id against a live `theme list --json` immediately before
-the delete; its batch is commit `dd0cbf1` on GitHub and can be redeployed from git if ever wanted.
-POC4–POC9 (`151277174953`, `151420207273`, `151440130217`, `151449862313`, `151454122153`,
-`151523131561`) were deleted earlier the same day. The erroneous POC9 duplicate `151615373481` was
-deleted 2026-07-25.
+**Only POC12, POC14 and POC15 previews now exist** — at the three-newest cap Steve set on
+2026-08-06, now enforced as `crema-poc-deploy` Step 5. **POC11 (`151797727401`) was deleted
+2026-08-18** on Steve's explicit go, after re-verifying the id against a live `theme list --json`
+immediately before the delete; its batch is commit `2a833d7` on GitHub and can be redeployed from
+git if ever wanted. **POC10 (`151624024233`) was deleted 2026-08-06** the same way (batch `dd0cbf1`),
+and POC4–POC9 (`151277174953`, `151420207273`, `151440130217`, `151449862313`, `151454122153`,
+`151523131561`) were deleted earlier that day. The erroneous POC9 duplicate `151615373481` was
+deleted 2026-07-25. **POC13's batch is on no theme** — commit `baff5e9`, redeployable; Steve
+confirmed he is not concerned about the previews skipping numbers.
 
-A `Development (0585b1-SteveR-AsymPlatPC)` theme (`151795564713`) may also appear in `theme list` —
-that is the throwaway created by `shopify theme dev`, not a deploy. Ignore it.
+A `Development (...)` theme may also appear in `theme list` — that is the throwaway created by
+`shopify theme dev`, not a deploy. Ignore it. **Its id is deliberately not recorded here**: the CLI
+creates a fresh one per machine/session, so any id written down goes stale (this block named
+`151795564713` until 2026-08-18, by which point it no longer existed).
 
 **The live theme is current with the repo** as of the 2026-07-24 push (all 13 files byte-match;
 zero customer-visible em-dashes verified by cookie-less fetch). **Storefront password still OFF**
 (friend-testing) — now purely a friend-testing decision, not a copy-quality one.
+
+**What POC15 is:** POC14 plus four items from the POC13 audit backlog, and one systemic brand
+breach found by looking at the result (4 commits, `fce62f4`..`995b11c`). Closed both outstanding
+**Brand Standards** breaches: the home page's *"carefully hand-selected... at its finest"*, which
+was §9's own named anti-pattern with the words rearranged, and the total absence of **U.S.
+customary weights** on a site selling to Americans against a 12 oz default bag. On the units,
+Steve's call put the dual form on the **price denominator** rather than the size pills — that is
+where the value math happens, `selectSize()` rewrites it live so the buyer sees the size they
+actually picked converted, and it keeps the pills to one row on a phone. The principle underneath
+it is worth keeping: the conversion exists to give an American a **sense of scale**, so once a
+reader is anchored at 250 g = 8.82 oz, lists stay short. Also: the **grinder expectation** is now
+stated under Add to cart and pointed at the burr grinder we stock (every coffee already said
+"whole bean only", but below the buy column, where a buyer could miss it); **JSON-LD** landed
+(`Organization` + `WebSite` server-side — `Product`/`AggregateRating` deliberately omitted and
+specified in `production_build_spec.md` §9, since a one-URL SPA has no per-product address); and
+first-paint **image weight fell 1,257 KB → 361 KB**, which cleared both long-standing
+`ImgWidthAndHeight` errors and moved the `theme check` baseline to **15 offenses / 0 errors**.
+Sixth item: **italic now means Italian and nothing else** — 31 italic-on-English usages removed,
+the sharpest being the Shop page rendering `Piemonte` italic to mean *disabled* while `un caffè`
+two sections away is italic to mean *Italian*. Detail: `docs/POC15_change_list.md`.
 
 **What POC13 is:** POC12 plus a mobile/interaction batch and the first photography (6 commits,
 `19548c0`..`baff5e9`). Headlines: the **account dropdown was nearly unusable** — a 5.6px dead strip
