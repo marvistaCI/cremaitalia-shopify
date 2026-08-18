@@ -38,8 +38,42 @@
       where a greeting belongs. Subhead is no longer italic - Marcellus has no italic face and
       the old one was a synthesised oblique (see the type block in ci-storefront.css).
     {%- endcomment -%}
-    <h1>Italian coffee, exactly as the roaster sealed&nbsp;it.</h1>
-    <p class="subhead" style="max-width:58ch;margin:.85rem auto .35rem">We import from a small, named group of artisan Italian roasters and change nothing... no re-roasting, no re-grinding, no re-bagging. For people who grind their own and can taste the difference.</p>
+    {%- comment -%}
+      Revised again 2026-08-18 (Steve). Two changes and a consequence:
+      (a) "Italian coffee" is a ROASTING STYLE, not a provenance or a date - Illy and Lavazza are
+          "Italian coffee" and sit on a shelf for a year. Freshness is the strongest persuasive fact
+          this brand has and it appeared NOWHERE above the fold; it was two screens down in "Our
+          model" and on the Promise page, which already says "airfreight coffee freshly roasted in
+          Italy" verbatim. So the headline now leads with it. The category word is not lost - the
+          logo lockup directly above reads ITALIAN ARTISAN COFFEE, and the subhead says "Coffee
+          from...". Measured: identical line count to the old headline (2 desktop / 3 mobile), so
+          the freshness gain is free. Keep the H1 under ~59 characters or it tips to 4 lines at 375.
+      (b) Two sentences, not a comma splice. "just as the roaster sealed it" can read temporally
+          ("at the moment of sealing"); "Exactly as" cannot. Two declaratives also give each beat
+          full weight, which suits the register better than a dependent clause.
+      (c) CONSEQUENCE: the subhead used to say "change nothing... no re-roasting, no re-grinding,
+          no re-bagging", which now merely repeats the H1. It was replaced with the MECHANISM that
+          substantiates the claim (air-freight, weeks not months) rather than restating it.
+      "grind their own beans", not "grind their own" - and note this is the only whole-bean signal
+      above the fold, which is a partial answer to the open finding that nothing warns a buyer they
+      need a grinder before this coffee is drinkable.
+      "For PEOPLE who", not "for those who" (Steve asked, 2026-08-18): the Standard's voice is
+      "plain, direct, deferential", and "for those who..." is the house construction of aspirational
+      luxury copy - it flatters the reader into a discerning elite, which is adjacent to the
+      "exclusive / world-class" register §6 bans.
+      "who LOVE TO grind their own beans" (Steve, same day) - we are filtering for PASSION, not for
+      capability. This replaced two weaker drafts. "...who grind their own beans and can taste the
+      difference" was cut because discernment is an EXCLUSIVE claim (it implies others cannot taste
+      it); "...who grind their own beans" was merely a hardware test. Affection is inclusive and
+      still names the audience, and it echoes the About page's own Three P's: "we are a group
+      passionate about coffee". Passion without elitism is the line to hold here.
+      Watch the subhead's rendered line count - the ORIGINAL hero's defect was a subhead with ~4x
+      the visual mass of the headline, and a long subhead recreates it. 5 lines at 375 is the cap.
+      NOTE: "Freshly roasted" is now the most prominent claim on the site. If transit or the
+      six-week arrival cadence slips, this headline is the first thing that becomes untrue.
+    {%- endcomment -%}
+    <h1>Freshly roasted in Italy.<br class="h1-break">Exactly as the&nbsp;roaster sealed&nbsp;it.</h1>
+    <p class="subhead" style="max-width:58ch;margin:.85rem auto .35rem">From a small, named group of artisan Italian roasters, air-freighted whole-bean so it reaches you weeks from the roast date, not months. For people who love to grind their own beans.</p>
     <p class="hero-benvenuto">Benvenuto - welcome&nbsp;in.</p>
     <!-- The quiz is the hero CTA (Steve, 2026-08-06) - it is free, it is the lowest-commitment
          way in, and it is the only onboarding asset that works before real photography exists.

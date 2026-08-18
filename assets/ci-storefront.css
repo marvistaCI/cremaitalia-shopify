@@ -780,3 +780,8 @@ strong, b { font-weight: 600; }
 @media (max-width:640px){.footer-signup{padding-top:1.25rem}}
 /* Screen-reader-only label text (the signup field is placeholder-led visually). */
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* Break the hero H1 at its SENTENCE boundary, not wherever text-wrap:balance
+   prefers. Balance was splitting "Exactly / as the roaster sealed it", stranding
+   "Exactly" and leaving a full stop mid-line. Line count is unchanged (2 desktop /
+   3 mobile) - this only moves where the break falls. (2026-08-18) */
+.hero h1{text-wrap:pretty}
