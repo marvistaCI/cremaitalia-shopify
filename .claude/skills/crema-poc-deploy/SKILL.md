@@ -189,9 +189,16 @@ Then re-run `shopify theme list` and confirm the survivors are exactly the three
    grep -rn "15[0-9]\{10\}" --include="*.md" --include="*.cmd" --include="*.json" --include="*.liquid" --include="*.js" . | grep -v node_modules
    ```
 
-   Judge each hit by tense, not by age:
+   Judge each hit by tense, not by age — and **judge the sentence, not the filename**:
    - **Historical narrative** (`CLAUDE.md` §9 entries, `docs/POC*_change_list.md`) — leave it.
      It describes a past moment and is *supposed* to name a now-dead id.
+   - **A file living in `docs/` with a POC number in its name is NOT automatically narrative.**
+     Open it and read the sentence around the id. If it says *"POC6 **is** deployed to…"* it is a
+     present-tense claim and it rots, whatever the file is called. (2026-08-18: this grep correctly
+     surfaced `docs/POC7_kickoff.md` during the POC13 prune — three hits, including deleted theme
+     `151440130217` — and it was waved through because the path *looked* like the change-list
+     pattern above. The sweep was never the problem; the shortcut was. That file was a spent
+     one-shot session prompt and has since been deleted.)
    - **Present-tense claims and anything executable** — fix it. These are the ones that rot:
      `dev.cmd`, the `reconnect-check` skill's expected-theme list, the ⚠️ callouts at the top
      of `CLAUDE.md`, any script or doc that says "the current preview is `<id>`".

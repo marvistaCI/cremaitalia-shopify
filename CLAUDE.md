@@ -1840,13 +1840,17 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   (`8fa0e25`), never updated, never repeated for POC8-POC13, and referenced by nothing. The edit was
   reverted. Worse, it carries a present-tense `CURRENT STATE:` block asserting POC6 is the live
   deployment and naming theme **`151440130217` twice - a theme deleted 2026-08-06**. That is exactly
-  the drift class §10 exists to prevent, and `crema-poc-deploy` **Step 6.4** (after any deletion,
-  grep the repo for theme ids and judge each hit by tense) should have caught it in the POC13 prune
-  and did not - the sweep evidently only covered `CLAUDE.md` and the change lists. **Open decision
-  for Steve:** delete the file (git keeps it at `8fa0e25`), or convert it to a state-free
-  `docs/poc_kickoff_TEMPLATE.md` that says "run `shopify theme list` + `git log origin/main..HEAD`"
-  instead of freezing a snapshot. The kickoff-prompt habit is good; freezing deployment state into
-  it is the bug.
+  the drift class §10 exists to prevent. **Steve's call: the file was deleted** (git keeps it at
+  `8fa0e25`; nothing referenced it). **Why `crema-poc-deploy` Step 6.4 missed it — and it is NOT
+  what I first wrote here.** My first diagnosis said the sweep's grep did not cover `docs/`. That
+  was wrong, and re-running the grep exactly as the skill writes it disproved it: all three hits in
+  that file were surfaced. **The grep was never the problem.** The failure was judgment. Step 6.4's
+  "leave it" example was written as a *file-path pattern* (`docs/POC*_change_list.md`), and
+  `docs/POC7_kickoff.md` sits in `docs/` with a POC number in its name, so it pattern-matched into
+  the leave-it bucket without anyone reading the tense of the sentence beside the id. **Fixed in the
+  skill:** Step 6.4 now says judge the sentence, not the filename, and spells out that a `docs/`
+  file with a POC number is not automatically narrative. Worth noting the shape: a checklist that
+  lists *examples* invites matching the example instead of applying the rule.
 
 ---
 
