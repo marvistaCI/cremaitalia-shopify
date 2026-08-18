@@ -273,3 +273,56 @@ decision to forgo star rich-results, not an oversight — record it either way.
   and support@ are created), and `WebSite.potentialAction` (only if real search ships).
   All three are omitted today because claiming them would be false; the omission comments
   are in `layout/theme.liquid`.
+
+---
+
+## 10. Weights: where the number lives, and where the conversion happens (Steve, 2026-08-18)
+
+Steve's question during POC15: *"the SKU will be set up in grams, but the presentation layer will
+handle the conversion based on the size selection - am I correct?"* Yes. Recording the shape so the
+production build does not reinvent it.
+
+### The two weights Shopify holds, which are easy to conflate
+
+| | What it is | What it drives |
+|---|---|---|
+| **Variant weight** | a real number + unit (`250`, `g`) | shipping rate calculation |
+| **Option value** | a string the merchant types (`"250 g"`) | the pill label, and Shopify's own printed surfaces |
+
+**Store the mass in grams on the variant weight field.** In Liquid, `variant.weight` returns grams
+regardless of the unit the merchant chose in the admin, with `variant.weight_unit` and
+`variant.weight_in_unit` alongside it for the merchant's preferred display. *Confirm this against
+the dev store during the platform spike rather than taking it on recall.*
+
+### The conversion is a render concern, and production gets better input than the POC
+
+`convertWeight()` in `assets/ci-storefront.js` is already written to be the single source of truth,
+and its comment says so. In production it takes `variant.weight` — a genuine number — instead of
+regexing the identifier string the POC's fixture catalog forces on it. That is strictly better: it
+cannot be broken by a merchant typing `250gr` or `250 grams` into the admin.
+
+Carry forward unchanged:
+
+- The **16 oz rule** — once a converted weight reaches 16 oz, state pounds, not ounces.
+- The dual form goes on the **price denominator**, live-updating with the size selection; pills and
+  size lists stay short metric. See `docs/POC15_change_list.md` §2 for why.
+
+### The boundary, which is the part worth deciding
+
+**The conversion reaches exactly as far as our own rendering.** Cards, product page and cart are
+ours (§0). Checkout, order confirmation emails, packing slips and the Shopify-hosted customer
+account are not — they print the **raw option value**. So with an option value of `250 g`, a US
+buyer sees metric-only at the moment they pay and again in their receipt, and there is no hook to
+inject into those surfaces below Plus.
+
+Two options, **not yet decided**:
+
+1. **Option value stays `250 g`.** Clean pills, conversion in our UI only, metric-only on Shopify's
+   surfaces. *Recommended:* the buyer has already seen the conversion on the product page before
+   reaching checkout, and option 2 re-breaks the one-row pill layout POC15 deliberately achieved.
+2. **Option value carries both**, `250 g (8.82 oz)`. Survives into every Shopify surface, at the
+   cost of a longer pill and the conversion rendering twice in our own layout.
+
+Note this interacts with Brand Standards §9 (both units on every weight reference): under option 1
+the receipt is metric-only, which is a surface we do not control rather than a breach we chose.
+Worth stating that explicitly wherever the Standard is next revised.
