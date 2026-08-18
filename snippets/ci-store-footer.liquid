@@ -4,6 +4,30 @@
   "Crema Italia, LLC · Lutz, Florida, USA · cremaitalia.com".
 {%- endcomment -%}
 <footer class="ci-footer" role="contentinfo">
+  {%- comment -%}
+    Email capture, added 2026-08-18. The POC storefront had NONE - no newsletter field,
+    no signup, nothing - while templates/password.liquid and live-theme/templates/index.liquid
+    (the coming-soon pages this storefront replaces) both have one. Launching as-was would have
+    retired the only acquisition surface on the same day paid traffic begins, and the win-back /
+    abandoned-cart / 60-day-grace campaigns in the Store Operating Standards all assume a list
+    that nothing was building.
+
+    Deliberately quiet: one sentence, one field, no modal, no popup, no discount bribe - a
+    discount incentive would also contradict the "we issue no codes, ever" rule (Standard v1.3).
+
+    PROD: replace with Shopify's native {% raw %}{% form 'customer' %}{% endraw %} newsletter form
+    (tags the customer for the chosen email platform), or the ESP's own embed once one is chosen.
+    Email platform is still an open launch-gating decision (CLAUDE.md §10). This send is MOCKED.
+  {%- endcomment -%}
+  <div class="footer-signup">
+    <p>We write rarely... a note when a new roaster joins, and when a coffee we like is about to run out.</p>
+    <form class="fs-row" id="footer-signup-form" onsubmit="return submitFooterSignup(event)" novalidate>
+      <label for="fs-email" class="visually-hidden">Email address</label>
+      <input id="fs-email" name="email" type="email" placeholder="Your email" autocomplete="email" required>
+      <button type="submit">Keep me posted</button>
+    </form>
+    <p class="fs-note" id="fs-note">No codes, no daily mail. Unsubscribe in one click.</p>
+  </div>
   <span>Crema Italia, LLC &middot; Lutz, Florida, USA &middot; cremaitalia.com</span>
   <div class="footer-links">
     <button onclick="showPage('promise')">The Crema Italia Promise</button>

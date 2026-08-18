@@ -23,11 +23,15 @@
   <link rel="icon" type="image/png" sizes="16x16" href="{{ 'ci-favicon-16.png' | asset_url }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ 'ci-apple-touch-icon.png' | asset_url }}">
 
-  <!-- Google Fonts: Marcellus (display) + Inter (body). Rebrand 2026-07-01: display = Marcellus (web stand-in for logo font Montecatini Pro). -->
+  <!-- Google Fonts: Marcellus (display) + Inter (body). Rebrand 2026-07-01: display = Marcellus (web stand-in for logo font Montecatini Pro).
+       Inter now loads its REAL italic (ital axis). Before 2026-08-18 only roman was loaded, so every
+       italic on the site was a browser-synthesised oblique - a mechanically slanted roman. Marcellus
+       has NO italic and only weight 400: never set font-style:italic or a weight >400 on the display
+       face, or the browser fakes it. See the corrective block at the foot of ci-storefront.css. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap"
     rel="stylesheet"
   >
 

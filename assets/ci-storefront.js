@@ -1321,7 +1321,72 @@
       (CATALOG.people || []).forEach(function (pn) { peopleById[pn.id] = pn; });
       renderAll();
       renderCart();
+      // Catalog-driven grids are built here, so stamp keyboard affordances after them.
+      if (window.markKeyboardActivable) window.markKeyboardActivable();
     }).catch(function (err) { console.error('Catalog load failed', err); });
+  }
+
+  // ---------- footer email capture (MOCKED - added 2026-08-18) ----------
+  // PROD: replace with Shopify's native {% form 'customer' %} newsletter form, or the
+  // chosen ESP's embed. Email platform is still an open launch-gating decision.
+  window.submitFooterSignup = function (e) {
+    e.preventDefault();
+    var input = document.getElementById('fs-email');
+    var note = document.getElementById('fs-note');
+    var val = (input && input.value || '').trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val)) {
+      if (note) { note.textContent = 'That email does not look right. Mind checking it?'; note.className = 'fs-note'; }
+      if (input) input.focus();
+      return false;
+    }
+    if (note) { note.textContent = 'Thank you. We will be in touch, rarely.'; note.className = 'fs-msg'; }
+    var form = document.getElementById('footer-signup-form');
+    if (form) form.style.display = 'none';
+    console.log('PROD: newsletter signup would POST here ->', val);
+    return false;
+  };
+
+  // ---------- keyboard activation for non-semantic clickables ----------
+  // Added 2026-08-18. An audit found 75 of 152 interactive elements were plain
+  // <div>/<span> with onclick: 0 of 13 product cards were reachable by keyboard, and
+  // NO quiz option was - so the hero CTA (the taste quiz) could be opened by a
+  // keyboard user and then never completed. POC12 fixed this for the two About
+  // people cards only; it was never carried to the commerce surfaces.
+  //
+  // One delegated handler beats editing every render function, and it keeps working
+  // for markup rendered later from the catalog. markKeyboardActivable() stamps the
+  // roles/tabindex; this listener turns Enter and Space into a click.
+  //
+  // PROD: the real storefront should use genuine <button>/<a> elements instead. This
+  // is the correct minimum for a POC whose CSS is built around divs.
+  function isActivable(el) {
+    return el && el.nodeType === 1 && el.hasAttribute('onclick') &&
+      ['BUTTON', 'A', 'INPUT', 'SELECT', 'TEXTAREA'].indexOf(el.tagName) === -1;
+  }
+  window.markKeyboardActivable = function (root) {
+    (root || document).querySelectorAll('[onclick]').forEach(function (el) {
+      if (!isActivable(el)) return;
+      // .disabled pills are decorative "coming soon" markers - not focusable.
+      if (el.classList.contains('disabled')) return;
+      if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+      if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+    });
+  };
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
+    var el = e.target;
+    if (!isActivable(el) || el.getAttribute('tabindex') === null) return;
+    e.preventDefault();           // stop Space scrolling the page
+    el.click();
+  });
+  // Re-stamp after any catalog-driven render (grids, roaster list, product detail).
+  var _showPage = window.showPage;
+  if (typeof _showPage === 'function') {
+    window.showPage = function () {
+      var r = _showPage.apply(this, arguments);
+      window.markKeyboardActivable();
+      return r;
+    };
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
