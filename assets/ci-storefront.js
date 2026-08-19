@@ -592,10 +592,18 @@
       // buy column, so a buyer could add to cart having never read it. The hero names an
       // audience that grinds its own beans, and nothing on the buy path confirmed the coffee
       // arrives unground. That is a returns problem, not a copy nicety. Stated here, at the
-      // decision point, and pointed at the burr grinder we actually stock rather than left
-      // for the buyer to solve.
+      // decision point, and pointed at the Bottega rather than left for the buyer to solve.
+      //
+      // Links the SHELF, not a SKU (Steve, 2026-08-19). This first shipped as
+      // openProduct('bottega-burr-grinder'), which hard-coded a FIXTURE handle into
+      // customer-facing copy. Bottega holds imagined SKUs today, we may carry more than
+      // one grinder, and the copy promised a specific product nobody has sourced. A
+      // Bottega category filter was considered and rejected: the only taxonomy that
+      // exists is Equipment/Merch, which does not isolate grinders, so building one would
+      // mean inventing a second layer of fixture data to prop up the first. Opening the
+      // shelf is honest at any catalog size.
       '<p class="afd" style="border:none;margin-top:.75rem"><strong>Whole bean only.</strong> You will need a grinder. ' +
-      'If you do not have one, there is a <button class="inline-link" onclick="openProduct(\'bottega-burr-grinder\')">burr grinder in the Bottega</button>.</p>' +
+      'If you do not have one, <button class="inline-link" onclick="showPage(\'bottega\')">search for a burr grinder in our Bottega</button>.</p>' +
       '</div></div>' + about;
   }
 
