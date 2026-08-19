@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.1) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.4) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.5) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > **Editing protocol:** Code owns the repo and all Standard sources; **Cowork proposes,
@@ -2024,7 +2024,7 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   occurrences remain in rendered text, all of them the SKU name), and historical narrative — §9
   entries, `docs/POC*_change_list.md`, the archived POC v2/v3 HTML, and code comments describing
   what *used* to exist. Judge by tense, per `crema-poc-deploy` Step 6.4.
-  **Store Operating Standards v1.3 → v1.4** published via `crema-std-publish`: vocabulary only, no
+  **Store Operating Standards v1.3 → v1.4 → v1.5** published via `crema-std-publish`: vocabulary only, no
   rule change — pricing factors, matrices and every other rule are untouched. New **§1.1** states
   the rule so the Standard now carries it rather than just complying with it. Both renders that the
   edit touched were regenerated (Store Operating v1.4 **and** Collaboration v1.1, whose companion
@@ -2037,6 +2037,34 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   Now a catalog-driven grid like the other three. And the Shop page's shelf gloss was a parallel
   `SHELF_NOTE` table that had drifted from all four shelf pages; it now reads each shelf page's own
   description at selection time, so there is one description per shelf and nothing to keep in sync.
+
+- 2026-08-19 — **Gifting built, and the packaging policy it depends on locked into the Standard
+  (Store Operating Standards v1.4 → v1.5).** Steve asked whether gifting belongs in the cart as a
+  checkbox. It does, and for a harder reason than convenience: **a Shopify order carries exactly one
+  shipping address**, so a per-item gift flag would let a customer mark one line as a gift and then
+  meet a single address field at checkout — promising a split the platform cannot execute. Two
+  recipients means two orders. The control also has only one possible home: the cart is ours,
+  checkout takes no custom fields below Plus. **Subscriptions block it** — any one subscription line,
+  because the cadence bills the giver's card indefinitely *and* the single-address problem remains.
+  Shown as an explanatory line rather than a vanishing control.
+  **The durable decision is Steve's, and it made the feature smaller:** rather than "hide prices on
+  gift orders", **nothing inside any package shows a price, gift or not** — the receipt is an email
+  entitlement. Blanket rather than conditional because a conditional rule must be executed correctly
+  by whoever is packing that day and **fails silently**; the customer discovers it only when a
+  present arrives with a price on it. Every order is now giftable by default and no flag has to reach
+  the warehouse. Locked as **§8.1**, with **§8.2** covering gifting itself — including that gifting is
+  **never inferred** from a shipping address that differs from billing (a vacation home is not a gift,
+  and inferring it puts a gift card in a box someone bought for themselves).
+  **Two questions this answered by relocating them.** "Hide prices" is not a 3PL feature and not
+  Loop's job — it is the **Shopify packing-slip template**, which we control. What *is* a 3PL question
+  became **§12.10**, and both parts are qualifying rather than preferences: do you print our slip or
+  insert your own paperwork, and can you insert a card varied per order. The second is not new scope —
+  Sorpresa collections already ship a printed tasting card, so a 3PL that cannot do it cannot fulfil
+  Sorpresa at all. **Affiliates** are referrers, not fulfilers, so no gift policy applies to them.
+  **§12.9 opened:** if a prepaid gift subscription is ever sold inside the first 222, does the
+  numbered honorific and the 12% attach to the giver or the recipient? §4 makes it permanent and the
+  slot finite, so it cannot be decided after the fact. Nothing gift-subscription is built until it is.
+  Both renders regenerated and delivered, gates at exit 0, v1.4 archived, md5-verified.
 
 ---
 

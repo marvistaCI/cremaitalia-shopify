@@ -1,8 +1,15 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.4 · 2026-08-19**
+**Version 1.5 · 2026-08-19**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.5 (2026-08-19)** adds **§8.1 — nothing inside a package shows a price**, gift or not, with
+> the receipt as an **email entitlement**. Steve's call, and deliberately blanket rather than a
+> gift-order exception: a conditional rule has to be executed correctly on every order by whoever
+> is packing, and it fails silently. It also adds **§8.2 Gifting** (order-level only, never
+> inferred from a differing shipping address, subscriptions excluded) and opens **§12.9** on who
+> holds the Founding Member slot if a gift subscription is ever sold. Nothing is repriced.
 
 > **v1.4 (2026-08-19)** is a **vocabulary correction, no rule change.** "Tour" was being used
 > throughout as the *name of the archetype* — "Tour / bundle pricing", "Tours / bundles — the BOM
@@ -309,6 +316,48 @@ printed tasting card.
 - **Carriers:** USPS Ground Advantage under 1 lb; UPS Ground 1 lb+.
 - **Transit:** East/Southeast 2–3 business days · Midwest/Mountain 3–4 · West Coast 4–5.
 
+### 8.1 Nothing inside a package shows a price (LOCKED — Steve, 2026-08-19)
+
+**Every package ships with a packing slip and nothing else. Prices, subtotals, discounts and
+totals never appear on any document inside any box, gift or not.** The receipt is an **email
+entitlement**: Shopify's order confirmation goes to the purchaser's contact email and never
+travels physically.
+
+**Why it is a blanket rule rather than a gift-order exception.** A conditional rule has to be
+executed correctly on every order by whoever is packing that day, and it fails silently — the
+customer only discovers it when a birthday present arrives with a price on it, by which point
+the damage is done and unrecoverable. A blanket rule cannot be forgotten, needs no flag to
+travel to the warehouse, and makes every order giftable by default.
+
+**What this obliges:**
+
+- The Shopify **packing slip template** (Settings → Shipping and delivery) must carry no
+  monetary fields. It is a Liquid template we control; verify after any theme or settings change.
+- **3PL selection question (§12):** *do you print our packing slip, or insert your own paperwork?*
+  A 3PL that inserts its own pick list or invoice breaks this policy and no setting on our side
+  prevents it. This is a qualifying question, not a preference.
+- The order's **contact email stays the purchaser's**, always. A gift flow must never substitute
+  the recipient's address there, or Shopify mails a priced confirmation to the person being
+  surprised.
+
+### 8.2 Gifting
+
+- **Gifting is an order-level option, never per line.** A Shopify order carries exactly one
+  shipping address, so a per-item gift flag would promise a split the platform cannot execute.
+  Two recipients means two orders.
+- **The control lives in the cart**, which we own; checkout takes no custom fields below Plus.
+  It rides to the order as a cart attribute.
+- **Gifting is never inferred.** A shipping address that differs from the billing address means
+  the customer is shipping somewhere else — a vacation home, an office — and nothing more. Only
+  an explicit opt-in makes an order a gift. Inferring it puts a gift card in a box someone bought
+  for themselves.
+- **A gift adds a printed card.** Same operational capability as the Sorpresa tasting card, so it
+  is not new 3PL scope — but confirm insert format, character limit and per-insert cost.
+- **Subscriptions cannot be gifted.** Any subscription line makes the whole order ungiftable: the
+  cadence bills the giver's card indefinitely, and the order still has one address. A prepaid
+  fixed-length gift subscription is a **different product**, not a flag, and is not offered —
+  see §12.9.
+
 ---
 
 ## 9. The Crema Italia Promise
@@ -441,5 +490,27 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
 
 ---
 
-*Store Operating Standards v1.4 · 2026-08-19 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.5 · 2026-08-19 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
+
+### 12.9 Gift subscriptions — who holds the Founding Member slot? (OPEN)
+
+Not offered today (§8.2), and it cannot be until this is answered. If a prepaid gift
+subscription is ever sold and it falls inside the first 222, **does the numbered honorific and
+the 12% attach to the giver who pays, or the recipient who drinks it?** And when a prepaid run
+ends, does the recipient inherit the rate if they continue in their own name? §4 makes the
+honorific permanent and the slot finite, so this cannot be decided after the fact. Decide before
+building any gift-subscription product.
+
+### 12.10 3PL selection — packing-slip and insert capability (OPEN)
+
+No 3PL is selected. Two questions are **qualifying**, not preferences, and both should be asked
+before commercial terms:
+
+1. **Do you print our packing slip, or insert your own paperwork?** A 3PL that inserts its own
+   pick list or invoice breaks §8.1 and nothing on our side can prevent it.
+2. **Can you insert a printed card, varied per order by an order attribute?** Format, character
+   limit, per-insert cost, lead time. This is not new scope — Sorpresa collections already ship
+   with a printed tasting card (§7), so a 3PL that cannot do it cannot fulfil Sorpresa at all.
+   The gift card of §8.2 is the same capability asked once.
+
