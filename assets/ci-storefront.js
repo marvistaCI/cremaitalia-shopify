@@ -328,6 +328,7 @@
     if ($('shop-grid')) $('shop-grid').innerHTML = CATALOG.products
       .filter(function (p) { return p.shelf !== 'bottega'; }).map(productCard).join('');
     if ($('grid-roccia')) $('grid-roccia').innerHTML = productsByShelf('roccia').map(productCard).join('');
+    if ($('grid-sorpresa')) $('grid-sorpresa').innerHTML = productsByShelf('sorpresa').map(productCard).join('');
     if ($('grid-selezione')) $('grid-selezione').innerHTML = productsByShelf('selezione').map(productCard).join('');
     if ($('grid-offerta')) $('grid-offerta').innerHTML = productsByShelf('offerta').map(productCard).join('');
     if ($('grid-bottega')) $('grid-bottega').innerHTML = productsByShelf('bottega').map(bottegaCard).join('');
@@ -652,18 +653,23 @@
   };
   // Plain-English gloss shown beside the Shop shelf pills, so the Italian shelf names teach
   // themselves as you browse. Keys must match the filterShelf values in templates/index.liquid.
-  var SHELF_NOTE = {
-    all:       'Every coffee we carry',
-    roccia:    'Our rock-solid coffee subscriptions',
-    sorpresa:  'Our surprising coffee tour collections',
-    selezione: 'Select premium and seasonal coffees',
-    offerta:   'Limited time and inventory coffees'
-  };
+  // ONE description per shelf (Steve, 2026-08-19). This used to be a parallel copy, and it
+  // had drifted from the shelf pages it was meant to gloss: Sorpresa's page read "Our curated
+  // collection of roasted delights." while this said "Our surprising coffee tour collections",
+  // so the same shelf introduced itself two different ways depending on how you reached it.
+  // Steve's call: the native shelf page's wording wins. Reading it out of the DOM rather than
+  // keeping a second copy is what stops them drifting again.
+  // textContent, NOT innerText - shelf pages are display:none and innerText returns "".
+  function shelfNote(val) {
+    if (val === 'all') return 'Every coffee we carry.';
+    var sub = document.querySelector('#page-' + val + ' .sub');
+    return sub ? sub.textContent.trim() : '';
+  }
 
   window.filterShelf = function (el, val) {
     activeShelf = val; setActive(el);
     var note = $('shelf-note');
-    if (note) note.textContent = SHELF_NOTE[val] || '';
+    if (note) note.textContent = shelfNote(val);
     applyFilters();
   };
 
@@ -835,7 +841,7 @@
       cards[i].style.display = show ? '' : 'none';
     }
   }
-  function applyProfileToShelves() { ['grid-roccia', 'grid-selezione', 'grid-offerta'].forEach(applyTasteToGrid); }
+  function applyProfileToShelves() { ['grid-roccia', 'grid-sorpresa', 'grid-selezione', 'grid-offerta'].forEach(applyTasteToGrid); }
   function applyTasteEverywhere() { applyFilters(); applyProfileToShelves(); }
   function setActive(el) {
     var pills = el.closest('.filter-pills').querySelectorAll('.pill:not(.disabled)');

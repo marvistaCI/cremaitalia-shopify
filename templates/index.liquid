@@ -171,7 +171,7 @@
     <p class="prose" style="max-width:72ch">One shelf for subscriptions and larger formats (<span class="ita">Roccia</span>), one for discovery and gifting (<span class="ita">Sorpresa</span>), one for rare or seasonal roasts (<span class="ita">Selezione</span>), and one for last-chance lots at an honest markdown (<span class="ita">Offerta</span>).</p>
     <div class="card-grid">
       <div class="shelf-card" onclick="showPage('roccia')"><h3>Roccia</h3><div class="ss2">The Rock · Subscription (and one-time ordering)</div><p>Your preferred coffee, size, and cadence. Subscribe for free shipping and a 10% discount.</p></div>
-      <div class="shelf-card" onclick="showPage('sorpresa')"><h3>Sorpresa</h3><div class="ss2">The Surprise · Curated Discovery</div><p>Our curated collection of roasted delights. On-demand 100 g (3.53 oz) Tour bundles - the best way to find your favorite roast subscription.</p></div>
+      <div class="shelf-card" onclick="showPage('sorpresa')"><h3>Sorpresa</h3><div class="ss2">The Surprise · Curated Discovery</div><p>Our curated collections of roasted delights. On-demand 100 g (3.53 oz) Tour bundles - the best way to find your favorite roast subscription.</p></div>
       <div class="shelf-card" onclick="showPage('selezione')"><h3>Selezione</h3><div class="ss2">The Selection · Premium &amp; Seasonal</div><p>Roasters' premium and seasonal offerings. Micro-lots and limited imports. When a product sells out, it may not return - once it's gone, it's gone.</p></div>
       <div class="shelf-card" onclick="showPage('offerta')"><h3>Offerta</h3><div class="ss2">The Offer · Limited Time and Inventory</div><p>Limited-time offers, on sale while inventory lasts. Good coffee approaching its freshness window, priced honestly. Sold as-is.</p></div>
     </div>
@@ -198,15 +198,17 @@
     <h1>Shop all our Coffee</h1>
     <div class="hero-filters">
       <!-- The shelf note to the right of the pills names what the current selection means, so
-           the four Italian shelf names teach themselves as you browse. Text is driven by
-           SHELF_NOTE in ci-storefront.js (filterShelf); keep the two in sync. -->
+           the four Italian shelf names teach themselves as you browse. Text is READ FROM the
+           matching shelf page's own .sub at selection time (shelfNote() in ci-storefront.js),
+           so there is exactly one description per shelf and nothing to keep in sync. It used
+           to be a parallel SHELF_NOTE table and it had already drifted. Edit the shelf page. -->
       <div class="filter-group"><div class="filter-label">Shelf</div><div class="filter-pills">
         <span class="pill active" onclick="filterShelf(this,'all')">All</span>
         <span class="pill" onclick="filterShelf(this,'roccia')">Roccia</span>
         <span class="pill" onclick="filterShelf(this,'sorpresa')">Sorpresa</span>
         <span class="pill" onclick="filterShelf(this,'selezione')">Selezione</span>
         <span class="pill" onclick="filterShelf(this,'offerta')">Offerta</span>
-        <span class="shelf-note" id="shelf-note">Every coffee we carry</span>
+        <span class="shelf-note" id="shelf-note">Every coffee we carry.</span>
       </div></div>
       <div class="filter-group filter-region">
         <div class="filter-label">Region</div>
@@ -249,20 +251,18 @@
     <button class="back-btn" style="color:var(--ci-crema-light)" onclick="goBack()">&larr; Back</button>
     <p class="eyebrow" style="color:var(--ci-crema-light)">The Surprise · Curated Discovery</p>
     <h1>Sorpresa</h1>
-    <p class="sub">Our curated collection of roasted delights.</p>
+    <p class="sub">Our curated collections of roasted delights.</p>
     <p>Named Tour bundles, our choice - three different 100 g (3.53 oz) bags assembled on-demand so every bag is fresh when it reaches you. Each Tour includes a printed tasting card naming each roaster in the tour and their tasting notes. The aim of a Tour is simple: to lead you to the roaster you will want on a Roccia subscription. Tour bundles make excellent gifts for your coffee-loving friends.</p>
   </div></div>
   <main class="ci-main">
-    <div class="tour-hero">
-      <div class="tour-hero-text">
-        <p class="eyebrow" style="color:var(--ci-crema-light)">Published now</p>
-        <h2>Tour d'Italia 1</h2>
-        <p>A journey across regions: North, Central, South. Three 100 g bags - Gardelli Ethiopia, La Sosta Guatemala, Fusari Colombia - boxed with a tasting card.</p>
-        <p style="margin-top:.5rem;color:var(--ci-crema-light)">$77.70 · assembled to order</p>
-        <button class="btn btn-primary" style="margin-top:1rem" onclick="openProduct('tour-ditalia-1')">View Tour</button>
-      </div>
-      <div class="tour-bags"><div class="tour-bag">Gardelli<br>Ethiopia</div><div class="tour-bag">La Sosta<br>Guatemala</div><div class="tour-bag">Fusari<br>Colombia</div></div>
-    </div>
+    <!-- Catalog-driven, like every other shelf (Steve, 2026-08-19). This was a hard-coded
+         .tour-hero spotlighting one fixture Tour - its handle, title, price ($77.70) and
+         component list all written into the template, with a View Tour button opening that
+         one SKU. Sorpresa was the only shelf without a grid. Steve: "let the user read about
+         whatever tours are currently offered and choose one of their liking" - so however
+         many Tours exist, they all show, and none of them is named here. -->
+    <div class="section-head" style="margin-top:0"><p class="eyebrow">Published now</p><h2>Sorpresa Tours</h2></div>
+    <div class="card-grid" id="grid-sorpresa"></div>
     <div class="callout"><strong>Why a Tour sometimes disappears.</strong> A Tour is only available while all three of its coffees are in stock and within our freshly roasted promise window. If we do have to swap a coffee after you order, we pair you with something close from the same roaster and say so in your confirmation.</div>
     <div class="afd">The selection is ours, not the roaster's, because curating is our job. Every Tour is three 100 g bags, never mixed sizes.</div>
   </main>

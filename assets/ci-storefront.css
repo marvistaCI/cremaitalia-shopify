@@ -460,12 +460,6 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .cn strong{font-style:normal;color:var(--ci-crema-light)}
 
 /* ---- tour hero ---- */
-.tour-hero{background:linear-gradient(135deg,var(--ci-coffee),#6B4A38);border-radius:var(--ci-radius);padding:2.5rem;margin-top:2.5rem;margin-bottom:2.5rem;color:var(--ci-cream);display:flex;gap:2rem;align-items:center;flex-wrap:wrap}
-.tour-hero-text{flex:1;min-width:240px}
-.tour-hero h2{font-family:var(--ci-font-display);font-size:2rem;font-weight:400;color:var(--ci-cream);margin-bottom:.5rem}
-.tour-hero p{color:#d4c4b8;font-size:.95rem;max-width:none}
-.tour-bags{display:flex;gap:.75rem}
-.tour-bag{width:72px;height:96px;background:var(--ci-espresso);border-radius:6px;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--ci-crema-light);text-align:center;padding:.4rem}
 
 /* ---- promise ---- */
 .promise-list{list-style:none;padding:0;margin:2rem 0;display:flex;flex-direction:column;gap:1.5rem}
@@ -617,7 +611,6 @@ nav button.active{color:var(--ci-crema);font-weight:600}
   .roaster-row{grid-template-columns:1fr}
   .roaster-portrait{width:100%}
   .dark-hero{padding:2rem 1rem 1.5rem}
-  .tour-hero{padding:1.5rem}
   .shop-menu{position:static;box-shadow:none;min-width:0}
   /* Cart line on phones: 2 columns, so the third child (price + Remove) would otherwise wrap
      into the 48px thumbnail column and get crushed. Span it across its own row instead, and
@@ -767,7 +760,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 
    Inter's italic is a real face, so italic on Inter is never synthesised. But as of
    POC15 (2026-08-18) italic is no longer used for "secondary" at all: .afd, .cn,
-   .tour-bag, .pill.disabled, .flavor-desc and .cart-line-img all dropped it, because
+   .pill.disabled, .flavor-desc and .cart-line-img all dropped it, because
    Brand Standards §3.3 reserves italic for Italian ("italics carry meaning") and the
    site was spending it 31 times on English. Italic now means exactly one thing: .ita.
    This block only corrects the display face and faux-bold.
