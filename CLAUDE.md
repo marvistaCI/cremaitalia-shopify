@@ -2072,11 +2072,90 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   are real. §8.2 now states the rule without deferring anything; the 3PL item renumbered to §12.9.
   Both renders regenerated and delivered, gates at exit 0, v1.4 archived, md5-verified.
 
+- 2026-08-19 — **POC16 built and deployed — the re-score's fixes, plus a run of corrections Steve
+  found by reviewing the result.** Ledger: `docs/POC16_change_list.md`. Two sources: items from the
+  POC15 re-score (which moved the deployed theme **5.4 → 6.9** on the original audit's ten
+  dimensions — note the audit's headline was **5.4**, not the 5.7 it was remembered as), and a
+  longer run of things Steve raised while walking the result, several of them structural rather
+  than cosmetic.
+  **From the re-score.** Five sign-in inputs had **no accessible name** — the labels existed but
+  were never *associated*, so a screen reader announced unlabelled edit fields; `for`/`id` fixed it
+  (0 of 13 unlabelled, was 5). The **hero H1** set three lines on a phone with a two-word stub, and
+  the cause was two-deep: `text-wrap:pretty`, added the day before to fix it, turned out to be
+  **inert** (measured: `pretty`/`balance`/`wrap` produce byte-identical output, because Chrome does
+  not balance across a forced `<br>`), and the real cause was type size. Line 2 measures **13.838×**
+  its own font-size against a measure of exactly `viewport − 48px`, so a **fixed** value satisfies
+  it at one width only — which is how POC11 broke it, having verified "one line at every width" on
+  desktop alone. Now fluid. The clamp **floor** mattered more than the expression: at 20px it
+  silently overrode the calc at 320px and produced `"it."` alone on a line, a worse orphan than the
+  original defect. And **Shop + cart now sit above the fold on mobile**, closing the half of the
+  first audit's central finding POC14 left open — the 62px bar had **153px of measured empty space**
+  between logo and hamburger while both controls sat two taps deep.
+  **What Steve found by reviewing.** (1) A **fixture SKU hard-coded into customer copy** — the
+  grinder note linked `openProduct('bottega-burr-grinder')`, asserting we stock one specific grinder
+  from a shelf of entirely imagined SKUs. Now opens the shelf. A Bottega category filter was
+  considered and rejected: the only taxonomy is Equipment/Merch, so building one would have meant
+  inventing a second layer of fixture data to prop up the first. This produced a standing rule, now
+  in agent memory: never hard-code a handle from a fixture array into logic or copy. (2) The Shop
+  page's **shelf gloss was a parallel table** that had drifted from **all four** shelf pages; it now
+  reads each page's own description at selection time, so there is one description per shelf and
+  nothing to sync. (3) **Sorpresa was the only shelf without a product grid** — a hard-coded block
+  naming one fixture SKU, its price and components; now catalog-driven like the other three.
+  **The vocabulary cure.** Steve: *"Tour is simply an SKU name (description) and is NOT a website
+  term... I want to cure this drift once and for all."* The archetype is a **collection**; only some
+  collections are tours of anywhere, and using the narrower word as the category had quietly shrunk
+  the shelf to one kind of product. Swept across storefront copy, code comments, the build spec and
+  the Standard. **Not** swept: product names (`Tour d'Italia 1` is correct and stays — the four
+  remaining occurrences in rendered text are all that SKU name), and historical narrative. Recorded
+  as a **"Never" in §6**, which is what actually prevents recurrence.
+  **Gifting**, and the policy that reshaped it. Order-level rather than per line, because **a
+  Shopify order carries exactly one shipping address** — a per-item flag would promise a split the
+  platform cannot execute. In the cart because that is the only place it can live. Blocked on any
+  subscription line. But the durable decision was Steve's reframing: rather than "hide prices on
+  gift orders", **nothing inside any package shows a price, gift or not**, with the receipt as an
+  email entitlement — blanket rather than conditional, because a conditional rule must be executed
+  correctly by whoever is packing that day and **fails silently**. That made the feature smaller and
+  every order giftable by default. Two of his questions were answered by **relocating** them: "hide
+  prices" is neither a 3PL feature nor Loop's job but the Shopify packing-slip template, which we
+  control; what *is* a 3PL question became Standard §12.9, and its insert requirement is not new
+  scope because Sorpresa collections already ship a printed card.
+  **The meta description moved out of the Shopify admin into the theme.** It read "curated
+  *italian* roasted coffee only found here" — lowercase on the word the proposition rests on, 62 of
+  an available ~155 characters, claiming exclusivity when the differentiator is *unchanged*. It had
+  drifted for months unnoticed because the coming-soon theme **hardcodes its own** description and
+  masked it; only the POC surfaced it. Nothing reviews an admin field; code gets diffed. Ported
+  `live-theme`'s fallback chain so per-record descriptions still win in production.
+  **Standards: v1.3 → v1.6 across three publishes.** v1.4 vocabulary; v1.5 the packaging policy
+  (§8.1) and gifting (§8.2); v1.6 **removed** a §12.9 that v1.5 had opened on gift-subscription
+  entitlement — Steve: *"we've already said there is no gift subscription capability... then why do
+  you ask about Founding Member slot?"* He was right, and it is worth recording as a pattern rather
+  than a one-off: **writing a Standard invites inventing open questions in order to look thorough**,
+  and an open-decisions list is where that does the most damage, because speculative entries bury
+  the real ones. Also `production_build_spec.md` **§10** (weights: grams on the variant, conversion
+  at render, and the boundary where our rendering stops — checkout, confirmation emails and the
+  hosted account print the raw option value) and **§11** (commercial rules must never ship as string
+  literals; six on the product page, none currently drifted, all correct *by care rather than by
+  construction*).
+  **Two method lessons.** A defect in the cart line — a separator stranded at the end of a row after
+  POC15's dual units lengthened it — was found **only by looking at a screenshot**. Every geometry
+  assertion passed, because nothing overflowed or overlapped; and the Range-based text measurement
+  reached for next is equally blind, since it concatenates characters and cannot see a CSS margin.
+  Separately, a gift-control test reported two failures that were **contamination from state left by
+  the previous test run**, not code defects — re-run from an emptied cart it was correct throughout.
+  **DEPLOYED** via the `crema-poc-deploy` skill to a NEW unpublished theme **"Crema Italia POC16
+  Preview" (id `151983030441`)**: `theme list` + `git log origin/main..HEAD` run **first** (no
+  collision), validation at the documented baseline (15 offenses / 0 errors / 0 new), then
+  **pull-and-diff proved** the push — both sides **38** files, zero content mismatches, nothing on
+  only one side, exactly one theme of that name. **POC12 (`151798841513`) pruned** on Steve's
+  explicit go under the three-newest cap, its id re-verified against live immediately before the
+  delete; its batch is commit `1f0d7c1` on GitHub and redeployable. POC14, POC15 and the live theme
+  untouched.
+
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC15 (deployed + pull-and-diff proved 2026-08-18) — read this first
+**▶ CURRENT STATE — POC16 (deployed + pull-and-diff proved 2026-08-19) — read this first
 when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
@@ -2101,38 +2180,52 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC15 Preview" | `151970840745` |
+| **Newest POC preview** | "Crema Italia POC16 Preview" | `151983030441` |
+| Prior preview | "Crema Italia POC15 Preview" | `151970840745` |
 | Prior preview | "Crema Italia POC14 Preview" | `151800610985` |
-| Prior preview | "Crema Italia POC12 Preview" | `151798841513` |
 
-**POC15 is deployed** and is the only POC15 theme (all **38** files byte-match the repo — verified
-by pull-and-diff 2026-08-18, both sides 38 files, zero content mismatches, nothing present on only
-one side; `theme list` was run **before** the push per the rule above). The file count moved
-**39 → 38**: POC15 deleted the orphaned `assets/ci-cup.png` and added no files.
+**POC16 is deployed** and is the only POC16 theme (all **38** files byte-match the repo — verified
+by pull-and-diff 2026-08-19, both sides 38 files, zero content mismatches, nothing present on only
+one side; `theme list` was run **before** the push per the rule above). File count unchanged at 38 —
+POC16 edited existing files and added none.
 
-POC12 and POC14 previews and the live theme are untouched. Preview:
-`https://crema-italia.myshopify.com?preview_theme_id=151970840745`
+POC14 and POC15 previews and the live theme are untouched. Preview:
+`https://crema-italia.myshopify.com?preview_theme_id=151983030441`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
-2026-07-06). To refresh: `shopify theme push --theme 151970840745`.
+2026-07-06). To refresh: `shopify theme push --theme 151983030441`.
 
-**Only POC12, POC14 and POC15 previews now exist** — at the three-newest cap Steve set on
-2026-08-06, now enforced as `crema-poc-deploy` Step 5. **POC11 (`151797727401`) was deleted
-2026-08-18** on Steve's explicit go, after re-verifying the id against a live `theme list --json`
-immediately before the delete; its batch is commit `2a833d7` on GitHub and can be redeployed from
-git if ever wanted. **POC10 (`151624024233`) was deleted 2026-08-06** the same way (batch `dd0cbf1`),
-and POC4–POC9 (`151277174953`, `151420207273`, `151440130217`, `151449862313`, `151454122153`,
-`151523131561`) were deleted earlier that day. The erroneous POC9 duplicate `151615373481` was
-deleted 2026-07-25. **POC13's batch is on no theme** — commit `baff5e9`, redeployable; Steve
-confirmed he is not concerned about the previews skipping numbers.
+**Only POC14, POC15 and POC16 previews now exist** — at the three-newest cap Steve set on
+2026-08-06, enforced as `crema-poc-deploy` Step 5. **POC12 (`151798841513`) was deleted 2026-08-19**
+on Steve's explicit go, after re-verifying the id against a live `theme list --json` immediately
+before the delete; its batch is commit `1f0d7c1` on GitHub and can be redeployed from git. Earlier
+deletions: POC11 (`151797727401`, batch `2a833d7`) and POC13 on 2026-08-18; POC10 (`151624024233`,
+batch `dd0cbf1`) and POC4–POC9 on 2026-08-06; the erroneous POC9 duplicate `151615373481` on
+2026-07-25.
 
-A `Development (...)` theme may also appear in `theme list` — that is the throwaway created by
+A `Development (...)` theme may also appear in `theme list` — the throwaway created by
 `shopify theme dev`, not a deploy. Ignore it. **Its id is deliberately not recorded here**: the CLI
-creates a fresh one per machine/session, so any id written down goes stale (this block named
-`151795564713` until 2026-08-18, by which point it no longer existed).
+mints a fresh one per machine and session, so any id written down goes stale.
 
 **The live theme is current with the repo** as of the 2026-07-24 push (all 13 files byte-match;
 zero customer-visible em-dashes verified by cookie-less fetch). **Storefront password still OFF**
 (friend-testing) — now purely a friend-testing decision, not a copy-quality one.
+
+**What POC16 is:** POC15 plus the fixes its re-score produced, and a run of vocabulary and
+data-model corrections Steve raised while reviewing (12 commits, `5812884`..`203b23c`). Headlines:
+**"Tour" is a SKU name, not a site term** — the word had spread across the storefront, the Standard
+and the build spec as though it were the category, quietly narrowing the Sorpresa shelf to one kind
+of product; the archetype is a **collection**, and it is now a "Never" in §6. **Sorpresa renders
+from the catalog** like every other shelf, replacing a hard-coded block that named one fixture SKU,
+its price and its components. **One description per shelf** — the Shop gloss was a parallel table
+that had drifted from all four shelf pages, and now reads each page's own description. **Gifting**
+arrived as an order-level cart option, blocked on any subscription line. The hero H1 holds **two
+lines at every phone width** via fluid sizing rather than a value tuned at one width, and **Shop +
+cart now sit above the fold on mobile**, closing the half of the first audit's central finding that
+POC14 left open. Also: five unlabelled sign-in inputs fixed, the Bottega link points at the shelf
+rather than a fixture SKU, and the **meta description moved out of the Shopify admin into the
+theme** after it was found reading "curated *italian* roasted coffee only found here" behind the
+coming-soon page's hardcoded override. Standards moved **v1.3 → v1.6** across three publishes.
+Detail: `docs/POC16_change_list.md`.
 
 **What POC15 is:** POC14 plus four items from the POC13 audit backlog, and one systemic brand
 breach found by looking at the result (4 commits, `fce62f4`..`995b11c`). Closed both outstanding
