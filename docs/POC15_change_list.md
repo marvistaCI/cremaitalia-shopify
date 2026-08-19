@@ -92,6 +92,13 @@ He is right, and the distinction is worth stating because it is the boundary of 
 
 Swept for the shape: this sentence was the only mixed-paren enumeration on the site.
 
+**Decided and closed (Steve, 2026-08-19): the card footer stays as it is.** It stacks
+`From $38.00 /250 g (8.82 oz)` above `250 g · 500 g · 1 kg`, so `250 g` appears twice one line
+apart, parenthesized once. Raised because it is arguably the same shape as the sentence above,
+one line apart rather than one sentence; Steve looked at it and left it. The two lines do
+different jobs - a price-per-unit and a list of what you can buy - and the conversion belongs
+with the price. Do not re-open this.
+
 ### The 16 oz rule (Steve, added after the first deploy)
 
 500 g was rendering as **17.64 oz**. Steve's call: past a pound, an American thinks in pounds,
