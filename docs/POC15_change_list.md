@@ -74,8 +74,23 @@ deliver one fact.
 | Sorpresa Tour | `/3×100 g (3.53 oz)` |
 | Cart line | `1 kg (2.20 lb) · One-time` |
 
-Same anchor principle applied to static copy: *"Bag sizes 250 g (8.82 oz), 500 g, and 1 kg."*
-and one conversion per page for the Tour's 100 g, not three.
+Same anchor principle applied to static copy: one conversion per page for the Tour's 100 g,
+not three.
+
+**Amended by Steve, 2026-08-19 - all or none inside one statement.** The anchor principle was
+applied *within* a sentence too, producing *"Bag sizes 250 g (8.82 oz), 500 g, and 1 kg."* Steve:
+*"if we're going to paren size this item, we should paren all sizes indicated in this statement."*
+He is right, and the distinction is worth stating because it is the boundary of the principle:
+
+- **Within one statement that enumerates sizes: convert all, or convert none.** Half-converting
+  reads as an oversight, not as restraint. Now: *"Bag sizes 250 g (8.82 oz), 500 g (1.10 lb), and
+  1 kg (2.20 lb)."*
+- **Across separate statements on a page: the anchor principle still holds** - the Sorpresa hero
+  converts its 100 g, and the Tour card and footnote below it do not repeat the conversion.
+- **The card size list converts nothing at all** (`250 g · 500 g · 1 kg`), which satisfies the same
+  rule by the "none" branch; the price denominator beside it carries the conversion.
+
+Swept for the shape: this sentence was the only mixed-paren enumeration on the site.
 
 ### The 16 oz rule (Steve, added after the first deploy)
 
