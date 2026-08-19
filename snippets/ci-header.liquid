@@ -10,6 +10,24 @@
   <div class="header-inner">
     <img class="ci-logo" src="{{ 'ci-logo.png' | asset_url }}" alt="Crema Italia" width="146" height="44"
          onclick="showPage('home')">
+    {%- comment -%}
+      POC16: mobile-only quick actions. On desktop Shop and the cart live in
+      .header-right; below the mobile breakpoint that whole block collapses into the
+      hamburger panel, which left the 62px bar carrying nothing but a logo and a
+      hamburger - 153px of it measurably empty - and put the cart two taps away.
+      A visitor arriving cold on a phone had no signal above the fold that this is a
+      shop at all, and a customer with a full cart had no visible way back to it.
+      Shop routes STRAIGHT to the all-shelves page rather than opening a submenu:
+      a second menu system running beside the hamburger panel is the real risk here,
+      not the two extra elements.
+    {%- endcomment -%}
+    <div class="header-quick">
+      <button class="hq-btn hq-shop" onclick="showPage('shop')">Shop</button>
+      <button class="hq-btn hq-cart" aria-label="Cart" onclick="showPage('cart')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M6 6 5 3H2"></path></svg>
+        <span class="cart-count">0</span>
+      </button>
+    </div>
     <button class="hamburger" id="hamburger" aria-label="Menu" aria-haspopup="true" aria-expanded="false"
             aria-controls="header-right" onclick="toggleMobileMenu()">
       <span class="ham-bars" aria-hidden="true"><span></span><span></span><span></span></span>

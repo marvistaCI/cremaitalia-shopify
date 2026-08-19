@@ -13,15 +13,15 @@
       <button class="signin-tab" onclick="switchTab('up')">Create Account</button>
     </div>
     <div id="tab-in">
-      <div class="form-field"><label>Email</label><input type="email" placeholder="you@example.com"></div>
-      <div class="form-field"><label>Password</label><input type="password" placeholder="Your password"></div>
+      <div class="form-field"><label for="si-email">Email</label><input id="si-email" name="si-email" type="email" autocomplete="email" placeholder="you@example.com"></div>
+      <div class="form-field"><label for="si-password">Password</label><input id="si-password" name="si-password" type="password" autocomplete="current-password" placeholder="Your password"></div>
       <button class="btn btn-primary" style="width:100%" onclick="simulateSignIn()">Sign In</button>
       <p class="note">Subscribers see their 10% benefit (12% for Founding Members) applied automatically across Roccia, Sorpresa, and Selezione once signed in.</p>
     </div>
     <div id="tab-up" style="display:none">
-      <div class="form-field"><label>Name</label><input type="text" placeholder="Your name"></div>
-      <div class="form-field"><label>Email</label><input type="email" placeholder="you@example.com"></div>
-      <div class="form-field"><label>Password</label><input type="password" placeholder="Choose a password"></div>
+      <div class="form-field"><label for="su-name">Name</label><input id="su-name" name="su-name" type="text" autocomplete="name" placeholder="Your name"></div>
+      <div class="form-field"><label for="su-email">Email</label><input id="su-email" name="su-email" type="email" autocomplete="email" placeholder="you@example.com"></div>
+      <div class="form-field"><label for="su-password">Password</label><input id="su-password" name="su-password" type="password" autocomplete="new-password" placeholder="Choose a password"></div>
       <button class="btn btn-primary" style="width:100%" onclick="simulateSignIn()">Create Account &amp; Save Profile</button>
     </div>
   </div>

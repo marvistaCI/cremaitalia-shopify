@@ -1096,11 +1096,16 @@
   };
   function cartUnits() { return cart.reduce(function (n, it) { return n + (it.qty || 1); }, 0); }
   function updateCartCount() {
-    var el = $('cart-count');
-    if (!el) return;
+    // Two badges since POC16: the desktop bar's and the mobile quick-actions one.
+    // Queried by CLASS, not id - duplicating id="cart-count" would be invalid HTML and
+    // $() would silently update only whichever came first in the document.
+    var els = document.querySelectorAll('.cart-count');
+    if (!els.length) return;
     var units = cartUnits();
-    el.textContent = units;
-    el.classList.toggle('show', units > 0);
+    for (var i = 0; i < els.length; i++) {
+      els[i].textContent = units;
+      els[i].classList.toggle('show', units > 0);
+    }
   }
   function eligibleForSubscriberDiscount(shelf) { return shelf === 'roccia' || shelf === 'sorpresa' || shelf === 'selezione'; }
   function renderCart() {

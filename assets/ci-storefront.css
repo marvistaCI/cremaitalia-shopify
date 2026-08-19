@@ -75,6 +75,12 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .ci-header.menu-open .ham-bars span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 .btn-label{display:none}
 
+/* Mobile quick actions (POC16). Hidden by default; the mobile block below turns them
+   on. This base rule sits BEFORE that media block ON PURPOSE - media queries add no
+   specificity, so a base rule placed after would silently win and discard the whole
+   mobile treatment. That is exactly how the account dropdown broke in POC13. */
+.header-quick{display:none}
+
 /* ---- MOBILE / TABLET header: hamburger + tap-first panel ----
    Triggers at <=1024px OR on any touch device (hover:none + pointer:coarse),
    so phones and tablets in portrait AND landscape all get the tap-first menu
@@ -82,6 +88,13 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 @media (max-width:1024px), (hover:none) and (pointer:coarse){
   .hamburger{display:flex}
   .header-inner{flex-wrap:nowrap;padding:.5rem 1rem;gap:.5rem}
+  /* Shop + cart, pushed right so they sit beside the hamburger rather than floating
+     in the middle of the bar (.header-inner is space-between). */
+  .header-quick{display:flex;align-items:center;gap:.35rem;margin-left:auto}
+  .hq-btn{background:none;border:none;cursor:pointer;color:var(--ci-espresso);display:flex;align-items:center;justify-content:center;min-height:44px;padding:0 .55rem;font-family:var(--ci-font-body);font-size:.95rem;font-weight:500;line-height:1}
+  .hq-btn:hover{color:var(--ci-crema)}
+  .hq-cart{min-width:44px;padding:0 .3rem}
+  .hq-cart svg{width:21px;height:21px;display:block}
   /* .header-right collapses into a full-width dropdown panel under the bar */
   .header-right{position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;flex-wrap:nowrap;background:var(--ci-cream);border-bottom:1px solid var(--ci-hairline);box-shadow:0 12px 24px rgba(59,31,18,.14);padding:.3rem 0 .5rem;max-height:calc(100vh - 62px);overflow-y:auto;display:none}
   .ci-header.menu-open .header-right{display:flex}
@@ -318,6 +331,29 @@ nav button.active{color:var(--ci-crema);font-weight:600}
    the string is 11.2x its font-size in Marcellus, so the clamp max must stay under
    (hero-inner 760px / 11.2) = 67px, and the min under (327px / 11.2) = 29px at 375px. */
 .hero h1{font-family:var(--ci-font-display);font-size:clamp(1.625rem,4vw,2.5rem);font-weight:400;color:var(--ci-cream);line-height:1.15;margin-bottom:0;text-wrap:balance}
+/* PHONE SIZING FOR THE HERO H1 - the line count is a TYPE problem, not a wrap problem.
+   The markup forces a break at the sentence boundary, so line 2 is always
+   "Exactly as the roaster sealed it." MEASURED (2026-08-19, not estimated): that string
+   sets 13.838x its own font-size in Marcellus, and the measure is exactly viewport-48px.
+   So it holds one line while
+       font-size <= (viewport - 48) / 13.838
+   giving 19.7px at 320, 22.5 at 360, 23.6 at 375, 24.7 at 390, 26.4 at 414, 27.5 at 428.
+   calc(7vw - 3.4px) sits under that ceiling at every one of those widths with ~4% slack.
+
+   A FIXED value satisfies the inequality at exactly ONE width, which is how this broke:
+   POC11 verified "one line at every width" on desktop only, and the headline had been
+   setting three lines with a two-word stub on phones ever since.
+
+   The floor is 18px and it matters more than it looks. It was briefly 20px, which at
+   320px OVERRODE the calc's 19.0 - pushing the size above the 19.7 ceiling and wrapping
+   to three lines with "it." alone on the last one, a two-character orphan far worse than
+   the defect being fixed. A clamp floor is a silent override; check it against the
+   narrowest viewport, not just the expression.
+
+   Re-measure if the headline copy changes - 13.838x is specific to this string. */
+@media (max-width:640px){
+  .hero h1{font-size:clamp(18px, calc(7vw - 3.4px), 1.625rem)}
+}
 .hero .subhead{font-family:var(--ci-font-display);font-size:clamp(1.1rem,2.5vw,1.4rem);color:var(--ci-crema-light);margin:.75rem auto 1rem;max-width:560px}
 /* Green-white-red tricolore divider: 3 equal segments, aligned, on dark panels. */
 .hero .tricolore{width:132px;height:4px;margin:0 auto 1.4rem;display:grid;grid-template-columns:1fr 1fr 1fr;overflow:hidden;border-radius:1px;line-height:0}
@@ -783,11 +819,23 @@ strong, b { font-weight: 600; }
 @media (max-width:640px){.footer-signup{padding-top:1.25rem}}
 /* Screen-reader-only label text (the signup field is placeholder-led visually). */
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-/* Break the hero H1 at its SENTENCE boundary, not wherever text-wrap:balance
-   prefers. Balance was splitting "Exactly / as the roaster sealed it", stranding
-   "Exactly" and leaving a full stop mid-line. Line count is unchanged (2 desktop /
-   3 mobile) - this only moves where the break falls. (2026-08-18) */
-.hero h1{text-wrap:pretty}
+/* The hero H1 breaks at its SENTENCE boundary via <br class="h1-break"> in the markup,
+   not via a wrap algorithm. text-wrap:pretty used to sit here to stop balance stranding
+   "Exactly"; measured 2026-08-19, pretty / balance / wrap now produce byte-identical
+   output, because Chrome does not balance across a forced <br> - so the declaration was
+   inert and its stated reason no longer held. Removed rather than left as decoration.
+   The mobile sizing below is what actually controls the line count now. */
+
+/* Below 360px the word and the cart no longer both fit; drop the word, keep the cart,
+   which is the stronger signal of the two. THE ARITHMETIC, written down so a later
+   label change ("Shop all") cannot silently reintroduce the overflow:
+     gap available = viewport - 32 (bar padding) - 146 (logo) - 44 (hamburger) - 28 (gaps)
+   MEASURED 2026-08-19 rather than calculated: the pair renders 105px wide, and the gap
+   between logo and hamburger is 138px at viewport 360 and 98px at 320. So both fit from
+   360 up with 33px to spare, and at 320 only the cart does. (An earlier estimate here
+   said 110px into 110px - "zero slack at 360" - which was over-conservative; the real
+   figures are above.) If the logo or the label grows, re-measure. */
+@media (max-width:359px){ .hq-shop{display:none} }
 
 /* ---------- .ita — the Italian-language cue (implemented 2026-08-18) ----------
    19 spans in the markup carried class="ita" and, outside the Shop dropdown, it
