@@ -1207,7 +1207,7 @@
       html += '<div class="cart-line">' +
         '<div class="cart-line-img card-img ' + imgCls(it.img) + '"' + imgStyle(it.img) + '>' + esc(it.img ? it.img.label.split(' · ')[0] : '') + '</div>' +
         '<div><h4>' + esc(it.title) + '</h4>' +
-        '<div class="rn">' + esc(sizeDual(it.size)) + (it.sub ? ' · <span class="tag-pill">Roccia subscription · every ' + esc(it.cadence) + ' weeks</span>' : ' · One-time') + '</div>' +
+        '<div class="rn">' + esc(sizeDual(it.size)) + (it.sub ? '<span class="tag-pill rn-tail">Roccia subscription &middot; every ' + esc(it.cadence) + ' weeks</span>' : '<span class="rn-tail">&middot; One-time</span>') + '</div>' +
         '<div class="qty-stepper"><button onclick="changeQty(' + i + ',-1)" aria-label="Decrease quantity">&minus;</button>' +
         '<span class="qty-n">' + qty + '</span>' +
         '<button onclick="changeQty(' + i + ',1)" aria-label="Increase quantity">+</button></div>' +

@@ -401,6 +401,14 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .sb{background:#2a2a3a;color:#c8c8d8}
 .card h3{font-family:var(--ci-font-display);font-weight:400;font-size:1.2rem;color:var(--ci-coffee);margin:0 0 .25rem}
 .rn{font-size:.85rem;color:var(--ci-espresso);margin-bottom:.5rem}
+/* POC15's dual units lengthened this line ("250g" -> "250 g (8.82 oz)") and pushed the
+   subscription pill onto a second row, stranding a bare "·" at the end of the first. The
+   separator is now dropped entirely for the pill - a bordered capsule already reads as a
+   separate object, and a leading "·" on the wrapped line just looks like a bullet - and kept
+   only for the plain "One-time" text, which has no border to do that work.
+   Found by LOOKING. Every geometry check passed: nothing overflowed, nothing overlapped, and
+   a Range-based text measurement cannot see a dangling separator OR a CSS margin. */
+.rn-tail{margin-left:.3em}
 .card p{font-size:.9rem;color:var(--ci-ink-soft);margin:0 0 .75rem;max-width:none}
 .cp{font-family:var(--ci-font-body);font-weight:600;font-size:1rem;color:var(--ci-coffee)}
 .card-footer{padding:.75rem 1.25rem;border-top:1px solid var(--ci-hairline);display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap}
