@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.1) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.3) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.4) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > **Editing protocol:** Code owns the repo and all Standard sources; **Cowork proposes,
@@ -314,6 +314,12 @@ lowercase-with-hyphens for CSS classes (`.hero-section__title`), camelCase for J
   sentence trails into a sequenced next thought, use an ellipsis (`...`); if unsure, ask
   Steve. This applies to customer-facing copy only - internal docs (this file, the change
   lists, code comments) may still use them.
+- **Never** use "Tour" as a site or category term (Steve, 2026-08-19). *Tour* is a SKU
+  **name** - `Tour d'Italia 1`, `Tour Tuscany` - not vocabulary. The archetype is a
+  **collection**, and a collection need not be a tour at all: `Decaf Collection 1` and
+  `Roaster's Favorites 2` are the same thing. The word had crept into the storefront, the
+  Store Operating Standard and the build spec as the category name; it was swept out in
+  POC16. Name a product whatever it should be called; describe the archetype as a collection.
 - **Never** italicize for emphasis (use bold); italics are reserved for Italian-language
 - **Never** ship an edited Crema Italia document still on an old brand version (see §6.1)
 
@@ -2003,6 +2009,34 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   separate session during this batch. It was left uncommitted rather than absorbed into a POC15
   commit, per the two-sessions rule; Steve's own session then committed it as `995b11c` before this
   one could. Nothing was lost and the two never wrote the same file — the rule worked as intended.
+
+- 2026-08-19 — **"Tour" is a SKU name, not a site term — vocabulary cured across the storefront,
+  the Standard and the build spec (Steve).** Steve: *"The term tour crept into our vocabulary
+  because I mentioned that a collection might be a tour of a region such as Tour Tuscany, or an
+  Italian Tour as in Tour d'Italia 1. It could also be a Decaf Collection 1. Roaster's favorites 1,
+  Roaster's favorites 2, etc. Tour is simply an SKU name (description) and is NOT a website term...
+  I want to cure this drift once and for all."* The archetype is a **collection**; only some
+  collections are tours of anywhere, and using the narrower word as the category quietly shrank the
+  Sorpresa shelf to one kind of product. **Swept:** storefront copy (Sorpresa page, home shelf card,
+  home CTA, callout, footnote, FAQ, empty-cart suggestion), the code comments that used it as the
+  category term, `docs/production_build_spec.md` §7, and the Store Operating Standard.
+  **Deliberately NOT swept:** product names (`Tour d'Italia 1` is correct and stays — four
+  occurrences remain in rendered text, all of them the SKU name), and historical narrative — §9
+  entries, `docs/POC*_change_list.md`, the archived POC v2/v3 HTML, and code comments describing
+  what *used* to exist. Judge by tense, per `crema-poc-deploy` Step 6.4.
+  **Store Operating Standards v1.3 → v1.4** published via `crema-std-publish`: vocabulary only, no
+  rule change — pricing factors, matrices and every other rule are untouched. New **§1.1** states
+  the rule so the Standard now carries it rather than just complying with it. Both renders that the
+  edit touched were regenerated (Store Operating v1.4 **and** Collaboration v1.1, whose companion
+  header changed without its own version moving — the blind spot recorded in that skill after
+  `f9ffcb1`), all gates passed at exit 0, v1.3 archived, both delivered to OneDrive `Standards\`
+  and md5-verified against the repo copies. The rule is also a **"Never" in §6**, which is what
+  actually prevents recurrence since this file loads every session.
+  **Also fixed in the same pass, same root cause:** the Sorpresa page was the only shelf without a
+  product grid — a hard-coded `.tour-hero` naming one fixture SKU, its price and its components.
+  Now a catalog-driven grid like the other three. And the Shop page's shelf gloss was a parallel
+  `SHELF_NOTE` table that had drifted from all four shelf pages; it now reads each shelf page's own
+  description at selection time, so there is one description per shelf and nothing to keep in sync.
 
 ---
 

@@ -214,7 +214,7 @@
     return String(sz == null ? '' : sz).replace(/(\d+(?:\.\d+)?)\s*(kg|g)\b/g, '$1 $2');
   }
   // "250g" -> "250 g (8.82 oz)". The compliant form. Works on any string containing a
-  // weight token, so it also handles composite units like the Tour's "/3x100g".
+  // weight token, so it also handles composite units like a collection's "/3x100g".
   function sizeDual(sz) {
     return String(sz == null ? '' : sz).replace(/(\d+(?:\.\d+)?)\s*(kg|g)\b/g, function (m, n, u) {
       return n + ' ' + u + ' (' + convertWeight(parseFloat(n), u) + ')';
@@ -265,7 +265,7 @@
   // Region display labels (filter value -> label).
   var REGION_LABEL = { toscana: 'Toscana', emilia: 'Emilia-Romagna', piemonte: 'Piemonte', sicilia: 'Sicilia' };
   function uniq(a) { var seen = {}, out = []; for (var i = 0; i < a.length; i++) { var v = a[i]; if (v && !seen[v]) { seen[v] = 1; out.push(v); } } return out; }
-  // A product's filter facets. A bundle/Tour is a BOM SKU (box + component coffees + card):
+  // A product's filter facets. A bundle/collection is a BOM SKU (box + component coffees + card):
   // it inherits the UNION of its components' facets, so it is "positive" to a filter if ANY
   // component matches (per-axis; AND across axes). See docs/production_build_spec.md for the
   // administrable BOM-builder requirement this stands in for. A single product carries its
@@ -418,7 +418,7 @@
     }
     $('roaster-bio').innerHTML = (r.bio || []).map(function (para) { return '<p>' + esc(para) + '</p>'; }).join('');
     $('roaster-bags-head').textContent = 'Available from ' + r.name.split(' ')[0];
-    // Show this roaster's coffee from all four shelves — including bundle/Tour
+    // Show this roaster's coffee from all four shelves — including bundle/collection
     // products that name this roaster via the structured `roasters` array rather
     // than the single `roaster` field. Bottega has no `roaster` field, so it's
     // naturally excluded without a shelf allowlist. See docs/POC_v4_change_list.md
@@ -1127,7 +1127,7 @@
     if (!el) return;
     if (!cart.length) {
       el.innerHTML = '<div class="cart-empty"><p style="font-weight:600;color:var(--ci-espresso)">Your bag is empty.</p>' +
-        '<p style="font-size:.9rem;margin-top:.25rem">Start with a <button onclick="showPage(\'sorpresa\')" style="background:none;border:none;color:var(--ci-crema);font-weight:600;cursor:pointer;text-decoration:underline">Sorpresa Tour</button> or build a <button onclick="showPage(\'roccia\')" style="background:none;border:none;color:var(--ci-crema);font-weight:600;cursor:pointer;text-decoration:underline">Roccia subscription</button>.</p></div>';
+        '<p style="font-size:.9rem;margin-top:.25rem">Start with a <button onclick="showPage(\'sorpresa\')" style="background:none;border:none;color:var(--ci-crema);font-weight:600;cursor:pointer;text-decoration:underline">Sorpresa collection</button> or build a <button onclick="showPage(\'roccia\')" style="background:none;border:none;color:var(--ci-crema);font-weight:600;cursor:pointer;text-decoration:underline">Roccia subscription</button>.</p></div>';
       return;
     }
     var html = '';

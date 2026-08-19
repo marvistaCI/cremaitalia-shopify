@@ -1,8 +1,18 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.3 · 2026-07-25**
+**Version 1.4 · 2026-08-19**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.4 (2026-08-19)** is a **vocabulary correction, no rule change.** "Tour" was being used
+> throughout as the *name of the archetype* — "Tour / bundle pricing", "Tours / bundles — the BOM
+> model", "Sorpresa ships only as Tours". It is not the archetype; it is a **SKU name**. Steve:
+> *"Tour is simply an SKU name (description) and is NOT a website term."* The archetype is a
+> **collection**, and a collection need not be a tour of anywhere — `Decaf Collection 1` and
+> `Roaster's Favorites 2` are the same thing as `Tour d'Italia 1`. Every archetype usage in this
+> Standard is now "collection"; product names are unaffected. The same sweep ran across the
+> storefront copy and `docs/production_build_spec.md`, and the rule is recorded in `CLAUDE.md` §6.
+> See §1.1 below. Rules, pricing factors and matrices are **unchanged**.
 
 > **v1.3 (2026-07-25)** replaced the unachievable **"No visible promo-code field at checkout"** exclusion
 > (§10) with the rule we can actually hold: **we issue no discount codes at all.** Checkout's code field
@@ -57,10 +67,26 @@ and taxonomy; **Bottega** is a separate non-coffee retail section, not a fifth c
 | Shelf | English meaning | Commercial role | Key rules |
 |---|---|---|---|
 | **Roccia** | "Rock / staple" | The subscription backbone — everyday coffees sold one-time **and** as Roccia subscriptions | Bag sizes 250g / 500g / 1kg (**no 100g**). The only shelf with subscriptions. |
-| **Sorpresa** | "Surprise" | Discovery **Tour** bundles (composite BOM SKUs) | Sorpresa 100g bags exist **only inside Tour bundles**, never sold alone. One-time only. |
+| **Sorpresa** | "Surprise" | Discovery **collections** (composite BOM SKUs) | Sorpresa 100g bags exist **only inside collections**, never sold alone. One-time only. |
 | **Selezione** | "Selection" | Premium / seasonal / limited micro-lots | One-time purchase only, never a subscription. Honest scarcity ("low inventory" under 12 units, hard cap). Active Roccia subscribers see new SKUs 48h early (Locksmith, tag `active-roccia`). |
 | **Offerta** | "Offer / deal" | Aged lots moved to an honest markdown as they approach their freshness limit | Not stocked directly — items *transition* here by age (see §6). Uses the `O[size]` markup factors. Guarantee is "as-is, defects only" (see §5). |
 | **Bottega** | "Shop / workshop" | Non-coffee retail: equipment, accessories, Crema Italia merch | Independent ordering experience. No roaster affiliation, no freshness/expiry logic. Never appears on roaster profiles. Never discounted for subscribers/Founding. |
+
+### 1.1 Vocabulary — *collection* is the term, *Tour* is a name
+
+A Sorpresa product is a **collection**: a named, curated set of component coffees sold as one
+composite BOM SKU (§7).
+
+**"Tour" is a SKU name, not a category term** (Steve, 2026-08-19). `Tour d'Italia 1` and
+`Tour Tuscany` are *names of collections*, in the same way `Decaf Collection 1` and
+`Roaster's Favorites 2` are — all three are the same archetype, and only the first two happen
+to be tours of anywhere. The word entered the vocabulary because the first worked example was
+regional; it then spread across the storefront, this Standard and the build spec as though it
+were the category itself, which quietly narrowed the shelf to one kind of product.
+
+Applies to every surface: storefront copy, this Standard, `docs/production_build_spec.md`, and
+future admin/ops language. Name a product whatever it should be called; describe the archetype
+as a **collection**. Recorded as a "Never" in `CLAUDE.md` §6.
 
 ---
 
@@ -90,7 +116,7 @@ Retail price = SKU_LAST_COST × Markup[Shelf, Size]
 | **Offerta** | *uses the `O[size]` factor of the item's originating shelf* | | | | | | | |
 | **Bottega** | 2.0× flat (1.5× if clearing) | | | | | | | |
 
-> **Sorpresa 250g / O250g are intentionally blank (retired 2026-07-13).** Sorpresa ships **only as Tours**
+> **Sorpresa 250g / O250g are intentionally blank (retired 2026-07-13).** Sorpresa ships **only as collections**
 > (§2.3), priced off the 100g factor (3.7× fresh / 3.2× aged); there is no standalone Sorpresa 250g
 > product, so those cells carry no live factor. If a standalone Sorpresa bag is ever introduced, restore
 > the cells and log it.
@@ -102,11 +128,11 @@ Retail price = SKU_LAST_COST × Markup[Shelf, Size]
 > default plus a per-SKU override). An override is a **deliberate exception, not the norm**, and it
 > **routes through the same admin approval** as any price change (§2.4).
 
-### 2.3 Tour / bundle pricing
+### 2.3 Collection / bundle pricing
 
-- `Tour cost = Σ (component SKU_LAST_COSTs) + packaging_cost`
-- `Tour retail = Tour cost × Sorpresa/100g factor (3.7×)`; an aged Tour uses `3.2×`.
-- Component cost changes flow into Tour cost automatically; the customer-facing Tour price updates
+- `Collection cost = Σ (component SKU_LAST_COSTs) + packaging_cost`
+- `Collection retail = Collection cost × Sorpresa/100g factor (3.7×)`; an aged collection uses `3.2×`.
+- Component cost changes flow into collection cost automatically; the customer-facing collection price updates
   **only on admin approval** (same governance as any SKU).
 - *Worked example:* (6.00 + 5.50 + 7.00 components) + 2.50 packaging = 21.00 → ×3.7 = **$77.70**.
 
@@ -163,7 +189,7 @@ Consequences, all deliberate:
 | **First-time buyer** | 5% | All shelves except Bottega | One-time, detected server-side (zero prior orders). A first-time founder/subscriber still gets 12/10% (higher). |
 | **BFCM** | 5% | All shelves incl. Offerta/Bottega | Manual admin toggle, site banner. A **flat** candidate in the `MAX` (no longer additive) — mainly benefits customers who hold no higher discount. |
 | **Abandoned cart** | 5% | All shelves | Triggered at email #3 as a time-boxed customer tag (the email links to the store, not to a code); once per customer per 90 days. |
-| **Referral** | **TBD** | **TBD** | Referral capture is **not built yet**; reward + mechanism are open (§12.6). The former "free 100g bag" is void — 100g exists only inside Tours (§1), so there is no standalone 100g SKU to gift. **Whatever form it takes, it must not require issuing a code** (the no-codes policy above). |
+| **Referral** | **TBD** | **TBD** | Referral capture is **not built yet**; reward + mechanism are open (§12.6). The former "free 100g bag" is void — 100g exists only inside collections (§1), so there is no standalone 100g SKU to gift. **Whatever form it takes, it must not require issuing a code** (the no-codes policy above). |
 
 ### 3.1 Subscriber benefits & how long they last (LOCKED 2026-07-13)
 
@@ -253,12 +279,12 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
 
 ---
 
-## 7. Tours / bundles — the BOM model
+## 7. Collections / bundles — the BOM model
 
-A Tour (and any future bundle) is a **Bill-of-Materials SKU**: box + N component coffee SKUs +
+A collection (and any future bundle) is a **Bill-of-Materials SKU**: box + N component coffee SKUs +
 printed tasting card.
 
-- **Browse facets are DERIVED from components, never hand-entered.** A Tour's Region / Roast / Flavor /
+- **Browse facets are DERIVED from components, never hand-entered.** A collection's Region / Roast / Flavor /
   Caffeine values are the **union** of its components (Option A: positive to a filter when **any**
   component matches, per axis; AND across axes). Modelled in the POC via `component_handles` +
   `productFacets()`.
@@ -266,10 +292,10 @@ printed tasting card.
   within freshness; auto-pauses and returns automatically as stock rotates.
 - **On-demand 3PL fulfilment:** on order, 3PL pulls components FIFO, assembles box + bags + card,
   QC's all roast dates within the 60-day window, ships in 1–2 business days.
-- **Substitution matrix** (admin-defined per Tour): if a component is within 7 days of its transition
+- **Substitution matrix** (admin-defined per collection): if a component is within 7 days of its transition
   date or out of stock after order, 3PL may substitute a defined alternate from the same roaster;
   customer is told ("Same quality, same roaster, new terroir").
-- **REQUIRED production capability:** an **admin-managed BOM builder** — create a Tour by naming it
+- **REQUIRED production capability:** an **admin-managed BOM builder** — create a collection by naming it
   and selecting component SKUs, facets/availability auto-derive, and each order emits a per-order
   pick-pack BOM to the 3PL. No developer, no code deploy. (See §11 tooling.)
 
@@ -400,7 +426,7 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    post-launch — confirmed deferred, tracked here so it isn't lost.
 6. **Referral program — reward + capture TBD (2026-07-13).** No referral-capture mechanism has been
    built, and the former "free 100g bag" reward is void (no standalone 100g SKU — 100g exists only inside
-   Tours, §1). Both the reward form (e.g. a 250g bag, account credit) and the capture/tracking tooling are
+   collections, §1). Both the reward form (e.g. a 250g bag, account credit) and the capture/tracking tooling are
    open; decide before any referral discount is enabled. The §3 table carries Referral as **TBD** until then.
    **Constraint added v1.3:** the chosen form must not require issuing a discount code (§3).
 7. **UNVERIFIED — can a Shopify discount Function read customer tags/metafields?** The whole §11 engine
@@ -415,5 +441,5 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
 
 ---
 
-*Store Operating Standards v1.3 · 2026-07-25 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.4 · 2026-08-19 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
