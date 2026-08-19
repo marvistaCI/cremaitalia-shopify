@@ -15,8 +15,35 @@
     {%- endif -%}
   </title>
 
-  {%- if page_description -%}
+  {%- comment -%}
+    META DESCRIPTION — authored HERE, not in the Shopify admin (Steve, 2026-08-19).
+
+    This is the grey sentence under a Google result: the first thing a stranger reads about
+    the company, before they have seen anything we made. It was coming from the admin SEO
+    field and read "Crema Italia - curated italian roasted coffee only found here." — lowercase
+    on the one word the whole proposition rests on, 62 characters of an available ~155, and
+    "only found here" claiming exclusivity when the differentiator is that the coffee is
+    UNCHANGED.
+
+    It drifted for months without anyone noticing, and the reason is worth keeping: the
+    coming-soon theme HARDCODES its own description (live-theme/layout/theme.liquid:36), so
+    the live site read correctly while the admin value sat wrong behind it. Nothing reviews an
+    admin field. Code gets diffed.
+
+    The fallback chain below is the one live-theme already uses, ported:
+      index          -> this theme-authored line (brand copy we own)
+      page_description -> the record's own SEO field (products, pages, articles own theirs)
+      neither        -> back to this line rather than emitting nothing
+    Note the POC is a single-document SPA, so template.name is always 'index' and the first
+    branch always wins here. The other two are for production, where real templates exist.
+  {%- endcomment -%}
+  {%- assign ci_meta_desc = 'Freshly roasted in Italy, air-freighted whole bean, and sold exactly as the roaster sealed it. Coffee from a small, named group of Italian artisan roasters.' -%}
+  {%- if template.name == 'index' -%}
+    <meta name="description" content="{{ ci_meta_desc | escape }}">
+  {%- elsif page_description -%}
     <meta name="description" content="{{ page_description | escape }}">
+  {%- else -%}
+    <meta name="description" content="{{ ci_meta_desc | escape }}">
   {%- endif -%}
 
   {%- comment -%}
