@@ -1108,6 +1108,28 @@
     updateCartCount();
     renderCart();
   };
+  // ---------- gifting (POC16) ----------
+  // ORDER-level, not per line. A Shopify order carries exactly ONE shipping address, so a
+  // per-item gift flag would let a customer mark one line as a gift and then meet a single
+  // address field at checkout - promising something the platform cannot execute. Two
+  // recipients means two orders, which is how every Shopify store handles it.
+  var giftOrder = false, giftMessage = "";
+
+  // Any ONE subscription line makes the whole order ungiftable - .some(), deliberately, not
+  // the .every() used for free shipping just below. Two independent reasons: the cadence bills
+  // the giver's card indefinitely, and the order still has only one address.
+  // PROD: the same test is `line_item.selling_plan_allocation` being present, so this ports
+  // rather than being reinvented - a subscription line stays structurally distinguishable
+  // from a one-time line of the identical product.
+  function cartHasSubscription() { return cart.some(function (it) { return it.sub; }); }
+
+  window.toggleGift = function (el) {
+    giftOrder = !!el.checked;
+    if (!giftOrder) giftMessage = "";
+    renderCart();
+  };
+  window.setGiftMessage = function (el) { giftMessage = el.value; };
+
   function cartUnits() { return cart.reduce(function (n, it) { return n + (it.qty || 1); }, 0); }
   function updateCartCount() {
     // Two badges since POC16: the desktop bar's and the mobile quick-actions one.
@@ -1195,6 +1217,35 @@
         '<button class="skip-link" onclick="removeFromCart(' + i + ')">Remove</button></div>' +
         '</div>';
     });
+
+    // ---- gift option (order-level) ----
+    // Placed after the lines and before the money, because it is a property of the ORDER.
+    // The stale-state guard matters: this cart re-renders on every change, so a gift ticked
+    // and THEN joined by a subscription would otherwise ride to checkout invisibly.
+    var subInCart = cartHasSubscription();
+    if (subInCart && giftOrder) { giftOrder = false; giftMessage = ""; }
+    if (subInCart) {
+      html += '<div class="gift-box gift-blocked">' +
+        '<strong>Gifting is not available on subscription orders.</strong> A subscription bills ' +
+        'your card on its cadence and ships to one address. To send coffee as a gift, place it ' +
+        'as a separate order.</div>';
+    } else {
+      html += '<div class="gift-box">' +
+        '<label class="gift-check"><input type="checkbox" id="gift-toggle"' + (giftOrder ? ' checked' : '') +
+        ' onchange="toggleGift(this)"><span>This order is a gift</span></label>';
+      if (giftOrder) {
+        // PROD: rides to the order as cart attributes (Gift / Gift message), which reach the
+        // Shopify admin, the packing slip template and Flow. Verify on the dev store.
+        html += '<div class="gift-fields">' +
+          '<label class="visually-hidden" for="gift-msg">Gift message</label>' +
+          '<textarea id="gift-msg" rows="3" maxlength="200" placeholder="A short note to go in the box (optional)" ' +
+          'oninput="setGiftMessage(this)">' + esc(giftMessage) + '</textarea>' +
+          '<p class="note">We print your note on a card and put it in the box. ' +
+          'No prices are printed on anything inside a package, gift or not.</p>' +
+          '</div>';
+      }
+      html += '</div>';
+    }
 
     // summary
     // PROD: Bottega ships from a separate source (not the coffee 3PL), so in production it gets
