@@ -332,3 +332,49 @@ Two options, **not yet decided**:
 Note this interacts with Brand Standards §9 (both units on every weight reference): under option 1
 the receipt is metric-only, which is a surface we do not control rather than a breach we chose.
 Worth stating that explicitly wherever the Standard is next revised.
+
+---
+
+## 11. Commercial rules must never ship as string literals (REQUIRED — Steve, 2026-08-19)
+
+Steve, reviewing the product detail page: *"All of the card details are coming from an Item
+Master and/or shelf master table; right? There should be very little hardcoded information on
+this page."* Almost — but the audit found a third category between "product data" and "UI
+chrome", and it is the one that rots.
+
+**Three categories, and only the third is a problem:**
+
+1. **Product facts** — title, roaster, origin, process, roast level, roast/best-by dates,
+   components, sizes, prices, `subscription` boolean, notes, brewing. All data-driven already.
+2. **UI chrome** — "Bag size", "Delivery cadence", "Add to cart", "About this coffee". Labels,
+   not data. Correctly literal; leave them alone.
+3. **Commercial rules quoted as customer copy.** Store Operating Standard rules typed into the
+   theme as text, with no link back to the Standard that owns them.
+
+### The category-3 inventory on the product page
+
+| String in the theme | Owned by | Where it must come from in production |
+|---|---|---|
+| "Best within 60 days of roast date. For peak flavor, brew within 30 days." | Standard §5 | Theme setting (no natural Shopify home). §5 prescribes this sentence verbatim. |
+| "10% off every shipment and free shipping… on Roccia, Sorpresa, and Selezione" | Standard §3, §6 | **`selling_plan.price_adjustments`** — the same object that actually applies the discount |
+| "Every 4 weeks / 6 weeks / 8 weeks" | Standard §6 | **`selling_plan_group.selling_plans`** — render the pills from the plans themselves |
+| "Printed tasting card included." | Standard §7 | Theme setting, or a per-collection metafield |
+| "Bottega items are never subscriber-discounted…" | Standard §1, §3 | Theme setting |
+| Gallery fixed at 3 slides, labels "Back of bag" / "Label close-up" | — | **`product.images`** — a variable-length array; some SKUs will have two photos, some six |
+
+**Verified 2026-08-19: none of these had drifted.** Every value matched the Standard at the time
+of writing. That is the point — they are correct **by care, not by construction**, and the care
+is not repeatable. Change the subscriber rate in the Standard and in the Shopify Function, and
+the product page still says 10% with nothing to catch it.
+
+### The rule
+
+**A number or rule that the Store Operating Standard owns may not be typed into a template.**
+Derive it from the object that enforces it where one exists (selling plans, metafields), and from
+a theme setting where one does not. The two subscription rows above are the important ones: the
+cadences and the discount are *already* data on the real store, so hardcoding them would be
+choosing a literal over a value that is sitting right there.
+
+Same failure shape as the shelf-description drift found the same day, where the Shop page kept a
+parallel `SHELF_NOTE` table that had silently diverged from all four shelf pages. Two copies, no
+link, and only one of them gets updated. See `CLAUDE.md` §9 (2026-08-19).
