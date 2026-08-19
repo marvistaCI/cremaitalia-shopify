@@ -1,15 +1,24 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.5 · 2026-08-19**
+**Version 1.6 · 2026-08-19**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.6 (2026-08-19)** removes the §12.9 opened hours earlier by v1.5, which asked who would hold
+> the Founding Member slot if a gift subscription were sold. Steve: *"we've already said there is no
+> gift subscription capability... then why do you ask about Founding Member slot?"* Correct — §8.2
+> says subscriptions cannot be gifted, and that **is** the decision. Parking entitlement rules for a
+> product we have declined to build put speculative scope into a list whose purpose is holding items
+> that must close **before the production build**; nothing depends on it. §8.2 now states the rule
+> without deferring anything, and the 3PL item renumbers to §12.9. No other change.
 
 > **v1.5 (2026-08-19)** adds **§8.1 — nothing inside a package shows a price**, gift or not, with
 > the receipt as an **email entitlement**. Steve's call, and deliberately blanket rather than a
 > gift-order exception: a conditional rule has to be executed correctly on every order by whoever
 > is packing, and it fails silently. It also adds **§8.2 Gifting** (order-level only, never
-> inferred from a differing shipping address, subscriptions excluded) and opens **§12.9** on who
-> holds the Founding Member slot if a gift subscription is ever sold. Nothing is repriced.
+> inferred from a differing shipping address, subscriptions excluded). It also opened a §12.9 on
+> the Founding Member slot under a gift subscription, **which v1.6 removed as speculative** — the
+> §12.9 in this document today is the 3PL item. Nothing is repriced.
 
 > **v1.4 (2026-08-19)** is a **vocabulary correction, no rule change.** "Tour" was being used
 > throughout as the *name of the archetype* — "Tour / bundle pricing", "Tours / bundles — the BOM
@@ -333,7 +342,7 @@ travel to the warehouse, and makes every order giftable by default.
 
 - The Shopify **packing slip template** (Settings → Shipping and delivery) must carry no
   monetary fields. It is a Liquid template we control; verify after any theme or settings change.
-- **3PL selection question (§12):** *do you print our packing slip, or insert your own paperwork?*
+- **3PL selection question (§12.9):** *do you print our packing slip, or insert your own paperwork?*
   A 3PL that inserts its own pick list or invoice breaks this policy and no setting on our side
   prevents it. This is a qualifying question, not a preference.
 - The order's **contact email stays the purchaser's**, always. A gift flow must never substitute
@@ -355,8 +364,8 @@ travel to the warehouse, and makes every order giftable by default.
   is not new 3PL scope — but confirm insert format, character limit and per-insert cost.
 - **Subscriptions cannot be gifted.** Any subscription line makes the whole order ungiftable: the
   cadence bills the giver's card indefinitely, and the order still has one address. A prepaid
-  fixed-length gift subscription is a **different product**, not a flag, and is not offered —
-  see §12.9.
+  fixed-length gift subscription would be a **different product**, not a flag on this one, and we
+  do not offer it. Nothing further is open here — this is the decision, not a deferral of one.
 
 ---
 
@@ -490,19 +499,10 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
 
 ---
 
-*Store Operating Standards v1.5 · 2026-08-19 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.6 · 2026-08-19 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
 
-### 12.9 Gift subscriptions — who holds the Founding Member slot? (OPEN)
-
-Not offered today (§8.2), and it cannot be until this is answered. If a prepaid gift
-subscription is ever sold and it falls inside the first 222, **does the numbered honorific and
-the 12% attach to the giver who pays, or the recipient who drinks it?** And when a prepaid run
-ends, does the recipient inherit the rate if they continue in their own name? §4 makes the
-honorific permanent and the slot finite, so this cannot be decided after the fact. Decide before
-building any gift-subscription product.
-
-### 12.10 3PL selection — packing-slip and insert capability (OPEN)
+### 12.9 3PL selection — packing-slip and insert capability (OPEN)
 
 No 3PL is selected. Two questions are **qualifying**, not preferences, and both should be asked
 before commercial terms:

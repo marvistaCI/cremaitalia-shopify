@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.1) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.5) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.6) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > **Editing protocol:** Code owns the repo and all Standard sources; **Cowork proposes,
@@ -2061,9 +2061,15 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   insert your own paperwork, and can you insert a card varied per order. The second is not new scope —
   Sorpresa collections already ship a printed tasting card, so a 3PL that cannot do it cannot fulfil
   Sorpresa at all. **Affiliates** are referrers, not fulfilers, so no gift policy applies to them.
-  **§12.9 opened:** if a prepaid gift subscription is ever sold inside the first 222, does the
-  numbered honorific and the 12% attach to the giver or the recipient? §4 makes it permanent and the
-  slot finite, so it cannot be decided after the fact. Nothing gift-subscription is built until it is.
+  **A §12.9 was opened here and then removed the same day (v1.5 → v1.6).** It asked who would hold
+  the Founding Member slot if a gift subscription were sold. Steve: *"we've already said there is no
+  gift subscription capability... then why do you ask about Founding Member slot?"* He was right.
+  §8.2 says subscriptions cannot be gifted, and that **is** the decision — parking entitlement rules
+  for a product we have declined to build put speculative scope into a list whose purpose is holding
+  items that must close **before the production build**, and nothing depends on it. Worth recording
+  as a pattern to watch: writing a Standard invites inventing open questions to look thorough, and an
+  open-decisions list is exactly where that does the most damage, because it buries the items that
+  are real. §8.2 now states the rule without deferring anything; the 3PL item renumbered to §12.9.
   Both renders regenerated and delivered, gates at exit 0, v1.4 archived, md5-verified.
 
 ---
