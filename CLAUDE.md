@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.1) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.7) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.8) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > **Editing protocol:** Code owns the repo and all Standard sources; **Cowork proposes,
@@ -2150,6 +2150,83 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   explicit go under the three-newest cap, its id re-verified against live immediately before the
   delete; its batch is commit `1f0d7c1` on GitHub and redeployable. POC14, POC15 and the live theme
   untouched.
+
+- 2026-08-20 — **Trust & social proof decided and recorded: Store Operating Standards v1.7 → v1.8
+  (new §13), plus the first platform fact in this area that was measured rather than read.** The
+  last open dimension on the storefront scorecard — 3.5 in all three passes, four points below the
+  next-lowest — was a decision before it was a build, and the decision turned on something neither
+  earlier pass had costed. Reasoning artifact: the trust decision brief (published, linked from
+  §6.1). **Eight calls (Steve):** collect ratings but render them through a **bespoke discreet
+  control** of our own design, never a vendor widget; that control **links to a review-detail view**;
+  **emit `aggregateRating`** in production; **reorder rate** logic built now, switched on when data
+  supports it; **no photograph reviews**; **publish all but abusive**; **purchase-gated only** via
+  emailed per-order links, public review form disabled; and the separate "rate your purchases" page
+  folded into that as redundant.
+  **The tension the brief was written to resolve mostly dissolved.** The first audit argued for
+  palate-matched feedback and reorder rate over a global five-star average, and `aggregateRating`
+  models exactly the average being rejected — so choosing the better on-site signal looked like
+  deliberately forgoing the star rich-result. Three things collapsed it: they are **different
+  surfaces** (Google requires the marked-up rating be *visible*, not that it lead, so a discreet
+  control satisfies the crawler while the average does none of the persuading); there are **no
+  product URLs** on a one-URL SPA, so the search cost of deferring was zero and is not yet live; and
+  a rating is a **required field** in Shopify's standard review schema, so "collect no stars" was
+  never on the menu. What the audit got right was the destination; what it never costed was the
+  **volume**. Palate-matching works by segmenting, and segmenting divides the sample — roughly 15
+  coffees × 9 taste cells × ~20 responses is ~2,700 reviews against maybe 300/yr at realistic volume.
+  Reorder rate is worse: undefined until two turns of the 60-day freshness cycle have run. Hence
+  §13.6's **minimum-n floors with silence below them**, and a three-rung ladder rather than a choice.
+  **Rung 1 is not social proof at all** and is the largest gap: the **legal pages still do not exist**
+  (privacy, terms, refund, shipping), and a store asking for a card while showing no returns policy
+  fails a trust check no star rating repairs.
+  **The dev-store test — half settled, half not, and the half that settled is the one with the
+  irreversible decision attached.** Built a four-file probe theme served through `shopify theme dev`,
+  captured a baseline **before** installing anything so absence could be told from failure, then
+  Steve installed Judge.me free and hand-entered one review. **Proven:**
+  `product.metafields.reviews.rating` returned `{"scale_min":"1.0","scale_max":"5.0","value":"2.0"}`
+  and `reviews.rating_count` returned `1`, read by **our own Liquid, server-side, no JavaScript** —
+  which is the entire input for both the §13.5 control and `aggregateRating`, so **D3 is measured,
+  not assumed**. **Unproven:** `reviews.product_reviews` returned nil and the standard
+  `product_review` metaobject definition does not appear on the store at all. Probable cause is
+  benign — Judge.me syndicates review *metaobjects* through the **Shop channel**, for Shop-eligible
+  stores, and a Partners dev store is not one; that fits the evidence exactly (aggregate metafields,
+  written directly, populated; metaobject records, travelling the Shop pathway, did not).
+  **Recorded as unproven, NOT refuted** — concluding otherwise from a store structurally unable to
+  exercise the feature would repeat the two errors already in this log (the stale deployment claim,
+  the screenshot tool that was never broken), and the July spike's caveat that a dev store is not a
+  perfect mirror stands. Open question for Judge.me support, two parts: does metaobject syndication
+  require Shop eligibility, and does the syndicated review populate `author` with the customer
+  reference (that second answer decides whether the palate-match join is free).
+  **Two findings worth more than the test itself.** (1) **The palate join is already owned.** The
+  review schema's `author` is a *customer reference* and the taste profile is the one axis the site
+  persists — so palate-matched feedback is a **join**, not a second data-collection exercise. That
+  retires the case for Judge.me's paid Custom Questions ($15/mo) and creates one cheap-now,
+  expensive-later requirement: **store the taste profile as a customer metafield** in production.
+  (2) **A method trap that nearly produced the opposite conclusion.** The obvious existence check,
+  `{% if shop.metaobjects.product_review %}`, returned **true** on a store with no review app
+  installed at all — Liquid hands back a truthy empty drop, so the honest test is the **count**,
+  never the truthiness. Asked the obvious way, the probe would have reported the definition present
+  on an empty store.
+  **Also decided:** Steve's **discreet-control-links-to-detail** design quietly contains the unproven
+  risk — only the *detail view* needs individual review records, so a failure means the vendor widget
+  on one page rather than widget furniture on every product card. And **"rate your purchases" is not
+  buildable in Liquid**: the account surface is Shopify-hosted (`production_build_spec.md` §0) *and*
+  the Liquid `customer` object is reported unreliable under new customer accounts (null while logged
+  in; details expiring after ~24h) — forum reporting, not documentation, so flagged rather than
+  asserted, but it is the failure mode that passes a test and breaks the next day. The emailed
+  per-order link **is** the dedicated rating call.
+  **Recorded where it belongs, not in one place:** policy → Standard **§13** (numbered 13
+  deliberately — renumbering §10-§12 would falsify citations inside immutable §9 entries); build
+  technique → `production_build_spec.md` **§6.1**, which also reconciles the 2026-07-09 review's
+  "NOT star-rating clutter" line rather than silently overriding it; **§9.2**'s deferred
+  `aggregateRating` question closed; and `docs/trust-and-social-proof-brief.md` **marked SUPERSEDED**
+  — a consumed task brief still saying "do not start building" is the same rot class as
+  `POC7_kickoff.md`. Both touched renders regenerated (Store Operating v1.8 **and** Collaboration
+  v1.1, whose companion header moved without its own version — the `f9ffcb1` blind spot), gates at
+  exit 0, v1.7 archived, delivered to OneDrive and md5-verified. **No theme code written yet** — the
+  POC build follows. **Steve's standing rule on fixture data, restated:** the POC may carry invented
+  ratings because its entire catalogue is invented, but they must be named so they cannot ship, the
+  way `ci-temp-*` marks the placeholder photography; **the real build never fakes data and never
+  ships a placeholder photo** (now Standard §13.7).
 
 ---
 

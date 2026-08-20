@@ -1,8 +1,19 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.7 · 2026-08-20**
+**Version 1.8 · 2026-08-20**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.8 (2026-08-20)** adds **§13 Reviews & social proof**, closing the last open item on the
+> storefront scorecard. Reviews are **purchase-gated only** (emailed per-order link; the public form
+> is disabled - an account is free, so a login gate proves nothing and the order is the trust
+> anchor); reviewers may choose a display name while the customer identity is retained as the join
+> key to their taste profile; **everything but abusive content is published**, with *abusive* defined
+> so it is not re-decided daily; **no photograph reviews**; the rating renders through our own
+> discreet control even at zero, with approved empty-state copy; `aggregateRating` is emitted only
+> when a real review exists; and reorder rate and palate-matched feedback carry **minimum-n floors
+> with silence below them**. Numbered 13 deliberately - renumbering §10-§12 would falsify citations
+> in immutable §9 log entries. Nothing is repriced.
 
 > **v1.7 (2026-08-20)** is an **editorial repair, no rule change and no renumbering.** §12.9 (the
 > 3PL packing-slip and insert question) had been appended *after* the document's own closing
@@ -514,5 +525,90 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
 
 ---
 
-*Store Operating Standards v1.7 · 2026-08-20 · Source of truth: `docs/standards/store-operating-standards.md`.*
+## 13. Reviews & social proof (Steve, 2026-08-20)
+
+Numbered 13 rather than inserted next to the other customer-facing policy sections **because
+renumbering §10-§12 would falsify history** - those numbers are cited in other repo documents and,
+more importantly, inside `CLAUDE.md` §9 log entries, which are immutable records of what was true
+when written. Position in the file is worth less than keeping every existing citation true.
+
+Reasoning, measurements and the rejected alternatives are recorded separately in the trust decision
+brief; this section states only what is now true.
+
+### 13.1 Who may submit a review - purchase-gated only
+
+Reviews may be submitted **only by a verified purchaser of that product**, through a per-order link
+delivered by email after fulfilment. The public storefront review form is **disabled**. There is no
+route by which a person who has not bought the product can leave a review of it.
+
+Note the distinction that decided this: an account is free and anyone can create one, so a login
+gate proves nothing. **The order is the trust anchor**, not the sign-in. The platform's review
+schema agrees - it carries an order reference and a verification status alongside the author.
+
+### 13.2 Anonymity - identity retained, display optional
+
+A reviewer may choose the name shown, including a first name only or a neutral mark such as
+*Verified buyer*. The **customer identity is retained internally regardless**, because it is the
+join key to that customer's saved taste profile (§13.6). Privacy on the page; the link underneath.
+
+### 13.3 What we publish, and what we do not
+
+**Everything except abusive content is published**, including critical and negative reviews. A
+product page showing only five-star reviews reads as curated, which destroys the trust it is meant
+to build.
+
+*Abusive*, for the avoidance of a judgment call made differently by whoever opens the queue each
+day, means: personal attacks on a named individual; obscenity; content about a person rather than
+the coffee; content that is not about the product at all; and anything unlawful. **A complaint
+about the coffee is not abuse and is published.** Service and delivery complaints belong in
+support, and are redirected rather than published.
+
+Merchant replies are permitted and encouraged on critical reviews. A considered reply is itself a
+trust asset and suits the editorial voice better than a defensive one.
+
+### 13.4 No photograph reviews
+
+Customer photographs are **not collected and not displayed**. They are not evidence of satisfaction
+in either direction, and on a store whose own photography is governed by Brand Standards §3.5
+(natural light, low saturation, narrow depth of field) an uncurated stream of phone snapshots would
+become the store's visual identity by default.
+
+### 13.5 How a rating is displayed
+
+The rating is rendered through **our own discreet control**, designed to sit inside the brand rather
+than a review vendor's widget furniture. It appears on the product page whether or not ratings exist,
+and links to a dedicated review-detail view.
+
+- **With ratings:** the control shows the aggregate and the count, quietly, and links to detail.
+- **With none:** it says so plainly and points a purchaser at the route in. Approved copy:
+  *"No ratings exist for this product. Have you purchased this product? If yes, check your email
+  and be the first to submit a rating."*
+- **Machine-readable markup** (`aggregateRating`) is emitted **only when at least one real review
+  exists**. Never for zero. See `docs/production_build_spec.md` §9.2.
+
+### 13.6 Reorder rate and palate-matched feedback - floors, and silence below them
+
+Both are permitted and both are **gated on sample size**. Each display carries a minimum-*n* floor,
+and **below the floor the store shows nothing at all**. Showing nothing is honest; showing a
+percentage derived from a handful of orders is not, and it is indistinguishable to the reader from a
+number that means something.
+
+This is why neither is a launch feature: reorder rate is undefined until customers have had the
+chance to reorder, and palate-matched feedback divides the sample across taste segments, so it needs
+roughly an order of magnitude more data than a single average does.
+
+### 13.7 Never fabricate
+
+No rating, review, count, reorder rate, or percentage may ever be displayed on the live store unless
+it derives from real customer activity. This includes seeded, sample, illustrative and
+"representative" data of every kind.
+
+The POC is explicitly exempt and always has been - its entire catalogue is invented - but fixture
+review data must be **named so that it cannot be mistaken for real or shipped by accident**, in the
+same way `ci-temp-*` marks the placeholder photography. The same rule governs photography: no
+placeholder image ships in the real build.
+
+---
+
+*Store Operating Standards v1.8 · 2026-08-20 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*

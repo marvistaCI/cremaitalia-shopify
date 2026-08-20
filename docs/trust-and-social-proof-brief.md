@@ -1,3 +1,11 @@
+> **SUPERSEDED 2026-08-20 - this brief has been consumed. Do not act on it.**
+> It was a one-shot prompt to *start* the trust work, and its central instruction ("do not start
+> building until the mechanism is chosen") is no longer true: the mechanism was chosen and the eight
+> decisions were made on 2026-08-20. **What is true now lives in Store Operating Standards §13**
+> (policy) and `docs/production_build_spec.md` §6.1 and §9.2 (build technique); what changed and when
+> is in `CLAUDE.md` §9. Kept only as a record of how the work was framed.
+> Its scorecard line (5.4 -> 6.9 -> 7.4) remains accurate as of 2026-08-19.
+
 # Task brief — Trust & social proof
 
 **This is a task brief, not a state document.** It deliberately names **no theme id and no

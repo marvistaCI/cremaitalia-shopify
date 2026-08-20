@@ -142,7 +142,7 @@ merchant-editable with **no developer and no build**. Only rarely-changing conte
   contact fields, and a structured roaster-linkage field on bundle/composite products (not
   just the single `roaster` reference on standalone SKUs).
 
-## 6. Trust signals + photography (from the 2026-07-09 consumer review)
+## 6. Trust signals, reviews + photography (2026-07-09 review; reviews decided 2026-08-20)
 
 The 2026-07-09 consumer-centric site review (full findings in `docs/POC5_change_list.md`
 item 6) surfaced two items that are **asset-dependent, not POC copy/layout** — they belong
@@ -160,6 +160,77 @@ in the production build, not the mock:
 
 The POC-actionable half of that review (hero rewrite, home resequence, surface founder
 story, quiz prominence, early value, nav order) is POC5 work — see POC5 change list item 6.
+
+### 6.1 Reviews & social proof — how it gets built (decided 2026-08-20)
+
+**The policy lives in Store Operating Standards §13** (who may review, moderation, anonymity, no
+photographs, the minimum-n floors). This section is only the build technique. The reasoning, the
+rejected alternatives and the measurements are in the trust decision brief.
+
+**Note the reconciliation with the bullet above.** The 2026-07-09 review said trust signals must not
+be "star-rating clutter". That still holds and is not contradicted here: the objection was to
+clutter, and §13.5 answers it with a discreet control of our own design linking to detail, not a
+star bar stamped across every card. Collecting a rating and shouting one are different things.
+
+**Mechanism: Judge.me free tier as a collection and moderation backend only.**
+
+- Free tier covers unlimited reviews, unlimited review-request emails, moderation queue and
+  importer. **Custom Questions ($15/mo) is NOT needed** — see the join note below.
+- It writes to Shopify's **standard review data**, so the vendor is swappable: any
+  syndication-compliant app writes the same shape, and changing vendor changes the back office
+  rather than the storefront.
+- Not plan-gated. Verified on a Basic-equivalent store, so this adds no pressure to the plan
+  decision.
+- Configure it for **§13.1**: disable the public storefront review form so the emailed per-order
+  link is the only route in. Configure for **§13.4**: photo/video upload off.
+
+**VERIFIED LIVE 2026-08-20** (dev store, Judge.me free, one hand-entered review, before-and-after
+baseline). Read by our own Liquid, server-side, no JavaScript:
+
+```liquid
+product.metafields.reviews.rating        {"scale_min":"1.0","scale_max":"5.0","value":"2.0"}
+product.metafields.reviews.rating_count  1
+```
+
+That is the whole input for the §13.5 control and for `aggregateRating`. **The discreet
+product-level control therefore rests on measured data, not on an assumption.**
+
+**UNPROVEN, and tracked** — `product.metafields.reviews.product_reviews`, the list of individual
+review records, returned nil, and the standard `product_review` metaobject definition does not
+appear on the dev store at all. Probable cause is benign: Judge.me syndicates review *metaobjects*
+through the **Shop channel**, for stores eligible for Shop, and a Partners development store is not.
+That fits the evidence — the aggregate metafields, which the app writes directly, populated; the
+metaobject records, which travel the Shop pathway, did not.
+
+- **Do not record this as refuted.** A dev store is not a perfect mirror of production (same caveat
+  as the July spike). Open question for Judge.me support: *does metaobject syndication require Shop
+  eligibility, and will `reviews.product_reviews` populate for a Basic-plan store?*
+- **Ask in the same message:** *does the syndicated review populate `author` with the customer
+  reference?* That answer decides whether the palate-match join is free or needs building.
+- **The blast radius is small, by design.** Only the **review-detail view** (§13.5) needs individual
+  records. If the metaobject route does not hold, the fallback is the vendor widget **on that one
+  page**, while our own control still governs every product page. This is a consequence of Steve's
+  decision to put detail behind a link rather than inline, and it is worth preserving for that
+  reason.
+
+**Required, and cheap now / expensive later: store the taste profile as a customer metafield.**
+The taste profile is the only axis the site persists, and the review schema's `author` field is a
+customer reference — so palate-matched feedback (§13.6) is a **join we already own**, not a second
+data-collection exercise. That is why Custom Questions is not needed. It costs nothing to write the
+profile to a customer metafield during the production build and requires going back to customers for
+data they already gave us if it is retrofitted.
+
+**Do NOT build a "rate your purchases" page in Liquid.** Two collisions: the account surface is
+Shopify-hosted (§0), and the Liquid `customer` object is reported unreliable under new customer
+accounts — returning null while the customer is logged in, and details expiring after roughly 24
+hours despite an active session. That is developer-forum reporting rather than official
+documentation, so verify before relying on it either way; but it is exactly the failure that works
+in testing and breaks a day later. **The emailed per-order link is the dedicated rating call**, and
+it needs neither the account surface nor the customer object.
+
+**Reorder rate and palate-matched feedback** cannot be derived in Liquid. Both need a scheduled
+computation writing a product metafield, and both must honour the §13.6 floor with silence below it.
+Specify the floor as a named constant, never a literal in a template (§11).
 
 ## 7. Bundles / collections — administrable BOM builder (REQUIRED — Steve, 2026-07-10)
 
@@ -262,12 +333,21 @@ It must **never** be emitted before real reviews exist, and must never be emitte
 product with zero reviews. Whatever review mechanism is chosen (see the open social-proof
 decision) has to expose `ratingValue`, `reviewCount`, `bestRating`, `worstRating`.
 
-Note the design tension already recorded against the audit's recommendation: the audit
-argued for **reorder rate and palate-matched feedback** over a global five-star average,
-on the grounds that one person's best coffee is another's "meh". A global average is what
-schema.org's `aggregateRating` models, and it is the only shape Google renders as stars.
-If we go with palate-matched feedback as the *on-site* trust asset, that is a deliberate
-decision to forgo star rich-results, not an oversight — record it either way.
+**RESOLVED 2026-08-20 — emit it.** The tension recorded here (the audit argued for reorder
+rate and palate-matched feedback over a global five-star average; `aggregateRating` models
+exactly the average being rejected, and is the only shape Google renders as stars) turned out
+to be smaller than it looked, and is dissolved rather than traded away:
+
+- They are **different surfaces.** `aggregateRating` is markup for a crawler; palate-matched
+  feedback is what a human reads. Google requires the marked-up rating be *visible* on the
+  page, not that it lead — so a discreet control (Standard §13.5) satisfies the crawler while
+  the average does none of the persuading.
+- A rating is **mandatory in the data model anyway** — the standard review schema makes it a
+  required field — so "collect no stars" was never actually available.
+- The inputs are **measured**: `reviews.rating` and `reviews.rating_count` read from live
+  Liquid on 2026-08-20. See §6.1.
+
+Emit it **only when at least one real review exists**, never for zero (Standard §13.5, §13.7).
 
 ### 9.3 Also worth emitting in production
 
