@@ -3,11 +3,19 @@
    SPA navigation, catalog rendering from baked-in test data,
    3-axis filtering, taste quiz, sign-in, mock cart, account.
 
-   Production note: the catalog render functions are replaced by
-   Liquid loops over real products/metafields; the cart + checkout
-   become Shopify cart + Shopify Checkout; the subscription toggle
-   binds to native selling_plan_groups (Loop). Search for "PROD:" /
-   "LOOP:" for the seams.
+   PROD: the catalog render functions are replaced by Liquid loops over
+   real products/metafields; the cart becomes the Shopify Cart AJAX API;
+   checkout becomes Shopify Checkout, which we never render; the
+   subscription toggle binds to native selling_plan_groups (Loop).
+
+   SEAM CONVENTION - exactly two markers, and nothing else:
+     PROD:  what production does instead of this code
+     LOOP:  a seam owned by the Loop subscription app
+   `grep -rn "PROD:\|LOOP:"` must find EVERY seam. It did not until
+   2026-08-20: a lone "POC:" and a prose "Production note:" sat outside
+   the convention, so the grep the line above tells you to run was
+   incomplete - which defeats the only purpose a marker has. If you add a
+   seam, use one of the two markers. Do not invent a third.
    ============================================================ */
 (function () {
   'use strict';
@@ -1225,7 +1233,10 @@
     $('tab-up').style.display = tab === 'up' ? '' : 'none';
   };
   window.simulateSignIn = function () {
-    // POC: assume a Founding-Member active subscriber so discounts/portal are visible.
+    // PROD: there is no sign-in to simulate. Customer accounts are Shopify-hosted and /account
+    // redirects off-domain (build spec section 0), so this whole function disappears; entitlement
+    // comes from the customer's tags read by a Shopify Function, not from theme state.
+    // The POC assumes a Founding-Member active subscriber so discounts and the portal are visible.
     session.signedIn = true; session.subscriber = true; session.foundingMember = true; session.paused = false;
     $('signin-btn').classList.add('signed-in');
     $('signin-label').textContent = session.name;

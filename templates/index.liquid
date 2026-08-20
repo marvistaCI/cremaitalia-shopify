@@ -9,7 +9,7 @@
   This renders only once Shopify password protection is OFF, or to a password-holder
   previewing the theme. While pre-launch, visitors still see templates/password.liquid.
 
-  Production note: when the live store is built, the JS-rendered grids are replaced by
+  PROD: when the live store is built, the JS-rendered grids are replaced by
   real Liquid loops over {{ collection.products }} + crema_italia.* metafields, and the
   Roccia subscription UI binds to native selling_plan_groups (Loop). Integration points
   are flagged with <!-- LOOP --> / <!-- PROD --> comments.

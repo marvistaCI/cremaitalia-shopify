@@ -631,3 +631,48 @@ is still wanted, it needs re-deciding rather than resurrecting.
 
 It is a transcription of what the POC **does**, not an endorsement of all of it. Where it disagrees
 with a Standard, the Standard wins. `shelf` in particular is recorded as open rather than answered.
+
+## 14. Two surfaces the spec had never covered (Review B, 2026-08-20)
+
+Every POC surface was checked against this document. Eighteen of twenty were covered somewhere.
+These two were not.
+
+### 14.1 The Roasting Regions page
+
+An editorial page carrying an inlined SVG map of nine Italian roasting traditions, plus a list.
+Reachable **only** from the Shop page's region filter — deliberately, as a discovery surprise rather
+than a nav item (Steve, 2026-07-10). Not in nav, not in the footer.
+
+- **Content:** rarely-changing editorial, so **static** under §1's umbrella rule. It does not need a
+  merchant-editable data source; a page or a section is enough.
+- **The map is the asset that matters.** `assets/ci-region-map.svg` is the source of truth for the
+  artwork; the theme carries an **inlined copy** so it can be styled and responsively cropped. Those
+  two can drift, and have: the OneDrive source still sets `font-weight:700` on its labels, which Inter
+  does not have, so that copy fabricates a bold the theme's copy no longer does (open Cowork item,
+  2026-08-18).
+- **Region names are Italian by design** (Toscana, not Tuscany) in the map, while the page's list is
+  English-first with the Italian in parentheses where the names differ. Deliberate; do not "fix".
+- **The map deliberately omits Emilia-Romagna**, which is Gardelli's region — the map shows the nine
+  classic espresso cultures, and the *filter* is a different list that names Emilia-Romagna and
+  "Other" separately. **Map ≠ filter list**, by design (2026-07-10).
+- The sub-label **em-dashes are a documented exception** to the no-em-dash rule (§6 of `CLAUDE.md`).
+
+### 14.2 Offerta — how a product gets there
+
+Standard §5 owns the *rule*: coffee approaching the edge of its freshness window moves to Offerta at
+an honest markdown, and coffee that passes the window comes off sale entirely and is donated. The
+build spec has never covered the **mechanism**.
+
+- **The transition must be automated**, not a person remembering. `roast_date` plus
+  `settings.freshness_window_days` determines it, and the intended tool is **Shopify Flow** (recorded
+  2026-07-13 as the launch-phase answer, alongside spreadsheet-assisted pricing).
+- **Two distinct transitions**, and only the first is a discount: *into* Offerta at the markdown, and
+  *off sale* at the end of the window. The second is a hard stop, not a deeper discount — Standard §5
+  and the no-waste pledge both depend on it, and it is the one a Flow is most likely to get wrong.
+- **Offerta pricing is a markdown against the shelf matrix**, so the variant's `compare_at_price`
+  carries the pre-markdown figure (§13.3). It is the only shelf that uses it.
+- **Offerta carries a narrower guarantee** — defective replaced, "wish it were fresher" not. That
+  sentence is stated in two places today and should be extracted to a snippet so the policy has one
+  home (Review A finding A6, re-filed to the policy work).
+- **Offerta is never subscriber-discounted** and never stacks (Standard §3).
+
