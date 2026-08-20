@@ -2228,6 +2228,93 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   way `ci-temp-*` marks the placeholder photography; **the real build never fakes data and never
   ships a placeholder photo** (now Standard §13.7).
 
+- 2026-08-20 — **Trust & social proof BUILT in the POC: the rating control, the review detail view,
+  and the reorder surface — plus Standards v1.8 → v1.10 recording the rules behind them.** Follows
+  the decision entry above; that one settled *what*, this one is *what shipped into the theme*. The
+  POC is now explicitly a **build reference for the real store** (Steve), so every shape here was
+  chosen to make production a data-source swap rather than a rewrite. **Committed, NOT deployed and
+  NOT pushed** — §10 corrected in the same pass, since the repo has moved ahead of the POC16 theme.
+  **The mark: stars plus numeral (Steve's call, and he was right).** I had recommended a bespoke
+  gauge on brand-purity grounds and he pushed back on two points, both correct. First, my claim that
+  empty stars "read as a bad score" was overstated: it holds when stars sit alone or beside a count —
+  which is why `0 stars / 38 ratings` would be awful — but with **"Not yet rated"** adjacent, nobody
+  computes zero-out-of-five, they read the words. It is a null, not a negative. Second, and the
+  bigger one, **stars are universally recognised and my gauge was not**: a hairline filled to 84% is
+  not an established rating idiom and would be read by some as a progress bar or a stock level. I was
+  trading instant comprehension for brand purity on a page where a stranger gives you seconds. What
+  survived from my side were two craft details that make his choice work: the glyphs **round to whole
+  stars** because the numeral carries precision, so nothing is fractionally painted and no clipped
+  glyph can read as a rendering artifact at 14px; and the empty stars sit at the **hairline value**
+  (`#D9D2C2`), not a mid grey, because at that weight they read as an unfilled frame rather than a
+  verdict. That colour choice is what makes "it is a null" true *on screen* rather than only in
+  argument, and it is commented so nobody darkens it later.
+  **Placement is guarded, not assumed (Standard §13.5.1).** The mark renders **only on the detail
+  view of a purchasable product** — the test is `sizes`, which is what makes a catalog entry
+  purchasable, rather than checking which page we happen to be on. Steve raised the guard himself
+  ("so we're not turning on roaster ratings by accident"). Verified live: **0 marks on roaster
+  profiles, 0 on person pages, 0 in any grid.** The detail view deliberately renders the control
+  **even when empty**, which is the opposite of the grid rule and the point of the asymmetry: one
+  null is the only thing on the page telling a purchaser a route to rate exists; thirteen down a
+  shelf page is a wall advertising an empty store. Steve read this backwards at one point and it was
+  worth catching — hiding it on detail too would have silently deleted his own empty-state copy.
+  **The bug, and how it was found.** Bottega renders through a **separate branch of
+  `productDetail()`**, so the first insertion reached only the coffee path and the mark was silently
+  absent on every Bottega item. **The diff looked entirely correct; the DOM did not.** It was caught
+  by asserting on rendered output after the change, not by reading. This matters beyond the fix:
+  there are **17 shelf-conditional branch points** in `ci-storefront.js` and one of them had already
+  diverged, which is the evidence behind the architecture review queued below.
+  **Bottega is its own rating context (§13.5.2, closing v1.9's open item).** Steve asked whether to
+  exclude it or "force the palette to be Bottega so it is its own taste". Segment, not exclude: the
+  comparison objection is an argument about **coffee**, where the palate is the variable, and does
+  not apply to equipment — a grinder either holds its setting or it does not, for everyone. It is
+  also not special-casing, because Bottega is already an exception the customer is *told* about
+  ("never subscriber-discounted and not part of the four coffee shelves"). Two binding consequences:
+  it **never shows a reorder rate** — nobody rebuys a grinder, so the figure would sit near zero,
+  mean nothing and read as damning, and it is excluded **by shelf** rather than left for the sample
+  floor to eventually pass — and it **never gets the palate-matched layer**. It is also the one shelf
+  where a card-level rating could later be defended on its own terms.
+  **Fixture convention, and why it is not the POC11 failure.** Steve's rule, restated: the POC may
+  carry invented ratings because its entire catalogue is invented; the **real build never fakes data
+  and never ships a placeholder photo** (now Standard §13.7). My initial caution was over-applying
+  the POC11 lesson — that was a claim reading as true on a page a stranger would believe, which is a
+  different thing. The safeguard is the convention this project already uses for photography: fixture
+  data lives under **`poc_rating`**, deliberately NOT the production `reviews.` namespace, so a grep
+  for the real namespace never hits fixture data and **one grep for `poc_` finds everything that must
+  go** — exactly what `ci-temp-*` does for the placeholder images. Five of seventeen products are
+  rated so the other twelve exercise the empty state.
+  **Reorder rate** carries `POC_REORDER_FLOOR` as a **named constant, never a literal** (build spec
+  §11) and shows nothing below it. Verified on `fusari-india`: 9 buyers against a floor of 25,
+  correctly silent. Both floors are the same idea applied at two levels — §13.6 keeps a per-product
+  signal quiet below its *sample* floor, §13.5.1 keeps the card-level mark off below a *coverage*
+  floor.
+  **The review detail view is a separate page, and that containment was Steve's design, not mine.**
+  Only that view needs individual review records — the one part of the production data path **not yet
+  proven** readable in Liquid. So if `reviews.product_reviews` does not populate in production, the
+  fallback is a vendor widget on **one page**, while our own mark still governs every product page.
+  Putting detail behind a link rather than inline is what made the unproven dependency cheap.
+  **Verification:** `node --check` and `JSON.parse` clean; `theme check` at the documented baseline
+  (**15 offenses / 0 errors / 0 new**); driven live via `shopify theme dev` with DOM assertions on
+  every guard, and **looked at** — three screenshots (populated detail, empty state with the reveal,
+  review view) rather than measured only. Commits `f73791f` (build) and `96c1348` (v1.10).
+  **Standards moved v1.7 → v1.10 across three publishes**, all rendered with gates at exit 0,
+  archived, delivered to OneDrive and md5-verified: **v1.8** added §13 (the eight decisions),
+  **v1.9** added §13.5.1 (placement), **v1.10** added §13.5.2 (Bottega). Build technique lives in
+  `production_build_spec.md` **§6.1**, which also reconciles the 2026-07-09 review's "NOT star-rating
+  clutter" line rather than silently overriding it, and **§9.2**'s deferred `aggregateRating`
+  question is closed.
+  **NEXT, agreed with Steve: an architecture review, as TWO reviews rather than one.** (A) *Is the
+  POC internally sound* — duplicate render paths, diverged shared components, dead code, state
+  coherence, starting with those 17 shelf branches; do this **before more POC building**, since it
+  protects the work still to come. (B) *Is the POC a good specification for production* — which parts
+  are decisions worth carrying, which are mock scaffolding that must never be carried, which model
+  surfaces we do not own. **B is not a new artifact**: `production_build_spec.md` already is that
+  document, but it grew reactively, section by section as decisions forced them, and nobody has ever
+  walked the POC systematically and asked what each part implies. Two notes recorded so B does not
+  rot: **you will not know the last POC is the last one until it is behind you**, so B should be a
+  per-batch habit rather than a terminal event; and the **26 `PROD:`/`LOOP:` seam markers have never
+  been audited for completeness** — an unmarked mock is invisible at production time because it
+  simply looks like working code, and every batch adds more mocked surface.
+
 ---
 
 ## 10. Open questions / TODO
@@ -2266,10 +2353,19 @@ against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16). **Trust &
 scored 3.5 in all three passes** and is the only dimension that has never moved; it is the next
 batch's subject. Brief: `docs/trust-and-social-proof-brief.md`.
 
-**POC16 is deployed** and is the only POC16 theme (all **38** files byte-match the repo — verified
-by pull-and-diff 2026-08-19, both sides 38 files, zero content mismatches, nothing present on only
-one side; `theme list` was run **before** the push per the rule above). File count unchanged at 38 —
-POC16 edited existing files and added none.
+**POC16 is deployed** and is the only POC16 theme. It was proved by pull-and-diff on 2026-08-19
+(both sides 38 files, zero content mismatches, nothing present on only one side; `theme list` was
+run **before** the push per the rule above).
+
+> ⚠️ **The repo has since moved AHEAD of this theme (2026-08-20).** The trust & social-proof build —
+> the rating control, the review detail view and the reorder surface — is **committed but NOT
+> deployed and NOT pushed to GitHub** (commits `318ea7e`, `b14760c`, `f73791f`, `96c1348`). So
+> `assets/ci-catalog.json`, `assets/ci-storefront.js`, `assets/ci-storefront.css` and
+> `templates/index.liquid` **no longer byte-match the POC16 theme**, and the 2026-08-19 pull-and-diff
+> result above is history, not current state. File count is still 38 — the batch edited existing
+> files and added none. Nothing on Shopify has changed; POC16 remains the newest deployed preview.
+> Deploying is a separate, explicit act: use the **`crema-poc-deploy`** skill, which re-verifies live
+> state first.
 
 POC14 and POC15 previews and the live theme are untouched. Preview:
 `https://crema-italia.myshopify.com?preview_theme_id=151983030441`
