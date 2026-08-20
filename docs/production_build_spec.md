@@ -541,7 +541,7 @@ These are not metafields. Do not invent `crema_italia.*` keys for them.
 | `origin` | `crema_italia.origin` | single-line | 13/17 | Growing origin, e.g. *Ethiopia, Yirgacheffe* |
 | `process` | `crema_italia.process` | single-line | 13/17 | *Natural* / *Washed* |
 | `notes` | `crema_italia.tasting_notes` | list.single_line | 13/17 | Drives the note pills |
-| `roast_date` | `crema_italia.roast_date` | date | 12/17 | **Per lot.** Drives freshness and the Offerta transition (Standard §5) |
+| `roast_date` | on the **lot** metaobject, not the product | date | 12/17 | **Per lot — see §13.9.** The POC stores it per product because it never models two lots of one coffee. Drives freshness, the displayed roast range, and the Offerta transition |
 | `long` | `crema_italia.description_long` | multi-line | 13/17 | The "About this coffee" prose |
 | `brewing` | `crema_italia.brewing` | multi-line | 13/17 | Brewing note; also where "whole bean only" lives |
 | `component_handles` | `crema_italia.components` | list.product_reference | 1/17 | The BOM — see §7 |
@@ -550,12 +550,11 @@ These are not metafields. Do not invent `crema_italia.*` keys for them.
 | `freshness_note` | `crema_italia.freshness_note` | single-line | 1/17 | Sorpresa, e.g. *Boxed for you when you order* |
 | `price_unit` | `crema_italia.price_unit` | single-line | 1/17 | Overrides the per-unit denominator on bundles |
 
-**`shelf` — OPEN, decide before the build.** Shelf drives pricing, discount eligibility,
-subscription eligibility, freshness treatment, BOM behaviour and rating context (Standard §13.5.2).
-It is the single most load-bearing field in the catalogue (20 read-sites). Candidates: a **collection**
-(natural for navigation and per-shelf templates), a **tag**, or a metafield. It **cannot** be
-`product.type`, which §12 claims for coffee/not-coffee. A collection is the likely answer because
-per-shelf templates and shelf navigation both want one, but this needs deciding, not assuming.
+**`shelf` — RESOLVED 2026-08-20, see §13.9.** It is a **tag on the product**, with an automated
+collection derived from it for the shelf page URL. It cannot be `product.type`, which §12 claims for
+coffee/not-coffee. More importantly, working it through showed that **shelf is a property of a lot,
+not of a coffee** — the POC never models that because no fixture coffee appears on two shelves. Read
+§13.9 before building anything that touches shelf, price or freshness.
 
 **`subscription` is not a field.** In the POC it is a boolean; in production it is the **presence of a
 selling plan group** on the product. Do not create a metafield mirroring it — that is build spec §11's
@@ -632,6 +631,163 @@ is still wanted, it needs re-deciding rather than resurrecting.
 It is a transcription of what the POC **does**, not an endorsement of all of it. Where it disagrees
 with a Standard, the Standard wins. `shelf` in particular is recorded as open rather than answered.
 
+### 13.9 SKU, lot and shelf — the model, and how it maps to Shopify (Steve, 2026-08-20)
+
+**Supersedes the `shelf` OPEN note in §13.2.** Worked out with Steve after he identified that the POC
+never models the case that happens in month one: a new lot arrives while the previous one is still
+sellable. Across all 17 fixture products, **no coffee appears on two shelves** — so shelf looked like
+a property of a coffee, and it is not.
+
+**Shelf, roast date, cost and freshness are properties of a LOT.** Roaster, origin, process, roast
+level, tasting notes and brewing are properties of the COFFEE. Steve's notation:
+
+```
+SKU              the coffee - permanent identity
+SKU.size         the SELLING PRICE (the master price)
+SKU.shelf        which markup produces that price
+SKU.lot          roast date, and the cost of that lot
+SKU.lot.size     the cost at that size - stable unless the roaster changes terms
+```
+
+**Cost flows up from the lot; price is set at SKU x size and never varies by lot.** Two lots of the
+same coffee sell at the same price even when they cost different amounts — you do not reprice the
+shelf because a shipment cost more. This is exactly what the **"LAST"** in Standard §2's
+`SKU_LAST_COST x Markup[shelf, size]` has always meant: the newest lot's cost sets the price for all
+stock of that SKU.
+
+#### The Shopify mapping
+
+```
+Product = SKU                                    subscriptions bind HERE, never to a lot
+├─ crema_italia.coffee  metaobject_reference     roaster, origin, process, notes, brewing
+├─ tag                  shelf                    drives which markup applies
+├─ product.type         Coffee / Equipment / Merch   (§12 - NOT shelf)
+├─ variants = sizes
+│    ├─ price            = last_cost x Markup[shelf, size]   derived, never typed (§11)
+│    ├─ compare_at_price = the pre-markdown price            Offerta only
+│    └─ unitCost         = SKU_LAST_COST for that size       native "Cost per item"
+└─ crema_italia.lots    list.metaobject_reference
+     └─ lot: roast_date · roaster_lot_code · received_on · qty and cost per size
+```
+
+**Two native facts verified 2026-08-20, both load-bearing:**
+
+- **`Cost per item` is native** (`InventoryItem.unitCost`), one value per variant, i.e. per size —
+  which is precisely where `SKU_LAST_COST` belongs. **It is readable in GraphQL but NOT writable
+  there**; updates go through the REST `inventory_item` endpoint's `cost` property. It is also gated
+  behind the "View product costs" staff permission, which matters when Lucia or Lauren need access.
+- **Shopify has NO native lot or batch tracking.** Inventory is one pooled number per variant per
+  location. It cannot hold "3 bags from 13 June, 20 from 18 July."
+
+#### Which lots are in stock is DERIVED, not tracked
+
+No batch app and no fake locations are needed. **FIFO + recorded receipt quantities + current
+on-hand is sufficient:**
+
+```
+L1 received 10 (roast 13 Jun)      total received 30
+L2 received 20 (roast 18 Jul)      Shopify on-hand  8
+                                   -> 22 sold; FIFO consumes L1 entirely
+                                   -> remaining stock is L2 only
+                                   -> the displayed roast range collapses to "Roasted 18 July"
+```
+
+Same principle as everywhere else in this spec: derive, do not store. **It breaks if stock is lost
+off-book** — shrinkage, damage, or a pick out of FIFO order desynchronises the arithmetic, so
+write-offs must be recorded as such rather than silently adjusted.
+
+#### Display: a range, and FIFO stated
+
+With multiple lots in stock the product shows a **range**, not a single date, and says what it does
+about it:
+
+> Roasted 13-20 June. We always ship the oldest lot first.
+
+When one lot is in stock the range collapses to a date, so it degrades naturally.
+
+**Drop `best_by` as a displayed field.** It is `roast_date + settings.freshness_window_days` — showing
+both displays one fact twice, and it aims the reader at a deadline rather than at freshness. The
+freshness sentence beside it already states the constant.
+
+**Range over oldest-lot-only.** Steve raised showing only the oldest lot's date, so a buyer receiving
+a fresher bag is pleasantly surprised. Truthful, and rejected: it works by the customer not noticing,
+which is the species of thing this brand keeps removing — manufactured urgency, the hidden promo
+field, the invented founding count. FIFO already guarantees the conservative outcome that approach
+was protecting, so stating the range costs nothing and reads as confidence.
+
+#### Recall traceability — designed in, not deferred
+
+Derivation tells you **which lot is in stock**. It does **not** tell you **which lot a given customer
+received**, and for a food importer that is the question that matters on the worst day. A
+FIFO-*derived* stamp is cheap but is silently wrong the moment a pick happens out of order, and a
+wrong recall record is worse than none.
+
+**Ground truth comes from whoever physically holds the bags.** This is therefore a **third qualifying
+question for the 3PL**, alongside the two in Standard §12.9 — not a separate mechanism:
+
+> *Can you record the lot picked for each order line, and report it back to us?*
+
+**The record to keep, per order line:** order id, SKU, **roast date** (the natural lot key — SKU plus
+roast date is unique at our scale), the roaster's own lot code if they supply one, quantity, and ship
+date. Written to an **order line item metafield** so it lives in Shopify and survives the 3PL
+relationship.
+
+**`roaster_lot_code` is worth capturing even though we do not need it ourselves.** A recall notice
+arrives naming *the roaster's* lot, not our roast date, and translating between them after the fact
+is exactly the work nobody has time for during a recall.
+
+**Until a 3PL is chosen**, stamp the FIFO-derived lot on the order line as a fallback — partial
+coverage at no cost — and mark it as derived rather than observed, so it is never mistaken for
+ground truth.
+
+#### Offerta stops being a markdown you type
+
+Moving a SKU's aged stock to Offerta changes which markup applies, and the price falls out of
+`last_cost x Markup[offerta, size]` with `compare_at_price` carrying the pre-markdown figure. No
+typed number, no special case — §11 satisfied by construction.
+
+**Two prices still require two products.** A 250 g variant cannot be $38 and $21 at once, and
+collections contain products, not variants — so when aged units are split off while fresh stock
+remains, the Offerta listing is a **separate short-lived product referencing the same coffee
+metaobject**. No specification is duplicated; it is referenced. And **FIFO is therefore per shelf**:
+Roccia ships the oldest fresh lot, Offerta the oldest aged lot. Archive these products rather than
+deleting them, so order history and the recall record survive.
+
+#### Onboarding order in Shopify
+
+Dependencies run downward; doing this out of order means rework.
+
+1. **Metaobject definitions** — `roaster`, then `coffee` (references roaster), then `lot`.
+   **Enable Storefront access on each**: definitions are private by default and Liquid cannot read
+   them otherwise. This is the setting the Judge.me test turned on (§6.1) and it is the one most
+   easily forgotten, because the failure looks like the data not existing.
+2. **Product metafield definitions** — `crema_italia.coffee` (metaobject_reference),
+   `crema_italia.lots` (list.metaobject_reference), plus the §13.2 facets. Turn on the
+   **smart-collections capability** for any definition a collection will filter on (max 128
+   definitions).
+3. **Records before the things that reference them** — roasters, then coffees.
+4. **Products** — one per SKU. Set `product.type`, the shelf tag, variants per size.
+5. **Costs** — `unitCost` per variant, via **REST**, remembering the staff permission.
+6. **Prices** — computed by the price tool from cost x markup (Standard §12.2), never typed.
+7. **Lot records** — created per receipt, and referenced from the product. Products before lots: the
+   reference runs product -> lots, one direction only.
+8. **Automated collections** — condition `tag equals <shelf>`. These give the shelf pages their URLs.
+9. **Selling plans** (Loop) on subscribable products. **`subscription` is not a field** — it is the
+   presence of a selling plan group (§13.2).
+10. **Flow** — daily scheduled trigger. Use the **Run code** action for the date arithmetic:
+    date comparison inside Flow's Liquid conditions is unreliable and reported to fail silently.
+    Two jobs, and only the second should be fully automatic: **flag** a SKU approaching the Offerta
+    threshold for a human to decide how much stock to split, and **unpublish** at the end of the
+    freshness window. The second is the hard stop the no-waste pledge depends on, and it is the one
+    a person forgets and an automation gets right.
+11. **Order-line lot stamp** at fulfilment.
+
+**One product template, branching on shelf — not per-shelf templates.** Shopify assigns alternate
+templates per product via `template_suffix`, so per-shelf templates would put the shelf fact in a
+second home that has to be kept in step with the tag. One template that branches keeps a single home,
+and it is what the POC already does. This deliberately overrides an older note in `CLAUDE.md` §10
+that assumed per-shelf templates, written before any of this was understood.
+
 ## 14. Two surfaces the spec had never covered (Review B, 2026-08-20)
 
 Every POC surface was checked against this document. Eighteen of twenty were covered somewhere.
@@ -675,4 +831,3 @@ build spec has never covered the **mechanism**.
   sentence is stated in two places today and should be extracted to a snippet so the policy has one
   home (Review A finding A6, re-filed to the policy work).
 - **Offerta is never subscriber-discounted** and never stacks (Standard §3).
-
