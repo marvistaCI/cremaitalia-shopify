@@ -1,8 +1,18 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.10 · 2026-08-20**
+**Version 1.11 · 2026-08-20**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.11 (2026-08-20)** adds **§5.4 Fulfilment order and multiple lots** and **§6.1 Substitution on
+> a subscription**, neither of which existed anywhere. Both came out of Steve spotting that the POC
+> models a case that never happens - one lot per coffee - while the real business routinely holds
+> several. We ship **FIFO by roast date, per shelf**, on the sellable pool only; the customer sees a
+> **roast date range** rather than a single date, and the **best-by date is no longer displayed**
+> because it is the roast date plus a constant. A subscription is never filled with coffee past the
+> freshness promise on its ship date, which is the substitution trigger. Substitution never crosses
+> caffeine and never costs the customer more. Three questions about *how* a substitution is offered
+> are **left explicitly open** in §6.1 rather than answered by assumption. Nothing is repriced.
 
 > **v1.10 (2026-08-20)** closes the one item v1.9 left open, as **§13.5.2**: **Bottega is rated, and
 > is its own rating context.** The comparison objection that keeps a global average suspect is an
@@ -312,6 +322,60 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
 
 ---
 
+### 5.4 Fulfilment order and multiple lots (Steve, 2026-08-20)
+
+We routinely hold **more than one lot of the same coffee**, because we replenish while previous stock
+is still selling. Stock is fulfilled **first in, first out by roast date**, and **per shelf**: Roccia
+ships the oldest fresh lot, Offerta the oldest aged lot.
+
+FIFO operates only on the **sellable pool**. A lot past the freshness window is off sale entirely
+(§5), so FIFO can never mean shipping something this Standard has already withdrawn.
+
+**Coffee only.** Equipment and merchandise carry no roast date and do not age.
+
+**A subscription is never filled with coffee that exceeds the freshness promise on its ship date.**
+That is the trigger for §6.1.
+
+**What the customer sees.** Where more than one lot is in stock the product shows a roast **range**
+rather than a single date; with one lot in stock the range collapses to a date. The **best-by date is
+not displayed** - it is the roast date plus the freshness window, so showing both states one fact
+twice and aims the reader at a deadline rather than at freshness.
+
+**Approved customer copy (Steve, 2026-08-20).** Belongs in the FAQ, with the roast range and the FIFO
+line surfacing on the product page:
+
+> We purchase the same coffee routinely which is why we sometimes quote a roast date range. We always
+> fulfill orders in the order that we receive inventory, or First In First Out (FIFO), in
+> inventory-speak. If a particular lot is out of our immediate freshness window, it is moved to our
+> Offerta shelf and priced accordingly. We do not fulfill subscriptions with products that exceed our
+> freshness promise on the date of shipping to you.
+>
+> In rare circumstances where an Offerta lot exceeds our freshness promise entirely, we endeavor to
+> donate this coffee to worthy recipients. Remember, commercial coffee is typically sold as fresh
+> within a 24-month freshness window.
+>
+> Please note that any order of more than one bag may span lots, but the freshness of spanned lots is
+> always in the favor of the customer. We want you to enjoy fresh coffee.
+
+**Substantiation for the 24-month claim.** It is an objective claim about the market and needs a
+reasonable basis held on file - not a footnote on the page, which would read defensive and off-register.
+The basis is in OneDrive `CremaItalia LLC\Brand and Marketing\Market Research\`, principally
+*Deep-dive competitive pricing research Aug 2026*, which records "dated roast/best-before windows
+(~24 months)" across the Italian brands surveyed and cites a competitor displaying a best-before of
+05.2028 at point of sale. **Recorded here because nobody will remember in two years where it came
+from.** The word "most" was dropped from an earlier draft: the sample is Italian competitor brands, so
+"most commercial coffee" claimed more than the evidence supports.
+
+**Two notes on the copy, both deliberate.** An earlier draft said the move to Offerta was
+"automatic"; that was removed, because the *split* is human-triggered - someone decides how many units
+move - while only the end-of-window withdrawal is automated (`docs/production_build_spec.md` §13.9).
+And a comparative closing clause was cut: this brand states a fact and lets the reader draw the
+conclusion, rather than arguing against other sellers (Brand Standards §9).
+
+**This is the first rule that binds the warehouse rather than the storefront.** It holds only if the
+3PL actually picks that way, so it belongs in their SOP and should be spot-audited. A
+customer-facing promise resting on somebody else's habit is not a promise.
+
 ## 6. Roccia subscriptions (Loop)
 
 - Engine = **Loop** (native `selling_plan_groups` + Shopify Checkout + Loop-hosted portal).
@@ -333,6 +397,43 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
   Selezione/Offerta into a Roccia shipment.
 
 ---
+
+### 6.1 Substitution on a subscription (Steve, 2026-08-20 - PARTLY OPEN)
+
+**A subscription is to a coffee, not to a lot.** The lot is chosen by FIFO at fulfilment (§5.4).
+
+**Substitution is a last resort, not a convenience.** If, at the moment a recurring order is
+generated, no compliant lot of the subscribed coffee exists (§5.4), we substitute rather than ship
+nothing.
+
+**How the substitute is chosen**, in order: another coffee from the **same roaster**; failing that,
+the closest match on the customer's **saved taste profile** - roast level first, then flavour.
+
+**Caffeine is never substituted across.** A decaf subscription is never filled with caffeinated
+coffee, or the reverse, under any circumstances. This is a hard constraint, not a preference.
+
+**Never at a higher price.** If the substitute would cost more, the customer pays their normal rate;
+if less, they are charged the lower.
+
+**A substituted shipment counts as a shipment** for subscriber and Founding Member benefits (§3, §4).
+
+**A substitution notice is transactional, not marketing.** It concerns an order the customer is being
+charged for, so it is not subject to marketing preferences and cannot be opted out of. This matches
+the existing design note that transactional order emails are store-level rather than a customer
+toggle. Note that the account page's notification stub covers *marketing* preferences and Loop's
+delivery reminders; **neither gives the customer a choice about what ships**, which is a different
+question and is the one below.
+
+**OPEN - decide before the production build:**
+
+1. **Notify and allow a decline before shipping, or substitute and tell them with an easy return?**
+   The first suits the brand's disclosure posture and delays the shipment while we wait; the second
+   is operationally simpler and takes the choice away.
+2. **Does the first-bag guarantee (§9) cover a substitution for an established subscriber?** Strictly
+   it is a *first*-bag guarantee. The argument for covering it anyway is that we chose the coffee, not
+   them, so we should carry the risk. It is a real cost either way.
+3. **Should substitution be opt-out at signup?** A checkbox would settle it per customer rather than
+   per incident. Steve left this open deliberately on 2026-08-20.
 
 ## 7. Collections / bundles — the BOM model
 
@@ -681,5 +782,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.10 · 2026-08-20 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.11 · 2026-08-20 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
