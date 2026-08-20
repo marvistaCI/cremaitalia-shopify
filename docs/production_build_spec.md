@@ -15,18 +15,31 @@ the Standards — must not be missed), `CLAUDE.md` (§9 log, §10 "NEXT (product
 
 When Steve is ready to have Claude Code build the real storefront, paste this:
 
-> We're building the real production storefront now, replacing the POC. The canonical rules
-> live in the three Standards under `docs/standards/` (Brand, Store Operating v1.3,
-> Collaboration) — read those first and treat them as authoritative over the POC. Then read
-> `docs/POC_drift_from_standards.md` (every place the POC knowingly diverges from the
-> Standards — do not carry that drift into production), and `CLAUDE.md` top to bottom —
-> especially §10's "To resume, read in this order" and the "NEXT (production build)" block —
-> plus `docs/production_build_spec.md` and `docs/POC5_change_list.md`, and
-> `00_PROJECT_BRIEF.md` in OneDrive. Then propose a phased build plan and wait for my OK
-> before writing code. Reuse the POC3/POC4/POC5 CSS/JS/markup as the design system, but where
-> the code contradicts a Standard, the Standard wins (see the drift ledger).
+> We're building the real production storefront now, replacing the POC. The canonical rules live
+> in the three Standards under `docs/standards/` — read `docs/standards/README.md` for the current
+> versions, read all three, and treat them as authoritative over the POC. Then read
+> `docs/POC_drift_from_standards.md` (every place the POC knowingly diverges from the Standards —
+> do not carry that drift into production), and `CLAUDE.md` top to bottom, especially §10 CURRENT
+> STATE, which names the newest POC and its change list. **Verify §10 against live output
+> (`shopify theme list`) before trusting it.** Then read `docs/production_build_spec.md` end to
+> end. Then propose a phased build plan and wait for my OK before writing code.
+>
+> **What carries over from the POC, and what must not.** Carry the **CSS** (it is the design
+> system), the **copy**, the **component markup shapes**, and the **business logic**. Do **NOT**
+> carry `assets/ci-storefront.js`: it is a single-document SPA renderer that paints `innerHTML`
+> strings and exposes ~64 `window.*` handlers, and the SPA shape is explicitly not the production
+> architecture (§0). Production is server-rendered Liquid with real URLs per product and
+> collection. Treat the POC's JS as an executable specification of *behaviour*, never as code to
+> port. Where the code contradicts a Standard, the Standard wins (see the drift ledger).
 
 Everything below is what that prompt pulls in.
+
+> **This prompt deliberately names no version numbers and no POC number.** It used to say
+> "Store Operating v1.3" and to point at `docs/POC5_change_list.md`; by 2026-08-20 the Standard was
+> at v1.10 and the change list thirteen batches out of date. It is read **once, by someone with no
+> context**, which is exactly the document where staleness compounds instead of being caught. Point
+> at `docs/standards/README.md` and `CLAUDE.md` §10 — the places that are kept current — and never
+> re-introduce a literal version here. Review B finding B1.
 
 ---
 

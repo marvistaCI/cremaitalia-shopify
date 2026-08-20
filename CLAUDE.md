@@ -2768,13 +2768,15 @@ production design prompts and a ready-to-use build prompt live in
 footer relationship pages, Loop/native/Functions account split) — read it first when the
 production build starts.
 
-**To resume, read in this order:** this block → `docs/POC6_change_list.md` (latest batch —
-dropdown bug, Promise wording, taste-filter ribbon redesign, back-links, tricolore) →
-`docs/POC5_change_list.md` (prior POC backlog) → `docs/production_build_spec.md` (production
-design prompts + ready build prompt — now incl. §8 full-responsive requirement) →
-`docs/POC_v4_change_list.md` (POC4's detailed working ledger) → `docs/CremaItalia_POC_v3.html` (design source — now stale relative to POC4/POC5
-live copy in several places; treat the repo as source of truth over this frozen doc) →
-`00_PROJECT_BRIEF.md` (single source of truth) → `Coordination\DECISIONS_LOG.md`.
+**To resume, read in this order:** this block → **the newest `docs/POC<N>_change_list.md`**, whose
+number is named in this block rather than written here (it was left saying "POC6 — latest batch"
+until 2026-08-20, by which point twelve batches had shipped past it — Review B finding B1) →
+`docs/production_build_spec.md` (production design prompts + the ready-to-use build prompt) →
+`docs/standards/README.md` for the current Standard versions, then the Standards themselves →
+`docs/POC_drift_from_standards.md` → `00_PROJECT_BRIEF.md` (OneDrive) →
+`Coordination\DECISIONS_LOG.md`. `docs/CremaItalia_POC_v3.html` is a **frozen 2026-06 design
+source**, stale in many places against the live POC; read it for original intent only, never as
+current truth.
 
 ---
 
