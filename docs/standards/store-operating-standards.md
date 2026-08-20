@@ -1,8 +1,18 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.9 · 2026-08-20**
+**Version 1.10 · 2026-08-20**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.10 (2026-08-20)** closes the one item v1.9 left open, as **§13.5.2**: **Bottega is rated, and
+> is its own rating context.** The comparison objection that keeps a global average suspect is an
+> argument about *coffee*, where the palate is the variable; it does not apply to equipment, where a
+> grinder either holds its setting or does not. Bottega is already an exception the customer is told
+> about, so this is consistent rather than special-cased. Two binding consequences: it **never shows
+> a reorder rate** (nobody rebuys a grinder, and the figure is excluded by shelf rather than left for
+> a sample floor to eventually pass), and it **never gets the palate-matched layer**. It also becomes
+> the one shelf where a card-level rating could later be defended on its own terms. No rule elsewhere
+> changes.
 
 > **v1.9 (2026-08-20)** adds **§13.5.1**, governing *where* the rating control may appear. It may
 > render **only on the detail view of a purchasable product** - never on a roaster profile, person
@@ -623,11 +633,29 @@ cleared the per-product floor of §13.6, at which point reason 3 has resolved it
 floor, the mark may appear **only on cards that have a rating** - a null is never rendered in a
 grid under any circumstances.
 
-**Open, deliberately not decided (2026-08-20):** whether **Bottega** should be exempt from the
-comparison objection. Reason 1 is an argument about *coffee*, where the palate is the variable. A
-burr grinder is straightforwardly good or bad for everyone, so a global average on equipment is
-valid in a way it is not on a roast, and arguably more useful. Decide before the card-level floor is
-ever crossed.
+### 13.5.2 Bottega is its own rating context (Steve, 2026-08-20 - closes the v1.9 open item)
+
+**Bottega is rated, and is not exempt.** Reason 1 above is an argument about *coffee*, where the
+palate is the variable. It does not apply to equipment: a grinder that will not hold its setting is
+bad for everyone, so a global average on a Bottega item is valid in a way it is not on a roast, and
+is arguably more useful - someone spending real money on a grinder wants exactly that number.
+
+This is not an inconsistency. Bottega is **already** an exception throughout the store, and says so
+to the customer: *"Bottega items are never subscriber-discounted and are not part of the four coffee
+shelves."* Treating it as its own rating context is consistent with how it is treated everywhere
+else.
+
+Two consequences, both binding:
+
+- **Bottega never shows a reorder rate.** Nobody rebuys a grinder, so the figure would sit near zero,
+  mean nothing, and read as damning. It is excluded **by shelf**, not left for the §13.6 sample floor
+  to catch - a floor would eventually pass it and publish a meaningless number.
+- **Bottega never gets the palate-matched layer** (§13.6). There is no palate involved.
+
+And one consequence for later: **Bottega is the one shelf where a card-level rating could be
+defended**, because §13.5.1's first and deciding objection - that a grid invites a comparison this
+rating cannot support - does not hold for equipment. It stays off cards for now with the rest of the
+catalogue; if the coverage floor is ever revisited, Bottega may be revisited on its own terms.
 
 ### 13.6 Reorder rate and palate-matched feedback - floors, and silence below them
 
@@ -653,5 +681,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.9 · 2026-08-20 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.10 · 2026-08-20 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
