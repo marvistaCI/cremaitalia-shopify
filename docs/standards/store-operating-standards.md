@@ -1,8 +1,18 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.8 · 2026-08-20**
+**Version 1.9 · 2026-08-20**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.9 (2026-08-20)** adds **§13.5.1**, governing *where* the rating control may appear. It may
+> render **only on the detail view of a purchasable product** - never on a roaster profile, person
+> page or editorial surface - and it is **kept off product cards in grids** below a catalogue
+> coverage floor, because a grid is a comparison device and this rating is explicitly not comparable,
+> because a wall of "Not yet rated" advertises an empty store, and because uneven coverage makes
+> unrated coffees read as ignored. Above the floor, only rated cards may show the mark; **a null is
+> never rendered in a grid.** Note the detail view is the opposite: it renders the control *including*
+> when empty, which is what prompts a purchaser to rate at all. Leaves one item open by design -
+> whether Bottega equipment is exempt from the comparison objection. No rule elsewhere changes.
 
 > **v1.8 (2026-08-20)** adds **§13 Reviews & social proof**, closing the last open item on the
 > storefront scorecard. Reviews are **purchase-gated only** (emailed per-order link; the public form
@@ -586,6 +596,39 @@ and links to a dedicated review-detail view.
 - **Machine-readable markup** (`aggregateRating`) is emitted **only when at least one real review
   exists**. Never for zero. See `docs/production_build_spec.md` §9.2.
 
+### 13.5.1 Where the control may appear (Steve, 2026-08-20)
+
+**Only on the detail view of a purchasable product.** Never on a roaster profile, a person page, a
+collection landing surface, or any editorial page. A roaster is not rated; a coffee is. The guard is
+explicit because the control is otherwise easy to switch on somewhere it does not belong.
+
+**Never on a product card in a grid, while below the catalogue coverage floor.** This is §13.6's
+principle applied one level up: that section keeps a per-product signal silent below its *sample*
+floor; this keeps the card-level mark silent below a *coverage* floor. Three reasons, and the first
+is the one that decides it:
+
+1. **A grid is a comparison device, and this rating is not comparable.** The premise of this whole
+   section is that an average measures *did this match my palate*, not *is this good*. Set those
+   averages side by side on a shelf page and the store has built the exact comparison it says is
+   invalid - a shopper picks 4.6 over 4.2 and is choosing on noise. The same number on a detail page
+   is information about one coffee; in a grid it becomes a ranking.
+2. **The empty state does not survive repetition.** One "Not yet rated" is an invitation. Thirteen
+   down a shelf page is a wall of nulls announcing that nothing has been reviewed.
+3. **Uneven coverage distorts merchandising.** With a few products rated and most not, the rated
+   ones read as endorsed and the rest as ignored - an artefact of which sold first, not of quality,
+   and it works against every newly signed roaster.
+
+**The floor:** the card-level mark stays off until a clear majority of the active catalogue has
+cleared the per-product floor of §13.6, at which point reason 3 has resolved itself. Above the
+floor, the mark may appear **only on cards that have a rating** - a null is never rendered in a
+grid under any circumstances.
+
+**Open, deliberately not decided (2026-08-20):** whether **Bottega** should be exempt from the
+comparison objection. Reason 1 is an argument about *coffee*, where the palate is the variable. A
+burr grinder is straightforwardly good or bad for everyone, so a global average on equipment is
+valid in a way it is not on a roast, and arguably more useful. Decide before the card-level floor is
+ever crossed.
+
 ### 13.6 Reorder rate and palate-matched feedback - floors, and silence below them
 
 Both are permitted and both are **gated on sample size**. Each display carries a minimum-*n* floor,
@@ -610,5 +653,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.8 · 2026-08-20 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.9 · 2026-08-20 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*

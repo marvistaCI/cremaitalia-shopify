@@ -571,6 +571,17 @@
      populated by openPerson(id) from ci-catalog.json `people`. In production this becomes
      a single Liquid template rendering an admin-managed Team/Partner record (see
      docs/production_build_spec.md §2) - the container is code, the people are data. -->
+<!-- Review detail. Reached ONLY from the rating mark on a product detail page
+     (Store Operating Standards 13.5.1). Individual review records are the one part of the
+     production data path not yet proven readable in Liquid - by design, only THIS view
+     depends on them. See production_build_spec.md 6.1. -->
+<div class="page" id="page-reviews">
+  <main class="ci-main">
+    <button class="back-btn" onclick="goBack()">&larr; Back</button>
+    <div id="reviews-detail"></div>
+  </main>
+</div>
+
 <div class="page" id="page-person">
   <div class="dark-hero"><div class="dark-hero-inner">
     <button class="back-btn" style="color:var(--ci-crema-light)" onclick="goBack()">&larr; Back</button>

@@ -464,6 +464,126 @@
     showPage('person');
   };
 
+  // ---------- rating mark (POC17) ----------
+  // Store Operating Standards 13.5 / 13.5.1 govern this control. Read them before changing it;
+  // the placement rules below are decisions, not styling preferences.
+  //
+  // PROD: every value here comes from `poc_rating` in ci-catalog.json, which is FIXTURE DATA shaped
+  // 1:1 onto Shopify's standard review data. The production swap is a data source, not a rewrite:
+  //     p.poc_rating.rating.value    ->  product.metafields.reviews.rating.value.rating
+  //     p.poc_rating.rating_count    ->  product.metafields.reviews.rating_count.value
+  //     p.poc_rating.product_reviews ->  product.metafields.reviews.product_reviews.value
+  // The first two are VERIFIED readable in Liquid (dev-store test, 2026-08-20). The third is not yet
+  // proven and may need the vendor widget as a fallback - which is why only the detail VIEW depends
+  // on it, and the mark itself does not. See production_build_spec.md 6.1.
+
+  // Minimum buyers before a reorder rate may be shown at all. Below it the store shows NOTHING
+  // (Standard 13.6) - a percentage off a handful of orders is indistinguishable to the reader from
+  // one that means something. A named constant, never a literal in a template (build spec 11).
+  var POC_REORDER_FLOOR = 25;
+
+  // Reorder rate is COFFEE ONLY. Nobody rebuys a grinder, so on Bottega the number would sit near
+  // zero, mean nothing, and read as damning. Excluded by shelf rather than left to the floor.
+  function reorderEligible(p) { return p.shelf !== 'bottega'; }
+
+  // 13.5.1: the mark renders ONLY on the detail view of a purchasable product - never a roaster
+  // profile, a person page, or an editorial surface. `sizes` is what makes a catalog entry
+  // purchasable, so it is the honest test rather than checking which page we happen to be on.
+  function ratable(p) { return !!(p && p.shelf && p.sizes && p.sizes.length); }
+
+  function starGlyphs(value) {
+    // Rounded to whole stars on purpose: the numeral beside them carries the precision, so there is
+    // no partial glyph to paint and nothing that can render as a clipping artifact at 14px.
+    var filled = Math.round(value), out = '';
+    for (var i = 1; i <= 5; i++) {
+      out += '<span class="rm-star' + (i <= filled ? ' on' : '') + '">\u2605</span>';
+    }
+    return out;
+  }
+
+  function ratingMark(p) {
+    if (!ratable(p)) return '';
+    var r = p.poc_rating;
+    var has = !!(r && r.rating_count > 0);
+    if (!has) {
+      // Empty is RENDERED, not hidden - on the detail view only. It is the only thing on the page
+      // telling a purchaser that a route to rate exists. In a grid the same null is suppressed
+      // entirely (13.5.1): one is an invitation, thirteen is a wall.
+      return '<div class="rating-mark is-empty">' +
+        '<span class="rm-stars">' + starGlyphs(0) + '</span>' +
+        '<button class="rm-link" onclick="toggleRatingHint()">Not yet rated</button>' +
+        '<div class="rm-hint" id="rm-hint" hidden>No ratings exist for this product. ' +
+        'Have you purchased this product? If yes, check your email and be the first to submit a rating.</div>' +
+        '</div>';
+    }
+    var v = r.rating.value, n = r.rating_count;
+    return '<div class="rating-mark">' +
+      '<span class="rm-stars">' + starGlyphs(v) + '</span>' +
+      '<span class="rm-val">' + v.toFixed(1) + '</span>' +
+      '<button class="rm-link" onclick="openReviews(\'' + p.handle + '\')">' +
+      n + (n === 1 ? ' rating' : ' ratings') + '</button>' +
+      '</div>';
+  }
+
+  function reorderLine(p) {
+    if (!ratable(p) || !reorderEligible(p)) return '';
+    var ro = p.poc_rating && p.poc_rating.reorder;
+    if (!ro || ro.total_buyers < POC_REORDER_FLOOR) return '';   // silence below the floor
+    var pct = Math.round((ro.repeat_buyers / ro.total_buyers) * 100);
+    return '<p class="reorder-line">' + pct + '% of people who bought this bought it again.</p>';
+  }
+
+  window.toggleRatingHint = function () {
+    var h = $('rm-hint');
+    if (h) h.hidden = !h.hidden;
+  };
+
+  // ---------- review detail view (POC17) ----------
+  // Deliberately a separate page rather than an inline expansion (Steve, 2026-08-20). That choice
+  // also contains the one unproven dependency: ONLY this view needs individual review records, so if
+  // `reviews.product_reviews` does not populate in production the fallback is a vendor widget on
+  // this page alone, while the mark still governs every product page.
+  function reviewsPage(p) {
+    var r = p.poc_rating, list = (r && r.product_reviews) || [];
+    var head = '<div class="section-head"><p class="eyebrow">Ratings</p><h2>' + esc(p.title) + '</h2></div>';
+
+    var summary = '<div class="rv-summary">' +
+      '<span class="rm-stars big">' + starGlyphs(r.rating.value) + '</span>' +
+      '<span class="rv-val">' + r.rating.value.toFixed(1) + '</span>' +
+      '<span class="rv-of">out of 5</span>' +
+      '<span class="rv-ct">' + r.rating_count + (r.rating_count === 1 ? ' rating' : ' ratings') + '</span>' +
+      '</div>' + reorderLine(p);
+
+    var note = '<p class="rv-note">Only verified purchasers can rate what we sell, and every rating ' +
+      'we receive is published apart from abusive content. We do not collect photographs.</p>';
+
+    var items = list.map(function (rv) {
+      return '<article class="rv">' +
+        '<div class="rv-head">' +
+          '<span class="rm-stars">' + starGlyphs(rv.rating) + '</span>' +
+          (rv.title ? '<h3 class="rv-title">' + esc(rv.title) + '</h3>' : '') +
+        '</div>' +
+        '<p class="rv-body">' + esc(rv.body) + '</p>' +
+        '<p class="rv-by">' + esc(rv.author_display_name) +
+          (rv.app_verification_status === 'verified' ? ' <span class="rv-vf">Verified purchase</span>' : '') +
+          ' \u00b7 ' + esc(rv.submitted_at) + '</p>' +
+        (rv.merchant_reply
+          ? '<div class="rv-reply"><p class="rv-reply-who">Crema Italia replied</p><p>' +
+            esc(rv.merchant_reply) + '</p></div>'
+          : '') +
+        '</article>';
+    }).join('');
+
+    return head + summary + note + '<div class="rv-list">' + items + '</div>';
+  }
+
+  window.openReviews = function (handle) {
+    var p = byHandle[handle];
+    if (!p || !ratable(p) || !p.poc_rating) return;
+    $('reviews-detail').innerHTML = reviewsPage(p);
+    showPage('reviews');
+  };
+
   window.openProduct = function (handle) {
     var p = byHandle[handle];
     if (!p) return;
@@ -527,6 +647,13 @@
       return '<div class="pd-grid">' + img + '<div>' +
         '<span class="cs sb">Bottega</span>' +
         '<h1 class="pd-title">' + esc(p.display_title) + '</h1>' +
+        // Bottega is its own rating context (Steve, 2026-08-20). The reason a global average is
+        // suspect on coffee - one palate's best is another's meh - does not apply to equipment: a
+        // grinder that will not hold its setting is bad for everyone. So the mark renders here, and
+        // this is the one shelf where a card-level rating could also be defended. What Bottega never
+        // gets is a reorder rate (nobody rebuys a grinder - see reorderEligible) or the
+        // palate-matched layer, because there is no palate involved.
+        ratingMark(p) +
         '<p class="prose" style="max-width:none">' + esc(p.blurb) + '</p>' +
         '<p class="pd-price">' + money(priceFrom(p)) + '</p>' +
         '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="addToCart(\'' + p.handle + '\',\'' + esc(p.sizes[0].size) + '\',false,null)">Add to cart</button>' +
@@ -582,10 +709,12 @@
       '<span class="cs ' + badge.cls + '">' + esc(badge.tag) + '</span>' +
       '<h1 class="pd-title">' + esc(p.title) + '</h1>' +
       roasterLine +
+      ratingMark(p) +
       (notePills ? '<div class="filter-pills" style="margin-bottom:1rem">' + notePills + '</div>' : '') +
       meta + components +
       sizeSelector +
       priceHtml +
+      reorderLine(p) +
       subBlock +
       '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="addToCartFromDetail(\'' + p.handle + '\')">Add to cart</button>' +
       // GRINDER EXPECTATION (POC15). Every coffee product already said "whole bean only" in

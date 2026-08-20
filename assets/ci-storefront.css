@@ -882,3 +882,46 @@ h1 .ita, h2 .ita, h3 .ita, h4 .ita,
    else - but keep the #page-home scope if that ever changes. */
 #page-home .card-grid{grid-template-columns:repeat(2,1fr)}
 @media (max-width:640px){#page-home .card-grid{grid-template-columns:1fr}}
+
+/* ---------- rating mark + review detail (POC17) ----------
+   Store Operating Standards 13.5 / 13.5.1 govern placement. The mark appears on the detail view of
+   a purchasable product only, and is never rendered into a product-card grid.
+   Stars carry recognition, the numeral carries precision - so the glyphs round to whole stars and
+   nothing is fractionally painted (Steve, 2026-08-20). Empty stars sit at the HAIRLINE value, not a
+   mid grey: at that weight they read as an unfilled frame rather than a score of zero, which is the
+   whole point of the null state. Do not darken them. */
+.rating-mark{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin:0 0 1rem}
+.rm-stars{display:inline-flex;gap:2px;line-height:1;font-size:.95rem}
+.rm-stars.big{font-size:1.35rem;gap:3px}
+.rm-star{color:var(--ci-hairline)}
+.rm-star.on{color:var(--ci-crema)}
+.rm-val{font-family:var(--ci-font-display);font-size:1.05rem;color:var(--ci-coffee);line-height:1;
+  font-variant-numeric:tabular-nums}
+.rm-link{background:none;border:none;padding:0;font:inherit;font-size:.85rem;color:var(--ci-crema-hover);
+  text-decoration:underline;text-underline-offset:2px;cursor:pointer;min-height:24px}
+.rm-link:hover{color:var(--ci-espresso)}
+.rating-mark.is-empty{align-items:flex-start;flex-direction:column;gap:.35rem}
+.rating-mark.is-empty .rm-stars{font-size:.95rem}
+.rm-hint{font-size:.85rem;color:var(--ci-mute);border-left:2px solid var(--ci-crema);
+  padding:.5rem 0 .5rem .75rem;max-width:38ch;line-height:1.5}
+
+/* reorder rate. Rendered only above POC_REORDER_FLOOR and never on Bottega - see the JS. */
+.reorder-line{font-size:.85rem;color:var(--ci-espresso);margin:.5rem 0 0}
+
+/* review detail view */
+.rv-summary{display:flex;align-items:baseline;flex-wrap:wrap;gap:.65rem;margin:0 0 .35rem}
+.rv-val{font-family:var(--ci-font-display);font-size:1.6rem;color:var(--ci-coffee);line-height:1;
+  font-variant-numeric:tabular-nums}
+.rv-of,.rv-ct{font-size:.85rem;color:var(--ci-mute)}
+.rv-note{font-size:.85rem;color:var(--ci-mute);max-width:60ch;margin:.75rem 0 1.5rem}
+.rv-list{display:flex;flex-direction:column;gap:1.5rem;max-width:72ch}
+.rv{border-top:1px solid var(--ci-hairline);padding-top:1.25rem}
+.rv-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:.6rem;margin-bottom:.4rem}
+.rv-title{font-size:1rem;font-weight:600;margin:0;color:var(--ci-espresso)}
+.rv-body{margin:0 0 .5rem;color:var(--ci-ink-soft)}
+.rv-by{font-size:.8rem;color:var(--ci-mute);margin:0}
+.rv-vf{color:var(--ci-green);font-weight:600}
+.rv-reply{margin-top:.75rem;border-left:2px solid var(--ci-hairline);padding-left:.9rem}
+.rv-reply-who{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ci-mute);
+  font-weight:600;margin:0 0 .25rem}
+.rv-reply p{font-size:.9rem;color:var(--ci-ink-soft);margin:0}

@@ -3,7 +3,8 @@
     "note": "POC3 baked-in test dataset. Single source of truth for the storefront preview. NOT wired to live Shopify products. When the production store is built, this is replaced by real {{ product }} / {{ collection }} objects + crema_italia.* metafields. See CLAUDE.md.",
     "currency": "USD",
     "freshness_window_days": 60,
-    "founding_member_cap": 222
+    "founding_member_cap": 222,
+    "poc_rating_note": "FIXTURE DATA - POC ONLY. Named poc_rating so a grep for the production 'reviews.' namespace never hits it, and one grep for poc_ finds everything that must go. Shape mirrors Shopify's standard review data 1:1 so production is a data-source swap: rating -> reviews.rating, rating_count -> reviews.rating_count, product_reviews[] -> reviews.product_reviews (metaobject fields). Store Operating Standards 13.7: no fabricated rating may ever appear on the live store."
   },
   "roasters": [
     {
@@ -119,15 +120,83 @@
       "origin": "Ethiopia, Yirgacheffe",
       "process": "Natural",
       "roast_level": "Light",
-      "notes": ["Jasmine", "Peach", "Bergamot"],
+      "notes": [
+        "Jasmine",
+        "Peach",
+        "Bergamot"
+      ],
       "roast_date": "2026-06-20",
       "best_by": "2026-08-19",
       "subscription": true,
-      "sizes": [{"size": "250g", "price": 38}, {"size": "500g", "price": 68}, {"size": "1kg", "price": 120}],
-      "img": {"cls": "p", "label": "Gardelli · Ethiopia"},
+      "sizes": [
+        {
+          "size": "250g",
+          "price": 38
+        },
+        {
+          "size": "500g",
+          "price": 68
+        },
+        {
+          "size": "1kg",
+          "price": 120
+        }
+      ],
+      "img": {
+        "cls": "p",
+        "label": "Gardelli · Ethiopia"
+      },
       "blurb": "Jasmine, peach, bergamot. Natural process.",
       "long": "A natural-process Yirgacheffe roasted light to keep its perfume intact - jasmine and bergamot up top, ripe peach underneath. Imported whole bean in Gardelli's valve-sealed bag.",
-      "brewing": "Excellent as filter or in a moka pot. We sell whole bean only - grind fresh just before you brew."
+      "brewing": "Excellent as filter or in a moka pot. We sell whole bean only - grind fresh just before you brew.",
+      "poc_rating": {
+        "rating": {
+          "value": 4.2,
+          "scale_min": 1.0,
+          "scale_max": 5.0
+        },
+        "rating_count": 38,
+        "reorder": {
+          "repeat_buyers": 52,
+          "total_buyers": 84
+        },
+        "product_reviews": [
+          {
+            "rating": 5,
+            "title": "Worth the wait",
+            "body": "Bright and clean, and it kept its character right through the bag. I ground a little coarser than usual for the V60 and it opened up.",
+            "author_display_name": "Marco T.",
+            "submitted_at": "2026-07-28",
+            "app_verification_status": "verified"
+          },
+          {
+            "rating": 5,
+            "title": "The jasmine is real",
+            "body": "I was sceptical about tasting notes generally. This one actually smells like the note on the label.",
+            "author_display_name": "Dana R.",
+            "submitted_at": "2026-07-14",
+            "app_verification_status": "verified"
+          },
+          {
+            "rating": 4,
+            "title": "Excellent, but not for milk",
+            "body": "Lovely black. I tried it in a flat white and it disappeared entirely. My fault, not the coffee.",
+            "author_display_name": "Priya S.",
+            "submitted_at": "2026-06-30",
+            "app_verification_status": "verified"
+          },
+          {
+            "rating": 2,
+            "title": "Too light for me",
+            "body": "Well roasted, arrived quickly, no complaints about the service. It is just far too delicate for how I drink coffee. I want something darker.",
+            "author_display_name": "Verified buyer",
+            "submitted_at": "2026-06-21",
+            "app_verification_status": "verified",
+            "merchant_reply": "That is a fair call, and thank you for saying so plainly. This one sits at the light end of what we carry. If you would like, reply to your order email and we will point you at something considerably darker.",
+            "merchant_replied_at": "2026-06-22"
+          }
+        ]
+      }
     },
     {
       "handle": "gardelli-rwanda",
@@ -142,12 +211,32 @@
       "origin": "Rwanda, Western Province",
       "process": "Washed",
       "roast_level": "Light",
-      "notes": ["Red currant", "Black tea", "Lime"],
+      "notes": [
+        "Red currant",
+        "Black tea",
+        "Lime"
+      ],
       "roast_date": "2026-06-19",
       "best_by": "2026-08-18",
       "subscription": true,
-      "sizes": [{"size": "250g", "price": 40}, {"size": "500g", "price": 72}, {"size": "1kg", "price": 128}],
-      "img": {"cls": "r", "label": "Gardelli · Rwanda"},
+      "sizes": [
+        {
+          "size": "250g",
+          "price": 40
+        },
+        {
+          "size": "500g",
+          "price": 72
+        },
+        {
+          "size": "1kg",
+          "price": 128
+        }
+      ],
+      "img": {
+        "cls": "r",
+        "label": "Gardelli · Rwanda"
+      },
       "blurb": "Red currant, black tea, lime. Washed.",
       "long": "A washed Rwandan from the hills of Nyamasheke, roasted light and clean. Sparkling acidity, red-fruit clarity, a black-tea finish.",
       "brewing": "Best as pour-over or filter. Whole bean only - grind fresh just before you brew."
@@ -165,15 +254,73 @@
       "origin": "Guatemala, Huehuetenango",
       "process": "Washed",
       "roast_level": "Medium",
-      "notes": ["Brown sugar", "Dried apricot", "Almond"],
+      "notes": [
+        "Brown sugar",
+        "Dried apricot",
+        "Almond"
+      ],
       "roast_date": "2026-06-18",
       "best_by": "2026-08-17",
       "subscription": true,
-      "sizes": [{"size": "250g", "price": 28}, {"size": "500g", "price": 50}, {"size": "1kg", "price": 88}],
-      "img": {"cls": "r", "label": "La Sosta · Guatemala"},
+      "sizes": [
+        {
+          "size": "250g",
+          "price": 28
+        },
+        {
+          "size": "500g",
+          "price": 50
+        },
+        {
+          "size": "1kg",
+          "price": 88
+        }
+      ],
+      "img": {
+        "cls": "r",
+        "label": "La Sosta · Guatemala"
+      },
       "blurb": "Brown sugar, dried apricot, almond.",
       "long": "A washed Huehuetenango roasted to a classic Florentine medium - brown sugar and almond, with a dried-apricot sweetness that suits a moka pot or an espresso machine.",
-      "brewing": "Built for moka and espresso. Whole bean only - grind fresh just before you brew."
+      "brewing": "Built for moka and espresso. Whole bean only - grind fresh just before you brew.",
+      "poc_rating": {
+        "rating": {
+          "value": 4.7,
+          "scale_min": 1.0,
+          "scale_max": 5.0
+        },
+        "rating_count": 12,
+        "reorder": {
+          "repeat_buyers": 8,
+          "total_buyers": 14
+        },
+        "product_reviews": [
+          {
+            "rating": 5,
+            "title": "My daily now",
+            "body": "Third bag. Consistent every time, which is the part I care about.",
+            "author_display_name": "Alessandro P.",
+            "submitted_at": "2026-08-02",
+            "app_verification_status": "verified"
+          },
+          {
+            "rating": 5,
+            "title": "Perfect in the moka",
+            "body": "Exactly what I hoped for. Chocolate and a little spice, no bitterness.",
+            "author_display_name": "Kate M.",
+            "submitted_at": "2026-07-19",
+            "app_verification_status": "verified"
+          },
+          {
+            "rating": 4,
+            "title": "Very good",
+            "body": "Solid and comforting. Not exciting, and I do not think it is trying to be.",
+            "author_display_name": "Verified buyer",
+            "submitted_at": "2026-07-05",
+            "app_verification_status": "verified"
+          }
+        ]
+      }
     },
     {
       "handle": "lasosta-brasile",
@@ -188,12 +335,32 @@
       "origin": "Brazil, Cerrado Mineiro",
       "process": "Natural",
       "roast_level": "Medium",
-      "notes": ["Peanut", "Cocoa", "Caramel"],
+      "notes": [
+        "Peanut",
+        "Cocoa",
+        "Caramel"
+      ],
       "roast_date": "2026-06-17",
       "best_by": "2026-08-16",
       "subscription": true,
-      "sizes": [{"size": "250g", "price": 26}, {"size": "500g", "price": 46}, {"size": "1kg", "price": 82}],
-      "img": {"cls": "p", "label": "La Sosta · Brasile"},
+      "sizes": [
+        {
+          "size": "250g",
+          "price": 26
+        },
+        {
+          "size": "500g",
+          "price": 46
+        },
+        {
+          "size": "1kg",
+          "price": 82
+        }
+      ],
+      "img": {
+        "cls": "p",
+        "label": "La Sosta · Brasile"
+      },
       "blurb": "Peanut, cocoa, caramel. Natural.",
       "long": "A natural Cerrado for the everyday cup - roasted, sweet, and low in acidity. The dependable house espresso.",
       "brewing": "Ideal for espresso and moka. Whole bean only - grind fresh just before you brew."
@@ -211,12 +378,28 @@
       "origin": "Colombia, Antioquia",
       "process": "Washed",
       "roast_level": "Dark",
-      "notes": ["Milk chocolate", "Hazelnut", "Caramel"],
+      "notes": [
+        "Milk chocolate",
+        "Hazelnut",
+        "Caramel"
+      ],
       "roast_date": "2026-06-16",
       "best_by": "2026-08-15",
       "subscription": true,
-      "sizes": [{"size": "250g", "price": 47}, {"size": "1kg", "price": 148}],
-      "img": {"cls": "p", "label": "Fusari · Colombia"},
+      "sizes": [
+        {
+          "size": "250g",
+          "price": 47
+        },
+        {
+          "size": "1kg",
+          "price": 148
+        }
+      ],
+      "img": {
+        "cls": "p",
+        "label": "Fusari · Colombia"
+      },
       "blurb": "Milk chocolate, hazelnut, caramel.",
       "long": "A washed Antioquia roasted dark in the Tuscan bar tradition - milk chocolate and hazelnut, a caramel sweetness, almost no edge. Nonna's espresso.",
       "brewing": "Made for espresso and moka. Whole bean only - grind fresh just before you brew."
@@ -234,15 +417,61 @@
       "origin": "India, Malabar Coast",
       "process": "Monsooned",
       "roast_level": "Dark",
-      "notes": ["Dark chocolate", "Pipe tobacco", "Baking spice"],
+      "notes": [
+        "Dark chocolate",
+        "Pipe tobacco",
+        "Baking spice"
+      ],
       "roast_date": "2026-06-14",
       "best_by": "2026-08-13",
       "subscription": true,
-      "sizes": [{"size": "250g", "price": 44}, {"size": "1kg", "price": 138}],
-      "img": {"cls": "r", "label": "Fusari · India"},
+      "sizes": [
+        {
+          "size": "250g",
+          "price": 44
+        },
+        {
+          "size": "1kg",
+          "price": 138
+        }
+      ],
+      "img": {
+        "cls": "r",
+        "label": "Fusari · India"
+      },
       "blurb": "Dark chocolate, pipe tobacco, baking spice.",
       "long": "A monsooned Malabar - low acidity, full body, a savoury depth of tobacco and spice. A winter espresso with character.",
-      "brewing": "Espresso and moka. Whole bean only - grind fresh just before you brew."
+      "brewing": "Espresso and moka. Whole bean only - grind fresh just before you brew.",
+      "poc_rating": {
+        "rating": {
+          "value": 3.8,
+          "scale_min": 1.0,
+          "scale_max": 5.0
+        },
+        "rating_count": 6,
+        "reorder": {
+          "repeat_buyers": 2,
+          "total_buyers": 9
+        },
+        "product_reviews": [
+          {
+            "rating": 4,
+            "title": "Unusual, in a good way",
+            "body": "Monsooned Malabar is strange coffee and this is a good example of it. Low acid, almost savoury.",
+            "author_display_name": "Ben H.",
+            "submitted_at": "2026-07-22",
+            "app_verification_status": "verified"
+          },
+          {
+            "rating": 3,
+            "title": "Not what I expected",
+            "body": "Interesting but I do not think I will reorder. That is about my palate rather than the roast.",
+            "author_display_name": "Verified buyer",
+            "submitted_at": "2026-07-08",
+            "app_verification_status": "verified"
+          }
+        ]
+      }
     },
     {
       "handle": "gcb-brasile",
@@ -257,12 +486,32 @@
       "origin": "Brazil, Daterra Estate",
       "process": "Pulped natural",
       "roast_level": "Medium",
-      "notes": ["Hazelnut", "Milk chocolate", "Brown sugar"],
+      "notes": [
+        "Hazelnut",
+        "Milk chocolate",
+        "Brown sugar"
+      ],
       "roast_date": "2026-06-13",
       "best_by": "2026-08-12",
       "subscription": true,
-      "sizes": [{"size": "250g", "price": 42}, {"size": "500g", "price": 75}, {"size": "1kg", "price": 132}],
-      "img": {"cls": "p", "label": "GCB · Brasile"},
+      "sizes": [
+        {
+          "size": "250g",
+          "price": 42
+        },
+        {
+          "size": "500g",
+          "price": 75
+        },
+        {
+          "size": "1kg",
+          "price": 132
+        }
+      ],
+      "img": {
+        "cls": "p",
+        "label": "GCB · Brasile"
+      },
       "blurb": "Hazelnut, milk chocolate, brown sugar.",
       "long": "A pulped-natural Daterra roasted medium - clean, sweet, and comforting. The brothers' take on a crowd-pleasing everyday bean.",
       "brewing": "Espresso, moka, or filter. Whole bean only - grind fresh just before you brew."
@@ -280,12 +529,29 @@
       "origin": "Colombia",
       "process": "Sugarcane (EA) decaffeination",
       "roast_level": "Medium",
-      "notes": ["Walnut", "Dried fig", "Cocoa"],
+      "notes": [
+        "Walnut",
+        "Dried fig",
+        "Cocoa"
+      ],
       "roast_date": "2026-06-15",
       "best_by": "2026-08-14",
       "subscription": true,
-      "sizes": [{"size": "250g", "price": 38}, {"size": "500g", "price": 68}],
-      "img": {"cls": "r", "style": "background:linear-gradient(135deg,#1a2a3a,#3a5a6a)", "label": "Val d'Orcia Decaf"},
+      "sizes": [
+        {
+          "size": "250g",
+          "price": 38
+        },
+        {
+          "size": "500g",
+          "price": 68
+        }
+      ],
+      "img": {
+        "cls": "r",
+        "style": "background:linear-gradient(135deg,#1a2a3a,#3a5a6a)",
+        "label": "Val d'Orcia Decaf"
+      },
       "blurb": "Walnut, dried fig, cocoa. The cup that started Crema Italia.",
       "long": "A sugarcane-process decaf from Colombia, roasted medium - walnut, dried fig, and cocoa, with none of the flatness decaf is unfairly known for. The cup that started Crema Italia.",
       "brewing": "Lovely as an evening espresso or moka. Whole bean only - grind fresh just before you brew."
@@ -303,12 +569,33 @@
       "origin": "Blend - Brazil, Ethiopia, India",
       "process": "Blend",
       "roast_level": "Medium",
-      "notes": ["Cocoa", "Toasted almond", "Caramel"],
+      "notes": [
+        "Cocoa",
+        "Toasted almond",
+        "Caramel"
+      ],
       "roast_date": "2026-06-12",
       "best_by": "2026-08-11",
       "subscription": true,
-      "sizes": [{"size": "250g", "price": 30}, {"size": "500g", "price": 54}, {"size": "1kg", "price": 96}],
-      "img": {"cls": "p", "style": "background:linear-gradient(135deg,#2a1a12,#6B4A38)", "label": "Val d'Orcia · Classica"},
+      "sizes": [
+        {
+          "size": "250g",
+          "price": 30
+        },
+        {
+          "size": "500g",
+          "price": 54
+        },
+        {
+          "size": "1kg",
+          "price": 96
+        }
+      ],
+      "img": {
+        "cls": "p",
+        "style": "background:linear-gradient(135deg,#2a1a12,#6B4A38)",
+        "label": "Val d'Orcia · Classica"
+      },
       "blurb": "Cocoa, toasted almond, caramel. A signature blend.",
       "long": "The roastery's signature blend - Brazilian body, a touch of Ethiopian lift, Indian depth. Cocoa and toasted almond, built for the bar cup.",
       "brewing": "Espresso and moka. Whole bean only - grind fresh just before you brew."
@@ -318,19 +605,44 @@
       "title": "Tour d'Italia 1",
       "display_title": "Tour d'Italia 1",
       "roaster": null,
-      "roasters": ["gardelli", "lasosta", "fusari"],
+      "roasters": [
+        "gardelli",
+        "lasosta",
+        "fusari"
+      ],
       "roaster_label": "Crema Italia curated selection",
       "shelf": "sorpresa",
-      "component_handles": ["gardelli-ethiopia", "lasosta-guatemala", "fusari-colombia"],
+      "component_handles": [
+        "gardelli-ethiopia",
+        "lasosta-guatemala",
+        "fusari-colombia"
+      ],
       "origin": "Three roasters, three regions",
       "process": "Curator's selection",
       "roast_level": "Mixed",
-      "notes": ["Our choice", "Three 100 g bags", "Printed tasting card"],
-      "components": ["Gardelli Ethiopia", "La Sosta Guatemala", "Fusari Colombia"],
+      "notes": [
+        "Our choice",
+        "Three 100 g bags",
+        "Printed tasting card"
+      ],
+      "components": [
+        "Gardelli Ethiopia",
+        "La Sosta Guatemala",
+        "Fusari Colombia"
+      ],
       "subscription": false,
-      "sizes": [{"size": "3 × 100g", "price": 77.70}],
+      "sizes": [
+        {
+          "size": "3 × 100g",
+          "price": 77.7
+        }
+      ],
       "price_unit": "/3×100g",
-      "img": {"cls": "p", "style": "background:linear-gradient(135deg,#5a3a18,#B88348)", "label": "Tour d'Italia 1"},
+      "img": {
+        "cls": "p",
+        "style": "background:linear-gradient(135deg,#5a3a18,#B88348)",
+        "label": "Tour d'Italia 1"
+      },
       "freshness_note": "Boxed for you when you order",
       "blurb": "Three 100 g bags, three roasters, assembled on-demand. Printed tasting card included.",
       "long": "A journey across regions: North, Central, South. Three 100 g bags - Gardelli Ethiopia, La Sosta Guatemala, Fusari Colombia - boxed with a tasting card and assembled to order so every bag ships fresh.",
@@ -349,14 +661,27 @@
       "origin": "Panama, Volcán - Finca Deborah",
       "process": "Washed",
       "roast_level": "Light",
-      "notes": ["Chamomile", "White peach", "Jasmine"],
+      "notes": [
+        "Chamomile",
+        "White peach",
+        "Jasmine"
+      ],
       "roast_date": "2026-06-21",
       "best_by": "2026-08-20",
       "subscription": false,
       "seasonal": false,
       "low_inventory": 9,
-      "sizes": [{"size": "250g", "price": 108}],
-      "img": {"cls": "r", "style": "background:linear-gradient(135deg,#2a1008,#8B3A10)", "label": "Gardelli · Geisha"},
+      "sizes": [
+        {
+          "size": "250g",
+          "price": 108
+        }
+      ],
+      "img": {
+        "cls": "r",
+        "style": "background:linear-gradient(135deg,#2a1008,#8B3A10)",
+        "label": "Gardelli · Geisha"
+      },
       "scarcity": "This shipment only",
       "blurb": "Chamomile, white peach, jasmine. Panama micro-lot.",
       "long": "A washed Geisha from Finca Deborah, high on the Volcán slopes - chamomile, white peach, jasmine. A micro-lot we secured a few kilos of; when this pallet is gone it may not return.",
@@ -375,14 +700,27 @@
       "origin": "Blend - seasonal",
       "process": "Blend",
       "roast_level": "Medium",
-      "notes": ["Panettone", "Candied orange", "Hazelnut"],
+      "notes": [
+        "Panettone",
+        "Candied orange",
+        "Hazelnut"
+      ],
       "roast_date": "2026-06-10",
       "best_by": "2026-08-09",
       "subscription": false,
       "seasonal": true,
       "low_inventory": 11,
-      "sizes": [{"size": "250g", "price": 54}],
-      "img": {"cls": "p", "style": "background:linear-gradient(135deg,#3a1a2a,#7a3a5a)", "label": "La Sosta · Natale"},
+      "sizes": [
+        {
+          "size": "250g",
+          "price": 54
+        }
+      ],
+      "img": {
+        "cls": "p",
+        "style": "background:linear-gradient(135deg,#3a1a2a,#7a3a5a)",
+        "label": "La Sosta · Natale"
+      },
       "scarcity": "Seasonal",
       "blurb": "Panettone, candied orange, hazelnut. Holiday micro-lot.",
       "long": "La Sosta's holiday blend - warm, sweet, and spiced, the cup that tastes like panettone on the table. A seasonal Selezione micro-lot.",
@@ -401,17 +739,49 @@
       "origin": "Blend",
       "process": "Blend",
       "roast_level": "Dark",
-      "notes": ["Chocolate", "Walnut", "Dried fig"],
+      "notes": [
+        "Chocolate",
+        "Walnut",
+        "Dried fig"
+      ],
       "roast_date": "2026-05-30",
       "best_by": "2026-07-29",
       "subscription": false,
       "as_is": true,
       "freshness_remaining": "Best within 23 days",
-      "sizes": [{"size": "250g", "price": 21, "original": 28}],
-      "img": {"cls": "p", "style": "background:linear-gradient(135deg,#3a3028,#7a6a58)", "label": "GCB · La Dolce Vita"},
+      "sizes": [
+        {
+          "size": "250g",
+          "price": 21,
+          "original": 28
+        }
+      ],
+      "img": {
+        "cls": "p",
+        "style": "background:linear-gradient(135deg,#3a3028,#7a6a58)",
+        "label": "GCB · La Dolce Vita"
+      },
       "blurb": "Chocolate, walnut, dried fig. Roasted 2026-05-30.",
       "long": "A dark house blend that reached its Offerta threshold - still good coffee, still inside a real freshness window, priced down honestly. Sold as-is.",
-      "brewing": "Espresso and moka. Whole bean only - grind fresh just before you brew."
+      "brewing": "Espresso and moka. Whole bean only - grind fresh just before you brew.",
+      "poc_rating": {
+        "rating": {
+          "value": 4.0,
+          "scale_min": 1.0,
+          "scale_max": 5.0
+        },
+        "rating_count": 5,
+        "product_reviews": [
+          {
+            "rating": 4,
+            "title": "Good value at the markdown",
+            "body": "Past its peak but still very drinkable, and the price reflected that honestly.",
+            "author_display_name": "Tomas L.",
+            "submitted_at": "2026-08-05",
+            "app_verification_status": "verified"
+          }
+        ]
+      }
     },
     {
       "handle": "bottega-moka-3cup",
@@ -420,8 +790,16 @@
       "roaster": null,
       "shelf": "bottega",
       "category": "Equipment",
-      "sizes": [{"size": "3-cup", "price": 34}],
-      "img": {"cls": "b", "label": "Moka · 3-cup"},
+      "sizes": [
+        {
+          "size": "3-cup",
+          "price": 34
+        }
+      ],
+      "img": {
+        "cls": "b",
+        "label": "Moka · 3-cup"
+      },
       "blurb": "The classic stovetop. Aluminium, made in Italy."
     },
     {
@@ -431,9 +809,43 @@
       "roaster": null,
       "shelf": "bottega",
       "category": "Equipment",
-      "sizes": [{"size": "Standard", "price": 59}],
-      "img": {"cls": "b", "label": "Burr grinder"},
-      "blurb": "Grind fresh, just before you brew. Stainless burrs."
+      "sizes": [
+        {
+          "size": "Standard",
+          "price": 59
+        }
+      ],
+      "img": {
+        "cls": "b",
+        "label": "Burr grinder"
+      },
+      "blurb": "Grind fresh, just before you brew. Stainless burrs.",
+      "poc_rating": {
+        "rating": {
+          "value": 4.9,
+          "scale_min": 1.0,
+          "scale_max": 5.0
+        },
+        "rating_count": 21,
+        "product_reviews": [
+          {
+            "rating": 5,
+            "title": "Should have bought one years ago",
+            "body": "The difference between this and a blade grinder is not subtle.",
+            "author_display_name": "Rachel K.",
+            "submitted_at": "2026-07-30",
+            "app_verification_status": "verified"
+          },
+          {
+            "rating": 5,
+            "title": "Holds its setting",
+            "body": "No drift between uses, which was my complaint about the last one I owned.",
+            "author_display_name": "Verified buyer",
+            "submitted_at": "2026-07-11",
+            "app_verification_status": "verified"
+          }
+        ]
+      }
     },
     {
       "handle": "bottega-espresso-cups",
@@ -442,8 +854,16 @@
       "roaster": null,
       "shelf": "bottega",
       "category": "Merch",
-      "sizes": [{"size": "Pair", "price": 28}],
-      "img": {"cls": "b", "label": "Cups · pair"},
+      "sizes": [
+        {
+          "size": "Pair",
+          "price": 28
+        }
+      ],
+      "img": {
+        "cls": "b",
+        "label": "Cups · pair"
+      },
       "blurb": "Porcelain, thick wall, Crema Italia mark."
     },
     {
@@ -453,8 +873,16 @@
       "roaster": null,
       "shelf": "bottega",
       "category": "Merch",
-      "sizes": [{"size": "One size", "price": 22}],
-      "img": {"cls": "b", "label": "Tote"},
+      "sizes": [
+        {
+          "size": "One size",
+          "price": 22
+        }
+      ],
+      "img": {
+        "cls": "b",
+        "label": "Tote"
+      },
       "blurb": "Heavy cotton canvas, tricolore stitch."
     }
   ],
