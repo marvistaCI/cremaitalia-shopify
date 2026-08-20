@@ -6,5 +6,46 @@
     "theme_author": "Crema Italia, LLC",
     "theme_documentation_url": "https://github.com/marvistaCI/cremaitalia-shopify",
     "theme_support_url": "https://github.com/marvistaCI/cremaitalia-shopify"
+  },
+  {
+    "name": "System settings",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Commercial rules"
+      },
+      {
+        "type": "paragraph",
+        "content": "These values are owned by the Store Operating Standards. Changing one here changes it everywhere on the storefront at once, with no code deploy. Change the Standard first, then this. Never type one of these numbers into a page."
+      },
+      {
+        "type": "number",
+        "id": "founding_member_cap",
+        "label": "Founding Member cap",
+        "info": "Store Operating Standards section 4. The number of founding slots, which does not reopen.",
+        "default": 222
+      },
+      {
+        "type": "number",
+        "id": "freshness_window_days",
+        "label": "Freshness window (days)",
+        "info": "Store Operating Standards section 5. Days from roast date within which we say the coffee is at its best. NOT the same as the benefit grace period below, which happens to share a value today.",
+        "default": 60
+      },
+      {
+        "type": "number",
+        "id": "peak_flavor_days",
+        "label": "Peak flavour window (days)",
+        "info": "Store Operating Standards section 5. The shorter window we recommend for peak flavour.",
+        "default": 30
+      },
+      {
+        "type": "number",
+        "id": "benefit_grace_days",
+        "label": "Benefit grace period (days)",
+        "info": "Store Operating Standards section 4. How long subscriber and founder benefits continue after cancelling. NOT the same as the freshness window above, which happens to share a value today. These two must be able to move independently.",
+        "default": 60
+      }
+    ]
   }
 ]

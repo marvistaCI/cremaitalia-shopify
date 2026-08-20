@@ -1,10 +1,8 @@
 {
   "_meta": {
     "note": "POC3 baked-in test dataset. Single source of truth for the storefront preview. NOT wired to live Shopify products. When the production store is built, this is replaced by real {{ product }} / {{ collection }} objects + crema_italia.* metafields. See CLAUDE.md.",
-    "currency": "USD",
-    "freshness_window_days": 60,
-    "founding_member_cap": 222,
-    "poc_rating_note": "FIXTURE DATA - POC ONLY. Named poc_rating so a grep for the production 'reviews.' namespace never hits it, and one grep for poc_ finds everything that must go. Shape mirrors Shopify's standard review data 1:1 so production is a data-source swap: rating -> reviews.rating, rating_count -> reviews.rating_count, product_reviews[] -> reviews.product_reviews (metaobject fields). Store Operating Standards 13.7: no fabricated rating may ever appear on the live store."
+    "poc_rating_note": "FIXTURE DATA - POC ONLY. Named poc_rating so a grep for the production 'reviews.' namespace never hits it, and one grep for poc_ finds everything that must go. Shape mirrors Shopify's standard review data 1:1 so production is a data-source swap: rating -> reviews.rating, rating_count -> reviews.rating_count, product_reviews[] -> reviews.product_reviews (metaobject fields). Store Operating Standards 13.7: no fabricated rating may ever appear on the live store.",
+    "rules_note": "Commercial rule values are NOT held here. They live in theme settings (config/settings_schema.json + settings_data.json), are read by Liquid as settings.* and by JS as window.CI_RULES, and can be changed without a code deploy. founding_member_cap, freshness_window_days and currency used to sit in this block and were never read by anything, while the values were hardcoded in markup - which is worse than not having them, because the data looked authoritative. Review A finding A3."
   },
   "roasters": [
     {

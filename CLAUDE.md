@@ -2375,6 +2375,20 @@ one side; `theme list` **and** `git log origin/main..HEAD` were run **before** t
 above, confirming no name collision). File count unchanged at 38 — the batch edited existing files
 and added none. The repo is fully pushed to GitHub, so nothing is local-only.
 
+> ⚠️ **The repo has moved AHEAD of this theme again (2026-08-20) — POC18 is in progress.** Review A
+> fixes are landing in the repo and are **committed but NOT deployed**. So the deployed POC17 theme
+> no longer byte-matches the repo, and the pull-and-diff result above describes the moment of that
+> deploy, not current state. POC17 is deliberately left frozen: the 7.9 re-score names theme
+> `152003018921` and every figure in it was measured there, so mutating it would break the link
+> between the score and something reproducible. Deploying POC18 is a separate, explicit act — use
+> the **`crema-poc-deploy`** skill, which re-verifies live state first, and expect to prune POC15
+> at the three-theme cap.
+>
+> **This warning is the NORMAL state between deploys, not an exception.** It was written on the
+> morning of 2026-08-20, retired when POC17 shipped that afternoon, and is back within the hour.
+> Whoever starts the next batch should put it back with their first commit rather than at the end,
+> so the window where §10 is quietly wrong never opens.
+
 POC15 and POC16 previews and the live theme are untouched. Preview:
 `https://crema-italia.myshopify.com?preview_theme_id=152003018921`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9

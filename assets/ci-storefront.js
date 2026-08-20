@@ -246,7 +246,7 @@
     if (p.shelf === 'sorpresa') return '<div class="freshness">' + esc(p.freshness_note || 'Assembled to order') + '</div>';
     if (p.shelf === 'offerta') return '<div class="freshness fw">' + esc(p.freshness_remaining || 'Sold as-is') + ' · sold as-is</div>';
     if (p.shelf === 'selezione' && p.low_inventory) return '<div class="freshness fw">Low inventory · ' + p.low_inventory + ' left</div>';
-    return '<div class="freshness">Best within 60 days of roast</div>';
+    return '<div class="freshness">Best within ' + FRESHNESS_DAYS + ' days of roast</div>';
   }
   function rnLine(p) {
     if (p.shelf === 'bottega') return '';
@@ -464,6 +464,23 @@
     showPage('person');
   };
 
+  // ---------- commercial rules (POC18) ----------
+  // Values the Store Operating Standards own, published from theme settings by layout/theme.liquid.
+  // A rule number must never be typed into a template (build spec section 11). The defaults here are a
+  // last resort only - if they are ever the value actually used, the setting failed to publish.
+  //
+  // freshnessWindowDays and benefitGraceDays are DELIBERATELY SEPARATE and happen to both be 60
+  // today. They belong to different rules (Standards 5 and 4). Review A finding A2 found seven
+  // occurrences of the string "60 days" split across both meanings, where the obvious edit - find
+  // and replace - would silently corrupt whichever rule you were not thinking about.
+  // No FOUNDING_CAP here on purpose: every occurrence of the cap is in static Liquid, which reads
+  // settings.founding_member_cap directly. A JS constant for it would be declared and never used -
+  // the exact orphan class Review A catalogued. Add it when JS actually needs it, not for symmetry.
+  var RULES = window.CI_RULES || {};
+  var FRESHNESS_DAYS  = RULES.freshnessWindowDays || 60;
+  var PEAK_DAYS       = RULES.peakFlavorDays      || 30;
+  var GRACE_DAYS      = RULES.benefitGraceDays    || 60;
+
   // ---------- rating mark (POC17) ----------
   // Store Operating Standards 13.5 / 13.5.1 govern this control. Read them before changing it;
   // the placement rules below are decisions, not styling preferences.
@@ -669,7 +686,7 @@
     var meta = '';
     if (p.origin) meta += '<p class="prose" style="max-width:none">Origin: ' + esc(p.origin) + (p.process ? ' · ' + esc(p.process) + ' process' : '') + (p.roast_level ? ' · ' + esc(p.roast_level) + ' roast.' : '') + '</p>';
     if (p.roast_date) meta += '<p style="font-size:.9rem;color:var(--ci-espresso);margin:.5rem 0"><strong>Roast date:</strong> ' + esc(p.roast_date) + ' · <strong>Best by:</strong> ' + esc(p.best_by) + '</p>';
-    meta += '<div class="freshness" style="margin:.5rem 0">Best within 60 days of roast date. For peak flavor, brew within 30 days.</div>';
+    meta += '<div class="freshness" style="margin:.5rem 0">Best within ' + FRESHNESS_DAYS + ' days of roast date. For peak flavor, brew within ' + PEAK_DAYS + ' days.</div>';
 
     var components = p.components ? '<p class="prose" style="max-width:none;margin-top:.5rem"><strong>In the box:</strong> ' + p.components.map(esc).join(' · ') + '. Printed tasting card included.</p>' : '';
 
@@ -1410,7 +1427,7 @@
             ? '<span class="status-chip sc-active">Active</span>' +
               '<p class="prose" style="margin-top:.75rem">Your Founding rate of <strong>12%</strong> applies automatically across Roccia, Sorpresa, and Selezione. Offerta and Bottega are never discounted.</p></div>'
             : '<span class="status-chip sc-lapsed">Benefits paused</span>' +
-              '<p class="prose" style="margin-top:.75rem">No. 087 is yours for good. Your <strong>12%</strong> is active whenever you hold a subscription - resubscribe to reactivate it. After cancelling, your benefits continue for 60 days.</p></div>') +
+              '<p class="prose" style="margin-top:.75rem">No. 087 is yours for good. Your <strong>12%</strong> is active whenever you hold a subscription - resubscribe to reactivate it. After cancelling, your benefits continue for ' + GRACE_DAYS + ' days.</p></div>') +
         '<div class="acct-card"><h3>Taste profile</h3>' +
           (profHtml
             ? '<div class="tags" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.25rem">' + profHtml + '</div>' +
@@ -1448,7 +1465,7 @@
   function subscriptionBlock() {
     if (!session.subscriber) {
       return '<div class="sub-manage"><p class="prose" style="margin:0">You have no active Roccia subscription.</p>' +
-        (session.foundingMember ? '<p class="note">Your Founding Member status (No. 087) is yours for good - resubscribe and your <strong>12%</strong> reactivates. Benefits continue for 60 days after cancelling.</p>' : '') +
+        (session.foundingMember ? '<p class="note">Your Founding Member status (No. 087) is yours for good - resubscribe and your <strong>12%</strong> reactivates. Benefits continue for ' + GRACE_DAYS + ' days after cancelling.</p>' : '') +
         '<div class="sub-actions"><button class="btn btn-primary" onclick="mockResubscribe()">Resubscribe</button></div></div>';
     }
     if (session.paused) {
@@ -1467,7 +1484,7 @@
     if (!el) return;
     el.innerHTML =
       '<div class="cancel-warn"><h4>Before you cancel</h4>' +
-      '<p><strong>Pause instead</strong> and keep shipping on your own schedule. If you do cancel, your Founding Member status (No. 087) stays yours - your <strong>12%</strong> reactivates whenever you resubscribe, and your benefits continue for 60 days meanwhile.</p>' +
+      '<p><strong>Pause instead</strong> and keep shipping on your own schedule. If you do cancel, your Founding Member status (No. 087) stays yours - your <strong>12%</strong> reactivates whenever you resubscribe, and your benefits continue for ' + GRACE_DAYS + ' days meanwhile.</p>' +
       '<div class="sub-actions"><button class="btn btn-primary" onclick="mockPause()">Pause instead</button><button class="btn btn-secondary" onclick="confirmCancel()">Cancel anyway</button></div></div>';
     el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };

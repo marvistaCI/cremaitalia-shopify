@@ -173,6 +173,20 @@
   <script>window.CI_CATALOG_URL = {{ 'ci-catalog.json' | asset_url | json }};</script>
   <!-- Resolves catalog `people[].photo` filenames to real asset URLs for the JS-rendered
        person page. PROD: real team/partner records carry their own image URLs. -->
+  {%- comment -%}
+    Commercial rules published to JS from theme settings, so a value the Store Operating Standards
+    owns has exactly ONE home and can be changed without a code deploy. Same mechanism as CI_ASSETS
+    below. Liquid reads settings.* directly; JS reads CI_RULES. Neither is client-cached - both are
+    written into the HTML at render time - so there is no stale-read window.
+    freshness_window_days and benefit_grace_days are SEPARATE settings that happen to share the
+    value 60 today. Do not collapse them: they belong to different rules (Standards 5 and 4) and
+    must be able to move independently. See CLAUDE.md 9 (2026-08-20, Review A finding A2).
+  {%- endcomment -%}
+  <script>window.CI_RULES = {
+    freshnessWindowDays: {{ settings.freshness_window_days | default: 60  | json }},
+    peakFlavorDays:      {{ settings.peak_flavor_days      | default: 30  | json }},
+    benefitGraceDays:    {{ settings.benefit_grace_days    | default: 60  | json }}
+  };</script>
   <script>window.CI_ASSETS = {
     "ci-lucia.jpg": {{ 'ci-lucia.jpg' | asset_url | json }},
     "ci-asia.jpg": {{ 'ci-asia.jpg' | asset_url | json }}

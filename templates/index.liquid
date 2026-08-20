@@ -238,7 +238,7 @@
   </div></div>
   <main class="ci-main">
     <div class="callout">Your subscriber benefit is <strong>10% off Roccia, Sorpresa, and Selezione</strong> - on your subscription shipments, and on anything else you order from those three shelves. <strong>Offerta and Bottega are priced as-is and are never discounted.</strong></div>
-    <div class="founding-banner"><strong>Founding Members</strong> - the first 222 subscribers receive 12% instead of 10%. Founding Membership is limited to 222 and does not reopen.</div>
+    <div class="founding-banner"><strong>Founding Members</strong> - the first {{ settings.founding_member_cap }} subscribers receive 12% instead of 10%. Founding Membership is limited to {{ settings.founding_member_cap }} and does not reopen.</div>
     <div class="section-head"><p class="eyebrow">Available now · Toscana</p><h2>Roccia coffees</h2></div>
     <div class="card-grid" id="grid-roccia"></div>
     <div class="afd">Fresh coffee arrives from Italy about every six weeks. If we are short on your coffee when your order comes due, we will tell you before it ships and let you choose: wait for the new arrival, or let us substitute something close from the same shelf. Either way, never at extra cost.</div>
@@ -619,7 +619,7 @@
       <h3>Damage replacement</h3>
       <p>If a bag arrives damaged, tell us and we will replace it.</p>
       <h3>Freshness window</h3>
-      <p>We airfreight coffee freshly roasted in Italy in superior quality, sealed packages and ship them to you with ample time to enjoy. Every package has a roast date, and we recommend that you consume the coffee within 60 days of the roast date for maximum enjoyment.</p>
+      <p>We airfreight coffee freshly roasted in Italy in superior quality, sealed packages and ship them to you with ample time to enjoy. Every package has a roast date, and we recommend that you consume the coffee within {{ settings.freshness_window_days }} days of the roast date for maximum enjoyment.</p>
       <h3>Our no-waste pledge</h3>
       <p>Coffee that passes its freshness window is removed from sale and donated to Feeding Tampa Bay. We do not discount our way out of waste; we give it away.</p>
     </div>
@@ -650,14 +650,14 @@
       <h3>Do you roast the coffee?</h3>
       <p>No. We import and curate; the roasters roast. We never roast, blend, or repackage.</p>
       <h3>How do subscriber discounts work?</h3>
-      <p>An active Roccia subscription gives 10% off Roccia, Sorpresa, and Selezione (Founding Members - the first 222 subscribers at launch - receive 12% for life). Offerta and Bottega are never discounted. Discounts never stack: you always receive the single highest one you qualify for. A one-time first-purchase 5% applies only when it is your best rate, so a subscriber's first order still gets their 10%, or a Founding Member's 12%, whichever is higher, never both added together.</p>
+      <p>An active Roccia subscription gives 10% off Roccia, Sorpresa, and Selezione (Founding Members - the first {{ settings.founding_member_cap }} subscribers at launch - receive 12% for life). Offerta and Bottega are never discounted. Discounts never stack: you always receive the single highest one you qualify for. A one-time first-purchase 5% applies only when it is your best rate, so a subscriber's first order still gets their 10%, or a Founding Member's 12%, whichever is higher, never both added together.</p>
       <h3>What goes in the discount code field at checkout?</h3>
       <p>Nothing. We do not issue promo/discount codes, to anyone, ever. No launch codes, no newsletter codes, no influencer codes. Any discount you have earned is calculated for you when you log in and check out.</p>
       <h3>How does gifting work?</h3>
       <p>Tick <strong>This order is a gift</strong> in your cart and add a short note. We print it on a card and put it in the box. Nothing inside any package we ship shows a price - gift or not - so there is nothing to remember and nothing to go wrong. Your receipt reaches you by email, never the box.</p>
       <p>Two things worth knowing. A gift ships to one address, so if you are buying for yourself and for someone else at the same time, place two orders. And <strong>subscriptions cannot be gifted</strong> - a subscription bills your card on its cadence and ships to a single address, so the gift option is not offered on any order that contains one. If you want to give someone coffee regularly, buy it for them as separate orders whenever you like.</p>
       <h3>How fresh is the coffee?</h3>
-      <p>Best within 60 days of the roast date, which we always show. Sorpresa collections are assembled on-demand so every bag ships fresh.</p>
+      <p>Best within {{ settings.freshness_window_days }} days of the roast date, which we always show. Sorpresa collections are assembled on-demand so every bag ships fresh.</p>
     </div>
   </main>
 </div>
