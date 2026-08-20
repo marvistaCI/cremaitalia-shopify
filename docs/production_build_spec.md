@@ -715,30 +715,37 @@ which is the species of thing this brand keeps removing — manufactured urgency
 field, the invented founding count. FIFO already guarantees the conservative outcome that approach
 was protecting, so stating the range costs nothing and reads as confidence.
 
-#### Recall traceability — designed in, not deferred
+#### Recall traceability — build it, do not over-build it (Steve, 2026-08-20)
 
-Derivation tells you **which lot is in stock**. It does **not** tell you **which lot a given customer
-received**, and for a food importer that is the question that matters on the worst day. A
-FIFO-*derived* stamp is cheap but is silently wrong the moment a pick happens out of order, and a
-wrong recall record is worse than none.
+**The bag carries the lot, so the customer identifies it, not us.** A recall of roasted beans is
+rare, and when one happens it is date-bound and names lots. The customer reads the lot off the bag in
+their kitchen to know whether they qualify. That is the source of truth, and it is better than
+anything we could reconstruct.
 
-**Ground truth comes from whoever physically holds the bags.** This is therefore a **third qualifying
-question for the 3PL**, alongside the two in Standard §12.9 — not a separate mechanism:
+**So our job is notification scope, not per-customer certainty.** Which lots were in stock during
+which ship-date window is derivable from the lot records and FIFO (above). Notify everyone who
+ordered that SKU in the window, slightly over-notifying, and let the bag settle each case. Proportionate
+to the risk.
 
-> *Can you record the lot picked for each order line, and report it back to us?*
+**What that changes:** asking a 3PL to record the lot picked per order is **worth asking for and must
+not be a disqualifier**. An earlier draft of this section made it a third qualifying question
+alongside Standard §12.9's two, which was over-scoped — it could rule out an otherwise good 3PL over
+a rare event the packaging already handles. Ask; take it if offered; do not weight it heavily.
 
-**The record to keep, per order line:** order id, SKU, **roast date** (the natural lot key — SKU plus
-roast date is unique at our scale), the roaster's own lot code if they supply one, quantity, and ship
-date. Written to an **order line item metafield** so it lives in Shopify and survives the 3PL
-relationship.
+**Build, cheaply:**
 
-**`roaster_lot_code` is worth capturing even though we do not need it ourselves.** A recall notice
-arrives naming *the roaster's* lot, not our roast date, and translating between them after the fact
-is exactly the work nobody has time for during a recall.
+- `roaster_lot_code` on the lot metaobject. **This is the one genuinely load-bearing field** — a
+  recall notice names *the roaster's* lot, not our roast date, and without it somebody is
+  reverse-engineering the mapping during the recall itself.
+- The FIFO-derived lot stamped on the order line at fulfilment, **marked as derived rather than
+  observed** so it is never mistaken for ground truth.
+- Nothing else. No batch app, no per-lot inventory.
 
-**Until a 3PL is chosen**, stamp the FIFO-derived lot on the order line as a fallback — partial
-coverage at no cost — and mark it as derived rather than observed, so it is never mistaken for
-ground truth.
+**One dependency, and it is on the roasters, not on us.** We never repackage — *"we do not roast,
+grind, blend, or alter the roasters' packaging"* — so we cannot add a lot label ourselves. The whole
+model above assumes the roaster prints a roast date or lot code on the bag. **Confirm this per roaster
+at onboarding**, alongside the other roaster-facing questions. If one does not print it, that is worth
+knowing before the first container, not during a recall.
 
 #### Offerta stops being a markdown you type
 
