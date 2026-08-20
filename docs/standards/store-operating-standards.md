@@ -1,8 +1,16 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.6 · 2026-08-19**
+**Version 1.7 · 2026-08-20**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.7 (2026-08-20)** is an **editorial repair, no rule change and no renumbering.** §12.9 (the
+> 3PL packing-slip and insert question) had been appended *after* the document's own closing
+> citation block, so it sat outside the document it belongs to - readers of the render met the
+> "end of Standard" stamp and then more Standard. It is now item 9 of the §12 numbered list, in the
+> same shape as items 1-8, and the citation closes the file as it should. The text of the item is
+> unchanged. Bumped rather than silently re-rendered because a same-version content edit is the one
+> drift no version-stamp check can see (see the `f9ffcb1` incident, 2026-08-04).
 
 > **v1.6 (2026-08-19)** removes the §12.9 opened hours earlier by v1.5, which asked who would hold
 > the Founding Member slot if a gift subscription were sold. Steve: *"we've already said there is no
@@ -496,21 +504,15 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    `MAX` could be violated without us doing anything wrong: a Loop selling-plan discount and our
    Function could collide or double-apply. **Highest-risk integration in the design.** Verify on the
    same dev store, with a real Loop subscription, before the production build.
+9. **3PL selection — packing-slip and insert capability.** No 3PL is selected. Two questions are
+   **qualifying**, not preferences, and both should be asked before commercial terms. (a) *Do you print
+   our packing slip, or insert your own paperwork?* A 3PL that inserts its own pick list or invoice
+   breaks §8.1 and nothing on our side can prevent it. (b) *Can you insert a printed card, varied per
+   order by an order attribute?* Format, character limit, per-insert cost, lead time. This is not new
+   scope - Sorpresa collections already ship with a printed tasting card (§7), so a 3PL that cannot do
+   it cannot fulfil Sorpresa at all. The gift card of §8.2 is the same capability asked once.
 
 ---
 
-*Store Operating Standards v1.6 · 2026-08-19 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.7 · 2026-08-20 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
-
-### 12.9 3PL selection — packing-slip and insert capability (OPEN)
-
-No 3PL is selected. Two questions are **qualifying**, not preferences, and both should be asked
-before commercial terms:
-
-1. **Do you print our packing slip, or insert your own paperwork?** A 3PL that inserts its own
-   pick list or invoice breaks §8.1 and nothing on our side can prevent it.
-2. **Can you insert a printed card, varied per order by an order attribute?** Format, character
-   limit, per-insert cost, lead time. This is not new scope — Sorpresa collections already ship
-   with a printed tasting card (§7), so a 3PL that cannot do it cannot fulfil Sorpresa at all.
-   The gift card of §8.2 is the same capability asked once.
-

@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.1) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.6) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.7) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > **Editing protocol:** Code owns the repo and all Standard sources; **Cowork proposes,
@@ -1924,7 +1924,7 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 
 - 2026-08-18 — **POC15 built, verified BY LOOKING, and deployed — four audit items closed plus a
   systemic brand breach the looking uncovered.** Ledger: `docs/POC15_change_list.md`. Picked up
-  from the POC13 audit's 5.7/10 open list. **Deliberately did NOT re-score POC14 first**: each of
+  from the POC13 audit's 5.4/10 open list. **Deliberately did NOT re-score POC14 first**: each of
   its fixes was verified individually, so a fresh scoring pass would have re-derived a backlog
   already written at the foot of `POC14_change_list.md`. Score once, at the end, on the same rubric.
   **(1) Voice.** `templates/index.liquid` read "We have carefully hand-selected a small number of
@@ -2183,6 +2183,11 @@ when resuming.**
 | **Newest POC preview** | "Crema Italia POC16 Preview" | `151983030441` |
 | Prior preview | "Crema Italia POC15 Preview" | `151970840745` |
 | Prior preview | "Crema Italia POC14 Preview" | `151800610985` |
+
+**Scorecard: 7.4/10 as of 2026-08-19** — the deployed storefront has been scored three times
+against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16). **Trust & social proof has
+scored 3.5 in all three passes** and is the only dimension that has never moved; it is the next
+batch's subject. Brief: `docs/trust-and-social-proof-brief.md`.
 
 **POC16 is deployed** and is the only POC16 theme (all **38** files byte-match the repo — verified
 by pull-and-diff 2026-08-19, both sides 38 files, zero content mismatches, nothing present on only
@@ -2458,8 +2463,12 @@ asked to avoid. Full context in the §9 2026-07-24 entry.
   (`assets/ci-company.jpg`), de-duped against the home "Our model" section. About page now has
   no placeholder copy left (only the company/founder photos are real; team/partner photos are
   still placeholders).
-- [ ] Team/partner section photos and roaster/product-tile photos are all text
-  placeholders pending real photography and logo assets.
+- [ ] **ALL photography is DEFERRED (Steve, 2026-08-20) — tracked in
+  `docs/photography-todo.md`, which is now the single list.** Team/partner headshots (Lauren,
+  Partner 1), roaster portraits + brand logos, and every product tile / PDP gallery slide are
+  still text or CSS placeholders. The three landing-page slots DO carry images, but they are
+  `ci-temp-*` stand-ins and **two of them cannot ship** for recorded reasons (a US café;
+  third-party trademarks). Most of the rest is gated on the roasters signing, not on us.
 - [ ] Deferred: no-waste copy rewrite on the Promise page (pending 3PL-city research).
 - [ ] Optional: `git tag poc3` to mark the POC3 milestone (still not done — consider
   before this POC4 batch is committed on top).
