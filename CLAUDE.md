@@ -2325,6 +2325,67 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   been audited for completeness** — an unmarked mock is invisible at production time because it
   simply looks like working code, and every batch adds more mocked surface.
 
+- 2026-08-20 — **Review A run and CLOSED; POC18 in progress (three fixes committed, not deployed).**
+  An architecture-efficiency pass over the POC, triggered by the POC17 bug where a shelf branch in
+  `productDetail()` meant an edit reached only the coffee path and the rating mark was silently
+  absent on every Bottega item — *the diff looked correct; the DOM did not.* **Method: run checks,
+  not read code**, since a skim would have missed that bug too. Full record:
+  `docs/POC18_change_list.md`.
+  **Fixed (`81f00c4`, `27e8ebd`, `986b0ce`).** **A2/A3 — one home per commercial value:** three
+  `_meta` keys sat in the catalogue **never read** while their values were hardcoded in markup, which
+  is worse than not having the data because the catalogue *looked* authoritative; and **"60 days"
+  meant two unrelated rules** (freshness window §5, benefit grace §4) that share a value by
+  coincidence, so the obvious find-and-replace would silently corrupt whichever one you were not
+  thinking about. Both closed with **theme settings**, which build spec §11 already prescribed for
+  values with no natural Shopify object — Liquid reads `settings.*`, `layout/theme.liquid` publishes
+  `window.CI_RULES`. This also answers **Steve's requirement that system settings change without a
+  rebuild**; his stated willingness to accept stale browser reads turned out to be unnecessary,
+  because these render server-side and there is no cached JSON to go stale. **A1 — ask "is this
+  coffee", not "is this not-Bottega":** the roaster page filtered by roaster with no taxonomy test,
+  and Bottega stayed out only because no Bottega item happened to carry a `roaster`. **Steve's
+  redirect made this a better change than the one proposed** — he asked why we were testing the
+  roaster field at all, given a roaster-branded tote is simply its own SKU; the predicate was
+  *wrong*, not merely missing. `isCoffee()` fixed two latent instances I had not flagged (the Shop
+  grid and `reorderEligible`, both on the same proxy, both silently broken by any second non-coffee
+  shelf). Derived, never stored — a stored flag would give one fact two homes, the very thing A3
+  removed; PROD home is Shopify's native `product.type`, recorded as `production_build_spec.md`
+  **§12**. One trap avoided: the first-order discount exclusion reads the same predicate **by
+  coincidence** and is a Standard §3 commercial rule, so collapsing it into `isCoffee()` would have
+  looked like tidying while welding a discount rule to a taxonomy rule. **A5 — 15 dead CSS rules
+  removed** (927 → 912 lines).
+  **The review corrected itself twice, which is the durable part.** A5 said 11 unused classes and was
+  wrong in **both** directions: two false positives (`.flag-bottom` is used; `.fonts` came from
+  `document.fonts.check` inside a *comment*) and three false negatives (the whole `.profile-banner`
+  block is dead since POC6's ribbon rebuild, but looked used because the snippet names its own file
+  in a comment). Same shape as the other method traps now logged here — the truthy empty Liquid drop,
+  hidden pages returning empty text, inputs measured with no product open. **A check that matches
+  text rather than meaning can report the exact opposite of the truth**, so every deletion was
+  re-verified by extracting real class tokens first, and every fix was proved by asserting on
+  rendered output: nothing rendered changed across all three commits, and A1 was proved by
+  temporarily giving `bottega-tote` a roaster and confirming the roaster page did not leak.
+  **Scope correction (Steve).** Steve stopped the review with *"I thought this was an architecture
+  efficiency review?"* and he was right. **A6 is content; N4 and N5 are UI/accessibility.** They got
+  in because **the method defined the scope rather than the remit filtering the checks** — a
+  "repeated sentences" check was easy to script, so it ran, and its output was treated as an
+  architecture finding because it came out of the same analysis. All three are re-filed rather than
+  fixed. Worth keeping as a pattern: an analysis that can measure something will produce findings
+  about it, whether or not they belong.
+  **A6 also produced an instruction that was NOT executed.** I characterised it as "three duplicated
+  sentences" and Steve approved deleting the verbatim twins. Investigating showed the promise list
+  appears on both the home page and the Promise page **correctly** — item 2 already differs
+  deliberately, the home version linking onward and the Promise version not — so the deletion would
+  have removed something that belongs. The real duplication is the **Offerta guarantee sentence**,
+  byte-identical in two places inside framing that is different and right for each. Written up
+  instead of executed, and re-filed with the policy work.
+  **Clean bills:** 0 orphaned JS functions, 0 dead `window` handlers, all 8 snippets rendered, state
+  model coherent. **NEXT: Review B** — is the POC a good specification for production. Not a new
+  artifact: `production_build_spec.md` already is that document, but it grew reactively and nobody
+  has walked the POC systematically against it. Carries three structural questions deferred from A
+  (a single 1,658-line IIFE with 64 `window.*` handlers as its public surface; `innerHTML` string
+  rendering as the universal pattern; the SPA shape itself), plus **A4** and the **seam audit** — 26
+  `PROD:`/`LOOP:` markers never checked for completeness, and an unmarked mock is invisible at
+  production time because it simply looks like working code.
+
 ---
 
 ## 10. Open questions / TODO
