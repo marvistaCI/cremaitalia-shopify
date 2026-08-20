@@ -458,3 +458,39 @@ choosing a literal over a value that is sitting right there.
 Same failure shape as the shelf-description drift found the same day, where the Shop page kept a
 parallel `SHELF_NOTE` table that had silently diverged from all four shelf pages. Two copies, no
 link, and only one of them gets updated. See `CLAUDE.md` §9 (2026-08-19).
+## 12. Coffee vs not-coffee: the taxonomy predicate (Steve, 2026-08-20)
+
+**The rule.** A **Bottega item never carries a roaster**, even when it is roaster-branded. A
+roaster-branded tote is simply its own SKU; the branding is part of the product, not a relationship
+the data model needs to express. We do not filter Bottega by roaster and have no plan to.
+
+**Why it is enforced in code rather than left to data entry.** Shopify cannot express *"this
+metafield may not be set for products in this collection"*, so there is no data-entry filter to
+configure - the only thing standing between the rule and a mistake is whoever creates the product,
+who in production may be Lucia or Lauren rather than Steve. Presented with an empty `roaster` field
+on a roaster-branded tote, filling it in is the obvious thing to do. That is `CLAUDE.md`'s
+*correct by care, not by construction*, and the care is not repeatable.
+
+**So the code asks the right question instead.** Every surface that means "is this coffee" tests a
+single predicate rather than the roaster field, which makes a stray roaster value **harmless rather
+than dangerous**. In the POC that is `isCoffee(p)` in `assets/ci-storefront.js`, currently derived
+from shelf.
+
+**PROD: the home for this is Shopify's native `product.type`** - `Coffee` / `Equipment` / `Merch`.
+It is indexable, filterable, and needs no custom metafield. Do not invent a
+`crema_italia.is_coffee` metafield; and do not store the flag redundantly alongside collection
+membership, because one fact in two homes is the drift this project keeps removing (see §11 and
+Review A findings A2/A3).
+
+**Two rules that share this predicate today and must NOT be merged:**
+
+| Question | Predicate | Owner |
+|---|---|---|
+| Is this coffee? (roaster page, reorder rate, Shop grid) | `isCoffee()` | taxonomy |
+| Is this discountable? (first-order 5%, subscriber rate) | `eligibleForFirstOrderDiscount()` / `eligibleForSubscriberDiscount()` | Store Operating Standards §3 |
+
+Both read "not Bottega" today, **by coincidence** - exactly as the freshness window and the benefit
+grace period both happened to be 60 days. If Bottega ever became discountable, or a non-coffee shelf
+were discountable, welding them together would be wrong. Keep them separate.
+
+---

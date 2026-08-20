@@ -220,12 +220,35 @@
       return n + ' ' + u + ' (' + convertWeight(parseFloat(n), u) + ')';
     });
   }
+  // The four `shelf === 'bottega'` branches that used to sit in sizesLine, priceCell, freshnessCell
+  // and rnLine were deleted in POC18. Bottega renders through bottegaCard, never through
+  // productCard, and isCoffee() now makes that a rule rather than a coincidence - so those branches
+  // were unreachable, and unreachable code that nothing exercises is what rots into wrong behaviour.
+  // Do not restore them "just in case": if Bottega is ever routed through productCard, an obvious
+  // gap is a better outcome than quietly stale handling. Review A finding A1.
+
+  // ---------- taxonomy predicate (POC18, Review A finding A1) ----------
+  // "Is this coffee?" - the real question the roaster page and the reorder rate are asking. It used
+  // to be asked as `shelf !== 'bottega'`, which is a PROXY that happens to be true today: add a
+  // second non-coffee shelf (books, gift cards, a hamper) and every one of those tests silently
+  // starts letting non-coffee through.
+  //
+  // Steve's rule, 2026-08-20: a Bottega item NEVER carries a `roaster`, even when it is
+  // roaster-branded - a branded tote is simply its own SKU. Testing the taxonomy rather than the
+  // roaster field is what makes a stray value harmless instead of dangerous, so the rule does not
+  // have to be remembered by whoever creates the product. In production that person may be Lucia or
+  // Lauren, and Shopify cannot express "this metafield may not be set for this collection."
+  //
+  // DERIVED, never stored: a stored is_coffee flag would give one fact two homes that can disagree,
+  // which is the problem change 1 removed. PROD: Shopify's native `product.type`
+  // (Coffee / Equipment / Merch) is the home for this - it needs no custom metafield.
+  function isCoffee(p) { return !!p && p.shelf !== 'bottega'; }
+
   function priceFrom(p) { return p.sizes && p.sizes.length ? p.sizes[0].price : 0; }
   function sizesLine(p) {
     if (p.shelf === 'sorpresa') return 'One-time';
     if (p.shelf === 'selezione') return p.scarcity || 'One-time';
     if (p.shelf === 'offerta') return 'One-time only';
-    if (p.shelf === 'bottega') return p.category || '';
     return (p.sizes || []).map(function (s) { return sizeShort(s.size); }).join(' · ');
   }
   function priceCell(p) {
@@ -235,21 +258,18 @@
     if (p.shelf === 'offerta' && first.original) {
       return '<span class="po">' + money(first.original) + '</span>' + money(first.price);
     }
-    if (p.shelf === 'bottega') return money(first.price);
     if (p.sizes && p.sizes.length > 1) {
       return 'From ' + money(first.price) + ' <span class="cpu">' + esc(unit) + '</span>';
     }
     return money(first.price) + ' <span class="cpu">' + esc(unit) + '</span>';
   }
   function freshnessCell(p) {
-    if (p.shelf === 'bottega') return '';
     if (p.shelf === 'sorpresa') return '<div class="freshness">' + esc(p.freshness_note || 'Assembled to order') + '</div>';
     if (p.shelf === 'offerta') return '<div class="freshness fw">' + esc(p.freshness_remaining || 'Sold as-is') + ' · sold as-is</div>';
     if (p.shelf === 'selezione' && p.low_inventory) return '<div class="freshness fw">Low inventory · ' + p.low_inventory + ' left</div>';
     return '<div class="freshness">Best within ' + FRESHNESS_DAYS + ' days of roast</div>';
   }
   function rnLine(p) {
-    if (p.shelf === 'bottega') return '';
     if (!p.roaster) return esc(p.roaster_label || 'Crema Italia curated selection');
     var r = roasterByHandle[p.roaster];
     var town = r ? r.town : '';
@@ -326,7 +346,7 @@
   function renderAll() {
     if ($('roaster-list')) $('roaster-list').innerHTML = CATALOG.roasters.map(roasterRow).join('');
     if ($('shop-grid')) $('shop-grid').innerHTML = CATALOG.products
-      .filter(function (p) { return p.shelf !== 'bottega'; }).map(productCard).join('');
+      .filter(isCoffee).map(productCard).join('');   // the Shop grid is the four coffee shelves
     if ($('grid-roccia')) $('grid-roccia').innerHTML = productsByShelf('roccia').map(productCard).join('');
     if ($('grid-sorpresa')) $('grid-sorpresa').innerHTML = productsByShelf('sorpresa').map(productCard).join('');
     if ($('grid-selezione')) $('grid-selezione').innerHTML = productsByShelf('selezione').map(productCard).join('');
@@ -423,8 +443,13 @@
     // than the single `roaster` field. Bottega has no `roaster` field, so it's
     // naturally excluded without a shelf allowlist. See docs/POC_v4_change_list.md
     // item 12.
+    // isCoffee() is the load-bearing test. Without it this filter relied on no Bottega item ever
+    // carrying a `roaster` - true today, but a rule held in someone's head rather than in the code,
+    // and a roaster-branded tote entered by anyone would have rendered here through the coffee
+    // renderer. Review A finding A1.
     var bags = CATALOG.products.filter(function (p) {
-      return p.roaster === handle || (Array.isArray(p.roasters) && p.roasters.indexOf(handle) !== -1);
+      return isCoffee(p) &&
+        (p.roaster === handle || (Array.isArray(p.roasters) && p.roasters.indexOf(handle) !== -1));
     });
     $('roaster-bags').innerHTML = bags.length ? bags.map(productCard).join('') :
       '<p class="prose" style="max-width:65ch">New bags from this roaster are on the way.</p>';
@@ -500,8 +525,8 @@
   var POC_REORDER_FLOOR = 25;
 
   // Reorder rate is COFFEE ONLY. Nobody rebuys a grinder, so on Bottega the number would sit near
-  // zero, mean nothing, and read as damning. Excluded by shelf rather than left to the floor.
-  function reorderEligible(p) { return p.shelf !== 'bottega'; }
+  // zero, mean nothing, and read as damning. Excluded by taxonomy rather than left to the floor.
+  function reorderEligible(p) { return isCoffee(p); }
 
   // 13.5.1: the mark renders ONLY on the detail view of a purchasable product - never a roaster
   // profile, a person page, or an editorial surface. `sizes` is what makes a catalog entry
@@ -1289,6 +1314,12 @@
       els[i].classList.toggle('show', units > 0);
     }
   }
+  // Standard 3: Bottega is never discounted. This shares a predicate with isCoffee() by COINCIDENCE,
+  // exactly as the freshness window and the benefit grace period both happened to be 60 days
+  // (Review A finding A2). It is a commercial rule, not a taxonomy question - if Bottega ever became
+  // discountable, or a non-coffee shelf were discountable, welding these together would be wrong.
+  // Keep them separate even though both read `!== 'bottega'` today.
+  function eligibleForFirstOrderDiscount(shelf) { return shelf !== 'bottega'; }
   function eligibleForSubscriberDiscount(shelf) { return shelf === 'roccia' || shelf === 'sorpresa' || shelf === 'selezione'; }
   function renderCart() {
     var el = $('cart-view');
@@ -1324,7 +1355,7 @@
         var lineTotal = it.price * (it.qty || 1);
         var lineRate = 0;
         if (subRate && eligibleForSubscriberDiscount(it.shelf)) lineRate = Math.max(lineRate, subRate);
-        if (session.firstTime && it.shelf !== 'bottega') lineRate = Math.max(lineRate, 0.05);
+        if (session.firstTime && eligibleForFirstOrderDiscount(it.shelf)) lineRate = Math.max(lineRate, 0.05);
         if (lineRate > 0) { discount += lineTotal * lineRate; appliedRates[lineRate] = true; }
       });
       var rateKeys = Object.keys(appliedRates);
