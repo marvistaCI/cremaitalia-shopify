@@ -507,3 +507,127 @@ grace period both happened to be 60 days. If Bottega ever became discountable, o
 were discountable, welding them together would be wrong. Keep them separate.
 
 ---
+## 13. The production data model, derived from the POC catalogue (Review B, 2026-08-20)
+
+`assets/ci-catalog.json` has been the de facto data model for eighteen batches. §1 above names the
+**sources** ("native Products + variants + `crema_italia.*` metafields"); this section is the
+**schema** — transcribed from what the POC actually uses, so it is not reconstructed from memory
+during the build. Every field below was checked against its read-sites in `assets/ci-storefront.js`.
+
+**Read §12 first.** It claims Shopify's native `product.type` for the coffee/not-coffee distinction,
+which constrains what `shelf` can map to (§13.2, open).
+
+### 13.1 Products — native Shopify fields
+
+These are not metafields. Do not invent `crema_italia.*` keys for them.
+
+| POC key | Production home | Note |
+|---|---|---|
+| `handle` | `product.handle` | |
+| `title` | `product.title` | The coffee's own name, e.g. *Ethiopia Bombe* — **not** prefixed with the roaster (see §13.5) |
+| `blurb` | `product.description` (short) or a metafield | The one-line card copy |
+| `img` | `product.images` | POC object `{cls,label,style}` is a CSS placeholder and carries nothing |
+| `sizes[]` | **variants** | See §13.3 |
+| `category` (Bottega only) | `product.type` | *Equipment* / *Merch* — and see §12 |
+
+### 13.2 Products — `crema_italia.*` metafields
+
+| POC key | Metafield | Type | Coverage | Note |
+|---|---|---|---|---|
+| `roast` | `crema_italia.roast` | single-line, defined value set | 12/17 | The **facet**: `light` / `medium` / `dark` |
+| `flavor` | `crema_italia.flavor` | single-line, defined value set | 12/17 | `fruit` / `sweet` / `bold` |
+| `caffeine` | `crema_italia.caffeine` | single-line, defined value set | 12/17 | `full` / `decaf` |
+| `region` | `crema_italia.region` | single-line, defined value set | 12/17 | Italian roasting region; roaster-level in the Standard, inherited by SKUs |
+| `origin` | `crema_italia.origin` | single-line | 13/17 | Growing origin, e.g. *Ethiopia, Yirgacheffe* |
+| `process` | `crema_italia.process` | single-line | 13/17 | *Natural* / *Washed* |
+| `notes` | `crema_italia.tasting_notes` | list.single_line | 13/17 | Drives the note pills |
+| `roast_date` | `crema_italia.roast_date` | date | 12/17 | **Per lot.** Drives freshness and the Offerta transition (Standard §5) |
+| `long` | `crema_italia.description_long` | multi-line | 13/17 | The "About this coffee" prose |
+| `brewing` | `crema_italia.brewing` | multi-line | 13/17 | Brewing note; also where "whole bean only" lives |
+| `component_handles` | `crema_italia.components` | list.product_reference | 1/17 | The BOM — see §7 |
+| `low_inventory` | `crema_italia.low_inventory` | integer | 2/17 | Selezione scarcity cue |
+| `scarcity` | `crema_italia.scarcity_note` | single-line | 2/17 | Selezione, e.g. *This shipment only* |
+| `freshness_note` | `crema_italia.freshness_note` | single-line | 1/17 | Sorpresa, e.g. *Boxed for you when you order* |
+| `price_unit` | `crema_italia.price_unit` | single-line | 1/17 | Overrides the per-unit denominator on bundles |
+
+**`shelf` — OPEN, decide before the build.** Shelf drives pricing, discount eligibility,
+subscription eligibility, freshness treatment, BOM behaviour and rating context (Standard §13.5.2).
+It is the single most load-bearing field in the catalogue (20 read-sites). Candidates: a **collection**
+(natural for navigation and per-shelf templates), a **tag**, or a metafield. It **cannot** be
+`product.type`, which §12 claims for coffee/not-coffee. A collection is the likely answer because
+per-shelf templates and shelf navigation both want one, but this needs deciding, not assuming.
+
+**`subscription` is not a field.** In the POC it is a boolean; in production it is the **presence of a
+selling plan group** on the product. Do not create a metafield mirroring it — that is build spec §11's
+rule, and the object that enforces the rule is the selling plan itself.
+
+**`best_by` is not a field either.** It is `roast_date + settings.freshness_window_days`. Storing it
+would give one fact two homes that can disagree — see §13.5.
+
+### 13.3 Variants
+
+| POC key | Production home | Note |
+|---|---|---|
+| `sizes[].size` | variant option value | `250g` / `500g` / `1kg`. **A cart-matching identifier**, kept metric and raw; the dual US display is a render-layer concern (§10) |
+| `sizes[].price` | `variant.price` | |
+| `sizes[].original` | `variant.compare_at_price` | Offerta markdown only, 1/32 |
+
+### 13.4 Roasters
+
+The POC models roasters as records with 15 fields, all populated 5/5. §1 says "metaobject or
+collection + metafields"; the field list argues for a **metaobject** — it has its own identity,
+its own page, and is referenced by products.
+
+`handle` · `name` · `town` · `region` (facet) · `founded` · `blurb` · `bio` (list of paragraphs) ·
+`address` · `phone` · `website` · `find`
+
+Products reference the roaster by handle (`roaster`), and bundles reference several
+(`roasters[]` — a list, because a collection names more than one). **`portrait_cls` and
+`portrait_style` do not carry** — they are CSS placeholder styling standing in for a logo (§13.6).
+
+**People** (`docs` §2) use the same shape at smaller scale: `id`, `name`, `role`, `group`,
+`photo`, `bio[]`. §2 already prescribes sections + blocks rather than metaobjects for these.
+
+### 13.5 Derive, never store — the pattern the POC repeats six times
+
+The POC stores a display string **alongside** the machine value it is derived from, because a mock
+has no cheap way to derive. Production must derive, or it inherits six opportunities for the two to
+disagree — the same defect Review A found in `_meta` and the two 60s.
+
+| Stored in the POC | Derived in production from |
+|---|---|
+| `display_title` — *"Gardelli - Ethiopia Bombe"* | `roaster.label` + `product.title`. **Not `roaster.name`** — that is *"Gardelli Specialty Coffee"*, which is why `label` exists and is the one display string worth storing |
+| `roast_level` — *"Light"* | `crema_italia.roast` (`light`) |
+| `components` — *"Gardelli Ethiopia, La Sosta…"* | the `component_handles` product references |
+| `roaster.region_label` — *"Forlì · Emilia-Romagna"* | `roaster.town` + the display name for `roaster.region` (the facet is `emilia`, so a region needs its own label lookup — one place, not per roaster) |
+| `roaster.find` — *"Forlì, Emilia-Romagna · gardellicoffee.com"* | `town` + `region` + `website` |
+| `best_by` | `roast_date` + `settings.freshness_window_days`. **Verified against the catalogue:** 2026-06-20 + 60 = 2026-08-19, exactly as stored |
+
+**`roaster.label` is the one to keep**, despite looking like the same pattern: it is the short form
+used where `name` will not fit, and shortening a proper noun is an editorial judgement, not a
+derivation.
+
+### 13.6 Fixture-only — must never reach production
+
+| POC key / asset | Why |
+|---|---|
+| `poc_rating` | Fixture ratings. Production reads the standard `reviews.*` data (§6.1). Standard §13.7 forbids fabricated ratings on the live store |
+| `img.cls` / `img.label` / `img.style` | CSS gradient placeholders standing in for photography |
+| `roaster.portrait_cls` / `portrait_style` | The same, for roaster logos |
+| `ci-temp-lp1..3.jpg` | Temporary landing-page photography; two cannot ship for recorded reasons (`docs/photography-todo.md`) |
+| `rebaseCatalogDates()` | Shifts fixture dates on load so the demo never ages out. Real dates come from the metafields |
+| `_meta.*` | Mock-dataset provenance notes |
+
+**One grep finds the review fixtures (`poc_rating`) and one finds the photography (`ci-temp-`).**
+Preserve that property for anything fixture-shaped added later.
+
+### 13.7 Drop these — carried in the catalogue and read by nothing
+
+`seasonal` (2/17) and `as_is` (1/17) are never read by any code. They are leftovers from an earlier
+merchandising idea. Do not transcribe them into the production schema; if the intent behind either
+is still wanted, it needs re-deciding rather than resurrecting.
+
+### 13.8 What this section is not
+
+It is a transcription of what the POC **does**, not an endorsement of all of it. Where it disagrees
+with a Standard, the Standard wins. `shelf` in particular is recorded as open rather than answered.
