@@ -2232,8 +2232,18 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   and the reorder surface — plus Standards v1.8 → v1.10 recording the rules behind them.** Follows
   the decision entry above; that one settled *what*, this one is *what shipped into the theme*. The
   POC is now explicitly a **build reference for the real store** (Steve), so every shape here was
-  chosen to make production a data-source swap rather than a rewrite. **Committed, NOT deployed and
-  NOT pushed** — §10 corrected in the same pass, since the repo has moved ahead of the POC16 theme.
+  chosen to make production a data-source swap rather than a rewrite. **Deployed the same day** to a NEW
+  unpublished theme **"Crema Italia POC17 Preview" (id `152003018921`)** via the `crema-poc-deploy`
+  ritual: `theme list` + `git log origin/main..HEAD` run **first** (no collision), validation at the
+  documented baseline, then **pull-and-diff proved** the push — both sides 38 files, zero content
+  mismatches, nothing on only one side, exactly one theme of that name. **POC14 (`151800610985`)
+  pruned** on Steve's explicit go under the three-newest cap, its id, name and role re-verified
+  against live immediately before the delete; its batch is `ef0cf74`..`1c27c88` on GitHub and is
+  redeployable. POC15, POC16 and the live theme untouched. Also corrected a stale number in the
+  deploy skill itself — it had said to expect **39** files since POC15 deleted the orphaned
+  `ci-cup.png`, and that wrong figure survived two deploys because the check passes either way when
+  nobody reads it; now 38, with the reason recorded so the next session does not read the change as
+  a regression.
   **The mark: stars plus numeral (Steve's call, and he was right).** I had recommended a bespoke
   gauge on brand-purity grounds and he pushed back on two points, both correct. First, my claim that
   empty stars "read as a bad score" was overstated: it holds when stars sit alone or beside a count —
@@ -2344,41 +2354,40 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC16 Preview" | `151983030441` |
+| **Newest POC preview** | "Crema Italia POC17 Preview" | `152003018921` |
+| Prior preview | "Crema Italia POC16 Preview" | `151983030441` |
 | Prior preview | "Crema Italia POC15 Preview" | `151970840745` |
-| Prior preview | "Crema Italia POC14 Preview" | `151800610985` |
 
 **Scorecard: 7.4/10 as of 2026-08-19** — the deployed storefront has been scored three times
 against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16). **Trust & social proof has
 scored 3.5 in all three passes** and is the only dimension that has never moved; it is the next
-batch's subject. Brief: `docs/trust-and-social-proof-brief.md`.
+batch's subject. Brief: `docs/trust-and-social-proof-brief.md` (marked SUPERSEDED 2026-08-20 — the
+decisions were made; policy now lives in Store Operating Standards §13).
 
-**POC16 is deployed** and is the only POC16 theme. It was proved by pull-and-diff on 2026-08-19
-(both sides 38 files, zero content mismatches, nothing present on only one side; `theme list` was
-run **before** the push per the rule above).
+> **That 7.4 is the score of POC16, not of what is deployed now.** POC17 shipped the trust work the
+> 3.5 was measuring the absence of, so the figure is stale in the one dimension it was flagging.
+> A re-score against POC17 is the next task (Steve, 2026-08-20) and is expected to be **the last one
+> before real photography**, since brand identity and product detail are gated on it.
 
-> ⚠️ **The repo has since moved AHEAD of this theme (2026-08-20).** The trust & social-proof build —
-> the rating control, the review detail view and the reorder surface — is **committed but NOT
-> deployed and NOT pushed to GitHub** (commits `318ea7e`, `b14760c`, `f73791f`, `96c1348`). So
-> `assets/ci-catalog.json`, `assets/ci-storefront.js`, `assets/ci-storefront.css` and
-> `templates/index.liquid` **no longer byte-match the POC16 theme**, and the 2026-08-19 pull-and-diff
-> result above is history, not current state. File count is still 38 — the batch edited existing
-> files and added none. Nothing on Shopify has changed; POC16 remains the newest deployed preview.
-> Deploying is a separate, explicit act: use the **`crema-poc-deploy`** skill, which re-verifies live
-> state first.
+**POC17 is deployed** and is the only POC17 theme — all **38** files byte-match the repo, proved by
+pull-and-diff on 2026-08-20 (both sides 38 files, zero content mismatches, nothing present on only
+one side; `theme list` **and** `git log origin/main..HEAD` were run **before** the push per the rule
+above, confirming no name collision). File count unchanged at 38 — the batch edited existing files
+and added none. The repo is fully pushed to GitHub, so nothing is local-only.
 
-POC14 and POC15 previews and the live theme are untouched. Preview:
-`https://crema-italia.myshopify.com?preview_theme_id=151983030441`
+POC15 and POC16 previews and the live theme are untouched. Preview:
+`https://crema-italia.myshopify.com?preview_theme_id=152003018921`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
-2026-07-06). To refresh: `shopify theme push --theme 151983030441`.
+2026-07-06). To refresh: `shopify theme push --theme 152003018921`.
 
-**Only POC14, POC15 and POC16 previews now exist** — at the three-newest cap Steve set on
-2026-08-06, enforced as `crema-poc-deploy` Step 5. **POC12 (`151798841513`) was deleted 2026-08-19**
-on Steve's explicit go, after re-verifying the id against a live `theme list --json` immediately
-before the delete; its batch is commit `1f0d7c1` on GitHub and can be redeployed from git. Earlier
-deletions: POC11 (`151797727401`, batch `2a833d7`) and POC13 on 2026-08-18; POC10 (`151624024233`,
-batch `dd0cbf1`) and POC4–POC9 on 2026-08-06; the erroneous POC9 duplicate `151615373481` on
-2026-07-25.
+**Only POC15, POC16 and POC17 previews now exist** — at the three-newest cap Steve set on
+2026-08-06, enforced as `crema-poc-deploy` Step 5. **POC14 (`151800610985`) was deleted 2026-08-20**
+on Steve's explicit go, after re-verifying the id, name and role against a live `theme list --json`
+immediately before the delete; its batch is commits `ef0cf74`..`1c27c88`, all confirmed on
+`origin/main`, so it can be redeployed from git. Earlier deletions: POC12 (`151798841513`, batch
+`1f0d7c1`) on 2026-08-19; POC11 (`151797727401`, batch `2a833d7`) and POC13 on 2026-08-18; POC10
+(`151624024233`, batch `dd0cbf1`) and POC4–POC9 on 2026-08-06; the erroneous POC9 duplicate
+`151615373481` on 2026-07-25.
 
 A `Development (...)` theme may also appear in `theme list` — the throwaway created by
 `shopify theme dev`, not a deploy. Ignore it. **Its id is deliberately not recorded here**: the CLI
@@ -2387,6 +2396,23 @@ mints a fresh one per machine and session, so any id written down goes stale.
 **The live theme is current with the repo** as of the 2026-07-24 push (all 13 files byte-match;
 zero customer-visible em-dashes verified by cookie-less fetch). **Storefront password still OFF**
 (friend-testing) — now purely a friend-testing decision, not a copy-quality one.
+
+**What POC17 is:** POC16 plus the trust & social-proof work — the decision, the platform test that
+grounded it, and the build (5 commits, `318ea7e`..`5e71413`). It closes the last open dimension on
+the scorecard, which had scored **3.5 in all three passes** and never moved. Eight decisions from
+Steve are recorded as **Store Operating Standards §13** (published across v1.8/v1.9/v1.10): reviews
+are **purchase-gated only** via emailed per-order links with the public form disabled; the rating is
+a **bespoke control of our own design** — stars plus a numeral, rounding to whole stars because the
+numeral carries the precision — that renders on the **detail view of a purchasable product only**
+and **never in a grid**; empty stars sit at the hairline value so a null reads as a null rather than
+a zero; everything but abusive content is published, with *abusive* defined; **no photograph
+reviews**; `aggregateRating` in production, now **measured rather than assumed**; and reorder rate
+built with its floor as a named constant and **silence below it**. **Bottega is its own rating
+context** (§13.5.2) — rated, because a grinder is good or bad for everyone, but never given a
+reorder rate, because nobody rebuys a grinder. Fixture ratings live under a **`poc_rating`** key,
+deliberately not the production `reviews.` namespace, so one grep finds everything that must go.
+Build technique is in `docs/production_build_spec.md` §6.1; §9.2's deferred `aggregateRating`
+question is closed. Detail: §9 2026-08-20.
 
 **What POC16 is:** POC15 plus the fixes its re-score produced, and a run of vocabulary and
 data-model corrections Steve raised while reviewing (12 commits, `5812884`..`203b23c`). Headlines:

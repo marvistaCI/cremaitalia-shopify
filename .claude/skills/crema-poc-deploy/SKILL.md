@@ -119,10 +119,11 @@ Pull the theme you just wrote and diff every file against the repo:
 shopify theme pull --theme <new-id> --path <scratchpad>/verify
 ```
 
-Then compare all files under `assets config layout locales snippets templates`. Expect **all 39 to
+Then compare all files under `assets config layout locales snippets templates`. Expect **all 38 to
 match** (37 → 36 when `assets/ci-founder-dog.jpg` was deleted 2026-08-06, then 36 → 39 with POC13's
-three temporary landing-page photos `ci-temp-lp1..3.jpg` — update this number here whenever the
-theme's file set legitimately changes). Also re-run `shopify theme list` and confirm there is now
+three temporary landing-page photos `ci-temp-lp1..3.jpg`, then 39 → 38 when POC15 deleted the
+orphaned `assets/ci-cup.png` — update this number here whenever the theme's file set legitimately
+changes; it was left saying 39 through POC15 and POC16 and was corrected during the POC17 deploy). Also re-run `shopify theme list` and confirm there is now
 **exactly one** theme with that name.
 
 Note `--path` must point at a directory that **already exists**; the CLI errors out rather than
