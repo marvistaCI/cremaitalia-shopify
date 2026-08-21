@@ -306,6 +306,55 @@ discounts, then inspect the resulting subscription contract to see what was snap
 should be revisited on the answers — this is a decision for Steve, not a correction Code should make
 unilaterally, because it changes which system owns a commercial rule.
 
+#### 5.2.1 Loop's pricing tiers, and the fact that three of our rules sit behind the paywall (2026-08-21)
+
+Loop was locked as the subscription engine on 2026-06-29 and **its cost was never recorded**. Checked
+against the App Store listing, because the spike priced Shopify carefully and priced the subscription
+engine not at all - the same class of gap as the Advanced break-even error corrected the same day: a
+number nobody re-derived.
+
+| Tier | Cost | What it adds |
+|---|---|---|
+| **Free Forever** | $0 | 50 active subscriptions, mobile customer portal, subscription alerts, growth/revenue analytics |
+| **Starter** | **$99/mo + 1.0% per transaction** | Dunning management, cancellation flows, branded portal, price updates, fixed & custom bundles, checkout links, product widgets, email actions. 14-day trial |
+| **Pro** | $399/mo + 0.75% | Dedicated CSM, gamified journeys, upsell profiles, portal customization, **prepaid/gift subscriptions**, user permissions, multilingual, APIs |
+
+**Three named commitments in our own record sit in Starter, not Free:**
+
+1. **Dunning management.** The durable Founding Member model (Standard §4) rests on it - CLAUDE.md
+   2026-07-10 records *"Loop dunning protects failed cards"* as the reason a failed card cannot cost
+   someone their rate. Without dunning, a declined card becomes a silent cancellation, which is
+   exactly the failure mode §4 was designed to prevent.
+2. **Cancellation flows.** The pause-first cancel is Standard §4 and was mocked in the POC.
+3. **Branded customer portal.** The Loop portal slot on the account page.
+
+**So the free tier is enough to TEST the design and not enough to RUN it.** That is a useful split
+rather than a problem: the §5.2 contract-snapshot question can be answered for $0, and the tier
+decision can wait until the answer is in.
+
+**The monthly platform cost, stated in one place for the first time:**
+
+```
+Shopify Grow      $79/mo (annual)  + 2.7% + 30c card
+Loop Starter      $99/mo           + 1.0% per transaction
+                  -------
+                  $178/mo before card fees, and 3.7% on every subscription order
+```
+
+**Loop is the larger of the two platform costs**, and its 1% sits on top of Shopify's card rate. Note
+this bears on the pricing matrix validation still open in Standard §12.3: the markup matrix has never
+been checked against real landed costs, and it has certainly never been checked against a 3.7%
+all-in rate on subscription orders.
+
+**A quiet vindication:** gift subscriptions are **Pro tier, $399/mo**. Standard v1.5 opened a §12.9
+asking who would hold the Founding Member slot on a gifted subscription, and v1.6 removed it as
+speculative scope for a product we had declined to build. Had it stayed, we would have been designing
+entitlement rules for a capability costing $300/mo more than the plan we need.
+
+**Open, and it decides whether Free is genuinely enough for the test:** whether the free tier lets you
+configure a **discount on a selling plan** at all. If it does not, the contract-snapshot test needs
+the Starter 14-day trial. Find out during the dev-store install.
+
 ## 6. Trust signals, reviews + photography (2026-07-09 review; reviews decided 2026-08-20)
 
 The 2026-07-09 consumer-centric site review (full findings in `docs/POC5_change_list.md`

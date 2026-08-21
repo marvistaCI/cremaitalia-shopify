@@ -2625,6 +2625,39 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   they describe a hand-built product versus a genuine componentised one, and the recommendation above
   changes if they do not.
 
+- 2026-08-21 — **Loop was locked as the subscription engine eight weeks ago and its cost was never
+  recorded. Priced now: it is the LARGER of our two platform costs.** Surfaced by Steve asking a
+  narrow question — *"so we can't install Loop in a free test?"* — after I had cautioned that dev
+  stores block paid apps. **The caution was misplaced:** Loop has a **Free Forever** tier (50 active
+  subscriptions), so it installs free and the dev-store restriction never applies. But checking that
+  surfaced something larger. Recorded as `docs/production_build_spec.md` **§5.2.1**.
+  **Three named commitments in our own record sit behind the paywall**, in Starter at **$99/mo +
+  1.0% per transaction**: **dunning management** — which CLAUDE.md 2026-07-10 makes load-bearing in
+  the durable Founding Member model (*"Loop dunning protects failed cards"*, the reason a declined
+  card cannot cost someone their rate); **cancellation flows** — the pause-first cancel locked in
+  Standard §4 and mocked in the POC; and the **branded portal** — the Loop slot on the account page.
+  So the free tier is enough to **test** the design and not enough to **run** it, which is a useful
+  split rather than a problem: the §5.2 contract-snapshot question can be answered for $0.
+  **The monthly floor, stated in one place for the first time: $178/mo before card fees** (Grow $79 +
+  Loop Starter $99), **and 3.7% all-in on every subscription order** (Shopify 2.7% + Loop 1.0%).
+  **This bears on Standard §12.3**, the pricing-matrix validation that has never been checked against
+  real landed costs — and has certainly never been checked against a 3.7% rate on subscription orders,
+  which is the shelf the whole subscriber model is built on.
+  **Same failure class as the Advanced break-even error corrected earlier the same day**, and worth
+  naming as a pattern: **a decision can be locked, logged, and cited for eight weeks without anyone
+  ever pricing it.** The spike priced Shopify carefully — Basic vs Grow vs Advanced, break-even
+  arithmetic — and priced the subscription engine not at all, because Loop was already "decided" and
+  a decided thing stops being examined. Two of these in one day suggests **a cost line should be a
+  required field on any platform decision**, not something derived later if someone happens to ask.
+  **A quiet vindication of Steve's call on §12.9:** gift subscriptions are **Pro tier, $399/mo**.
+  Standard v1.5 opened an item asking who would hold the Founding Member slot on a gifted
+  subscription; v1.6 removed it as speculative scope for a product we had declined to build. Had it
+  stayed, we would have been designing entitlement rules for a capability costing $300/mo more than
+  the plan we need.
+  **Open, and it decides whether Free is genuinely enough for the test:** whether the free tier
+  exposes **selling-plan discount configuration** at all. If not, the contract-snapshot test needs the
+  Starter 14-day trial. To be answered during the dev-store install.
+
 ---
 
 ## 10. Open questions / TODO
@@ -2981,6 +3014,13 @@ decides. Full context in the §9 2026-07-24 and 2026-08-21 entries.
   **Nothing in the design needs more than Grow.** Shopify Functions run on all plans; customer-account
   UI extensions run on all plans (§5.1); checkout extensibility is the only Plus-gated thing we wanted
   and was already declined in Standard v1.3 at ~$24k/yr for one hidden field.
+  **Loop is the larger platform cost and had never been priced** — see `production_build_spec.md`
+  §5.2.1. Loop **Starter is $99/mo + 1.0% per transaction**, so the real monthly floor is **$178/mo
+  before card fees, and 3.7% all-in on every subscription order**. Loop's **Free Forever** tier (50
+  active subscriptions) is enough to *test* the design but not to *run* it: **dunning management,
+  cancellation flows and the branded portal are all Starter**, and all three are named commitments in
+  Standard §4. Bears on the §12.3 pricing-matrix validation, which has never been checked against a
+  3.7% rate.
   **CORRECTION to the 2026-07-24 §9 entry**, which said Advanced pays for itself "around $70–80k/yr
   revenue". The arithmetic does not support that. Advanced costs **$220/mo more** than Grow and saves
   **0.2pp** on card rate (2.5% vs 2.7%), so break-even is `0.002 × R = 220`, i.e. **~$110k per month —
