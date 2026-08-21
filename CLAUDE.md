@@ -2654,9 +2654,53 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   subscription; v1.6 removed it as speculative scope for a product we had declined to build. Had it
   stayed, we would have been designing entitlement rules for a capability costing $300/mo more than
   the plan we need.
-  **Open, and it decides whether Free is genuinely enough for the test:** whether the free tier
-  exposes **selling-plan discount configuration** at all. If not, the contract-snapshot test needs the
-  Starter 14-day trial. To be answered during the dev-store install.
+  **[VERIFIED the same day by installing it — see the entry below. The table above was read off a
+  pricing page; the entry below was read out of Loop's own admin, and it corrects and extends this.]**
+
+- 2026-08-21 — **Loop installed on the free dev store, and the tier finding VERIFIED in the app rather
+  than off a pricing page — which changed two things and settled the §5.2.1 open question.** Steve put
+  the admin in the shared browser. **The dev-store question is answered empirically: Loop installs and
+  runs on a free Partner development store**, because it has a genuinely free tier, so the "paid apps
+  cannot be installed on development stores" restriction never applied. Billing page, verbatim:
+  *"You currently have **FREE** plan activated on your store. 50 Subscriptions + Basic features
+  included. $0 / month, **0% transaction fee**."*
+  **The open question is closed: the free tier DOES expose selling-plan discount configuration**, so
+  the §5.2 contract-snapshot test costs nothing and needs no trial clock. A selling plan named
+  *Founder Subscriptions* already exists carrying **12.00%** across two frequencies (4-weekly,
+  8-weekly).
+  **The structural finding, and it is observed rather than argued: the discount is a property of the
+  SELLING PLAN, not of the customer.** It is configured per plan per delivery frequency, and there is
+  no per-customer rate field anywhere in the plan. **So founder-12% and subscriber-10% must be two
+  different selling plans**, a customer's rate is decided by which plan they subscribed to, and
+  promoting someone to Founding Member mid-subscription means **migrating their contract to a
+  different plan** — not re-evaluating a rule and certainly not re-running a Function. That is the
+  strongest available support for the morning's Finding 2, and it is Standard §4's durable model
+  expressed in Loop's own data model: **entitlement is contract state, not computed state.**
+  **A fourth gated dependency the pricing page did not surface: subscription-specific shipping rates
+  are Starter.** Standard §3/§4 make shipping offsets a subscriber benefit, and it is easy to miss
+  because it does not read as a subscription feature. Joins dunning, cancellation flows and the
+  branded portal.
+  **The API wall, verified directly rather than inferred.** Settings → API tokens shows the generate
+  button disabled behind *"This feature requires you to upgrade to **PRO** plan"*. Combined with the
+  structural finding, that forces a real fork: promoting a founder means mutating a contract, and the
+  only two routes are **manually in the Loop admin (Starter, $99/mo)** or **programmatically via
+  Loop's REST API (Pro, $399/mo)**. **Recommendation: Starter, migrate founders by hand.** Founding
+  Membership is capped at **222** by Standard §4 and is a one-way, once-per-customer event, so 222
+  manual operations across the life of the business is not a workload, while $3,600/yr is real money.
+  Note **bulk actions are also Pro**, so manual means one at a time. Revisit only if the cap is lifted
+  or a second contract-mutating rule appears.
+  **Also worth keeping: Loop's transaction fee is not monotonic** — Free 0%, Starter 1.0%, Pro 0.75%.
+  Starter→Pro breaks even at `0.0025 × R = 300`, i.e. **$120k/month**, the same order as the Shopify
+  Advanced break-even and the same verdict: not before seven figures.
+  **Method note.** The morning's §5.2.1 was written off Loop's public pricing page and was mostly
+  right; installing the app took twenty minutes and produced one correction, one new gated dependency,
+  one settled open question, and the structural fact the whole entitlement architecture turns on.
+  Loop marks gated features inline with **STARTER/PRO badges in the UI**, so the app is a better
+  specification of its own tiers than its marketing is. Consistent with this repo's standing rule that
+  live output beats a document — which evidently applies to vendor pricing too, not just our own state.
+  **Still to run, now that the tooling is proven free:** create a test subscription against *Founder
+  Subscriptions* and inspect the resulting contract to see what was snapshotted onto it. That is the
+  last piece of Finding 2 still resting on a forum answer rather than something we watched happen.
 
 ---
 

@@ -306,54 +306,116 @@ discounts, then inspect the resulting subscription contract to see what was snap
 should be revisited on the answers — this is a decision for Steve, not a correction Code should make
 unilaterally, because it changes which system owns a commercial rule.
 
-#### 5.2.1 Loop's pricing tiers, and the fact that three of our rules sit behind the paywall (2026-08-21)
+#### 5.2.1 Loop's tiers, VERIFIED in the app on a free dev store (2026-08-21)
 
-Loop was locked as the subscription engine on 2026-06-29 and **its cost was never recorded**. Checked
-against the App Store listing, because the spike priced Shopify carefully and priced the subscription
-engine not at all - the same class of gap as the Advanced break-even error corrected the same day: a
-number nobody re-derived.
+Loop was locked as the subscription engine on 2026-06-29 and **its cost was never recorded**. Priced
+here - and then **verified by installing it**, which is why this section supersedes anything read off
+a pricing page. Everything below was read from Loop's own admin on
+`crema-italia-development`, not from marketing copy.
 
-| Tier | Cost | What it adds |
+**First: the dev-store question is settled empirically. Loop installs and runs on a free Partner
+development store.** The "paid apps cannot be installed on development stores" restriction never
+applied, because Loop has a genuinely free tier. Billing page, verbatim: *"You currently have **FREE**
+plan activated on your store. 50 Subscriptions + Basic features included. $0 / month, 0% transaction
+fee."*
+
+| Tier | Cost | Transaction fee |
 |---|---|---|
-| **Free Forever** | $0 | 50 active subscriptions, mobile customer portal, subscription alerts, growth/revenue analytics |
-| **Starter** | **$99/mo + 1.0% per transaction** | Dunning management, cancellation flows, branded portal, price updates, fixed & custom bundles, checkout links, product widgets, email actions. 14-day trial |
-| **Pro** | $399/mo + 0.75% | Dedicated CSM, gamified journeys, upsell profiles, portal customization, **prepaid/gift subscriptions**, user permissions, multilingual, APIs |
+| **Free** | $0 | **0%** |
+| **Starter** | $99/mo | **1.0%** |
+| **Pro** | $399/mo | **0.75%** |
 
-**Three named commitments in our own record sit in Starter, not Free:**
+Note the fee is **not monotonic**: Pro's rate is *lower* than Starter's. Starter to Pro is $300/mo for
+0.25pp, so it breaks even at `0.0025 x R = 300`, i.e. **$120k/month**. Same order of magnitude as the
+Shopify Advanced break-even, and the same verdict: not before seven figures.
 
-1. **Dunning management.** The durable Founding Member model (Standard §4) rests on it - CLAUDE.md
-   2026-07-10 records *"Loop dunning protects failed cards"* as the reason a failed card cannot cost
-   someone their rate. Without dunning, a declined card becomes a silent cancellation, which is
-   exactly the failure mode §4 was designed to prevent.
-2. **Cancellation flows.** The pause-first cancel is Standard §4 and was mocked in the POC.
-3. **Branded customer portal.** The Loop portal slot on the account page.
+##### The free tier does expose selling-plan discounts - so the §5.2 test costs nothing
 
-**So the free tier is enough to TEST the design and not enough to RUN it.** That is a useful split
-rather than a problem: the §5.2 contract-snapshot question can be answered for $0, and the tier
-decision can wait until the answer is in.
+This was the open question. **Answered yes.** A selling plan named *Founder Subscriptions* exists on
+the free tier carrying **12.00% discount** across two frequencies (deliver every 4 weeks, deliver every
+8 weeks), available to Storefront, Customer portal and Admin portal.
 
-**The monthly platform cost, stated in one place for the first time:**
+##### The structural finding: the discount is a property of the SELLING PLAN, not the customer
+
+The discount is configured **per selling plan, per delivery frequency**. There is no per-customer rate
+field anywhere in the plan configuration. **This is the strongest available support for Finding 2
+above**, and it is observed rather than read:
+
+- **Founder 12% and subscriber 10% must be two different selling plans.**
+- A customer's rate is decided by **which plan they subscribed to**, fixed at signup.
+- Promoting someone to Founding Member mid-subscription is **migrating their contract to a different
+  selling plan** - not re-evaluating a rule, and certainly not re-running a Function.
+
+That is Standard §4's durable Founding Member model expressed in Loop's data model, and it confirms
+the architecture consequence: **entitlement is contract state, not computed state.**
+
+##### What is gated, read off the billing page
+
+**Starter ($99/mo + 1%)** - unlimited subscriptions · fixed and build-your-own bundles · one-click
+checkout links · widget templates · **branded customer portal with upsell** · **smart dunning
+management** · **personalized & interactive cancellation flows** · custom delivery scheduling (Zapier)
+· **subscription-specific shipping rates** · auto price and shipping updates · inventory control and
+customer alerts · global email branding · Klaviyo/Yotpo & 30+ integrations.
+
+**Pro ($399/mo + 0.75%)** - everything in Starter, plus gamified journeys · personalized upsell
+profiles · portal themes · **prepaid and gift subscriptions** · **workflow automations & bulk actions**
+· user permissions · partial billing · branded email domain · multilingual · **Admin/Storefront APIs
+and webhooks** · dedicated CSM.
+
+**Four named commitments in our own record sit above Free:**
+
+1. **Dunning management** (Starter). CLAUDE.md 2026-07-10 makes this load-bearing in the durable
+   Founding Member model - *"Loop dunning protects failed cards"* is the reason a declined card cannot
+   cost someone their rate. Without it a decline becomes a silent cancellation, the exact failure mode
+   Standard §4 exists to prevent.
+2. **Cancellation flows** (Starter). The pause-first cancel, Standard §4, mocked in the POC.
+3. **Branded customer portal** (Starter). The Loop slot on the account page.
+4. **Subscription-specific shipping rates** (Starter). Standard §3/§4 make shipping offsets a
+   subscriber benefit. Easy to miss, because it does not look like a subscription feature.
+
+##### The API wall, and the decision it forces
+
+**Verified directly, not inferred:** Settings → API tokens shows *"Generate and manage Loop API tokens
+to read and update your subscriptions with REST API calls"* with the generate button disabled and
+*"This feature requires you to upgrade to **PRO** plan in order to use."*
+
+Combine that with the structural finding above and a real fork appears. If entitlement is contract
+state, then **promoting a customer to Founding Member means changing their contract**, and there are
+only two ways to do it:
+
+| | Cost | Viability |
+|---|---|---|
+| **Manually**, in the Loop admin | Starter, $99/mo | Plausible - Founding Membership is **capped at 222** by Standard §4, and it is a one-way, once-per-customer event. Note **bulk actions are also Pro**, so manual means one at a time |
+| **Programmatically**, via Loop's REST API | **Pro, $399/mo** | $300/mo for automation of an event that happens at most 222 times, ever |
+
+**Recommendation: Starter, and migrate founders by hand.** 222 manual operations spread across the
+life of the business is not a workload; $3,600/yr is real money. Revisit only if the founder cap is
+ever lifted or a second contract-mutating rule appears.
+
+##### The monthly platform cost, stated in one place
 
 ```
 Shopify Grow      $79/mo (annual)  + 2.7% + 30c card
 Loop Starter      $99/mo           + 1.0% per transaction
                   -------
-                  $178/mo before card fees, and 3.7% on every subscription order
+                  $178/mo before card fees, 3.7% all-in on subscription orders
 ```
 
-**Loop is the larger of the two platform costs**, and its 1% sits on top of Shopify's card rate. Note
-this bears on the pricing matrix validation still open in Standard §12.3: the markup matrix has never
-been checked against real landed costs, and it has certainly never been checked against a 3.7%
-all-in rate on subscription orders.
+**Loop is the larger of the two platform costs.** This bears on Standard §12.3, the pricing-matrix
+validation that has never been checked against real landed costs - and certainly never against a 3.7%
+all-in rate on the shelf the entire subscriber model is built on.
 
-**A quiet vindication:** gift subscriptions are **Pro tier, $399/mo**. Standard v1.5 opened a §12.9
-asking who would hold the Founding Member slot on a gifted subscription, and v1.6 removed it as
-speculative scope for a product we had declined to build. Had it stayed, we would have been designing
-entitlement rules for a capability costing $300/mo more than the plan we need.
+**A quiet vindication of Steve's call on §12.9:** prepaid and **gift subscriptions are Pro, $399/mo**.
+Standard v1.5 opened an item asking who would hold the Founding Member slot on a gifted subscription;
+v1.6 removed it as speculative scope for a product we had declined to build. Had it stayed, we would
+have been designing entitlement rules for a capability costing $300/mo more than the plan we need.
 
-**Open, and it decides whether Free is genuinely enough for the test:** whether the free tier lets you
-configure a **discount on a selling plan** at all. If it does not, the contract-snapshot test needs
-the Starter 14-day trial. Find out during the dev-store install.
+##### Still to run on the dev store, now that the tooling is proven free
+
+Create a test subscription against *Founder Subscriptions* and **inspect the resulting subscription
+contract** to see what was snapshotted onto it. That is the last piece of Finding 2 that rests on a
+forum answer rather than something we watched happen.
+
 
 ## 6. Trust signals, reviews + photography (2026-07-09 review; reviews decided 2026-08-20)
 
