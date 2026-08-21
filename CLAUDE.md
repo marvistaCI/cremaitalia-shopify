@@ -2564,6 +2564,67 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   customer-account UI extensions can render, evaluating a bundle app against Standard §7, and the
   plan choice.
 
+- 2026-08-21 — **The pre-production platform spike RUN and CLOSED — three de-risks and one
+  architectural break.** Opened 2026-07-24 as four unverified assumptions about how Shopify actually
+  behaves; two more were settled by the platform on 2026-07-25. All now answered. Written up in
+  `docs/production_build_spec.md` **§5.1** (account extensions), **§5.2** (Loop × Functions) and
+  **§7.1** (bundle apps); the §10 checklist carries the short forms.
+  **The break, and it is the reason the spike was worth running: discount Functions are not re-run
+  when recurring orders are created.** Shopify staff, on the developer forum: the rate is
+  **snapshotted onto the subscription contract** at signup and orders 2..n bill from that snapshot,
+  independent of the original discount. **Standard §11 specifies a Function owns the entitlement,
+  reading customer tags to decide the applied rate — that can only ever govern the first order.** It
+  breaks the durable Founding Member model directly: someone who subscribes at 10% and later becomes
+  a founder would keep 10% forever, because nothing re-evaluates; the 60-day benefit grace cannot be
+  enforced on recurring orders either. So the rate must live on the **contract**, which makes it
+  **Loop's** job, and shrinks the Function to campaign discounts on one-time purchases. That is a
+  materially different architecture from §11 as written. **Second finding, smaller but related:** a
+  selling-plan discount is a **price adjustment, not a discount** — it changes the line price before
+  any discount is evaluated, so Functions and codes compound *on top of it*. `MAX` holds among
+  Function and code discounts (Shopify already applies only the largest product discount per line off
+  Plus, which hands us §3's rule for free), but a selling plan sits outside that contest entirely.
+  **Deliberately did NOT amend Standard §11/§12.8.** Finding 2 rests on a staff forum answer plus
+  Help Centre wording — strong, but forum rather than formal documentation, and unobserved on a
+  store. This project's own rule is that live output beats a document, and the same rule cuts both
+  ways: a document is not refuted by another document. Four questions for Loop support are in §5.2,
+  then confirm on the dev store by inspecting a real contract. **Which system owns a commercial rule
+  is Steve's decision, not a correction Code should make unilaterally.**
+  **De-risk 1 — customer-account UI extensions run on ALL plans, not Plus.** This had been the
+  largest open consequence for the production build since 2026-07-25 established that `/account` is
+  Shopify-hosted and the POC's account page is not buildable in Liquid. Full-page extensions exist and
+  can be linked from the account header, so the page has a home; extensions can **read and write
+  customer metafields**, which confirms the taste-profile-as-customer-metafield requirement (§6.1) is
+  the natural mechanism rather than a workaround; and they can call our own backend. **The cost is
+  brand, not function:** no custom CSS, no arbitrary HTML, no custom fonts — only Shopify's component
+  library, which *"will always render the merchant's own branding"*. We control logo, colours and
+  typography through the shared branding configuration, so the page wears our palette and logo but not
+  the storefront's typography, spacing or composition. **The POC's account information architecture
+  and copy survive; its visual design does not**, and that should be accepted deliberately rather than
+  discovered mid-build. Business rules untouched (Standard §3.1/§4).
+  **De-risk 2 — use Shopify's own Bundles app; do not buy a third-party one.** Third-party bundle
+  apps earn their fee on mix-and-match, build-your-own, volume discounts and BOGO, none of which we
+  need: a Sorpresa collection is a **fixed** set of components we choose. Native covers admin
+  management and component stock, and its limits (100 variants, 30 products, 3 options) are nowhere
+  near binding. **The two §7 requirements no app satisfies are ours either way** — component-derived
+  facets, and availability gated on component **freshness** — so a paid app buys nothing we lack.
+  **De-risk 3 — Grow is the plan**, billed annually at $79/mo, Steve to confirm. **Basic is
+  disqualified rather than merely tight: it includes ZERO staff accounts**, and the team is Steve plus
+  Lucia, Asia and Lauren; Grow allows 5. Nothing in the design needs more — Functions run on all
+  plans, account extensions run on all plans, and checkout extensibility was the only Plus-gated thing
+  we wanted, declined in Standard v1.3 at ~$24k/yr for one hidden field.
+  **A correction to this log, and it is an order of magnitude.** The 2026-07-24 entry said Advanced
+  pays for itself *"around $70–80k/yr revenue"*. The arithmetic does not support it: Advanced costs
+  **$220/mo more** than Grow and saves **0.2pp** on card rate, so break-even is `0.002 × R = 220`,
+  i.e. **~$110k per month, about $1.3M a year.** Revisit Advanced at seven figures, not before. Worth
+  noting *how* it survived a month: it was written as a confident aside in an entry about something
+  else, and nobody re-derives an aside.
+  **Two small live checks left for Steve on the dev store**, both minutes rather than hours: whether
+  the branding editor offers **Marcellus** (Settings → Checkout → Configurations → Edit), which decides
+  whether the account surface diverges from the storefront on type as well as layout; and whether
+  native bundles actually decrement **component inventory** — sources conflict, most likely because
+  they describe a hand-built product versus a genuine componentised one, and the recommendation above
+  changes if they do not.
+
 ---
 
 ## 10. Open questions / TODO
@@ -2840,10 +2901,16 @@ catalog schema additions) should be logged there too.
 
 **OPEN / TO VET:**
 
-**▶ PRE-PRODUCTION PLATFORM SPIKE (added 2026-07-24 — do these BEFORE the production build).**
-These are not decisions; they are unverified assumptions about how Shopify actually behaves.
-Each one, if wrong, forces a spec revision mid-build — which is exactly the outcome Steve
-asked to avoid. Full context in the §9 2026-07-24 entry.
+**▶ PRE-PRODUCTION PLATFORM SPIKE — RUN AND CLOSED 2026-08-21 (added 2026-07-24).**
+These were never decisions; they were unverified assumptions about how Shopify actually behaves,
+and each one, if wrong, forces a spec revision mid-build. **All six items are now answered.** Two
+were settled by the platform itself on 2026-07-25; the remaining four were researched on 2026-08-21
+and written up in `docs/production_build_spec.md` §5.1, §5.2 and §7.1. **Three de-risks and one
+architectural break:** customer-account UI extensions run on all plans, Functions are not
+plan-gated, and native Bundles covers what a paid bundle app would - but **discount Functions do not
+re-run on recurring orders**, so entitlement cannot be Function-owned as Standard §11 specifies.
+That last one is the only item still carrying an action, and it needs Loop's answers before Steve
+decides. Full context in the §9 2026-07-24 and 2026-08-21 entries.
 - [x] ~~**DECIDE: amend Store Operating Standards §10 ("no visible promo-code field").**~~
   **DONE 2026-07-25 — Standard v1.2 → v1.3, and since VERIFIED on the dev store.** Steve declined
   Plus; §10 now states the achievable rule (**we issue no discount codes at all**, so the visible
@@ -2894,13 +2961,32 @@ asked to avoid. Full context in the §9 2026-07-24 entry.
   **One two-minute check left for Steve:** whether the branding editor offers Marcellus. Settings →
   Checkout → Configurations → Edit on the dev store.
 
-- [ ] **EVALUATE: a bundle app against Standard §7's BOM requirements** (component-derived
-  facets, component-gated availability incl. the freshness window, per-order pick-pack BOM to
-  the 3PL). Native Shopify Bundles covers component inventory but not freshness or facet
-  derivation. If nothing fits, the fallback (what's automated vs manual) changes the build.
-- [ ] **CHOOSE a Shopify plan.** Basic allows **0** extra staff accounts, so **Grow** ($79/mo
-  annual) is the practical floor for the Lucia/Asia/Lauren team. Advanced only pays for itself
-  on card-rate savings around $70–80k/yr revenue. **Plus is not justifiable** — see §9.
+- [x] ~~**EVALUATE: a bundle app against Standard §7's BOM requirements.**~~ **DONE 2026-08-21 —
+  `docs/production_build_spec.md` §7.1. Use Shopify's own Bundles app; do not buy a third-party one.**
+  Third-party bundle apps earn their fee on mix-and-match, build-your-own, volume discounts and BOGO,
+  none of which we need — a Sorpresa collection is a **fixed** set of components we choose. Native
+  covers admin management and component stock; its limits (100 variants, 30 products, 3 options) are
+  nowhere near binding on a handful of components. **The two requirements no app satisfies are ours
+  either way** — component-derived facets, and availability gated on component **freshness** — so a
+  paid app buys nothing we lack. **One ten-minute dev-store check before relying on it:** sources
+  conflict on whether native bundles decrement component inventory, so build a two-component bundle,
+  place a test order, and watch whether component stock moves.
+
+- [x] ~~**CHOOSE a Shopify plan.**~~ **RESEARCHED 2026-08-21 — recommendation: Grow, billed
+  annually ($79/mo; $105 monthly). Steve's call to confirm.** 2026 pricing: Basic $29/39, Grow
+  $79/105, Advanced $299/399, Plus from $2,300. (The "Shopify" plan was renamed **Grow** in 2026 —
+  same plan.)
+  **Basic is disqualified, not merely tight: it includes ZERO staff accounts** — the owner is the only
+  login — and the team is Steve plus Lucia, Asia and Lauren. Grow allows 5.
+  **Nothing in the design needs more than Grow.** Shopify Functions run on all plans; customer-account
+  UI extensions run on all plans (§5.1); checkout extensibility is the only Plus-gated thing we wanted
+  and was already declined in Standard v1.3 at ~$24k/yr for one hidden field.
+  **CORRECTION to the 2026-07-24 §9 entry**, which said Advanced pays for itself "around $70–80k/yr
+  revenue". The arithmetic does not support that. Advanced costs **$220/mo more** than Grow and saves
+  **0.2pp** on card rate (2.5% vs 2.7%), so break-even is `0.002 × R = 220`, i.e. **~$110k per month —
+  about $1.3M a year.** The old figure was out by more than an order of magnitude. Revisit Advanced at
+  seven figures, not before.
+
 - [ ] Also still open and launch-gating, though not build-blocking: pricing numbers never
   validated against real landed costs (Standard §12.3); real catalog data + photography;
   3PL not selected (blocks the no-waste Promise copy, and the transit/$8.50 claims); email

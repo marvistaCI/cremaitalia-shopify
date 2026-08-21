@@ -435,6 +435,41 @@ Generalises beyond Sorpresa collections to any composite product. Ties to the PO
 logged (a structured roaster-linkage field on bundle/composite products) — extend it to a full
 component-SKU BOM.
 
+### 7.1 Bundle app evaluation against these requirements (platform spike, 2026-08-21)
+
+**Recommendation: Shopify's own Bundles app. Do not buy a third-party bundle app.**
+
+Measured against the four requirements above:
+
+| Requirement | Covered by an app? |
+|---|---|
+| Admin-managed: define a collection and its component SKUs without a developer | **Yes** - native Bundles |
+| Component-derived **facets** (region/roast/flavour/caffeine as the union of components) | **No app does this.** Ours regardless |
+| Availability gated on component **stock** | **Yes** - native Bundles keeps component inventory in sync |
+| Availability gated on component **freshness** (§5) | **No app does this.** Ours regardless |
+| Per-order BOM to the 3PL | Not an app question - see Standard §12.9 and the 3PL questionnaire |
+
+**Why native rather than paid.** Third-party bundle apps earn their fee on **mix-and-match,
+build-your-own, volume discounts and BOGO** - none of which we need. A Sorpresa collection is a
+**fixed** set of components chosen by us. And the two requirements no app satisfies are ours to build
+either way, so a paid app buys nothing we lack.
+
+**Native limits are not close to binding:** 100 variants and 30 products per bundle, 3 option
+dimensions. Our collections hold a handful of components.
+
+**One ambiguity to settle on the dev store before relying on it.** Sources conflict on whether native
+bundles decrement component inventory: one describes bundles as standalone products whose components
+*"aren't deducted automatically"*, another describes real-time component sync that is *"more reliable
+than what third-party apps can typically achieve"*. The likeliest reading is that these describe
+different things - a hand-built product that merely represents a bundle, versus a genuine
+componentised product created through the Bundles app. **Worth ten minutes on the dev store:** create a
+bundle from two components, place a test order, and watch whether component inventory moves. If it does
+not, the recommendation changes.
+
+**Freshness gating remains ours whatever the answer**, and it is the harder half: a collection must
+become unavailable when *any* component leaves the freshness window (§5), which is a rule no bundle app
+knows about.
+
 ## 8. Fully responsive — mobile & tablet (REQUIRED — Steve, 2026-07-12)
 
 The production storefront MUST be **fully responsive across phone, tablet, and desktop** —
