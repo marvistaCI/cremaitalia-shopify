@@ -2702,6 +2702,53 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   Subscriptions* and inspect the resulting contract to see what was snapshotted onto it. That is the
   last piece of Finding 2 still resting on a forum answer rather than something we watched happen.
 
+- 2026-08-21 — **The Loop test subscription RUN — the morning's two findings confirmed on a real
+  order, and the $99-vs-$399 fork dissolved in our favour.** Everything in §5.2 had rested on
+  documentation and a Shopify staff forum answer. This ran it: order **#1001** and contract
+  **#15285027040** on the dev store through the Test payment gateway, against a *Founder Subscriptions*
+  selling plan at **12.00%** mapped to a **$24.95** product. Written up as
+  `docs/production_build_spec.md` **§5.2.2**.
+  **Finding 1 CONFIRMED, and it carries a consequence nobody had drawn.** The order billed **$21.96**
+  — `24.95 x 0.88` to the cent — and shows **no discount line anywhere**. Not a zeroed one; none. The
+  12% appeared as a *lower price*, which is what a price adjustment is. **So the subscriber benefit is
+  invisible on the Shopify order:** the customer's confirmation email will just show $21.96 and look
+  like the price, Shopify's discount analytics will report **zero** discounts on subscription orders,
+  and any report keyed on discount lines will agree. The POC cart renders an explicit "Founding Member
+  12%" line; in production, on a subscription line, **that line will not exist in Shopify's record**,
+  so the theme has to render it from base-vs-plan price or the customer never learns they got it.
+  **Finding 2 confirmed structurally.** The contract stores `Base price $24.95 / Subscription discount
+  12.00% / Plan: Founder Subscriptions` as its own fields and had already **pre-scheduled five future
+  orders** (18 Sep, 16 Oct, 13 Nov, 11 Dec, 8 Jan 2027) to bill from that stored state. That does not
+  by itself prove a Function is skipped — that needs a Function deployed to observe — but it confirms
+  the half the architecture turns on: **the rate is contract state, not a rule evaluated per order.**
+  **The finding that changed the cost basis, and it corrects my own recommendation from four hours
+  earlier.** §5.2.1 framed a $99-vs-$399 fork on the reasoning that mutating a contract might need
+  Loop's REST API, which is Pro. **It does not.** The contract's product line opens an *Edit product*
+  dialog with discount type, discount value and final price all editable, on the **FREE** tier. So
+  promoting a subscriber to 12% when they become a Founding Member is: open the subscription, change
+  the value, save. **Pro buys automation of an event capped at 222 occurrences that is a thirty-second
+  admin edit.** Starter stands. Also native, and worth knowing before anyone designs an intro offer:
+  **"Change discount offer after specific payments"**.
+  **Three of the four Loop-support questions are now answered without asking**: selling plans do carry
+  the discount; the rate cannot vary per customer *on the plan* but can *per contract*; and contract
+  rates are editable manually on the free tier. **The fourth is the only thing still blocking** — does
+  a discount Function **compound** with the selling-plan adjustment on the first order? It cannot be
+  answered by inspection; it needs a Function deployed and a second test order. Given Finding 1 the
+  expectation is yes, since the Function sees $21.96 as the line price. **Until then the subscriber
+  rate lives in the selling plan OR in a Function, never both**, or a founder gets 12% off a price
+  that is already 12% off.
+  **Method note, consistent with the day's other one.** The morning's §5.2 was researched from docs and
+  a forum post and was right on both counts; running one $29.96 test order confirmed both, produced a
+  customer-facing consequence (the invisible benefit) that no amount of reading would have surfaced,
+  and **reversed a cost recommendation I had made the same day**. Three checks in one day where live
+  output beat a document — the Advanced break-even, Loop's tiers, and now this.
+  **Also cleared up, and worth recording because it will recur:** Loop splits *Acquire → Selling plans*
+  (the offer) from *Subscriptions* (customer contracts), and an empty Subscriptions list next to a
+  perfectly intact selling plan reads as lost work. It is not — and the distinction is precisely the
+  one the entitlement architecture turns on: **the plan is the template, the contract is the instance,
+  and the rate is copied onto the instance at signup.** Loop's own information architecture is telling
+  us the same thing the forum answer did.
+
 ---
 
 ## 10. Open questions / TODO
@@ -3010,11 +3057,23 @@ decides. Full context in the §9 2026-07-24 and 2026-08-21 entries.
   subscribes at 10% and later becomes a founder would keep 10% forever, because nothing re-evaluates.
   The rate must live on the **contract**, which makes it **Loop's** job, and shrinks the Function to
   campaign discounts on one-time purchases.
-  **Confidence:** finding 1 is well documented; finding 2 rests on a Shopify staff forum answer plus
-  Help Centre wording — strong but not formal docs, and unobserved on a store. **Next: four questions
-  to Loop support** (listed in §5.2), then confirm on the dev store by inspecting a real contract.
-  **Do not write the entitlement Function until those are answered**, and Standard §11/§12.8 need
-  Steve's decision on the answers, because this changes which system owns a commercial rule.
+  **TESTED 2026-08-21 on a real order — see §5.2.2. Finding 1 CONFIRMED, Finding 2 confirmed
+  structurally, and three of the four Loop questions answered without asking.** Order #1001 billed a
+  $24.95 base at **$21.96** with **no discount line anywhere on the order**, and the contract stores
+  `Base price / Subscription discount 12.00% / Plan` as its own fields with five future orders
+  pre-scheduled. **The rate is contract state, not a rule evaluated per order.**
+  **Two consequences.** (1) **The subscriber benefit is invisible on the Shopify order** — the
+  confirmation email will just show a lower price, Shopify's discount analytics will report zero
+  discounts on subscriptions, and if we want the customer to see the benefit the theme must render it
+  itself. (2) **The $99-vs-$399 fork dissolves:** contract discount rates are editable **in the Loop
+  admin on the FREE tier**, so promoting a founder is a thirty-second admin edit, not an API call.
+  Pro is not needed and **Starter stands**.
+  **ONE question left, and it is the only thing still blocking:** does a Shopify discount Function
+  **compound** with the selling-plan adjustment on the first order? Cannot be answered by inspection —
+  needs a Function deployed and a second test order. Given Finding 1 the expectation is yes, because
+  the Function sees $21.96 as the line price. **Until it is answered, the subscriber rate must live in
+  the selling plan OR in a Function, never both**, or a founder gets 12% off a price already 12% off.
+  Standard §11/§12.8 still need Steve's decision on which system owns the rule.
 
 - [x] ~~**CHOOSE: new vs legacy Shopify customer accounts.**~~ **NOT A CHOICE — settled by the
   platform, verified 2026-07-25.** A store created today runs **new customer accounts only**;
