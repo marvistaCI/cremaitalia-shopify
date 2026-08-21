@@ -1,8 +1,16 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.13 · 2026-08-21**
+**Version 1.14 · 2026-08-21**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.14 (2026-08-21)** retires **`peak_flavor_days`** as a setting and closes §12.10, which v1.13 had
+> opened hours earlier. The confusion was never the number - *"brew within 30 days"* sat inches from
+> Offerta's *"Best within 27 days"* and the two measured from different things. The other windows are
+> **gates we enforce**; this was **advice about behaviour we do not control**, so it is brand copy
+> rather than tunable policy. It is now merged into the whole-bean sentence, counting **from
+> receiving** rather than from roast, so one statement carries the purchase expectation, the freshness
+> advice and the route to a grinder. No window changed and nothing is repriced.
 
 > **v1.13 (2026-08-21)** changes both freshness statements and **reverses one v1.12 rule**. Offerta no
 > longer shows an actual roast date; it shows a **computed band** - *"Roasted between 24-MAR-2026 and
@@ -331,9 +339,25 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
 - **Freshness statement, main shelves (revised v1.13):** "These beans are within our best-freshness
   window of `{freshness_window_days}` days." The number comes from theme settings, never typed (§5.4,
   build spec §11). Never "best by" alone. **Offerta has its own statement** - see §5.4.
-  The peak-flavour clause was removed from this sentence because, sitting after a roast-date
-  statement, *"brew within 30 days"* is ambiguous between 30 days from roast and 30 days from
-  delivery (Steve, 2026-08-21). **Where that message goes instead is OPEN - see §12.10.**
+  The peak-flavour clause was removed from this sentence, and **`peak_flavor_days` was retired as a
+  setting entirely** (v1.14). The confusion was never the number: *"brew within 30 days"* sat inches
+  from Offerta's *"Best within 27 days"*, and the two measured from different things. Steve's
+  diagnosis: the other three windows are **gates we enforce and control**, whereas this one is
+  **advice about behaviour we do not control** - how a customer chooses to consume what they bought.
+  Nothing branches on it, nothing enforces it, and it never varies by SKU or shelf, so representing it
+  as tunable policy invited someone to tune a piece of advice. It is **brand copy** and belongs in the
+  repo where the voice rules apply, not in the settings that drive gating logic - a category-2 string
+  under build spec §11, not a category-3 one.
+
+  **The advice now lives in the whole-bean sentence, merged rather than adjacent** (approved copy,
+  Steve, 2026-08-21):
+
+  > Whole beans only. We recommend using your beans within 30 days of receiving them, and grinding
+  > them just before each brew. Need a grinder? Search for one in our Bottega.
+
+  One statement doing three jobs - the purchase expectation, the freshness advice, and the route to
+  a grinder - instead of two sentences saying overlapping things a few lines apart. Note the 30 days
+  counts **from receiving**, not from roast, which is what removes the ambiguity.
   **It is NOT paired with an actual roast date on the main shelves** - v1.12 replaced that with a computed floor, *"Roasted on or after DD-MMM-YYYY"*; only
   Offerta shows a real date (§5.4).
 - **`days_to_offerta` is RETIRED (v1.12).** It carried its own default of 45, which is the same fact as
@@ -369,7 +393,6 @@ FIFO operates only on the **sellable pool**. A lot past the freshness window is 
 |---|---|---|
 | `freshness_window_days` | **90** | Age 0-90: the coffee sits on Roccia, Sorpresa or Selezione |
 | `offerta_fresh_days` | **150** | Age **91-150**: Offerta, priced accordingly. Past 150 it comes off sale entirely and is donated |
-| `peak_flavor_days` | **30** | Not a shelf-life rule. A **brewing message to the customer**, so that a bag kept for a year is not later judged against our promise |
 
 Boundaries are exclusive - 90 belongs to the main shelves and Offerta starts at 91. No day lives in
 two bands.
@@ -739,14 +762,11 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    `MAX` could be violated without us doing anything wrong: a Loop selling-plan discount and our
    Function could collide or double-apply. **Highest-risk integration in the design.** Verify on the
    same dev store, with a real Loop subscription, before the production build.
-10. **Where does the peak-flavour message live?** (opened v1.13.) `peak_flavor_days` (30) exists to
-   protect a real position: a customer who keeps a bag for a year should not be able to judge it
-   against our freshness promise. v1.13 removed the clause from the main-shelf freshness sentence
-   because it read ambiguously there, which leaves the setting **with no consumer** - the defect this
-   Standard keeps removing elsewhere. Three options, none chosen: put it in the **brewing note** on the
-   product page, where "from roast" is unambiguous in context; put it in the **FAQ** alongside the FIFO
-   explanation; or drop the setting and accept the loss. **Decide before building POC19 item 1** - do
-   not simply delete the sentence and leave the setting behind.
+10. ~~**Where does the peak-flavour message live?**~~ **RESOLVED v1.14 (2026-08-21), opened v1.13.**
+   Opened and closed within a day. The setting is **retired**; the message is merged into the
+   whole-bean sentence (§5), reworded to count **from receiving** rather than from roast. The
+   distinction that settled it is worth keeping: the freshness windows are **gates we enforce**, this
+   is **advice about behaviour we do not control**, and only the former belong in settings.
 
 9. **3PL selection — segregation, packing slip, and inserts.** No 3PL is selected. Three questions are
    **qualifying**, not preferences, and all should be asked before commercial terms.
@@ -902,5 +922,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.13 · 2026-08-21 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.14 · 2026-08-21 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*

@@ -23,21 +23,29 @@ Those need settling as part of the build, not discovered during it.
 from"* — a fair reading. Placed after a roast-date sentence, "brew within 30 days" is ambiguous
 between 30 days from roast and 30 days from delivery.
 
-### Consequence — `peak_flavor_days` loses its only consumer
+### RESOLVED — `peak_flavor_days` is retired, and the advice merges into the whole-bean sentence
 
-That sentence is the **only** place `peak_flavor_days` renders. Removing it leaves a theme setting
-that nothing reads, which is exactly the defect Review A finding A3 removed from the catalogue: data
-that *looks* authoritative while nothing consumes it.
+Standard **v1.14** settled this. The setting is **removed entirely**, not rehomed: the freshness
+windows are gates we enforce, and this was advice about behaviour we do not control, so it is brand
+copy rather than tunable policy.
 
-The need behind it has not gone away. Steve's stated reason for the 30 days on 2026-08-21 was so that
-**a customer who keeps a bag for a year cannot later judge it against our freshness promise.** That is
-a real protection and it still needs a home. Three options, none chosen:
+**Also replace the whole-bean sentence** (approved copy, Steve, 2026-08-21). Today it reads:
 
-- Move it to the **brewing note** on the product page, where "from roast" is unambiguous in context.
-- Move it to the **FAQ**, alongside the FIFO explanation.
-- Drop the setting entirely and accept the loss of that protection.
+> **Whole bean only.** You will need a grinder. If you do not have one, *search for a burr grinder in
+> our Bottega*.
 
-**Do not simply delete the sentence and leave the setting.**
+It becomes:
+
+> **Whole beans only.** We recommend using your beans within 30 days of receiving them, and grinding
+> them just before each brew. Need a grinder? *Search for one in our Bottega.*
+
+One statement doing three jobs instead of two sitting a few lines apart and half-overlapping. The 30
+days counts **from receiving**, which is what removed the ambiguity in the first place. The Bottega
+link stays a shelf link, never a fixture SKU handle.
+
+**Build consequence:** remove `peak_flavor_days` from `settings_schema.json`, `settings_data.json`,
+`window.CI_RULES` and the `PEAK_DAYS` constant. Leaving any of them behind recreates the
+setting-nothing-reads defect this change exists to remove.
 
 ---
 
@@ -70,15 +78,15 @@ website always honest, instead of mostly honest."*
 This is the same reasoning as the main-shelf floor, one shelf over: state the **guaranteed band**
 derived from policy, rather than a specific fact that may not hold for every bag in the bin.
 
-### Consequence — this contradicts Standard §5.4 as published
+### DONE — the Standard was amended first
 
-v1.12 states, explicitly, that **"Offerta is the exception and shows its actual roast date"**. This
-staged item reverses that. **Building it requires a v1.13 amendment**, and the Standard must change
-first or the storefront and the Standard disagree on day one.
+This item reversed v1.12's rule that *"Offerta is the exception and shows its actual roast date"*.
+**Standard v1.13 (2026-08-21) made that change before any code was written**, so the storefront and
+the Standard will not disagree when it is built.
 
-The rationale for the original rule still partly holds and should be preserved in the amendment: the
-two shelves must not *look* identically fresh. The computed band does that better than an actual date,
-because it makes the age gap explicit rather than leaving the reader to compare two dates.
+The original rationale survives and is better served: the two shelves must not *look* identically
+fresh, and a band does that more plainly than an actual date, because it makes the age gap explicit
+rather than leaving the reader to compare two dates and work it out.
 
 ### Consequence — Offerta no longer needs a roast date for display
 
@@ -115,4 +123,7 @@ meaningful and is not.
 - **`DD-MMM-YYYY` throughout** (Standard §5.4).
 - The main-shelf floor already publishes as `CI_RULES.freshFloorLabel`. The Offerta band needs two
   more computed labels alongside it, by the same mechanism.
-- Sequence: **amend the Standard to v1.13 first**, then build. Item 2 is a reversal, not an addition.
+- **The Standards are already amended** - v1.13 for the Offerta band, v1.14 for retiring
+  `peak_flavor_days` and merging its message into the whole-bean sentence. Build against them; do
+  not re-litigate. Item 2 was a reversal rather than an addition, which is why it went to the
+  Standard first.
