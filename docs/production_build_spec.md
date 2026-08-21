@@ -584,6 +584,51 @@ Products reference the roaster by handle (`roaster`), and bundles reference seve
 (`roasters[]` — a list, because a collection names more than one). **`portrait_cls` and
 `portrait_style` do not carry** — they are CSS placeholder styling standing in for a logo (§13.6).
 
+**Photography lives in Shopify too, not in the theme.** The logo is a `file_reference` field on the
+metaobject; place or process shots are a `list.file_reference`. Both point at entries in **Shopify
+Files**, served from Shopify's CDN with the usual `image_url` resizing filters. This is the same
+POC-versus-production shift as the data itself: today `assets/ci-lucia.jpg` ships inside the theme and
+roaster logos are CSS gradients, and in production **adding a roaster photograph requires no deploy**.
+20 MB per file; constrain the field with file-type validations.
+
+#### 13.4.1 Two capabilities to enable on the definition
+
+- **`publishable`** — gives every entry a **DRAFT / ACTIVE** status. This is the visible/invisible
+  flag: build a roaster up while you are still courting them, and flip to ACTIVE when their first
+  pallet lands. It is enforced by the platform, not by our template logic. Verified behaviour: *"a
+  metaobject can only be accessed if its status is active. If its status is draft, then the return
+  value is nil"*, and storefront loops **skip** draft entries entirely.
+- **`onlineStore`** — assigns a theme template and a URL so the metaobject renders as a real page.
+  **The roaster profile page can be native**, rather than a route we build. Worth taking; the POC
+  hand-rolls this because a mock has no alternative.
+
+Also available and worth knowing: `renderable` (SEO metadata on the entry) and `translatable`, which
+matters if roaster copy is ever published bilingually.
+
+#### 13.4.2 The trap inside the publishable capability
+
+**Draft resolves to `nil`, and `nil` renders as nothing.** A *live* product whose roaster or coffee
+metaobject is still DRAFT silently loses its roaster name - no error, no warning, just a blank where
+"by Gardelli Specialty Coffee" belongs. It looks correct in the admin and wrong only on the storefront.
+
+**Rule: a product may not be published until every metaobject it references is ACTIVE.** This belongs
+in Product Onboarding (§15.2) as a publish-time check, not as something to remember.
+
+#### 13.4.3 Records are writable by API, which is what makes an application form possible
+
+```
+metaobjectCreate / metaobjectUpdate / metaobjectDelete        Admin GraphQL
+stagedUploadsCreate -> upload to the returned URL -> file GID -> metaobjectCreate/Update
+```
+
+Images are that two-step: stage, upload, then pass the returned GID into the `file_reference` field.
+`httpMethod: "POST"` is required for IMAGE resources - a documented gotcha.
+
+**This is the whole reason an external onboarding form works.** Shopify has no supplier portal, and
+its B2B features serve wholesale *buyers*, not vendors - so a roaster cannot log in to Shopify. But a
+form outside Shopify can write a metaobject entry directly into the admin as **Draft**, photographs
+included, for review. See §15.1 and §15.2.
+
 **People** (`docs` §2) use the same shape at smaller scale: `id`, `name`, `role`, `group`,
 `photo`, `bio[]`. §2 already prescribes sections + blocks rather than metaobjects for these.
 
@@ -862,6 +907,10 @@ records what each one is, what already exists, and what is open.
 **Owner:** Lucia Calò, Operations Manager - Italy, who is the purchasing contact named in the guide
 and who reviews the Italian line by line.
 
+**The roaster application itself can feed Shopify directly** - same mechanism as Product Onboarding,
+described once in §13.4.3 rather than twice. A tokenised form writes a `roaster` metaobject as Draft,
+photographs included; it becomes visible when it is set ACTIVE.
+
 **Open:**
 
 - The guide is at v6 (Italian, approved by Lucia 2026-08-21) with v7 in progress, adding one line:
@@ -900,6 +949,19 @@ scattered across the Roaster Guide.
    mislead the customer. Prefer `03 JUL 2026` or ISO `2026-07-03`.
 6. **Records are created:** the `coffee` metaobject, the Shopify product, its variants, its
    metafields, and the label artwork.
+
+**The technical pipeline exists and is not the hard part.** Metaobject records and their images are
+writable through the Admin GraphQL API (§13.4.3), so a form outside Shopify can deposit a proposed
+coffee - story, tasting notes, photographs and all - straight into the admin as a **Draft** metaobject
+for review. Nothing needs to be retyped, and nothing becomes visible until someone approves it.
+
+**For a handful of roasters, avoid accounts entirely.** Send a **tokenised link per roaster** rather
+than building logins: no passwords, no resets, no support burden, and no Shopify customer account
+being used for something it was not designed for. This is the same choice already made for review
+collection - an emailed per-order link rather than an account gate - and for the same reason.
+
+**Publish-time check, not a habit:** a product may not go live until every metaobject it references is
+ACTIVE, or the live page silently renders a blank where the roaster name belongs (§13.4.2).
 
 **Open, and the reason this needs its own thread:**
 
