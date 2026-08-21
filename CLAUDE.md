@@ -2467,6 +2467,25 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   containing v1.11 content. The render gates did not catch it, and could not: the render was internally
   faithful to its source, and only the *filename* was wrong. Deleted and redone. **A gate proves a
   render matches its source, never that the source is the one you meant.**
+  **DEPLOYED the same day** via the `crema-poc-deploy` ritual to a NEW unpublished theme **"Crema
+  Italia POC18 Preview" (id `152016912553`)**: `theme list` + `git log origin/main..HEAD` run **first**
+  (no collision), validation at the documented baseline (15 offenses / 0 errors / 0 new), then
+  **pull-and-diff proved** the push — both sides 38 files, zero content mismatches, nothing on only one
+  side, exactly one theme of that name. **POC15 (`151970840745`) pruned** on Steve's explicit go under
+  the three-newest cap, its id, name and role re-verified against live immediately before the delete;
+  its batch is `fce62f4`..`995b11c` on GitHub and is redeployable. POC16, POC17 and the live theme
+  untouched. Worth noting for the review: **three of POC18's four changes are deliberately invisible**,
+  their success condition being that nothing rendered changed, so the reviewable surface is only the
+  freshness display and the new FAQ entry.
+  **Staged immediately after, NOT built: `docs/POC19_change_list.md`** — three display changes from
+  Steve while reviewing POC18. Two of them **orphan a setting or a field POC18 had just introduced**
+  (`peak_flavor_days` loses its only consumer if the peak-flavour clause is dropped;
+  `freshness_remaining` loses its consumer if the Offerta line changes), and the third **reverses**
+  Standard §5.4's rule that Offerta shows an actual roast date — replacing it with a computed band,
+  because a slow-moving SKU can hold more than one Offerta lot and *"quoting the range keeps the
+  website always honest, instead of mostly honest."* That one needs a **v1.13 amendment before it is
+  built**, not after. Also caught while staging: Steve's worked example gave the band's younger date as
+  19-JUL-2026 where his own formula gives 22-MAY-2026 — the formula is right and is what was staged.
 
 ---
 
@@ -2497,9 +2516,9 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC17 Preview" | `152003018921` |
+| **Newest POC preview** | "Crema Italia POC18 Preview" | `152016912553` |
+| Prior preview | "Crema Italia POC17 Preview" | `152003018921` |
 | Prior preview | "Crema Italia POC16 Preview" | `151983030441` |
-| Prior preview | "Crema Italia POC15 Preview" | `151970840745` |
 
 **Scorecard: 7.4/10 as of 2026-08-19** — the deployed storefront has been scored three times
 against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16). **Trust & social proof has
@@ -2512,47 +2531,38 @@ decisions were made; policy now lives in Store Operating Standards §13).
 > A re-score against POC17 is the next task (Steve, 2026-08-20) and is expected to be **the last one
 > before real photography**, since brand identity and product detail are gated on it.
 
-**POC17 is deployed** and is the only POC17 theme — all **38** files byte-match the repo, proved by
-pull-and-diff on 2026-08-20 (both sides 38 files, zero content mismatches, nothing present on only
-one side; `theme list` **and** `git log origin/main..HEAD` were run **before** the push per the rule
-above, confirming no name collision). File count unchanged at 38 — the batch edited existing files
-and added none. The repo is fully pushed to GitHub, so nothing is local-only.
+**POC18 is deployed** and is the only POC18 theme — all **38** files byte-match the repo, proved by
+pull-and-diff on 2026-08-21 (both sides 38 files, zero content mismatches, nothing present on only
+one side; `theme list` **and** `git log origin/main..HEAD` were run **before** the push, confirming no
+name collision). The repo is fully pushed to GitHub, so nothing is local-only.
 
-> ⚠️ **The repo has moved AHEAD of this theme again (2026-08-20) — POC18 is in progress.** Review A
-> fixes are landing in the repo and are **committed but NOT deployed**. So the deployed POC17 theme
-> no longer byte-matches the repo, and the pull-and-diff result above describes the moment of that
-> deploy, not current state. POC17 is deliberately left frozen: the 7.9 re-score names theme
-> `152003018921` and every figure in it was measured there, so mutating it would break the link
-> between the score and something reproducible. Deploying POC18 is a separate, explicit act — use
-> the **`crema-poc-deploy`** skill, which re-verifies live state first, and expect to prune POC15
-> at the three-theme cap.
->
-> **This warning is the NORMAL state between deploys, not an exception.** It was written on the
-> morning of 2026-08-20, retired when POC17 shipped that afternoon, and is back within the hour.
-> Whoever starts the next batch should put it back with their first commit rather than at the end,
-> so the window where §10 is quietly wrong never opens.
-
-POC15 and POC16 previews and the live theme are untouched. Preview:
-`https://crema-italia.myshopify.com?preview_theme_id=152003018921`
+POC16 and POC17 previews and the live theme are untouched. Preview:
+`https://crema-italia.myshopify.com?preview_theme_id=152016912553`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
-2026-07-06). To refresh: `shopify theme push --theme 152003018921`.
+2026-07-06). To refresh: `shopify theme push --theme 152016912553`.
 
-**Only POC15, POC16 and POC17 previews now exist** — at the three-newest cap Steve set on
-2026-08-06, enforced as `crema-poc-deploy` Step 5. **POC14 (`151800610985`) was deleted 2026-08-20**
-on Steve's explicit go, after re-verifying the id, name and role against a live `theme list --json`
-immediately before the delete; its batch is commits `ef0cf74`..`1c27c88`, all confirmed on
-`origin/main`, so it can be redeployed from git. Earlier deletions: POC12 (`151798841513`, batch
-`1f0d7c1`) on 2026-08-19; POC11 (`151797727401`, batch `2a833d7`) and POC13 on 2026-08-18; POC10
-(`151624024233`, batch `dd0cbf1`) and POC4–POC9 on 2026-08-06; the erroneous POC9 duplicate
-`151615373481` on 2026-07-25.
+**Only POC16, POC17 and POC18 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
+enforced as `crema-poc-deploy` Step 5. **POC15 (`151970840745`) was deleted 2026-08-21** on Steve's
+explicit go, after re-verifying its id, name and role against a live `theme list --json` immediately
+before the delete; its batch is commits `fce62f4`..`995b11c`, on `origin/main`, so it is redeployable.
+Earlier deletions: POC14 (`151800610985`, batch `ef0cf74`..`1c27c88`) on 2026-08-20; POC12
+(`151798841513`, batch `1f0d7c1`) on 2026-08-19; POC11 (`151797727401`, batch `2a833d7`) and POC13 on
+2026-08-18; POC10 (`151624024233`, batch `dd0cbf1`) and POC4–POC9 on 2026-08-06; the erroneous POC9
+duplicate `151615373481` on 2026-07-25.
 
-A `Development (...)` theme may also appear in `theme list` — the throwaway created by
-`shopify theme dev`, not a deploy. Ignore it. **Its id is deliberately not recorded here**: the CLI
-mints a fresh one per machine and session, so any id written down goes stale.
+**What POC18 is:** Review A's architecture fixes plus the freshness reset (15 commits,
+`81f00c4`..`f0b82b5`). **Three of its four changes are deliberately invisible** — their success
+condition was that nothing rendered changed: commercial values moved to **theme settings** so they can
+be changed without a deploy; `isCoffee()` replaced the `shelf !== 'bottega'` proxy, fixing two latent
+bugs and making a stray roaster value on a Bottega item harmless; and 15 dead CSS rules went. The one
+visible change is **freshness**: main shelves now show a **computed floor** — *"Roasted on or after
+23-MAY-2026"*, today minus the 90-day window, server-side — Offerta shows its actual date, **"Best by"
+appears nowhere**, and the FAQ gained Steve's FIFO explanation. Windows moved to **90 / 91-150 / 30**
+(Standard v1.12). Detail: `docs/POC18_change_list.md` and §9 2026-08-20 / 2026-08-21.
 
-**The live theme is current with the repo** as of the 2026-07-24 push (all 13 files byte-match;
-zero customer-visible em-dashes verified by cookie-less fetch). **Storefront password still OFF**
-(friend-testing) — now purely a friend-testing decision, not a copy-quality one.
+**Staged but NOT built: `docs/POC19_change_list.md`** — three display changes Steve staged while
+reviewing POC18. Two of them orphan a setting or a field that POC18 introduced, and one **reverses**
+Standard §5.4's rule that Offerta shows an actual date, so it needs a **v1.13 amendment first**.
 
 **What POC17 is:** POC16 plus the trust & social-proof work — the decision, the platform test that
 grounded it, and the build (5 commits, `318ea7e`..`5e71413`). It closes the last open dimension on
