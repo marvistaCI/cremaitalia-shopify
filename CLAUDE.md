@@ -2386,6 +2386,27 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   `PROD:`/`LOOP:` markers never checked for completeness, and an unmarked mock is invisible at
   production time because it simply looks like working code.
 
+- 2026-08-21 — **Roaster Guide v7 (Italian) shipped, and a verification pattern worth reusing: Code
+  holds a pre-edit baseline and diffs Cowork's work.** Steve needed one sentence added to a document
+  Lucia Calò had just reviewed line by line, and his concern was precise: *"I dare not break it by
+  adding a little change and then having cowork run-off and try to improve something else."* So the
+  edit was fenced and then **verified**, rather than trusted. Code snapshotted and md5'd the approved
+  v6 Italian **before** Cowork was given the prompt — without that baseline, drift is unprovable
+  afterwards — and the prompt named the exact insertion point, quoted the exact sentence, and listed
+  what was explicitly out of scope including the English version. **Result: in bounds.** 251 → 252
+  text blocks; three changed lines and one print-CSS rule, every one of them authorised; 249 of 251
+  blocks byte-identical. The added line is `Codice SKU Crema Italia, da noi assegnato e fornito
+  insieme al modello di etichetta.`, sitting exactly where specified. **Two caveats reported rather
+  than glossed:** the orphan fix scopes `break-inside: avoid` to *every* `h3 + ul`, so pagination may
+  have shifted document-wide and the page numbers cited in the v6 change list may no longer point at
+  what they describe; and the PDF's rendered content could not be verified here (compressed text
+  streams, no PDF tooling on this machine) — matching timestamps show it was regenerated with the
+  HTML, which is evidence rather than proof. **The pattern generalises** and should be reused for v8,
+  which already has two deferred items: baseline first, fence the prompt, diff after. It is the
+  render-trust idea (Collaboration Standard §9) applied to a document Cowork owns rather than one
+  Code renders. Baseline destroyed on Steve's word once the diff was reported; the diff result is
+  recorded here instead. **Italian is the document of record; English is for Steve's convenience.**
+
 ---
 
 ## 10. Open questions / TODO

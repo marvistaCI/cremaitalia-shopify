@@ -913,8 +913,14 @@ photographs included; it becomes visible when it is set ACTIVE.
 
 **Open:**
 
-- The guide is at v6 (Italian, approved by Lucia 2026-08-21) with v7 in progress, adding one line:
-  that Crema Italia assigns the SKU appearing on the U.S. label.
+- **v7 Italian shipped 2026-08-21**, adding one line to the U.S. label's mandatory elements: *"Codice
+  SKU Crema Italia, da noi assegnato e fornito insieme al modello di etichetta."* Cowork also fixed an
+  orphaned bullet (a print-CSS `break-inside` rule), dropped *"(bozza in revisione)"*, and corrected an
+  internal Brand Standards reference from v2.0 to v2.1 - all three authorised by Steve. English v7
+  follows; **Italian remains the document of record.**
+- **Note for the next pass:** the orphan fix scopes `break-inside: avoid` to *every* `h3 + ul` in the
+  document, so page breaks may have moved throughout. No text changed, but the page numbers cited in
+  `..._ELENCO_MODIFICHE.md` may no longer point at what they describe.
 - The v6 file is still named `..._v6_pending_it`. If it is approved, the name says otherwise.
 - Two known ambiguities deferred rather than bundled into v7, because bundling is how a
   painstakingly reviewed translation gets silently broken:
