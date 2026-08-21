@@ -2378,13 +2378,11 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   byte-identical in two places inside framing that is different and right for each. Written up
   instead of executed, and re-filed with the policy work.
   **Clean bills:** 0 orphaned JS functions, 0 dead `window` handlers, all 8 snippets rendered, state
-  model coherent. **NEXT: Review B** — is the POC a good specification for production. Not a new
-  artifact: `production_build_spec.md` already is that document, but it grew reactively and nobody
-  has walked the POC systematically against it. Carries three structural questions deferred from A
-  (a single 1,658-line IIFE with 64 `window.*` handlers as its public surface; `innerHTML` string
-  rendering as the universal pattern; the SPA shape itself), plus **A4** and the **seam audit** — 26
-  `PROD:`/`LOOP:` markers never checked for completeness, and an unmarked mock is invisible at
-  production time because it simply looks like working code.
+  model coherent. **Review B followed and is now closed — see the 2026-08-21 entry below.**
+  (This line read "NEXT: Review B" until 2026-08-21, after B had finished: a present-tense claim
+  pointing forward at completed work, which is the same drift class as the stale deployment line that
+  caused the duplicate theme. Steve noticed the thread had frayed and asked; nothing had been lost
+  except the record, plus three structural questions B never got to.)
 
 - 2026-08-21 — **Roaster Guide v7 (Italian) shipped, and a verification pattern worth reusing: Code
   holds a pre-edit baseline and diffs Cowork's work.** Steve needed one sentence added to a document
@@ -2513,6 +2511,58 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   in a search string, exactly as the v1.12 publish script had aborted on a bad anchor earlier the same
   day. Both times nothing partial was written, because the file write sits at the end of the script —
   which is the property that makes an aborted run safe rather than corrupting.
+
+- 2026-08-21 — **Review B run and CLOSED.** *Is the POC a good specification for production?* Not a
+  new artifact — `production_build_spec.md` already was that document, but it had grown reactively,
+  section by section as decisions forced them, and nobody had ever walked the POC systematically
+  against it. Five findings, all fixed.
+  **B1 — the document that bootstraps the production build was stale four ways, and it is the one
+  document where staleness compounds**, because it is read once, by someone with no context, at the
+  start. It told the future builder to *"reuse the POC3/POC4/POC5 CSS/**JS**/markup as the design
+  system"* — the JS being the one thing that must not be carried, and §0 of the same file saying so
+  four sections later. It named **Store Operating v1.3** when the Standard was at v1.10, pointed at a
+  change list thirteen batches old, and sent readers to a §10 "To resume" list that still called
+  `POC6_change_list.md` "latest batch". Now it names **no version numbers and no POC number at all**,
+  pointing instead at the places that are kept current, with a note never to reintroduce a literal.
+  **B2 — the POC catalogue was a specification nobody had read as one.** 78 keys refined across
+  eighteen batches, and nothing anywhere transcribed the schema; §1 named the *sources* but not the
+  fields. Now `production_build_spec.md` §13. Every field was checked against its read-sites, and the
+  derivation claims were verified against real values rather than asserted — which caught an error in
+  my own table (`display_title` derives from `roaster.label`, not `roaster.name`, which is precisely
+  why `label` exists). **The finding worth keeping is a pattern:** the POC stores a display string
+  alongside the machine value it derives from **six times**, because a mock has no cheap way to
+  derive. Production derives, or it inherits six standing opportunities for the two to disagree.
+  **B3 — how a shelf becomes a Shopify object** turned into the largest piece of work in the session
+  once Steve pointed out that the POC never models the event that happens in month one: a new lot
+  arriving while the previous one is still sellable. See the SKU/lot entries above.
+  **B4 — the seam convention was not single-greppable.** `PROD:` ×29, `LOOP:` ×3, `POC:` ×1, plus a
+  prose "Production note". The file header instructs the reader to grep for two markers, which missed
+  three sites — and a marker convention whose own declared grep is incomplete defeats the only purpose
+  a marker has. Normalised to exactly two; verified 36 found, 0 outside.
+  **B5 — two of twenty POC surfaces had no spec section anywhere**: the Regions page and Offerta's
+  transition mechanism. Both added as §14, including the three things about the Regions page that look
+  like bugs and are not, and the point that Offerta has **two** transitions where only the first is a
+  discount — the second is a hard stop the no-waste pledge depends on, and the one an automation is
+  most likely to get wrong.
+  **A correction of my own, twice over.** Transcribing the POC into a specification inherits its
+  mistakes as well as its decisions. §13.2 described `crema_italia.brewing` as *"also where 'whole bean
+  only' lives"* — a fixture-data defect written into the production schema as though it were the
+  design, when in production a roaster supplies that field and has no reason to write our store
+  policy. And §13.9 originally assumed `shelf` is a property of a coffee, which the fixture data made
+  look true because no fixture coffee appears on two shelves. **When a fixture value looks like a
+  pattern, ask whether it is a decision or an accident before writing it down as a rule.**
+  **The three structural questions deferred from Review A were nearly lost** — B ran B1-B5 without
+  touching them, and this log said "NEXT: Review B" after B had finished. **Resolved with no action,
+  and the reasons recorded** in `docs/POC18_change_list.md`: none of the three carries to production,
+  B1 made that explicit in the build prompt, and Review A's evidence says the POC is monolithic but
+  not rotting. **The one structural risk that is real is none of the three** — the 17
+  shelf-conditional branch points, one of which had already silently diverged, which is what produced
+  the POC17 Bottega bug. Count them at the start of any future architecture pass.
+  **NEXT is the PRE-PRODUCTION PLATFORM SPIKE in §10**, which is a different question from either
+  review: not *is our design coherent* but *does Shopify actually behave the way the design assumes*.
+  Four items open, none touched this session — the Loop × Functions discount interplay, scoping what
+  customer-account UI extensions can render, evaluating a bundle app against Standard §7, and the
+  plan choice.
 
 ---
 

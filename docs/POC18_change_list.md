@@ -116,6 +116,45 @@ belongs. It was written up rather than executed.
   decisions forced them, and nobody has walked the POC systematically against it.
 - **The seam audit.** 26 `PROD:`/`LOOP:` markers, never checked for *completeness*. An unmarked mock
   is invisible at production time because it simply looks like working code.
-- **Three structural questions** deferred to B as its proper remit: a single 1,658-line IIFE holding
-  the whole storefront with 64 `window.*` handlers as its public surface; `innerHTML` string rendering
-  as the universal pattern; and the SPA shape itself, which §0 already flags as not carrying over.
+- ~~**Three structural questions** deferred to B~~ — **RESOLVED 2026-08-21, see below.**
+
+## The three structural questions — resolved, no action
+
+Deferred from Review A to Review B, then nearly lost: Review B ran B1-B5 without touching them, and
+§9 still said *"NEXT: Review B"* after B had finished. Steve caught the frayed thread. Answering them
+properly, because "no action" is only a real answer once the reasons are written down.
+
+**All three share one resolution: none of them carries to production**, and B1 made that explicit in
+the build prompt, which now says not to port `ci-storefront.js` at all and to treat it as an
+executable specification of *behaviour*. Production is server-rendered Liquid with real URLs per
+product and collection. So none of the three is a production risk.
+
+The other half of the question is whether they are a risk to the **POC**, which is still being built
+on. Review A's evidence says no: **0 orphaned functions, 0 dead `window` handlers, a coherent state
+model with no orphan variables and no write-without-read, and all 8 snippets rendered.** It is
+monolithic but it is not rotting, and at 1,658 lines it is small enough to review whole — which
+Review A did.
+
+Taken individually:
+
+1. **The single IIFE and its 64 `window.*` handlers.** Not a production risk, not a POC risk. The
+   handler count is a *consequence* of question 2 rather than a problem in itself: generated HTML
+   strings carry `onclick=`, and an `onclick` needs a global.
+2. **`innerHTML` string rendering.** Does not carry. But it is the pattern that made two defects
+   inevitable and both have already been paid for: every generated `<div onclick>` was non-semantic,
+   so keyboard access had to be retrofitted wholesale in POC14 (0 of 13 product cards reachable), and
+   the same shape produced the unlabelled inputs found in POC16. The cost is known and spent.
+3. **The SPA shape.** Explicitly does not carry (§0), and its costs are already recorded rather than
+   latent: no per-product URLs, which is why `Product` JSON-LD is deferred to production (build spec
+   §9.2), and an account page that modelled a surface we do not own.
+
+**No action, deliberately.** Restructuring the POC now would cost real time and deliver nothing to
+production, because none of it ports. The correct mitigation was making the build prompt say so, and
+that is done.
+
+**The one structural risk that is real, and it is none of the three.** `ci-storefront.js` holds **17
+shelf-conditional branch points**, and one of them had already silently diverged — the POC17 bug where
+an edit reached only the coffee path and the rating mark was absent on every Bottega item. Review A's
+`isCoffee()` fixed the taxonomy subset. **If shelf branches keep accumulating, that is what will bite
+again** — not the file size, not the IIFE, not the rendering pattern. Worth counting at the start of
+any future architecture pass.
