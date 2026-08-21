@@ -2,7 +2,7 @@
 
 **Version 1.14 · 2026-08-21**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
-**Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
+**Companion standards:** Brand Standards v2.2 (look & voice) · Collaboration Standard v1.1 (how we work).
 
 > **v1.14 (2026-08-21)** retires **`peak_flavor_days`** as a setting and closes §12.10, which v1.13 had
 > opened hours earlier. The confusion was never the number - *"brew within 30 days"* sat inches from
