@@ -182,10 +182,23 @@
     value 60 today. Do not collapse them: they belong to different rules (Standards 5 and 4) and
     must be able to move independently. See CLAUDE.md 9 (2026-08-20, Review A finding A2).
   {%- endcomment -%}
+  {%- comment -%}
+    The freshness FLOOR is computed SERVER-SIDE, deliberately. It is a guarantee derived from policy
+    ("nothing we ship you is older than this"), not a report of what is in the bin - so it needs no lot
+    data, and a missed lot entry can never make it lie. Computing it in the browser instead would let a
+    customer with a wrong system clock see a wrong guarantee. Liquid also gives us the STORE's timezone
+    rather than theirs. CDN caching can only ever serve a floor a day or two old, which states a WIDER
+    window than we guarantee - true, and erring in the customer's favour. Standard 5.4.
+  {%- endcomment -%}
+  {%- assign fresh_days = settings.freshness_window_days | default: 90 -%}
+  {%- assign fresh_secs = fresh_days | times: 86400 -%}
+  {%- assign floor_ts = 'now' | date: '%s' | minus: fresh_secs -%}
   <script>window.CI_RULES = {
-    freshnessWindowDays: {{ settings.freshness_window_days | default: 60  | json }},
-    peakFlavorDays:      {{ settings.peak_flavor_days      | default: 30  | json }},
-    benefitGraceDays:    {{ settings.benefit_grace_days    | default: 60  | json }}
+    freshnessWindowDays: {{ fresh_days | json }},
+    offertaFreshDays:    {{ settings.offerta_fresh_days | default: 150 | json }},
+    peakFlavorDays:      {{ settings.peak_flavor_days   | default: 30  | json }},
+    benefitGraceDays:    {{ settings.benefit_grace_days | default: 60  | json }},
+    freshFloorLabel:     {{ floor_ts | date: '%d-%b-%Y' | upcase | json }}
   };</script>
   <script>window.CI_ASSETS = {
     "ci-lucia.jpg": {{ 'ci-lucia.jpg' | asset_url | json }},

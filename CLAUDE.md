@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.1) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.11) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.12) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > **Editing protocol:** Code owns the repo and all Standard sources; **Cowork proposes,
@@ -2406,6 +2406,67 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   render-trust idea (Collaboration Standard §9) applied to a document Cowork owns rather than one
   Code renders. Baseline destroyed on Steve's word once the diff was reported; the diff result is
   recorded here instead. **Italian is the document of record; English is for Steve's convenience.**
+
+- 2026-08-21 — **Freshness reset to 90/150, the roast-date display replaced by a computed floor, and
+  the SKU format finally written down. Store Operating Standards v1.11 → v1.12.** A long, decision-rich
+  stretch; the recording matters as much as the decisions, and an audit at the end found three
+  contradictions that would otherwise have shipped.
+  **The windows (Steve).** Main shelves **60 → 90 days**; **Offerta 91-150**; past 150 the coffee comes
+  off sale and is donated. Boundaries exclusive, because 90 cannot live in two bands. `peak_flavor_days`
+  stays **30** and is now labelled for what it is: **a brewing message to the customer**, so a bag kept
+  for a year is not later judged against our promise. Steve's reasoning is competitive: we are up
+  against sellers claiming two years of sealed freshness, so 90 is still an enormous gap, and 90/150
+  leaves room to clear stock before giving it away. New governance rule: **windows may be shortened,
+  never extended** - lengthening walks back a promise customers bought under. The 60→90 move is a
+  **one-time pre-launch recalibration**, honest only because nobody has ever purchased under the
+  60-day promise; from here we tighten as real consumption data arrives.
+  **Yesterday's Review A fix paid off within a day.** Freshness and the benefit grace period were both
+  **60**, and A2 separated them precisely because a find-and-replace would move them together. Moving
+  freshness to 90 would otherwise have silently made the subscriber benefit grace 90 as well.
+  **The display: a computed floor, not a date.** Steve's proposal, and better than both of mine.
+  Main shelves now show *"Roasted on or after 23-MAY-2026"* — **today minus the window, computed
+  server-side**. It is a **guarantee derived from policy** (*nothing we ship you is older than this*),
+  true by construction because §5 takes past-window coffee off sale. Three reasons it beat the range I
+  had specified: it has **no dependency on lot data**, so a late receipt cannot make it lie; a range's
+  fresh end is **unreachable** under FIFO, since a single-bag buyer always gets the oldest lot; and it
+  asks the reader no arithmetic. Computed in Liquid rather than JS deliberately — a client clock can be
+  wrong, and CDN caching can only ever serve a *wider* window than we guarantee, which errs in the
+  customer's favour. **Offerta keeps its actual roast date**, because an Offerta product is one
+  split-off lot and knows its own date, and because the same floor on both shelves would make them look
+  identically fresh, hiding what justifies the markdown. **`best_by` is no longer displayed anywhere**
+  — it is the roast date plus a constant, so showing both stated one fact twice. **`DD-MMM-YYYY`
+  everywhere a date is shown to anyone**: `03/07/2026` is 3 July to an Italian roaster and 7 March to a
+  U.S. warehouse. Verified live: floor renders `23-MAY-2026` (21 Aug minus 90, correct), Offerta reads
+  `Roasted: 20-JUL-2026`, and "Best by" appears nowhere on the site.
+  **The SKU format was a pointer to nothing.** `TRRRPPPPSS` — type, roaster, product, size — had been
+  discussed at length and appeared **once in the whole repo**, as a cross-reference to a section that
+  did not define it. Now `production_build_spec.md` **§13.9.1**, with the point that matters: **Shopify
+  does not parse SKUs.** The field is plain text, so the SKU is a *label that travels* — to the roaster,
+  the forwarder, the 3PL, a packing slip, a scanner — not the mechanism that links coffee to roaster.
+  That is metaobject references. So the SKU is **generated from them and never typed**, or it becomes
+  another two-homes problem. And it deliberately carries **no shelf segment**, so stock moving to
+  Offerta needs no physical relabelling.
+  **Which creates a problem nobody has solved (§13.9.2): one physical SKU, two Shopify products, one
+  warehouse bin.** An Offerta split makes a second product drawing on the same SKU in the same bin, and
+  FIFO says pick the oldest — so **a full-price buyer is handed the aged bag**. Three candidate
+  resolutions are recorded and OPEN, and it is now a **third qualifying question for the 3PL** (Standard
+  §12.9), larger than the two already there. Note the 90-day window may have made the "never overlap"
+  option achievable without anyone designing for it: against 60 days the previous lot was already at
+  the edge when replenishment arrived; against 90 it has another 20-48 days to sell through.
+  **Three contradictions found by auditing rather than by remembering**, all of which would have
+  shipped: `production_build_spec.md` still specified the **roast-date range** the Standard had just
+  superseded; §11's literals table still quoted the 60-day sentence; and — the real one — **Standard §5
+  itself carried `days_to_offerta`, default 45.** That is the *same fact* as the freshness window stated
+  a second time, and by today the two had diverged 45 against 90. **Retired**: coffee moves to Offerta
+  when it leaves the freshness window, so `freshness_window_days` is the only home for that boundary.
+  **Also recorded:** the Roaster Guide's **45-day arrival clause** is expressed *relative to our window*,
+  so 60→90 silently loosened what roasters must deliver from "within 15 days of roast" to "within 45" —
+  a v8 item, and Steve's view is it may have been overstated as a requirement in the first place.
+  **Also caught, and worth keeping as a process note:** the v1.12 publish script aborted on a bad anchor
+  *after* the cross-references had been updated and a PDF rendered — producing a file named v1.12
+  containing v1.11 content. The render gates did not catch it, and could not: the render was internally
+  faithful to its source, and only the *filename* was wrong. Deleted and redone. **A gate proves a
+  render matches its source, never that the source is the one you meant.**
 
 ---
 

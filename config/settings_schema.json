@@ -28,9 +28,16 @@
       {
         "type": "number",
         "id": "freshness_window_days",
-        "label": "Freshness window (days)",
-        "info": "Store Operating Standards section 5. Days from roast date within which we say the coffee is at its best. NOT the same as the benefit grace period below, which happens to share a value today.",
-        "default": 60
+        "label": "Freshness window (days) - main shelves",
+        "info": "Store Operating Standards section 5. Days from roast date that coffee stays on Roccia, Sorpresa and Selezione. Past this it moves to Offerta. Windows may be SHORTENED but never extended - lengthening walks back a promise customers already bought under.",
+        "default": 90
+      },
+      {
+        "type": "number",
+        "id": "offerta_fresh_days",
+        "label": "Freshness window (days) - Offerta",
+        "info": "Store Operating Standards section 5. Absolute age ceiling. Offerta holds coffee from freshness_window_days + 1 up to this number of days from roast; past it, the coffee comes off sale entirely and is donated. Must be greater than freshness_window_days.",
+        "default": 150
       },
       {
         "type": "number",
@@ -43,7 +50,7 @@
         "type": "number",
         "id": "benefit_grace_days",
         "label": "Benefit grace period (days)",
-        "info": "Store Operating Standards section 4. How long subscriber and founder benefits continue after cancelling. NOT the same as the freshness window above, which happens to share a value today. These two must be able to move independently.",
+        "info": "Store Operating Standards section 4. How long subscriber and founder benefits continue after cancelling. NOT the freshness window - the two shared the value 60 until 2026-08-21, when freshness moved to 90 and this did not. That divergence is why they are separate settings.",
         "default": 60
       }
     ]

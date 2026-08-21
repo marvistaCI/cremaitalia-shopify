@@ -448,7 +448,7 @@ chrome", and it is the one that rots.
 
 | String in the theme | Owned by | Where it must come from in production |
 |---|---|---|
-| "Best within 60 days of roast date. For peak flavor, brew within 30 days." | Standard §5 | Theme setting (no natural Shopify home). §5 prescribes this sentence verbatim. |
+| "Best within 90 days of roast date. For peak flavor, brew within 30 days." | Standard §5 | **DONE 2026-08-21** - both numbers now come from theme settings (`freshness_window_days`, `peak_flavor_days`) via `window.CI_RULES`. |
 | "10% off every shipment and free shipping… on Roccia, Sorpresa, and Selezione" | Standard §3, §6 | **`selling_plan.price_adjustments`** — the same object that actually applies the discount |
 | "Every 4 weeks / 6 weeks / 8 weeks" | Standard §6 | **`selling_plan_group.selling_plans`** — render the pills from the plans themselves |
 | "Printed tasting card included." | Standard §7 | Theme setting, or a per-collection metafield |
@@ -741,24 +741,42 @@ Same principle as everywhere else in this spec: derive, do not store. **It break
 off-book** — shrinkage, damage, or a pick out of FIFO order desynchronises the arithmetic, so
 write-offs must be recorded as such rather than silently adjusted.
 
-#### Display: a range, and FIFO stated
+#### Display: a computed floor (SUPERSEDES the range, Steve 2026-08-21)
 
-With multiple lots in stock the product shows a **range**, not a single date, and says what it does
-about it:
+**This section previously specified a roast-date RANGE across lots in stock. That is superseded.**
+Standard §5.4 v1.12 is authoritative; the rule is now:
 
-> Roasted 13-20 June. We always ship the oldest lot first.
+> Roasted on or after 23-MAY-2026
 
-When one lot is in stock the range collapses to a date, so it degrades naturally.
+**today minus `settings.freshness_window_days`, computed server-side.** It is a guarantee derived from
+policy - *nothing we ship you is older than this* - not a report of what is in the bin.
 
-**Drop `best_by` as a displayed field.** It is `roast_date + settings.freshness_window_days` — showing
-both displays one fact twice, and it aims the reader at a deadline rather than at freshness. The
-freshness sentence beside it already states the constant.
+**Why it replaced the range, and this matters for the build:**
 
-**Range over oldest-lot-only.** Steve raised showing only the oldest lot's date, so a buyer receiving
-a fresher bag is pleasantly surprised. Truthful, and rejected: it works by the customer not noticing,
-which is the species of thing this brand keeps removing — manufactured urgency, the hidden promo
-field, the invented founding count. FIFO already guarantees the conservative outcome that approach
-was protecting, so stating the range costs nothing and reads as confidence.
+- **It has no dependency on lot data.** A range needed the FIFO derivation to be correct AND the lot
+  records to have been entered on time. This needs neither. A missed receipt cannot make it lie.
+- **The range's fresh end was unreachable anyway.** Under FIFO a single-bag buyer always gets the
+  oldest lot, so the upper bound was systematically optimistic.
+
+**Compute it in Liquid, never in the browser.** A client clock can be wrong, and the store's timezone
+is the correct one. CDN caching can only serve a floor a day or two old, which states a *wider* window
+than we guarantee - true, and erring in the customer's favour.
+
+**Offerta is the exception and shows its ACTUAL roast date**, because an Offerta product is one
+split-off lot and knows its own date, and because showing the same floor on both shelves would make
+them look identically fresh - hiding the very thing that justifies the markdown.
+
+**`DD-MMM-YYYY` wherever a date is shown to anyone** (Standard §5.4). `03/07/2026` is 3 July to an
+Italian roaster and 7 March to a U.S. warehouse.
+
+**Drop `best_by` as a displayed field.** It is `roast_date + freshness_window_days` - showing both
+displays one fact twice and aims the reader at a deadline rather than at freshness.
+
+**FIFO is explained in the FAQ, not on the product page.** With a computed floor there is nothing on
+the product page that needs explaining.
+
+**The FIFO derivation is still needed** - just not for display. It drives the Offerta transition
+(§14.2) and tells operations which lot is oldest.
 
 #### Recall traceability — build it, do not over-build it (Steve, 2026-08-20)
 
@@ -804,6 +822,71 @@ remains, the Offerta listing is a **separate short-lived product referencing the
 metaobject**. No specification is duplicated; it is referenced. And **FIFO is therefore per shelf**:
 Roccia ships the oldest fresh lot, Offerta the oldest aged lot. Archive these products rather than
 deleting them, so order history and the recall record survive.
+
+#### 13.9.1 The SKU format (Steve, 2026-08-21)
+
+**`TRRRPPPPSS`** - ten characters, each `A-Z0-9`.
+
+| Segment | Len | Meaning | Values |
+|---|---|---|---|
+| `T` | 1 | Type | `C` coffee, `B` Bottega |
+| `RRR` | 3 | Roaster | links to the roaster metaobject |
+| `PPPP` | 4 | Product | links to the coffee metaobject |
+| `SS` | 2 | Size | `10` 100g, `25` 250g, `50` 500g, `1K` 1kg, `EA` each (Bottega) |
+
+Capacity is not a constraint: 46,656 roasters and 1.6 million products per segment.
+
+**It maps onto Shopify's grain correctly.** Shopify puts SKU on the **variant**, and the size segment
+is exactly what makes this variant-level. The four sizes match the Roaster Guide's standard sizes.
+
+**But understand what it is: a label, not a key.** Shopify does **not** parse SKUs - the field is
+plain text, never decomposed, never used to resolve a relationship. Coffee links to roaster, and
+roaster to region, through **metaobject references** (§13.4), not through the SKU string.
+
+So the SKU encodes the same facts a second time, which is the two-homes problem this spec keeps
+removing. **Resolution: the SKU is GENERATED from the metaobject references and never typed by
+hand.** Then it cannot disagree with them. It earns its place for the thing metafields cannot do:
+
+> **It travels.** The roaster, the freight forwarder, the 3PL, a packing slip, a scanner, a bag label -
+> all of them see the SKU. None of them can see a metafield.
+
+**There is deliberately NO shelf segment**, and that is load-bearing. Shelf changes when a lot ages
+into Offerta; type, roaster, product and size do not. A SKU that encoded shelf would have to be
+**physically relabelled** on every bag when stock moved shelves. It does not, so the printed label
+stays true for the life of the bag. Do not "improve" this by adding a shelf character.
+
+**OPEN:** is `PPPP` scoped **per roaster** or **globally unique**? Per-roaster is the natural reading -
+each roaster numbers their own coffees, and `RRR+PPPP` still identifies the coffee uniquely - but it
+decides who assigns product codes, so it needs settling.
+
+#### 13.9.2 The consequence nobody has solved: one SKU, two products, one bin
+
+Because the SKU carries no shelf, and because an Offerta split creates a **second Shopify product**
+for the aged units (§13.9), production reaches this state:
+
+> **One physical SKU. Two Shopify products. One warehouse bin.**
+
+An Offerta order and a Roccia order resolve to the same SKU, on the same shelf, in the same
+warehouse - and FIFO says *pick the oldest*. So **a full-price Roccia buyer is handed the aged bag**,
+which is precisely the coffee that was moved to Offerta to avoid selling at full price. FIFO and a
+split inventory are in direct conflict unless the aged units are physically segregated.
+
+**Three candidate resolutions, OPEN (Steve, 2026-08-21) - decide before choosing a 3PL, because it is
+a qualifying question larger than the two already in Standard §12.9:**
+
+- **A · Segregate with a distinct identifier.** The Offerta product takes a suffixed SKU; the 3PL
+  applies a sticker or moves units to a marked bin on instruction. Costs a physical touch per
+  transfer, and briefly makes the bag's printed SKU incomplete.
+- **B · Segregate by location only.** Same SKU, different bin, two locations tracked in the 3PL's
+  WMS. Depends entirely on their system - a genuine qualifying question.
+- **C · Never overlap.** Move a SKU to Offerta only when *all* remaining stock is aged. One pool, no
+  segregation, no conflict.
+
+**The 2026-08-21 window change may have made C achievable.** With replenishment on a 6-to-10-week
+cadence, new stock arrives when the previous lot is roughly 42-70 days old. Against the old 60-day
+window that lot was already at the edge and overlap was routine; against 90 days it has another 20-48
+days to sell through before it is Offerta-eligible at all. The hardest case got rarer without anyone
+designing for it.
 
 #### Onboarding order in Shopify
 
@@ -918,6 +1001,14 @@ photographs included; it becomes visible when it is set ACTIVE.
   orphaned bullet (a print-CSS `break-inside` rule), dropped *"(bozza in revisione)"*, and corrected an
   internal Brand Standards reference from v2.0 to v2.1 - all three authorised by Steve. English v7
   follows; **Italian remains the document of record.**
+- **The 45-day arrival clause needs revisiting, and this is the coupling to watch.** The guide requires
+  every bag to arrive with *"a minimum freshness window of at least forty-five (45) days following the
+  labeled roast date"* - a figure expressed **relative to our window**. Against 60 days it meant
+  arriving within 15 days of roast. Against the 90-day window set on 2026-08-21 it means arriving
+  within **45** days, a far laxer requirement, loosened silently by a number changed in a different
+  document. Steve's view is that the real controls are the bag specification, the roast-to-pickup
+  limit and airfreight, and that 45 days may have been overstated as a requirement in the first place.
+  **A separate thread, likely Cowork's.**
 - **Note for the next pass:** the orphan fix scopes `break-inside: avoid` to *every* `h3 + ul` in the
   document, so page breaks may have moved throughout. No text changed, but the page numbers cited in
   `..._ELENCO_MODIFICHE.md` may no longer point at what they describe.

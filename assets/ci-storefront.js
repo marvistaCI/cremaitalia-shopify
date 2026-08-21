@@ -513,6 +513,19 @@
   var FRESHNESS_DAYS  = RULES.freshnessWindowDays || 60;
   var PEAK_DAYS       = RULES.peakFlavorDays      || 30;
   var GRACE_DAYS      = RULES.benefitGraceDays    || 60;
+  var OFFERTA_DAYS    = RULES.offertaFreshDays    || 150;
+  // Computed SERVER-SIDE in layout/theme.liquid - see the comment there for why it is not
+  // computed here from the browser clock.
+  var FRESH_FLOOR     = RULES.freshFloorLabel     || '';
+
+  // DD-MMM-YYYY, unambiguous by design: 03/07/2026 is 3 July to an Italian roaster and
+  // 7 March to a US warehouse. Standard 5.4 requires this format wherever a date is shown.
+  var MONTHS_ABBR = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  function fmtDate(iso) {
+    var p = String(iso || '').split('-');
+    if (p.length !== 3) return iso || '';
+    return p[2] + '-' + (MONTHS_ABBR[(+p[1]) - 1] || p[1]) + '-' + p[0];
+  }
 
   // ---------- rating mark (POC17) ----------
   // Store Operating Standards 13.5 / 13.5.1 govern this control. Read them before changing it;
@@ -718,8 +731,26 @@
 
     var meta = '';
     if (p.origin) meta += '<p class="prose" style="max-width:none">Origin: ' + esc(p.origin) + (p.process ? ' · ' + esc(p.process) + ' process' : '') + (p.roast_level ? ' · ' + esc(p.roast_level) + ' roast.' : '') + '</p>';
-    if (p.roast_date) meta += '<p style="font-size:.9rem;color:var(--ci-espresso);margin:.5rem 0"><strong>Roast date:</strong> ' + esc(p.roast_date) + ' · <strong>Best by:</strong> ' + esc(p.best_by) + '</p>';
-    meta += '<div class="freshness" style="margin:.5rem 0">Best within ' + FRESHNESS_DAYS + ' days of roast date. For peak flavor, brew within ' + PEAK_DAYS + ' days.</div>';
+    // FRESHNESS DISPLAY (Standard 5.4, Steve 2026-08-21). We no longer show a roast date and a best-by
+    // date. best_by is roast_date plus the window, so showing both stated one fact twice and pointed the
+    // reader at a deadline rather than at freshness.
+    //
+    // Main shelves show a computed FLOOR, not a fact about this bag: "nothing we ship you is older than
+    // this". It is a guarantee derived from policy, true by construction because Standard 5 takes
+    // past-window coffee off sale entirely - so it needs NO lot data and cannot be made to lie by a
+    // missed lot entry. That robustness is the whole point; an actual date would depend on someone
+    // having entered a lot record on time.
+    //
+    // Offerta is the exception and shows its ACTUAL roast date, because an Offerta product IS one
+    // split-off lot and knows its own date - and because showing the same floor on both shelves would
+    // make them look identically fresh, hiding the very thing that justifies the markdown.
+    if (p.shelf === 'offerta') {
+      if (p.roast_date) meta += '<p style="font-size:.9rem;color:var(--ci-espresso);margin:.5rem 0"><strong>Roasted:</strong> ' + esc(fmtDate(p.roast_date)) + '</p>';
+      if (p.freshness_remaining) meta += '<div class="freshness fw" style="margin:.5rem 0">' + esc(p.freshness_remaining) + ' · sold as-is</div>';
+    } else {
+      if (FRESH_FLOOR) meta += '<p style="font-size:.9rem;color:var(--ci-espresso);margin:.5rem 0"><strong>Roasted on or after</strong> ' + esc(FRESH_FLOOR) + '</p>';
+      meta += '<div class="freshness" style="margin:.5rem 0">Best within ' + FRESHNESS_DAYS + ' days of roast date. For peak flavor, brew within ' + PEAK_DAYS + ' days.</div>';
+    }
 
     var components = p.components ? '<p class="prose" style="max-width:none;margin-top:.5rem"><strong>In the box:</strong> ' + p.components.map(esc).join(' · ') + '. Printed tasting card included.</p>' : '';
 

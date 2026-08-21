@@ -16,7 +16,8 @@
     "font_body": "inter_n4",
     "social_instagram": "cremaitaliaco",
     "founding_member_cap": 222,
-    "freshness_window_days": 60,
+    "freshness_window_days": 90,
+    "offerta_fresh_days": 150,
     "peak_flavor_days": 30,
     "benefit_grace_days": 60
   },

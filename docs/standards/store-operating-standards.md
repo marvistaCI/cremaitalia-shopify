@@ -1,8 +1,20 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.11 · 2026-08-20**
+**Version 1.12 · 2026-08-21**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.12 (2026-08-21)** resets the freshness windows and replaces the display rule. **Main shelves
+> move from 60 to 90 days; Offerta is 91-150; past 150 the coffee comes off sale and is donated.**
+> `peak_flavor_days` stays at 30 and is clarified as a **brewing message to the customer**, not a
+> shelf-life rule. A new governance rule: **windows may be shortened, never extended** - the 60-to-90
+> move is a one-time recalibration made while pre-launch, when nobody has bought under the old promise.
+> The display becomes a **computed floor** - *"Roasted on or after 23-MAY-2026"*, today minus the
+> window, server-side - replacing v1.11's roast-date range, which depended on lot data being entered
+> on time and whose fresh end was unreachable under FIFO anyway. Offerta keeps its actual roast date.
+> **`DD-MMM-YYYY` is now required wherever a date is shown to anyone.** A third qualifying question is
+> added to §12.9: how a 3PL segregates an Offerta lot from fresh stock of the same SKU. Nothing is
+> repriced.
 
 > **v1.11 (2026-08-20)** adds **§5.4 Fulfilment order and multiple lots** and **§6.1 Substitution on
 > a subscription**, neither of which existed anywhere. Both came out of Steve spotting that the POC
@@ -306,9 +318,16 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
 
 ## 5. Freshness & the Offerta transition
 
-- **Freshness statement (always paired with the actual roast date):** "Best within 60 days of roast
-  date. For peak flavor, brew within 30 days." Never "best by" alone.
-- **`days_to_offerta`** default **45**, admin-editable per master SKU (override per lot if needed).
+- **Freshness statement:** "Best within `{freshness_window_days}` days of roast date. For peak flavor,
+  brew within `{peak_flavor_days}` days." The numbers come from theme settings, never typed (§5.4,
+  build spec §11). Never "best by" alone. **It is NOT paired with an actual roast date on the main
+  shelves** - v1.12 replaced that with a computed floor, *"Roasted on or after DD-MMM-YYYY"*; only
+  Offerta shows a real date (§5.4).
+- **`days_to_offerta` is RETIRED (v1.12).** It carried its own default of 45, which is the same fact as
+  the freshness window stated a second time - and by 2026-08-21 the two had diverged, 45 against 90.
+  Coffee moves to Offerta when it leaves the freshness window, so **`freshness_window_days` is the only
+  home for that boundary.** A per-SKU override, if it is ever genuinely wanted, overrides that setting;
+  it does not get a parallel field.
 - **`offerta_transition_date`** = `roast_date + days_to_offerta`.
 - **Nightly** the system flags lots at/over their transition date. Admin sees a daily digest and
   approves (may auto-approve). On transition: `current_shelf` → Offerta (Shopify Flow), price
@@ -331,15 +350,61 @@ ships the oldest fresh lot, Offerta the oldest aged lot.
 FIFO operates only on the **sellable pool**. A lot past the freshness window is off sale entirely
 (§5), so FIFO can never mean shipping something this Standard has already withdrawn.
 
+**The three windows (set 2026-08-21, held as theme settings, not typed into any page):**
+
+| Setting | Days | Meaning |
+|---|---|---|
+| `freshness_window_days` | **90** | Age 0-90: the coffee sits on Roccia, Sorpresa or Selezione |
+| `offerta_fresh_days` | **150** | Age **91-150**: Offerta, priced accordingly. Past 150 it comes off sale entirely and is donated |
+| `peak_flavor_days` | **30** | Not a shelf-life rule. A **brewing message to the customer**, so that a bag kept for a year is not later judged against our promise |
+
+Boundaries are exclusive - 90 belongs to the main shelves and Offerta starts at 91. No day lives in
+two bands.
+
+**Windows may be SHORTENED but never extended.** Lengthening walks back a promise customers already
+bought under. The 2026-08-21 move from 60 to 90 is a **one-time recalibration against research**, made
+deliberately while the store is pre-launch and **nobody has ever purchased under the 60-day promise**,
+so there is nothing to retract. The rule starts from here: as real consumption data arrives we tighten,
+which widens the gap against sellers who claim two years of sealed freshness.
+
 **Coffee only.** Equipment and merchandise carry no roast date and do not age.
 
 **A subscription is never filled with coffee that exceeds the freshness promise on its ship date.**
 That is the trigger for §6.1.
 
-**What the customer sees.** Where more than one lot is in stock the product shows a roast **range**
-rather than a single date; with one lot in stock the range collapses to a date. The **best-by date is
-not displayed** - it is the roast date plus the freshness window, so showing both states one fact
-twice and aims the reader at a deadline rather than at freshness.
+**What the customer sees (revised v1.12, Steve, 2026-08-21).** An earlier draft showed a roast date
+**range** across lots in stock. That is replaced by something simpler and stronger.
+
+**Main shelves show a computed floor, not a fact about the bag:**
+
+> Roasted on or after 23-MAY-2026
+
+where the date is **today minus `freshness_window_days`**, computed server-side. It is a **guarantee
+derived from policy** - *nothing we ship you is older than this* - and it is true by construction,
+because coffee past the window is off sale entirely (§5).
+
+**Three reasons it beats showing actual dates:**
+
+1. **It cannot go stale or lie.** It has no dependency on lot data being entered, entered on time, or
+   entered correctly. An actual roast date would show the *previous* lot's date on coffee already
+   shipping if a receipt were recorded late.
+2. **A range's fresh end is unreachable.** Under FIFO a single-bag buyer always receives the oldest
+   lot, so the upper bound of a range is systematically optimistic.
+3. **It is comprehensible.** One date, one meaning, no arithmetic asked of the reader.
+
+**The best-by date is not displayed.** It is the roast date plus the window, so showing both states
+one fact twice and aims the reader at a deadline rather than at freshness.
+
+**Offerta is the exception and shows its actual roast date**, because an Offerta product is one
+split-off lot and knows its own date - and because showing the same floor on both shelves would make
+them look identically fresh, hiding the very thing that justifies the markdown.
+
+**Date format is `DD-MMM-YYYY` (e.g. `29-AUG-2026`) wherever a date is shown to anyone**, customer or
+partner. `03/07/2026` is 3 July to an Italian roaster and 7 March to a U.S. warehouse; that ambiguity
+would break FIFO picking and mislead a customer, and it will otherwise happen.
+
+**FIFO itself is explained in the FAQ, not on the product page.** With a computed floor there is
+nothing on the product page that needs explaining.
 
 **Approved customer copy (Steve, 2026-08-20).** Belongs in the FAQ, with the roast range and the FIFO
 line surfacing on the product page:
@@ -636,8 +701,16 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    `MAX` could be violated without us doing anything wrong: a Loop selling-plan discount and our
    Function could collide or double-apply. **Highest-risk integration in the design.** Verify on the
    same dev store, with a real Loop subscription, before the production build.
-9. **3PL selection — packing-slip and insert capability.** No 3PL is selected. Two questions are
-   **qualifying**, not preferences, and both should be asked before commercial terms. (a) *Do you print
+9. **3PL selection — segregation, packing slip, and inserts.** No 3PL is selected. Three questions are
+   **qualifying**, not preferences, and all should be asked before commercial terms.
+
+   **(0) How would you segregate an Offerta lot from fresh stock of the same SKU?** Added 2026-08-21
+   and **larger than the two below.** Because a SKU carries no shelf segment (`docs/production_build_spec.md`
+   §13.9.1), an Offerta split creates a second Shopify product drawing on the same physical SKU in the
+   same bin - and FIFO would hand a full-price buyer the aged bag. Three candidate answers are open in
+   §13.9.2 of that document, and the 3PL's capability decides which of them are even available.
+
+   (a) *Do you print
    our packing slip, or insert your own paperwork?* A 3PL that inserts its own pick list or invoice
    breaks §8.1 and nothing on our side can prevent it. (b) *Can you insert a printed card, varied per
    order by an order attribute?* Format, character limit, per-insert cost, lead time. This is not new
@@ -782,5 +855,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.11 · 2026-08-20 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.12 · 2026-08-21 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
