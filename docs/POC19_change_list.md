@@ -1,7 +1,11 @@
-# POC19 — staged, NOT BUILT
+# POC19 change list — freshness copy
 
-**Nothing in this file has been built.** These are items Steve staged on 2026-08-21 while reviewing
-POC18. For what is deployed, read `CLAUDE.md` §10 CURRENT STATE and verify it live.
+**BUILT and deployed 2026-08-21** (commit `502b885`). For what is deployed, read `CLAUDE.md` §10
+CURRENT STATE and verify it live — this file states no deployment state, by design.
+
+The Standards were amended **before** the build, deliberately: v1.13 for the Offerta band, v1.14 for
+retiring `peak_flavor_days`. Item 2 was a reversal of a published rule, not an addition, so building
+first would have put the storefront and the Standard in conflict on day one.
 
 Each item below carries a **consequence** section, because two of the three orphan a setting or a
 field that POC18 only just introduced, and one of them contradicts a Standard published hours earlier.

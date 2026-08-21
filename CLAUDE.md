@@ -2486,6 +2486,33 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   website always honest, instead of mostly honest."* That one needs a **v1.13 amendment before it is
   built**, not after. Also caught while staging: Steve's worked example gave the band's younger date as
   19-JUL-2026 where his own formula gives 22-MAY-2026 — the formula is right and is what was staged.
+  **All three POC19 items then BUILT and DEPLOYED the same day** (commit `502b885`, theme **"Crema
+  Italia POC19 Preview" id `152017764521`**), with the Standards amended **first** — v1.13 for the
+  Offerta band, v1.14 for retiring `peak_flavor_days` — precisely because item 2 was a *reversal* of a
+  published rule rather than an addition, and building first would have put the storefront and the
+  Standard in conflict on day one. Verified by asserting on rendered output: the band renders
+  *"Roasted between 24-MAR-2026 and 22-MAY-2026"* with arithmetic exact to the day, the main shelves
+  read *"These beans are within our best-freshness window of 90 days."*, and **zero** occurrences of
+  "peak flavor" or "Best by" remain anywhere on the site. `peak_flavor_days` was removed from **all
+  four** places it lived — schema, data, `CI_RULES`, and the JS constant — because leaving any one
+  behind recreates the setting-nothing-reads defect the change existed to remove.
+  **Steve's merge of the whole-bean sentence was the better fix and worth recording as a pattern.** I
+  had proposed keeping his new freshness advice *separate* from the existing grinder line, and flagged
+  only that they would half-overlap. He merged them instead, so one statement carries the purchase
+  expectation, the freshness advice and the route to a grinder — and the advice counts **from
+  receiving** rather than from roast, which is what removed the ambiguity at its root rather than
+  working around it. The original confusion was never the number: *"brew within 30 days"* sat inches
+  from Offerta's *"Best within 27 days"* and the two measured from different things.
+  **POC16 (`151983030441`) pruned** on Steve's explicit go under the three-newest cap, id/name/role
+  re-verified against live immediately before the delete; batch `5812884`..`203b23c` is on GitHub.
+  POC17, POC18 and the live theme untouched. **Two copy questions left open on purpose**, both found by
+  reading the rendered result rather than the diff: the coffee *card* still says "Best within 90 days
+  of roast" while the detail page uses the new wording, and the catalogue's per-product brewing note
+  still carries a third overlapping grind sentence. Neither is a defect; both are Steve's copy.
+  **One process repeat worth noting:** the §10 update script aborted on an em-dash encoding mismatch
+  in a search string, exactly as the v1.12 publish script had aborted on a bad anchor earlier the same
+  day. Both times nothing partial was written, because the file write sits at the end of the script —
+  which is the property that makes an aborted run safe rather than corrupting.
 
 ---
 
@@ -2516,9 +2543,9 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC18 Preview" | `152016912553` |
+| **Newest POC preview** | "Crema Italia POC19 Preview" | `152017764521` |
+| Prior preview | "Crema Italia POC18 Preview" | `152016912553` |
 | Prior preview | "Crema Italia POC17 Preview" | `152003018921` |
-| Prior preview | "Crema Italia POC16 Preview" | `151983030441` |
 
 **Scorecard: 7.4/10 as of 2026-08-19** — the deployed storefront has been scored three times
 against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16). **Trust & social proof has
@@ -2531,40 +2558,39 @@ decisions were made; policy now lives in Store Operating Standards §13).
 > A re-score against POC17 is the next task (Steve, 2026-08-20) and is expected to be **the last one
 > before real photography**, since brand identity and product detail are gated on it.
 
-**POC18 is deployed** and is the only POC18 theme — all **38** files byte-match the repo, proved by
+**POC19 is deployed** and is the only POC19 theme — all **38** files byte-match the repo, proved by
 pull-and-diff on 2026-08-21 (both sides 38 files, zero content mismatches, nothing present on only
 one side; `theme list` **and** `git log origin/main..HEAD` were run **before** the push, confirming no
 name collision). The repo is fully pushed to GitHub, so nothing is local-only.
 
-> ⚠️ **The repo has moved AHEAD of this theme again (2026-08-21) — POC19 is in progress.** The three
-> staged display changes are **committed but NOT deployed**, so POC18 no longer byte-matches the repo
-> and the pull-and-diff result above describes the moment of that deploy, not current state. Deploying
-> is a separate, explicit act — use the **`crema-poc-deploy`** skill, and expect to prune POC16 at the
-> three-theme cap. As noted below, this warning is the normal state between deploys.
-
-POC16 and POC17 previews and the live theme are untouched. Preview:
-`https://crema-italia.myshopify.com?preview_theme_id=152016912553`
+POC17 and POC18 previews and the live theme are untouched. Preview:
+`https://crema-italia.myshopify.com?preview_theme_id=152017764521`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
-2026-07-06). To refresh: `shopify theme push --theme 152016912553`.
+2026-07-06). To refresh: `shopify theme push --theme 152017764521`.
 
-**Only POC16, POC17 and POC18 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
-enforced as `crema-poc-deploy` Step 5. **POC15 (`151970840745`) was deleted 2026-08-21** on Steve's
+**Only POC17, POC18 and POC19 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
+enforced as `crema-poc-deploy` Step 5. **POC16 (`151983030441`) was deleted 2026-08-21** on Steve's
 explicit go, after re-verifying its id, name and role against a live `theme list --json` immediately
-before the delete; its batch is commits `fce62f4`..`995b11c`, on `origin/main`, so it is redeployable.
-Earlier deletions: POC14 (`151800610985`, batch `ef0cf74`..`1c27c88`) on 2026-08-20; POC12
-(`151798841513`, batch `1f0d7c1`) on 2026-08-19; POC11 (`151797727401`, batch `2a833d7`) and POC13 on
-2026-08-18; POC10 (`151624024233`, batch `dd0cbf1`) and POC4–POC9 on 2026-08-06; the erroneous POC9
-duplicate `151615373481` on 2026-07-25.
+before the delete; its batch is commits `5812884`..`203b23c`, on `origin/main`, so it is redeployable.
+Earlier deletions: POC15 (`151970840745`) on 2026-08-21; POC14 (`151800610985`) on 2026-08-20; POC12
+(`151798841513`) on 2026-08-19; POC11 (`151797727401`) and POC13 on 2026-08-18; POC10 (`151624024233`)
+and POC4–POC9 on 2026-08-06; the erroneous POC9 duplicate `151615373481` on 2026-07-25.
 
-**What POC18 is:** Review A's architecture fixes plus the freshness reset (15 commits,
-`81f00c4`..`f0b82b5`). **Three of its four changes are deliberately invisible** — their success
-condition was that nothing rendered changed: commercial values moved to **theme settings** so they can
-be changed without a deploy; `isCoffee()` replaced the `shelf !== 'bottega'` proxy, fixing two latent
-bugs and making a stray roaster value on a Bottega item harmless; and 15 dead CSS rules went. The one
-visible change is **freshness**: main shelves now show a **computed floor** — *"Roasted on or after
-23-MAY-2026"*, today minus the 90-day window, server-side — Offerta shows its actual date, **"Best by"
-appears nowhere**, and the FAQ gained Steve's FIFO explanation. Windows moved to **90 / 91-150 / 30**
-(Standard v1.12). Detail: `docs/POC18_change_list.md` and §9 2026-08-20 / 2026-08-21.
+**What POC19 is:** the freshness copy pass (commit `502b885`), built against Standards **v1.13 and
+v1.14**, which were amended *first* so the build could not contradict them. Offerta shows a **computed
+band** — *"Roasted between 24-MAR-2026 and 22-MAY-2026"* — rather than a roast date, because an Offerta
+product can hold more than one lot on a slow mover and a single date is only mostly honest. Main
+shelves read *"These beans are within our best-freshness window of 90 days."* **`peak_flavor_days` is
+retired** from all four places it lived: the other windows are gates we enforce, that one was advice
+about behaviour we do not control. Its message merged into the whole-bean sentence, counting **from
+receiving** rather than from roast. `freshness_remaining` retired with its consumers; Offerta cards now
+say only *"Sold as-is"*. Detail: `docs/POC19_change_list.md`.
+
+**Two copy questions left open deliberately**, both surfaced by looking at the rendered result: the
+coffee **card** still says *"Best within 90 days of roast"* while the detail page uses the new wording,
+and the catalogue's per-product **brewing note** still says *"We sell whole bean only - grind fresh
+just before you brew"*, a third overlapping grind statement one layer down from the one just merged.
+Neither is a defect; both are Steve's copy to decide.
 
 **Staged but NOT built: `docs/POC19_change_list.md`** — three display changes Steve staged while
 reviewing POC18. Two of them orphan a setting or a field that POC18 introduced, and one **reverses**
