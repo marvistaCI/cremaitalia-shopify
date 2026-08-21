@@ -1,8 +1,18 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.12 · 2026-08-21**
+**Version 1.13 · 2026-08-21**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.1 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.13 (2026-08-21)** changes both freshness statements and **reverses one v1.12 rule**. Offerta no
+> longer shows an actual roast date; it shows a **computed band** - *"Roasted between 24-MAR-2026 and
+> 22-MAY-2026"* - bounded by the donate age at one end and by one day older than the main-shelf floor
+> at the other. v1.12 assumed an Offerta product is a single split-off lot; **a slow-moving SKU can
+> accumulate more than one**, so a single date was only mostly honest. The main-shelf sentence becomes
+> *"These beans are within our best-freshness window of N days"*, dropping the peak-flavour clause,
+> which read ambiguously after a roast-date statement. That leaves `peak_flavor_days` without a
+> consumer, so **§12.10 is opened** to decide where the message goes rather than letting a setting sit
+> unread. Nothing is repriced, and no window changed.
 
 > **v1.12 (2026-08-21)** resets the freshness windows and replaces the display rule. **Main shelves
 > move from 60 to 90 days; Offerta is 91-150; past 150 the coffee comes off sale and is donated.**
@@ -318,10 +328,13 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
 
 ## 5. Freshness & the Offerta transition
 
-- **Freshness statement:** "Best within `{freshness_window_days}` days of roast date. For peak flavor,
-  brew within `{peak_flavor_days}` days." The numbers come from theme settings, never typed (§5.4,
-  build spec §11). Never "best by" alone. **It is NOT paired with an actual roast date on the main
-  shelves** - v1.12 replaced that with a computed floor, *"Roasted on or after DD-MMM-YYYY"*; only
+- **Freshness statement, main shelves (revised v1.13):** "These beans are within our best-freshness
+  window of `{freshness_window_days}` days." The number comes from theme settings, never typed (§5.4,
+  build spec §11). Never "best by" alone. **Offerta has its own statement** - see §5.4.
+  The peak-flavour clause was removed from this sentence because, sitting after a roast-date
+  statement, *"brew within 30 days"* is ambiguous between 30 days from roast and 30 days from
+  delivery (Steve, 2026-08-21). **Where that message goes instead is OPEN - see §12.10.**
+  **It is NOT paired with an actual roast date on the main shelves** - v1.12 replaced that with a computed floor, *"Roasted on or after DD-MMM-YYYY"*; only
   Offerta shows a real date (§5.4).
 - **`days_to_offerta` is RETIRED (v1.12).** It carried its own default of 45, which is the same fact as
   the freshness window stated a second time - and by 2026-08-21 the two had diverged, 45 against 90.
@@ -395,9 +408,34 @@ because coffee past the window is off sale entirely (§5).
 **The best-by date is not displayed.** It is the roast date plus the window, so showing both states
 one fact twice and aims the reader at a deadline rather than at freshness.
 
-**Offerta is the exception and shows its actual roast date**, because an Offerta product is one
-split-off lot and knows its own date - and because showing the same floor on both shelves would make
-them look identically fresh, hiding the very thing that justifies the markdown.
+**Offerta shows a computed BAND, not a date (revised v1.13, Steve, 2026-08-21).**
+
+> Roasted between `{today - offerta_fresh_days}` and `{today - (freshness_window_days + 1)}`
+
+With today at 21-AUG-2026 and the windows at 150 and 90, that reads *"Roasted between 24-MAR-2026 and
+22-MAY-2026"*. The band **is the Offerta definition made visible**: the older bound is the age at
+which we withdraw and donate; the younger bound is **one day older than the main-shelf floor**, so the
+two shelves can never claim overlapping freshness.
+
+**This reverses v1.12**, which had Offerta showing its actual roast date on the reasoning that an
+Offerta product is one split-off lot. That assumption does not hold: **a slow-moving SKU can accumulate
+more than one lot on Offerta.** Steve: *"quoting the range keeps the website always honest, instead of
+mostly honest."*
+
+It is the same reasoning that produced the main-shelf floor, one shelf over - state the **guaranteed
+band derived from policy** rather than a specific fact that may not be true of every bag in the bin -
+and it carries the same benefits: no dependency on lot data, nothing that can go stale, and nothing
+that a late receipt can make into a lie.
+
+**The original rationale survives and is better served.** The two shelves must not *look* identically
+fresh. A band does that more plainly than an actual date, because it makes the age gap explicit
+instead of leaving the reader to compare two dates and work it out.
+
+**Offerta's freshness line is "Best if used soon after purchase - sold as-is."** A computed
+remaining-days figure would be a third number on the same subject.
+
+**`roast_date` is still required on an Offerta product** - for the withdrawal trigger at
+`offerta_fresh_days` and for operations. It simply stops driving anything the customer sees.
 
 **Date format is `DD-MMM-YYYY` (e.g. `29-AUG-2026`) wherever a date is shown to anyone**, customer or
 partner. `03/07/2026` is 3 July to an Italian roaster and 7 March to a U.S. warehouse; that ambiguity
@@ -701,6 +739,15 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    `MAX` could be violated without us doing anything wrong: a Loop selling-plan discount and our
    Function could collide or double-apply. **Highest-risk integration in the design.** Verify on the
    same dev store, with a real Loop subscription, before the production build.
+10. **Where does the peak-flavour message live?** (opened v1.13.) `peak_flavor_days` (30) exists to
+   protect a real position: a customer who keeps a bag for a year should not be able to judge it
+   against our freshness promise. v1.13 removed the clause from the main-shelf freshness sentence
+   because it read ambiguously there, which leaves the setting **with no consumer** - the defect this
+   Standard keeps removing elsewhere. Three options, none chosen: put it in the **brewing note** on the
+   product page, where "from roast" is unambiguous in context; put it in the **FAQ** alongside the FIFO
+   explanation; or drop the setting and accept the loss. **Decide before building POC19 item 1** - do
+   not simply delete the sentence and leave the setting behind.
+
 9. **3PL selection — segregation, packing slip, and inserts.** No 3PL is selected. Three questions are
    **qualifying**, not preferences, and all should be asked before commercial terms.
 
@@ -855,5 +902,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.12 · 2026-08-21 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.13 · 2026-08-21 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
