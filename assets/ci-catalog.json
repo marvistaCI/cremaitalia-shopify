@@ -146,7 +146,7 @@
       },
       "blurb": "Jasmine, peach, bergamot. Natural process.",
       "long": "A natural-process Yirgacheffe roasted light to keep its perfume intact - jasmine and bergamot up top, ripe peach underneath. Imported whole bean in Gardelli's valve-sealed bag.",
-      "brewing": "Excellent as filter or in a moka pot. We sell whole bean only - grind fresh just before you brew.",
+      "brewing": "Excellent as filter or in a moka pot.",
       "poc_rating": {
         "rating": {
           "value": 4.2,
@@ -237,7 +237,7 @@
       },
       "blurb": "Red currant, black tea, lime. Washed.",
       "long": "A washed Rwandan from the hills of Nyamasheke, roasted light and clean. Sparkling acidity, red-fruit clarity, a black-tea finish.",
-      "brewing": "Best as pour-over or filter. Whole bean only - grind fresh just before you brew."
+      "brewing": "Best as pour-over or filter."
     },
     {
       "handle": "lasosta-guatemala",
@@ -280,7 +280,7 @@
       },
       "blurb": "Brown sugar, dried apricot, almond.",
       "long": "A washed Huehuetenango roasted to a classic Florentine medium - brown sugar and almond, with a dried-apricot sweetness that suits a moka pot or an espresso machine.",
-      "brewing": "Built for moka and espresso. Whole bean only - grind fresh just before you brew.",
+      "brewing": "Built for moka and espresso.",
       "poc_rating": {
         "rating": {
           "value": 4.7,
@@ -361,7 +361,7 @@
       },
       "blurb": "Peanut, cocoa, caramel. Natural.",
       "long": "A natural Cerrado for the everyday cup - roasted, sweet, and low in acidity. The dependable house espresso.",
-      "brewing": "Ideal for espresso and moka. Whole bean only - grind fresh just before you brew."
+      "brewing": "Ideal for espresso and moka."
     },
     {
       "handle": "fusari-colombia",
@@ -400,7 +400,7 @@
       },
       "blurb": "Milk chocolate, hazelnut, caramel.",
       "long": "A washed Antioquia roasted dark in the Tuscan bar tradition - milk chocolate and hazelnut, a caramel sweetness, almost no edge. Nonna's espresso.",
-      "brewing": "Made for espresso and moka. Whole bean only - grind fresh just before you brew."
+      "brewing": "Made for espresso and moka."
     },
     {
       "handle": "fusari-india",
@@ -439,7 +439,7 @@
       },
       "blurb": "Dark chocolate, pipe tobacco, baking spice.",
       "long": "A monsooned Malabar - low acidity, full body, a savoury depth of tobacco and spice. A winter espresso with character.",
-      "brewing": "Espresso and moka. Whole bean only - grind fresh just before you brew.",
+      "brewing": "Espresso and moka.",
       "poc_rating": {
         "rating": {
           "value": 3.8,
@@ -512,7 +512,7 @@
       },
       "blurb": "Hazelnut, milk chocolate, brown sugar.",
       "long": "A pulped-natural Daterra roasted medium - clean, sweet, and comforting. The brothers' take on a crowd-pleasing everyday bean.",
-      "brewing": "Espresso, moka, or filter. Whole bean only - grind fresh just before you brew."
+      "brewing": "Espresso, moka, or filter."
     },
     {
       "handle": "valdorcia-decaf",
@@ -552,7 +552,7 @@
       },
       "blurb": "Walnut, dried fig, cocoa. The cup that started Crema Italia.",
       "long": "A sugarcane-process decaf from Colombia, roasted medium - walnut, dried fig, and cocoa, with none of the flatness decaf is unfairly known for. The cup that started Crema Italia.",
-      "brewing": "Lovely as an evening espresso or moka. Whole bean only - grind fresh just before you brew."
+      "brewing": "Lovely as an evening espresso or moka."
     },
     {
       "handle": "valdorcia-classica",
@@ -596,7 +596,7 @@
       },
       "blurb": "Cocoa, toasted almond, caramel. A signature blend.",
       "long": "The roastery's signature blend - Brazilian body, a touch of Ethiopian lift, Indian depth. Cocoa and toasted almond, built for the bar cup.",
-      "brewing": "Espresso and moka. Whole bean only - grind fresh just before you brew."
+      "brewing": "Espresso and moka."
     },
     {
       "handle": "tour-ditalia-1",
@@ -644,7 +644,7 @@
       "freshness_note": "Boxed for you when you order",
       "blurb": "Three 100 g bags, three roasters, assembled on-demand. Printed tasting card included.",
       "long": "A journey across regions: North, Central, South. Three 100 g bags - Gardelli Ethiopia, La Sosta Guatemala, Fusari Colombia - boxed with a tasting card and assembled to order so every bag ships fresh.",
-      "brewing": "Each bag is whole bean - grind fresh just before you brew. The card suggests a method for each."
+      "brewing": "The card suggests a method for each."
     },
     {
       "handle": "gardelli-geisha",
@@ -683,7 +683,7 @@
       "scarcity": "This shipment only",
       "blurb": "Chamomile, white peach, jasmine. Panama micro-lot.",
       "long": "A washed Geisha from Finca Deborah, high on the Volcán slopes - chamomile, white peach, jasmine. A micro-lot we secured a few kilos of; when this pallet is gone it may not return.",
-      "brewing": "Reserve it for pour-over, where the florals carry. Whole bean only - grind fresh just before you brew."
+      "brewing": "Reserve it for pour-over, where the florals carry."
     },
     {
       "handle": "lasosta-natale",
@@ -722,7 +722,7 @@
       "scarcity": "Seasonal",
       "blurb": "Panettone, candied orange, hazelnut. Holiday micro-lot.",
       "long": "La Sosta's holiday blend - warm, sweet, and spiced, the cup that tastes like panettone on the table. A seasonal Selezione micro-lot.",
-      "brewing": "Espresso or moka, alongside something sweet. Whole bean only - grind fresh just before you brew."
+      "brewing": "Espresso or moka, alongside something sweet."
     },
     {
       "handle": "gcb-dolcevita",
@@ -760,7 +760,7 @@
       },
       "blurb": "Chocolate, walnut, dried fig. Roasted 2026-05-30.",
       "long": "A dark house blend that reached its Offerta threshold - still good coffee, still inside a real freshness window, priced down honestly. Sold as-is.",
-      "brewing": "Espresso and moka. Whole bean only - grind fresh just before you brew.",
+      "brewing": "Espresso and moka.",
       "poc_rating": {
         "rating": {
           "value": 4.0,

@@ -2563,6 +2563,11 @@ pull-and-diff on 2026-08-21 (both sides 38 files, zero content mismatches, nothi
 one side; `theme list` **and** `git log origin/main..HEAD` were run **before** the push, confirming no
 name collision). The repo is fully pushed to GitHub, so nothing is local-only.
 
+> ⚠️ **The repo has moved AHEAD of this theme (2026-08-21).** The fixture brewing notes were
+> corrected after the deploy, so POC19 no longer byte-matches the repo. A small data-only change,
+> not worth a deploy on its own; it rides along with the next batch. This warning is the normal
+> state between deploys.
+
 POC17 and POC18 previews and the live theme are untouched. Preview:
 `https://crema-italia.myshopify.com?preview_theme_id=152017764521`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9

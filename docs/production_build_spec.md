@@ -543,12 +543,26 @@ These are not metafields. Do not invent `crema_italia.*` keys for them.
 | `notes` | `crema_italia.tasting_notes` | list.single_line | 13/17 | Drives the note pills |
 | `roast_date` | on the **lot** metaobject, not the product | date | 12/17 | **Per lot — see §13.9.** The POC stores it per product because it never models two lots of one coffee. Drives freshness, the displayed roast range, and the Offerta transition |
 | `long` | `crema_italia.description_long` | multi-line | 13/17 | The "About this coffee" prose |
-| `brewing` | `crema_italia.brewing` | multi-line | 13/17 | Brewing note; also where "whole bean only" lives |
+| `brewing` | `crema_italia.brewing` | multi-line | 13/17 | **A per-coffee brewing hint only** - "Reserve it for pour-over, where the florals carry". **Never store policy.** The roaster supplies this (Roaster Guide, "SKU back-story"), and a roaster has no reason to write our whole-bean rule. See the note below. |
 | `component_handles` | `crema_italia.components` | list.product_reference | 1/17 | The BOM — see §7 |
 | `low_inventory` | `crema_italia.low_inventory` | integer | 2/17 | Selezione scarcity cue |
 | `scarcity` | `crema_italia.scarcity_note` | single-line | 2/17 | Selezione, e.g. *This shipment only* |
 | `freshness_note` | `crema_italia.freshness_note` | single-line | 1/17 | Sorpresa, e.g. *Boxed for you when you order* |
 | `price_unit` | `crema_italia.price_unit` | single-line | 1/17 | Overrides the per-unit denominator on bundles |
+
+**A correction worth recording, because it shows how this section can go wrong (2026-08-21).** This
+row previously read *"Brewing note; also where 'whole bean only' lives"* - which transcribed a
+**fixture-data defect into the production schema as though it were the design.** All 13 fixture
+coffees had our store-wide whole-bean policy pasted onto the end of a genuinely per-coffee brewing
+hint, so the customer read the same instruction twice on every product page. Steve's diagnosis:
+*"Our test data is wrong, not the feature."* The fixture data was corrected and this row now states
+what the field is for.
+
+**The general lesson:** transcribing the POC into a specification inherits the POC's mistakes as well
+as its decisions, and a repeated boilerplate string is exactly the kind that looks like a convention.
+Two such errors were caught on 2026-08-21 alone - this one, and the assumption that `shelf` is a
+property of a coffee (§13.9). When a fixture value looks like a pattern, ask whether it is a decision
+or an accident before writing it down as a rule.
 
 **`shelf` — RESOLVED 2026-08-20, see §13.9.** It is a **tag on the product**, with an automated
 collection derived from it for the shelf page URL. It cannot be `product.type`, which §12 claims for
