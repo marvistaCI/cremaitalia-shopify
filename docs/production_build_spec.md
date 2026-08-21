@@ -838,3 +838,85 @@ build spec has never covered the **mechanism**.
   sentence is stated in two places today and should be extracted to a snippet so the policy has one
   home (Review A finding A6, re-filed to the policy work).
 - **Offerta is never subscriber-discounted** and never stacks (Standard §3).
+
+## 15. Roaster Onboarding and Product Onboarding — two distinct processes (Steve, 2026-08-21)
+
+**These are two things, not one, and conflating them is why the roast-date format looked like a gap
+in the Roaster Guide.** It is not. The guide is a **pre-boarding** document, aimed at a roaster we are
+still courting. A date format is a **per-SKU artifact** detail that only becomes real after a roaster
+signs. Both processes need designing; **the design is a separate thread** and this section only
+records what each one is, what already exists, and what is open.
+
+### 15.1 Roaster Onboarding — courting to signed
+
+**Ends when:** a roaster has agreed terms and exists as a `roaster` metaobject (§13.4).
+
+**Already exists**, in OneDrive `Operations/In Italy/`:
+
+- `Crema_Italia_Roaster_Guide_v*_it` / `_us` — eligibility, disqualifying conditions, FDA
+  registration, bag sizes, packaging standard, roast-to-ship discipline, U.S. retail labeling,
+  palletization, logistics, commercial terms, pricing process. **Italian is the document of record;
+  English is for Steve's convenience.**
+- `Crema_Italia_Roaster_Intro_Letter_v*` and the Vendor Intro Sheet — the approach.
+
+**Owner:** Lucia Calò, Operations Manager - Italy, who is the purchasing contact named in the guide
+and who reviews the Italian line by line.
+
+**Open:**
+
+- The guide is at v6 (Italian, approved by Lucia 2026-08-21) with v7 in progress, adding one line:
+  that Crema Italia assigns the SKU appearing on the U.S. label.
+- The v6 file is still named `..._v6_pending_it`. If it is approved, the name says otherwise.
+- Two known ambiguities deferred rather than bundled into v7, because bundling is how a
+  painstakingly reviewed translation gets silently broken:
+  - the packaging section says "compatible with U.S.-applied retail labeling" while the labeling
+    section says *"Non rietichettiamo negli Stati Uniti"* - applied at origin. Ambiguous at best.
+  - the packing list is our template and is the natural feed for lot data (§13.9), but does not
+    explicitly require roast date and lot code as columns.
+
+### 15.2 Product Onboarding — per SKU, after signing
+
+**Ends when:** a sellable Shopify product exists, with a `coffee` metaobject, variants per size,
+costs, a computed price, and an approved label.
+
+**This is the process that populates §13's data model**, which is why it is recorded here rather than
+purely as an operations matter. It does not exist as a defined process today; its inputs are
+scattered across the Roaster Guide.
+
+**The steps, as currently understood:**
+
+1. **Roaster proposes a SKU.** The guide already specifies the payload under *"SKU back-story
+   (mandatory)"*: name and tagline, origin, varietal, process, roast level, 3-6 tasting notes,
+   back-story, brewing methods, and two or three high-resolution photographs.
+2. **Crema Italia reviews and accepts.** No criteria are written down. Flavored coffee is already
+   excluded; decaf is permitted with the method declared.
+3. **Crema Italia assigns the SKU code** - `TRRRPPPPSS` (§13.9). The roaster never invents it.
+4. **Cost is agreed per size**, which becomes `SKU_LAST_COST` and feeds the price via
+   `cost x Markup[shelf, size]` (Standard §2). Cost is per lot; price is per SKU and size (§13.9).
+5. **A pro-forma label is generated** and audited before the first production run - the guide already
+   commits to "we audit a sample before the first production run". This is where the
+   **roast date format** belongs, and it must be unambiguous: `03/07/2026` is 3 July to an Italian
+   roaster and 7 March to a U.S. warehouse, which would break FIFO picking (Standard §5.4) and
+   mislead the customer. Prefer `03 JUL 2026` or ISO `2026-07-03`.
+6. **Records are created:** the `coffee` metaobject, the Shopify product, its variants, its
+   metafields, and the label artwork.
+
+**Open, and the reason this needs its own thread:**
+
+- **Manual forms or a simple online system?** For a handful of roasters and roughly 15 SKUs, a
+  structured form is likely enough at launch - the same posture already taken on pricing, which is
+  spreadsheet-assisted until volume justifies a tool (Standard §12.2). The form has to be started by
+  Crema Italia, completed by the roaster, and reviewed by Crema Italia, which is a three-party
+  workflow rather than a document.
+- **Acceptance criteria** for a proposed SKU are undefined.
+- **Who owns it** - Lucia is closest to the roaster, but SKU assignment, costing and label approval
+  are Crema Italia decisions.
+- **Where the artifacts live**, and how the accepted data reaches Shopify without being retyped.
+
+### 15.3 Why they are separated
+
+Roaster Onboarding happens **once per roaster** and is a relationship. Product Onboarding happens
+**every time a SKU is added**, for the life of the relationship, and is a data pipeline. They have
+different owners, different cadences, different outputs, and different failure modes - a badly
+onboarded roaster costs a partnership, a badly onboarded product costs a wrong label or a wrong
+price. Designing them as one process would optimise for neither.

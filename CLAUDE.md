@@ -2707,6 +2707,16 @@ asked to avoid. Full context in the §9 2026-07-24 entry.
   info@ / support@ mailboxes not created (POC9's contact routing needs them); and the legal
   pages checkout requires (privacy, terms, refund, shipping) do not exist anywhere in the repo.
 
+- [ ] **DESIGN: Roaster Onboarding and Product Onboarding as two distinct processes** (Steve,
+  2026-08-21) — see `docs/production_build_spec.md` §15. **Roaster Onboarding** (courting to signed,
+  once per roaster, Lucia's lane) largely exists as the Roaster Guide + intro letter; open items are
+  the v7 SKU line, the `_v6_pending_it` filename, and two deferred ambiguities. **Product
+  Onboarding** (per SKU, every time, a data pipeline) does **not** exist as a defined process — its
+  inputs are scattered across the guide. It is the process that populates §13's data model: roaster
+  proposes, Crema Italia reviews, **we assign the SKU**, cost is agreed, and a **pro-forma label is
+  generated and audited** — which is where the unambiguous **roast date format** belongs, not in the
+  pre-boarding guide. Steve's call: **work this in a separate thread**; manual forms or a simple
+  online system is itself an open question.
 - [ ] **Turn storefront password protection back ON** (Online Store > Preferences)
   once Steve's friend-testing round is done — see the ⚠️ callout at the top of this
   file. This is the one open item from the whole 2026-07-05/06 investigation.
