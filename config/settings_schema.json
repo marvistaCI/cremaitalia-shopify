@@ -41,13 +41,6 @@
       },
       {
         "type": "number",
-        "id": "peak_flavor_days",
-        "label": "Peak flavour window (days)",
-        "info": "Store Operating Standards section 5. The shorter window we recommend for peak flavour.",
-        "default": 30
-      },
-      {
-        "type": "number",
         "id": "benefit_grace_days",
         "label": "Benefit grace period (days)",
         "info": "Store Operating Standards section 4. How long subscriber and founder benefits continue after cancelling. NOT the freshness window - the two shared the value 60 until 2026-08-21, when freshness moved to 90 and this did not. That divergence is why they are separate settings.",

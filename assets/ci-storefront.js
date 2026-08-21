@@ -75,11 +75,6 @@
       if (p.best_by) p.best_by = isoDay(Date.parse(p.best_by) + shift);
       // The Offerta blurb quotes its own roast date in prose; keep the two in step.
       if (p.blurb) p.blurb = p.blurb.split(oldRoast).join(p.roast_date);
-      // Offerta cards show the remaining window in plain words, so recompute it.
-      if (p.shelf === 'offerta' && p.best_by) {
-        var left = Math.round((Date.parse(p.best_by) - Date.now()) / DAY_MS);
-        p.freshness_remaining = left > 0 ? 'Best within ' + left + ' days' : 'Past its window';
-      }
     });
   }
 
@@ -273,7 +268,10 @@
   }
   function freshnessCell(p) {
     if (p.shelf === 'sorpresa') return '<div class="freshness">' + esc(p.freshness_note || 'Assembled to order') + '</div>';
-    if (p.shelf === 'offerta') return '<div class="freshness fw">' + esc(p.freshness_remaining || 'Sold as-is') + ' · sold as-is</div>';
+    // Offerta cards say only "Sold as-is". The remaining-days figure was retired with
+    // freshness_remaining (Standard v1.13): the detail page states the age band, and a card is
+    // not the place for a third number on the same subject.
+    if (p.shelf === 'offerta') return '<div class="freshness fw">Sold as-is</div>';
     if (p.shelf === 'selezione' && p.low_inventory) return '<div class="freshness fw">Low inventory · ' + p.low_inventory + ' left</div>';
     return '<div class="freshness">Best within ' + FRESHNESS_DAYS + ' days of roast</div>';
   }
@@ -511,12 +509,13 @@
   // the exact orphan class Review A catalogued. Add it when JS actually needs it, not for symmetry.
   var RULES = window.CI_RULES || {};
   var FRESHNESS_DAYS  = RULES.freshnessWindowDays || 60;
-  var PEAK_DAYS       = RULES.peakFlavorDays      || 30;
   var GRACE_DAYS      = RULES.benefitGraceDays    || 60;
   var OFFERTA_DAYS    = RULES.offertaFreshDays    || 150;
   // Computed SERVER-SIDE in layout/theme.liquid - see the comment there for why it is not
   // computed here from the browser clock.
   var FRESH_FLOOR     = RULES.freshFloorLabel     || '';
+  var OFFERTA_OLDEST  = RULES.offertaOldestLabel  || '';
+  var OFFERTA_NEWEST  = RULES.offertaNewestLabel  || '';
 
   // DD-MMM-YYYY, unambiguous by design: 03/07/2026 is 3 July to an Italian roaster and
   // 7 March to a US warehouse. Standard 5.4 requires this format wherever a date is shown.
@@ -745,11 +744,15 @@
     // split-off lot and knows its own date - and because showing the same floor on both shelves would
     // make them look identically fresh, hiding the very thing that justifies the markdown.
     if (p.shelf === 'offerta') {
-      if (p.roast_date) meta += '<p style="font-size:.9rem;color:var(--ci-espresso);margin:.5rem 0"><strong>Roasted:</strong> ' + esc(fmtDate(p.roast_date)) + '</p>';
-      if (p.freshness_remaining) meta += '<div class="freshness fw" style="margin:.5rem 0">' + esc(p.freshness_remaining) + ' · sold as-is</div>';
+      // A BAND, not a date (Standard v1.13). An Offerta product can hold more than one lot on a
+      // slow-moving SKU, so a single roast date was only mostly honest. The band is the Offerta
+      // definition made visible: oldest is the age at which we withdraw and donate, newest is one
+      // day older than the main-shelf floor, so the two shelves cannot claim overlapping freshness.
+      if (OFFERTA_OLDEST && OFFERTA_NEWEST) meta += '<p style="font-size:.9rem;color:var(--ci-espresso);margin:.5rem 0"><strong>Roasted between</strong> ' + esc(OFFERTA_OLDEST) + ' <strong>and</strong> ' + esc(OFFERTA_NEWEST) + '</p>';
+      meta += '<div class="freshness fw" style="margin:.5rem 0">Best if used soon after purchase - sold as-is</div>';
     } else {
       if (FRESH_FLOOR) meta += '<p style="font-size:.9rem;color:var(--ci-espresso);margin:.5rem 0"><strong>Roasted on or after</strong> ' + esc(FRESH_FLOOR) + '</p>';
-      meta += '<div class="freshness" style="margin:.5rem 0">Best within ' + FRESHNESS_DAYS + ' days of roast date. For peak flavor, brew within ' + PEAK_DAYS + ' days.</div>';
+      meta += '<div class="freshness" style="margin:.5rem 0">These beans are within our best-freshness window of ' + FRESHNESS_DAYS + ' days.</div>';
     }
 
     var components = p.components ? '<p class="prose" style="max-width:none;margin-top:.5rem"><strong>In the box:</strong> ' + p.components.map(esc).join(' · ') + '. Printed tasting card included.</p>' : '';
@@ -813,8 +816,8 @@
       // exists is Equipment/Merch, which does not isolate grinders, so building one would
       // mean inventing a second layer of fixture data to prop up the first. Opening the
       // shelf is honest at any catalog size.
-      '<p class="afd" style="border:none;margin-top:.75rem"><strong>Whole bean only.</strong> You will need a grinder. ' +
-      'If you do not have one, <button class="inline-link" onclick="showPage(\'bottega\')">search for a burr grinder in our Bottega</button>.</p>' +
+      '<p class="afd" style="border:none;margin-top:.75rem"><strong>Whole beans only.</strong> We recommend using your beans within 30 days of receiving them, and grinding them just before each brew. ' +
+      'Need a grinder? <button class="inline-link" onclick="showPage(\'bottega\')">Search for one in our Bottega</button>.</p>' +
       '</div></div>' + about;
   }
 

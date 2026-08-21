@@ -191,14 +191,32 @@
     window than we guarantee - true, and erring in the customer's favour. Standard 5.4.
   {%- endcomment -%}
   {%- assign fresh_days = settings.freshness_window_days | default: 90 -%}
+  {%- assign offerta_days = settings.offerta_fresh_days | default: 150 -%}
+  {%- assign now_ts = 'now' | date: '%s' -%}
+  {%- comment -%}
+    Three computed labels, all DD-MMM-YYYY (Standard 5.4).
+      freshFloorLabel    today - fresh_days            main shelves: "Roasted on or after X"
+      offertaOldestLabel today - offerta_days          the age at which we withdraw and donate
+      offertaNewestLabel today - (fresh_days + 1)      one day older than the main-shelf floor,
+                                                       so the two shelves can never claim
+                                                       overlapping freshness
+    The Offerta BAND replaced an actual roast date in Standard v1.13: an Offerta product can hold
+    more than one lot on a slow-moving SKU, so a single date was only mostly honest.
+  {%- endcomment -%}
   {%- assign fresh_secs = fresh_days | times: 86400 -%}
-  {%- assign floor_ts = 'now' | date: '%s' | minus: fresh_secs -%}
+  {%- assign floor_ts = now_ts | minus: fresh_secs -%}
+  {%- assign offerta_old_secs = offerta_days | times: 86400 -%}
+  {%- assign offerta_old_ts = now_ts | minus: offerta_old_secs -%}
+  {%- assign offerta_new_days = fresh_days | plus: 1 -%}
+  {%- assign offerta_new_secs = offerta_new_days | times: 86400 -%}
+  {%- assign offerta_new_ts = now_ts | minus: offerta_new_secs -%}
   <script>window.CI_RULES = {
     freshnessWindowDays: {{ fresh_days | json }},
-    offertaFreshDays:    {{ settings.offerta_fresh_days | default: 150 | json }},
-    peakFlavorDays:      {{ settings.peak_flavor_days   | default: 30  | json }},
-    benefitGraceDays:    {{ settings.benefit_grace_days | default: 60  | json }},
-    freshFloorLabel:     {{ floor_ts | date: '%d-%b-%Y' | upcase | json }}
+    offertaFreshDays:    {{ offerta_days | json }},
+    benefitGraceDays:    {{ settings.benefit_grace_days | default: 60 | json }},
+    freshFloorLabel:     {{ floor_ts       | date: '%d-%b-%Y' | upcase | json }},
+    offertaOldestLabel:  {{ offerta_old_ts | date: '%d-%b-%Y' | upcase | json }},
+    offertaNewestLabel:  {{ offerta_new_ts | date: '%d-%b-%Y' | upcase | json }}
   };</script>
   <script>window.CI_ASSETS = {
     "ci-lucia.jpg": {{ 'ci-lucia.jpg' | asset_url | json }},
