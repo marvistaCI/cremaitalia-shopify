@@ -155,6 +155,68 @@ merchant-editable with **no developer and no build**. Only rarely-changing conte
   contact fields, and a structured roaster-linkage field on bundle/composite products (not
   just the single `roaster` reference on standalone SKUs).
 
+### 5.1 What customer-account UI extensions can actually do (platform spike, 2026-08-21)
+
+Closes the §10 spike item *"SCOPE what customer-account UI extensions can actually do"*, which had been
+the largest open consequence for the production build since the 2026-07-25 finding that `/account` is
+Shopify-hosted and the POC's account page is not buildable in Liquid. **Researched against current
+Shopify documentation, not recalled.** One sub-question remains and needs two minutes on the dev store.
+
+**The de-risk: they are available on ALL plans, not Plus.** Plus is required for *checkout*
+extensibility, not for customer accounts. So the account experience is buildable on Grow, and nothing
+here pushes the plan decision.
+
+| Capability | Verdict |
+|---|---|
+| Plan requirement | **All plans.** Not a Plus feature |
+| A whole custom page in the account | **Yes** - full-page extensions, and the merchant can add a link to it in the account header navigation |
+| Blocks on existing pages | Yes - Profile page (`PAGE_TITLE`, `PROFILE1`, `PROFILE2`) and Order Status (`ORDER_STATUS1-3`), plus static targets per line item, delivery status, payment status and returns |
+| Read customer metafields | **Yes**, via the Customer Account API |
+| **Write** customer metafields | **Yes** - `metafieldsSet` on Customer, Order, Company, CompanyLocation |
+| Call our own backend | Yes - `network_access = true`, requested in the Partner Dashboard. The server must send `Access-Control-Allow-Origin: *`, because extensions run in a Web Worker with a null origin |
+| Custom CSS / arbitrary HTML / custom fonts inside the extension | **No** |
+
+**The metafield write capability matters more than it looks.** §6.1 records that storing the taste
+profile as a **customer metafield** is cheap now and expensive to retrofit, and that it is the join key
+for palate-matched feedback. This confirms the extension surface can both read and write it — so the
+account page can show a taste profile *and* let the customer change it, which is exactly what the POC
+models.
+
+#### The constraint, and it is a brand constraint
+
+> *"You can't override the CSS for UI components. The customer account UI will always render the
+> merchant's own branding."*
+
+Extensions are confined to Shopify's component library — actions, feedback, forms, layout, media,
+overlays, typography. **No arbitrary HTML, no custom CSS, no custom fonts inside the extension.**
+
+What we *do* control is the **shared branding configuration** (Settings → Checkout → Configurations),
+which carries across checkout, customer accounts and sign-in: **logo**, **colours** (any value, plus a
+reusable palette of up to 20), and **typography**. Colours can be overridden per surface.
+
+**So the account page will be Shopify's components wearing Crema Italia's palette and logo — not the
+storefront's typography, spacing and composition.** For a brand whose differentiator is editorial
+restraint, that is a real loss, and it should be accepted deliberately rather than discovered during
+the build.
+
+**What survives from the POC's account design:** the information architecture (which tiles exist and
+what each says), the copy, and the data behind it. **What does not:** the visual composition. The
+Membership tile's hairline box and gold accent, the Marcellus headings, the tricolore rule — none of
+it carries. The POC's account page remains, as §0 says, a model of a surface we do not own; this
+section records *how much* of it is recoverable, which is more than feared on function and less on form.
+
+**The business rules are untouched** — durable Founding Member status, the numbered honorific, and the
+60-day benefit grace live in Store Operating Standards §3.1/§4 and are unaffected by any of this.
+
+#### Still open, and it is a two-minute check on the dev store
+
+**Which fonts the branding editor actually offers, and whether Marcellus is among them.** Typography
+is customisable, but whether a specific Google font can be selected — or a custom font uploaded, and on
+which plan — is not something to assert from documentation. Open **Settings → Checkout →
+Configurations → Edit** on `crema-italia-development` and look. If Marcellus is unavailable, the
+account surface diverges from the storefront on type as well as layout, which is worth knowing before
+anyone designs against it.
+
 ## 6. Trust signals, reviews + photography (2026-07-09 review; reviews decided 2026-08-20)
 
 The 2026-07-09 consumer-centric site review (full findings in `docs/POC5_change_list.md`

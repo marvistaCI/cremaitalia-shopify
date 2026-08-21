@@ -2863,15 +2863,22 @@ asked to avoid. Full context in the §9 2026-07-24 entry.
   URL, and **no classic option anywhere** (Authentication is just Shop / Google / Facebook sign-in).
   `/account` and `/account/login` **redirect off-domain** to `shopify.com/<store-id>/account`, so
   **the theme renders none of the account experience.**
-- [ ] **NEW, replaces the above: SCOPE what customer-account UI extensions can actually do.** The
-  POC's account page (Membership tile + founder number, taste-profile card, Loop portal slot,
-  Recent Orders) is **not buildable in Liquid** — that surface is Shopify-hosted and extensible only
-  via customer-account UI extensions. Establish what an extension can render and where, then decide
-  how much of the POC's account design survives. **This is the largest open consequence for the
-  production build**, and under the POC-scope rule (`production_build_spec.md` §0) it also means the
-  POC's account page has been modelling a surface we do not own. The *business rules* are unaffected
-  — durable founder status, the numbered honorific, and the 60-day benefit grace live in Store
-  Operating Standards §3.1/§4 and are unchanged; only the rendering surface and technique change.
+- [x] ~~**SCOPE what customer-account UI extensions can actually do.**~~ **DONE 2026-08-21 — see
+  `docs/production_build_spec.md` §5.1.** The headline is a de-risk: **they work on all plans, not
+  just Plus**, so the account experience is buildable on Grow and this does not push the plan
+  decision. Full-page extensions exist and the merchant can link to one from the account header, so
+  the POC's account page has a home. Extensions can **read and write customer metafields**, which
+  confirms the taste-profile-as-customer-metafield requirement in §6.1 is the natural mechanism, not
+  a workaround. They can call our own backend with `network_access`.
+  **The cost is brand, not function.** No custom CSS, no arbitrary HTML, no custom fonts inside an
+  extension - only Shopify's component library, which "will always render the merchant's own
+  branding". We control logo, colours and typography through the shared checkout/accounts branding
+  configuration, so the page wears our palette and logo but not the storefront's typography, spacing
+  or composition. The POC's account *information architecture* and copy survive; its visual design
+  does not. Business rules are untouched (Standard §3.1/§4).
+  **One two-minute check left for Steve:** whether the branding editor offers Marcellus. Settings →
+  Checkout → Configurations → Edit on the dev store.
+
 - [ ] **EVALUATE: a bundle app against Standard §7's BOM requirements** (component-derived
   facets, component-gated availability incl. the freshness window, per-order pick-pack BOM to
   the 3PL). Native Shopify Bundles covers component inventory but not freshness or facet
