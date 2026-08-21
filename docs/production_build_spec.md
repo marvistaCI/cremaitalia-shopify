@@ -217,6 +217,95 @@ Configurations → Edit** on `crema-italia-development` and look. If Marcellus i
 account surface diverges from the storefront on type as well as layout, which is worth knowing before
 anyone designs against it.
 
+### 5.2 Loop x Shopify Functions — the entitlement model does not survive contact (platform spike, 2026-08-21)
+
+Standard §12.8 called this *"the highest-risk integration in the design"* and *"the one place `MAX`
+could be violated without us doing anything wrong."* Researched before building anything. **It is
+violated, and the reason is worse than stacking.** Two findings, and the second one breaks the
+entitlement architecture as specified.
+
+#### Finding 1 — a selling-plan discount is not a discount, so MAX does not see it
+
+A selling plan applies a **price adjustment**: a $60 variant on a 10% plan simply costs $54. It is not
+a discount competing in a combination — it has already changed the line price before any discount is
+evaluated. Everything else then applies **on top of the reduced price**:
+
+> "Any discount configured in Shopify that applies to subscriptions will stack on top of the existing
+> discount applied on the selling plan… a 10% selling plan discount plus a 10% code gives **$81**, not
+> $90 or $90." And explicitly: **"Shopify Functions discounts will stack on top of subscription
+> discounts."**
+
+So `MAX` holds *among* Function and code discounts — Shopify already applies only the largest product
+discount per line on non-Plus plans, which gives us §3's rule for free — but a selling-plan adjustment
+sits outside that contest entirely and compounds with the winner.
+
+**Consequence: the subscriber discount must live in exactly one of the two places, never both.**
+
+#### Finding 2 — Functions do not run on recurring orders
+
+This is the one that matters. From Shopify's developer forum, answered by Shopify staff:
+
+> **"Discount functions are not re-run when recurring orders are created."**
+> "The mental model is that a buyer agrees to the terms of the contract based on what they see in the
+> first order, so whatever discounts they got on that first order which are marked as
+> `appliesOnSubscription` should carry forward up to the `recurringCycleLimit`."
+> "When a discount code is applied to a subscription, a **snapshot** of the discount is saved to the
+> subscription contract, and this snapshot is **independent of the original discount**."
+
+**Standard §11 specifies that a Shopify Function owns the entitlement — reading customer tags to
+decide the applied rate. That can only ever govern the first order.** Orders 2..n are billed from the
+contract, and the contract holds a snapshot taken at signup.
+
+**What this breaks, concretely:**
+
+- **The durable Founding Member model (§4).** A customer who subscribes as an ordinary subscriber at
+  10% and later becomes a founder would keep 10% on every recurring order, because the contract
+  snapshot never re-evaluates. Reinstating "at tier" on resume cannot be done by a Function.
+- **Any change to the subscriber rate** would not reach existing subscribers.
+- **The 60-day benefit grace (§4)** cannot be enforced by a Function on recurring orders either.
+
+**So entitlement cannot be Function-owned end to end.** Something must write the correct rate onto the
+**contract** — either the selling plan the customer is on, or `subscriptionContractUpdate` after each
+cycle. In practice that is **Loop's job**, because Loop owns the contract; every subscription app faces
+this and Loop documents subscription discounts as a feature it manages.
+
+#### The shape this forces
+
+```
+first order      Function computes MAX(founder, subscriber, first-order) - and MUST NOT
+                 double-apply on top of a selling-plan adjustment
+orders 2..n      the CONTRACT carries the rate; Loop maintains it
+tier changes     Loop updates the contract; a Function cannot reach these orders
+```
+
+Which means the subscriber/founder rate belongs on the **contract**, and the Function's role shrinks
+to campaign discounts on **one-time** purchases. That is a materially different architecture from
+Standard §11 as written.
+
+#### Confidence, and what still needs proving
+
+**Finding 1 is well documented.** Finding 2 rests on a **Shopify staff answer in the developer forum**
+plus Help Centre wording — strong, but forum rather than formal documentation, and this project's own
+rule is that live output beats a document. Neither has been observed on a store.
+
+**Ask Loop support directly** (cheaper and more definitive than a build):
+
+1. Do your selling plans carry the subscriber discount, or do you expect the merchant to apply it
+   another way?
+2. Can the rate differ **per customer** — 12% for Founding Members, 10% otherwise — on the same
+   cadence? Two selling plans, a contract-level override, or not at all?
+3. When a customer's tier changes, can you update an **existing** contract's rate, and is it manual or
+   API-driven?
+4. If we also run a Shopify discount Function, will it **compound** with your selling-plan adjustment
+   on the first order, and how do you advise avoiding that?
+
+**Then confirm on the dev store** with a real subscription: place a first order and inspect the applied
+discounts, then inspect the resulting subscription contract to see what was snapshotted onto it.
+
+**Do not write the entitlement Function until questions 1-4 are answered.** Standard §11 and §12.8
+should be revisited on the answers — this is a decision for Steve, not a correction Code should make
+unilaterally, because it changes which system owns a commercial rule.
+
 ## 6. Trust signals, reviews + photography (2026-07-09 review; reviews decided 2026-08-20)
 
 The 2026-07-09 consumer-centric site review (full findings in `docs/POC5_change_list.md`

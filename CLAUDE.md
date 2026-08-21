@@ -2854,9 +2854,24 @@ asked to avoid. Full context in the §9 2026-07-24 entry.
   phone, and the Checkout Editor lists `Order summary → Discounts → Discount or gift card` as
   **advisory, non-interactive structure** — no visibility toggle, no removal. The field genuinely
   cannot be hidden below Plus.
-- [ ] **TEST: Loop × Shopify Functions discount interplay.** Highest-risk integration in the
-  whole design. Loop's selling-plan subscription discount vs our Function-applied founder/
-  subscriber benefit — verify they don't collide or double-apply. Best done on a dev store.
+- [~] **Loop × Shopify Functions discount interplay — RESEARCHED 2026-08-21, see
+  `docs/production_build_spec.md` §5.2. It is worse than stacking and it changes the architecture.**
+  Two findings. (1) A **selling-plan discount is a price adjustment, not a discount** — it changes the
+  line price before any discount is evaluated, so Functions and codes compound *on top of it*. `MAX`
+  holds among Function/code discounts (Shopify already applies only the largest product discount per
+  line off Plus, which gives §3's rule for free) but a selling plan sits outside that contest.
+  (2) **Discount Functions are not re-run on recurring orders** — the rate is snapshotted onto the
+  subscription contract at signup and orders 2..n bill from it. **So a Function cannot own entitlement,
+  which is what Standard §11 specifies.** It breaks the durable Founding Member model (§4): someone who
+  subscribes at 10% and later becomes a founder would keep 10% forever, because nothing re-evaluates.
+  The rate must live on the **contract**, which makes it **Loop's** job, and shrinks the Function to
+  campaign discounts on one-time purchases.
+  **Confidence:** finding 1 is well documented; finding 2 rests on a Shopify staff forum answer plus
+  Help Centre wording — strong but not formal docs, and unobserved on a store. **Next: four questions
+  to Loop support** (listed in §5.2), then confirm on the dev store by inspecting a real contract.
+  **Do not write the entitlement Function until those are answered**, and Standard §11/§12.8 need
+  Steve's decision on the answers, because this changes which system owns a commercial rule.
+
 - [x] ~~**CHOOSE: new vs legacy Shopify customer accounts.**~~ **NOT A CHOICE — settled by the
   platform, verified 2026-07-25.** A store created today runs **new customer accounts only**;
   Settings → Customer accounts offers Configurations / Authentication / returns / store credit /
