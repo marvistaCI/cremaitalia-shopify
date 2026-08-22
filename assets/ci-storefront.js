@@ -774,8 +774,14 @@
     var subBlock = '';
     if (p.subscription) {
       subBlock =
-        '<div class="sub-toggle"><input type="checkbox" id="pd-sub" onchange="toggleSub(this)">' +
-        '<div class="sub-toggle-text"><h4>Make this a Roccia subscription</h4>' +
+        // The checkbox had NO accessible name: 0 <label> elements, no aria-label, so a screen reader
+        // announced it as "checkbox, not checked" with nothing else. It was the only unnamed control
+        // on the page, and it is the one control where that matters most - the automatic-renewal
+        // disclosure sits beside it, and ROSCA wants informed consent. aria-labelledby names it from
+        // the heading; aria-describedby attaches the RENEWAL TERMS, so a blind user hears the
+        // disclosure with the control rather than having to go looking for it.
+        '<div class="sub-toggle"><input type="checkbox" id="pd-sub" onchange="toggleSub(this)" aria-labelledby="pd-sub-label" aria-describedby="pd-sub-renewal">' +
+        '<div class="sub-toggle-text"><h4 id="pd-sub-label">Make this a Roccia subscription</h4>' +
         '<p>10% off every shipment and free shipping, your standing subscriber benefit on Roccia, Sorpresa, and Selezione. Default is a one-time purchase.</p>' +
         // The automatic-renewal disclosure, added POC22. The line above is merchandising and is
         // NOT a renewal disclosure: it never says the card is charged again automatically, at what
@@ -790,7 +796,7 @@
         // to defeat, and it is the one place where this brand's quiet-and-small reflex is wrong.
         // "Cancel anytime" moved out of the line above so cancellation is stated once, here, with
         // the renewal terms it qualifies.
-        '<p class="sub-renewal">Subscribing charges your card automatically at the cadence you choose, at the price shown, until you cancel. No minimum and no cancellation fee, and cancelling stops the next shipment immediately.</p>' +
+        '<p class="sub-renewal" id="pd-sub-renewal">Subscribing charges your card automatically at the cadence you choose, at the price shown, until you cancel. No minimum and no cancellation fee, and cancelling stops the next shipment immediately.</p>' +
         '</div></div>' +
         '<div class="cadence" id="pd-cadence"><div class="filter-label">Delivery cadence</div>' +
         '<div class="filter-pills">' +
