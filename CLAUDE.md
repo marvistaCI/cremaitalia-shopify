@@ -266,9 +266,28 @@ illustrations, emoji, decorative coffee-bean borders.
 
 ### 3.6 Bilingual posture
 Roaster-facing artifacts ship in English AND Italian. Italian is the controlling
-version when handed to an Italian roaster. Honor formal Italian address — use Voi/Vi/
-Vostro, capitalized. Numbers and units: always include both metric (250 g) and US
-customary (8.82 oz).
+version when handed to an Italian roaster. Honor formal Italian address — use the
+**`voi` form, lowercase** (`vostro`, `vostra`, `vi`). Numbers and units: always include
+both metric (250 g) and US customary (8.82 oz).
+
+> **Corrected 2026-08-22 — this rule used to say "Voi/Vi/Vostro, capitalized" and the
+> document of record disagreed with it.** The Roaster Guide Italian edition, reviewed
+> line by line by Lucia Calò (Operations Manager - Italy, native speaker), carries
+> **36 lowercase `vostro`/`vostra` and zero capitalized**. Lowercase is standard modern
+> Italian commercial register; the capitalized form reads archaic, and capitalized
+> `Suo`/`Vostro` belongs to the deferential *Lei* form we do not use. The native
+> speaker who owns the relationship wrote the document, so her practice is the rule and
+> this line was the bug. Found while analysing her register to draft the v8 goal
+> statement in it.
+>
+> **The rest of her register, measured from the same text, and worth matching in any
+> new Italian copy:** median sentence **13 words**; first-person plural (`noi`)
+> dominant at 59 occurrences; **zero** impersonal `si deve`/`si richiede`; obligation
+> stated plainly with **`deve`/`devono`**, never softened into subjunctive
+> circumlocution; **`torrefazione`** for the roastery, never `tosteria`; numbers
+> written **words-then-digits** in contractual passages (*sette (7) giorni*,
+> *quarantacinque (45) giorni*); courtesy forms (`preghiamo`, `vi chiediamo`) used
+> sparingly rather than as padding.
 
 ---
 
