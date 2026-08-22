@@ -3406,10 +3406,9 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC25 Preview" | `152030281897` |
+| **Newest POC preview** | "Crema Italia POC26 Preview" | `152030347433` |
+| Prior preview | "Crema Italia POC25 Preview" | `152030281897` |
 | Prior preview | "Crema Italia POC24 Preview" | `152030183593` |
-| Prior preview | "Crema Italia POC23 Preview" | `152030052521` |
-| Prior preview | "Crema Italia POC22 Preview" | `152029757609` |
 
 **Scorecard: 8.3/10 as of 2026-08-22 (POC24)** — the deployed storefront has been scored six times
 against one rubric: 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20) →
