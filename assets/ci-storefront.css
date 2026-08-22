@@ -344,8 +344,19 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 
    Re-measure if the headline copy changes - 13.838x is specific to this string. */
 @media (max-width:640px){
-  .hero h1{font-size:clamp(18px, calc(7vw - 3.4px), 1.625rem)}
+  /* THE ARITHMETIC, re-measured 2026-08-22 for the three-line headline. Available width is
+     viewport - 48px (hero padding). The binding line is "Exactly as the roaster sealed it."
+     at 15.126x its own font-size, so the largest size holding ONE LINE EACH is
+     (100vw - 48px) / 15.126 = 6.611vw - 3.173px. Set just under that for margin.
+     WHY THE HEADLINE CAN BE THIS BIG: line 2 carries "in Italy" as a PLACE, so line 1 does
+     not need the word "Italian" - dropping it took the worst line from 18.159x to 15.126x
+     and bought 18.4px -> 21.6px at 375, which is what keeps the H1 larger than the subhead
+     (1.23:1). A two-line hero previously sat at 13.838x; do not copy that number back.
+     VERIFIED one line each at 320 / 360 / 375 / 390 / 428.
+     Re-measure if the headline copy changes - these multipliers are specific to these strings. */
+  .hero h1{font-size:clamp(14px, calc(6.55vw - 3.3px), 1.625rem)}
 }
+
 .hero .subhead{font-family:var(--ci-font-display);font-size:clamp(1.1rem,2.5vw,1.4rem);color:var(--ci-crema-light);margin:.75rem auto 1rem;max-width:560px}
 /* Green-white-red tricolore divider: 3 equal segments, aligned, on dark panels. */
 .hero .tricolore{width:132px;height:4px;margin:0 auto 1.4rem;display:grid;grid-template-columns:1fr 1fr 1fr;overflow:hidden;border-radius:1px;line-height:0}
