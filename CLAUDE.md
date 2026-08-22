@@ -3542,9 +3542,10 @@ POC18 and POC19 previews and the live theme are untouched. Preview:
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
 2026-07-06). To refresh: `shopify theme push --theme 152029167785`.
 
-**POC21, POC22, POC23 and POC24 previews exist** — one over the three-newest cap Steve set on
-2026-08-06, because **POC21's prune is pending Steve's explicit go** (`crema-poc-deploy` Step 5
-requires it by name and id, and the deploy did not carry that approval). **POC20 (`152028446889`)
+**Only POC22, POC23 and POC24 previews now exist** — at the three-newest cap Steve set on
+2026-08-06, enforced as `crema-poc-deploy` Step 5. **POC21 (`152029167785`) was deleted 2026-08-22**
+on Steve's explicit go, id/name/role re-verified against a live `theme list --json` in the same
+breath as the delete; its batch is commit `69e6296` and it is redeployable. **POC20 (`152028446889`)
 was deleted 2026-08-22** on Steve's
 explicit go, id/name/role re-verified against a live `theme list --json` in the same breath as the
 delete and after the POC23 push was proven; its batch is commit `ee1fa66` and it is redeployable.
