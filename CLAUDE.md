@@ -103,55 +103,48 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > should flag it to Steve/Code rather than attempt its own fix. See `DECISIONS_LOG.md`
 > 2026-07-04.
 >
-> **The browser screenshot tool is NOT broken — don't screenshot the `preview_start` tab
-> (solved 2026-08-18).** Six §9 entries below (POC5, POC6, POC7, POC9, POC12, POC13) record the
-> screenshot tool as "wedged" and fall back to expensive DOM measurement. **It was never wedged.**
-> **THE FIX — three calls, and the third is the one everybody misses:**
-> ```
-> mcp__Claude_Browser__tabs_create              -> returns e.g. tab-1
-> mcp__Claude_Browser__navigate    {tabId:"tab-1", url:"<url>"}
-> mcp__Claude_Browser__tabs_select {tabId:"tab-1"}    # REQUIRED - only the fronted tab composites
-> mcp__Claude_Browser__computer    {tabId:"tab-1", action:"screenshot"}   # works
-> ```
-> **THREE conditions are required** (the third added 2026-08-22, after the first two proved
-> insufficient; the two before it were each corrected once on 2026-08-18):
-> 1. **A `tabs_create` tab.** The tab `preview_start` makes (`tabId: "seed"`) **never** composites,
->    whatever the pane is doing.
-> 2. **A displayed Browser pane.** A `tabs_create` tab goes back to `hidden` the moment the pane is
->    hidden, and screenshots start failing again mid-session.
-> 3. **That tab must be the FRONTED one.** Only the fronted tab composites. Creating a second tab
->    steals the front, and screenshots then fail on **both** — including the tab that was working
->    seconds earlier. `tabs_context` reporting `isActive: true` is **not** sufficient; call
->    `tabs_select` explicitly.
+> **Browser pane: what is actually true (rewritten 2026-08-22 after getting it wrong twice in one
+> day).** Read this before theorising. Earlier versions of this callout asserted a "seed tab never
+> composites" rule and a "tabs_create + displayed pane" rule. **Both were wrong**, and each one cost
+> Steve a round trip. What follows is only what has been directly observed.
 >
-> **Read the probe correctly — `{visibilityState, hidden, hasFocus}` distinguishes 2 from 3:**
-> - `hidden:true` -> the **pane** is not displayed (condition 2). Ask Steve to show it.
-> - `hidden:false` but the screenshot still times out -> the tab is **not fronted** (condition 3).
->   Call `tabs_select`. This is the case that looks impossible and wastes the most time, because the
->   one signal the old version of this callout told you to trust reports healthy.
+> **1. Screenshots require the pane to be the surface actually on top on Steve's screen.** Not merely
+> open - on top. If he switches to Cowork, another app, or another tab, the page goes
+> `document.hidden === true`, stops compositing, and `computer{action:"screenshot"}` times out with
+> *"the Browser pane is not displayed"*. **The message is accurate; it is the agent that keeps
+> misreading it as a bug.** Coordinate clicks need a recent screenshot, so they fail with it.
 >
-> Also pass an explicit `{tabId}` to `resize_window`, or the new tab keeps its own default size.
-> **Note `javascript_tool` works on a hidden, un-fronted tab.** That is what made this durable — DOM
-> reads keep succeeding, so the measurement workaround looks like a sound answer rather than a
-> symptom — but it is also genuinely useful: a hidden tab is still a fully authenticated HTTP client,
-> and on 2026-08-22 the whole A1 platform test was driven through `fetch()` on a hidden tab when the
-> pane was unavailable. **Two admin-specific traps:** the Shopify admin's `s-internal-*` web
-> components return **zero-size bounding rects** when the pane is not compositing, so ref-clicks and
-> coordinate-clicks silently miss while `innerText` still reads fine; and cross-origin iframes (card
-> entry at checkout) can never be driven by script, so paying for a test order always needs the pane.
-> **Two things that made this durable.** (1) The error text — "the Browser pane is not displayed" —
-> reads as a user-side problem and has now sent **three** sessions down the wrong path of asking
-> Steve to open a panel; on 2026-08-22 Steve answered "the claude pane is visible, and has been from
-> the start", which is what exposed condition 3. **If Steve says the pane is visible, believe him and
-> look for the third condition.** (2) JS execution is never gated on visibility, only throttled, so
-> `javascript_tool` kept returning correct DOM geometry on a dead tab.
-> **Cost of the error:** POC13 re-rendered `object-fit:cover` crops offline in Pillow to judge
-> photography it could simply have looked at. DOM geometry is authoritative for position, size and
-> keyboard reachability but **cannot** judge crop, colour, composition, or synthesised type — and
-> the first visual pass (2026-08-18) found brand-critical defects in all four categories that six
-> DOM-only passes had missed. **Look at the page; do not only measure it.** The §9 entries are left
-> as written (historical narrative, per `crema-poc-deploy` Step 6.4); this callout is the
-> present-tense truth.
+> **2. Everything else works whether the pane is visible or not.** `javascript_tool`, `read_page`,
+> ref-based clicks, `get_page_text`, and `fetch()` from page context all work on a hidden tab. **A
+> hidden tab is a fully authenticated HTTP client** - on 2026-08-22 the whole A1 cart-and-checkout
+> measurement was driven through `fetch()` this way. Prefer this; ask for eyes only when you must
+> genuinely *look* (crop, colour, composition, type).
+>
+> **3. A freshly-started `preview_start` pane composites on its `seed` tab.** Verified directly. Do
+> not create extra tabs by reflex. If several tabs exist, only the fronted one composites, so
+> `tabs_select` the one you want first.
+>
+> **4. The tool's state can diverge from what Steve sees.** `tabs_context` returned *"No preview is
+> open"* while the pane was up in front of him. If that happens, call `preview_start` again - do not
+> tell him the pane is closed.
+>
+> **5. Cross-origin iframes cannot be clicked, ever.** Checkout card fields return *"the press could
+> not be attributed to a frame"* while ordinary clicks on the same page succeed. So **completing a
+> test order always needs Steve's hands**, no matter how healthy the pane is. Stage everything else
+> first, then ask once.
+>
+> **How to behave.** Batch the work that needs looking, tell Steve you need the pane on top, and do
+> everything else headlessly so he is free to work elsewhere. **If Steve says the pane is up, believe
+> him** - he has been right every time and the agent wrong every time. Probe `{visibilityState,
+> hidden, hasFocus}` to tell "not on top" (`hidden:true`) from a genuine tool fault, and if it is
+> neither, say so plainly instead of inventing a new rule for this file.
+>
+> **Why this matters, and it is not about screenshots.** DOM geometry is authoritative for position,
+> size and keyboard reachability but **cannot** judge crop, colour, composition, or synthesised type.
+> Six POC batches measured instead of looking and the first real visual pass (2026-08-18) found
+> brand-critical defects in all four categories. **Look at the page; do not only measure it.** The §9
+> entries that call the tool "wedged" are left as written (historical narrative, per
+> `crema-poc-deploy` Step 6.4); this callout is the present-tense truth.
 
 ---
 
