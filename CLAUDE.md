@@ -3341,11 +3341,47 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   new), then **pull-and-diff proved** the push — both sides 38 files, zero content mismatches, and the
   batch content asserted on the deployed theme. POC21, POC22 and the live theme untouched.
 
+- 2026-08-22 — **POC24: tap targets — and the entry worth reading here is the correction, not the
+  fix.** Steve asked what two carried scorecard findings meant: *"the star rating size not meeting a
+  standard, and the subscription checkbox not being meta-tagged."* **I had told him both were closed.
+  Only one was.** POC23 gave the checkbox an accessible name; the tap target was never touched and I
+  said otherwise. He caught it by asking a question, not by checking my work — which is the wrong way
+  round.
+  **What the findings meant, plainly:** *"meta-tagged"* = an `<input>` has no visible text of its
+  own, so a screen reader had nothing to announce; *"size"* = **WCAG 2.2 AA SC 2.5.8** requires a
+  clickable target to be at least **24x24 CSS px**, and the rating link was **65x24**, scraping past
+  on height with nothing spare and failing this project's own **44px** convention from POC7.
+  **Measuring it took three attempts and two intermediate answers were wrong, both caught before
+  anything was built on them.** (1) The first pass measured the **`<input>` rather than the target**
+  and reported the contact radios as **13x13**, calling them the worst on the site; they are wrapped
+  in a `<label>`, so the real region is **326x20** and the failure was 4px of height, not 11. A fix
+  built on that reading would have solved nothing that was broken. (2) The second **mis-classified an
+  inline link**: 2.5.8 exempts a target **inside a sentence**, and *"three-question quiz"* sits
+  mid-sentence in a `div.callout`, which my `P`/`LI`/`SPAN` heuristic did not recognise. It is exempt
+  and was correctly left alone. The third pass computed the effective target as the **union of the
+  control and its labels** and read the surrounding sentence to classify exemptions.
+  **Fixed:** `#pd-sub` **18x18 with zero labels -> 44x44** hit area and 292x44 effective; contact
+  radios **20 -> 44** tall; `.back-btn` **17 -> 45** across 8 instances; `.region-learn` **15 -> 45**.
+  Zero remaining below AA across 13 pages plus product detail. Mechanism is **padding plus an equal
+  negative margin** (the POC13 ribbon trick), so the hit area grows at **zero layout cost** — proven
+  rather than asserted, by toggling each rule back to its pre-POC24 values in the live page and
+  confirming the visible text and the following content sit at the **same pixel**, 0 movement both.
+  The contact radios were checked the same way and were **already stacked** one per line at both
+  widths, so the min-height changed no layout.
+  **One deliberate omission.** The renewal disclosure is **not** inside a label, though wrapping the
+  whole block would have made the largest target on the page. Reading or selecting a legal disclosure
+  should not toggle a purchase option.
+  **DEPLOYED** to **"Crema Italia POC24 Preview" (id `152030183593`)**: `theme list` +
+  `git log origin/main..HEAD` first, baseline validation, **pull-and-diff proved** — 38 files both
+  sides, zero mismatches, batch content asserted on the deployed theme. **The store is one theme over
+  the three-preview cap**: POC21's prune needs Steve's explicit go by name and id, which the deploy
+  instruction did not carry.
+
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC23 (deployed + pull-and-diff proved 2026-08-22) — read this first
+**▶ CURRENT STATE — POC24 (deployed + pull-and-diff proved 2026-08-22) — read this first
 when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
@@ -3370,9 +3406,9 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC23 Preview" | `152030052521` |
+| **Newest POC preview** | "Crema Italia POC24 Preview" | `152030183593` |
+| Prior preview | "Crema Italia POC23 Preview" | `152030052521` |
 | Prior preview | "Crema Italia POC22 Preview" | `152029757609` |
-| Prior preview | "Crema Italia POC21 Preview" | `152029167785` |
 
 **Scorecard: 7.9/10 as of 2026-08-22 (POC20)** — the deployed storefront has been scored five times
 against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20).
@@ -3393,13 +3429,35 @@ decisions were made; policy now lives in Store Operating Standards §13).
 > accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
 > gate** on brand identity and product detail rising above 9.
 
-**POC23 is deployed** and is the only POC23 theme — all **38** files byte-match the repo, proved by
+**POC24 is deployed** and is the only POC24 theme — all **38** files byte-match the repo, proved by
+pull-and-diff on 2026-08-22 (both sides 38 files, zero content mismatches, nothing on only one side;
+`theme list` **and** `git log origin/main..HEAD` run **before** the push). Batch content asserted on
+the deployed theme.
+
+**What POC24 is:** tap targets (commit `53afe0a`), built after Steve asked what two carried scorecard
+findings actually meant — **and after I told him both were closed when only one was.** POC23 fixed
+the checkbox's accessible name; the tap target was never touched. **Every interactive control now
+meets this project's 44px convention**, against WCAG 2.2 AA's 24x24 floor: `#pd-sub` **18x18 -> 44x44**
+(and it had **zero labels**), contact radios **20 -> 44** tall, `.back-btn` **17 -> 45** across 8
+instances, `.region-learn` **15 -> 45**. Zero remaining below AA across 13 pages plus product detail.
+**Measuring it correctly took three attempts and two intermediate answers were wrong** — the first
+measured the `<input>` rather than the target and reported the contact radios as 13x13 when their
+wrapping `<label>` makes them **326x20**; the second mis-classified *"three-question quiz"*, which
+sits mid-sentence and is **exempt** under 2.5.8's inline exception, as a failure. Both were caught
+before anything was built on them. The fixes use **padding plus an equal negative margin** (the POC13
+ribbon trick) so the hit area grows at **zero layout cost**, proven by toggling each rule back to its
+pre-POC24 values in the live page and confirming the visible text and following content sit at the
+**same pixel**, 0 movement. **The renewal disclosure is deliberately NOT inside a label** — wrapping
+the whole block would make reading or selecting the legal text toggle a purchase option. Detail:
+`docs/POC24_change_list.md`.
+
+**What POC23 was:** it is the only POC23 theme — all **38** files byte-match the repo, proved by
 pull-and-diff on 2026-08-22 (both sides 38 files, zero content mismatches, nothing on only one side;
 `theme list` **and** `git log origin/main..HEAD` were run **before** the push). The diff asserted the
 batch content on the deployed theme: 34 `--ci-crema-text` uses, 4 `--ci-bottega-*` uses,
 `aria-describedby`/`aria-hidden` present, and **zero hardcoded navy** left in the Liquid.
 
-**What POC23 is:** the answer to a standing scorecard item Steve challenged — *"semantic markup where
+**What POC23 was:** the answer to a standing scorecard item Steve challenged — *"semantic markup where
 it claims that elements announce poorly, and we have not run an end-to-end screen-reader"* (commit
 `2c08080`). Testing it split the claim in half. **The semantic-markup half was largely false:** 83 of
 83 non-semantic clickables already carry `role="button"` and `tabindex` and 82 of 83 have an
@@ -3484,8 +3542,10 @@ POC18 and POC19 previews and the live theme are untouched. Preview:
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
 2026-07-06). To refresh: `shopify theme push --theme 152029167785`.
 
-**Only POC21, POC22 and POC23 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
-enforced as `crema-poc-deploy` Step 5. **POC20 (`152028446889`) was deleted 2026-08-22** on Steve's
+**POC21, POC22, POC23 and POC24 previews exist** — one over the three-newest cap Steve set on
+2026-08-06, because **POC21's prune is pending Steve's explicit go** (`crema-poc-deploy` Step 5
+requires it by name and id, and the deploy did not carry that approval). **POC20 (`152028446889`)
+was deleted 2026-08-22** on Steve's
 explicit go, id/name/role re-verified against a live `theme list --json` in the same breath as the
 delete and after the POC23 push was proven; its batch is commit `ee1fa66` and it is redeployable.
 Earlier the same day: **POC19 (`152017764521`) was deleted** on Steve's
