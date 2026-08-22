@@ -3352,6 +3352,27 @@ catalog schema additions) should be logged there too.
 
 **OPEN / TO VET:**
 
+> **▶ THE LIVE OPEN-ITEMS LIST IS NOT HERE (Steve, 2026-08-22).** It is the **Decisions**
+> sheet of `Operations\In USA\shopify\Systems\Systems Inventory.xlsx` (OneDrive) — filter
+> **State** for `OPEN`, `GAP`, `CHANGING` or `SCHEDULED`. That sheet carries **Owner**,
+> **Next action** and **By when** for every live item; this file carries none of those and
+> never will.
+>
+> **Everything below this line is retained as CONTEXT AND HISTORY — the reasoning, the
+> measurements, and why each item exists.** It is genuinely useful and it is why the items
+> are understandable at all. But **do not read an item's STATE from here.** A checkbox in
+> this file records what was true when someone typed it; the sheet records what is true now.
+>
+> **This exists because open items had three homes** — this section, the Decisions sheet,
+> and the follow-ups inside `Coordination\DECISIONS_LOG.md` entries — and state drifted
+> between them. Proven the same day: the `info@` / `support@` mailbox item sat OPEN and
+> launch-blocking in this very section while both mailboxes already existed, one of them
+> since June. Same repair already made twice at document level (the brief's §12 on
+> 2026-07-14, its §10 today), now applied to the list of open items itself.
+>
+> **When you close something, close it in the sheet.** If you also want the narrative here
+> corrected, correct it — but the sheet is what another person reads.
+
 **▶ PRE-PRODUCTION PLATFORM SPIKE — RUN AND CLOSED 2026-08-21 (added 2026-07-24).**
 These were never decisions; they were unverified assumptions about how Shopify actually behaves,
 and each one, if wrong, forces a spec revision mid-build. **All six items are now answered.** Two
