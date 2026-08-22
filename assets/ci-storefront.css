@@ -7,8 +7,29 @@
    ============================================================ */
 :root{
   --ci-cream:#FBF8F1;--ci-ivory:#FFFFFF;--ci-coffee:#55331B;--ci-espresso:#6B4A38;
-  --ci-crema:#B88348;--ci-crema-hover:#9C6E3C;--ci-crema-light:#E8A86A;
+  --ci-crema:#B88348;--ci-crema-hover:#9C6E3C;--ci-crema-light:#E9AB6E;
   --ci-green:#0E7A3A;--ci-red:#C8342B;--ci-hairline:#D9D2C2;--ci-mute:#8C7E6A;--ci-ink-soft:#5A4A3F;
+  /* POC23 - CONTRAST TOKENS. Brand Standards v2.0 already recorded that Crema Gold is 3.1:1 on
+     cream and is therefore "large-display/accent only", but the site used it for 12px eyebrows and
+     inline links anyway; a 13-page audit found 17 failing colour combinations across 127 rendered
+     instances, and TWO colours accounted for all of them. These are DARKENED SIBLINGS, not
+     replacements: same hue, same saturation, less lightness, used ONLY where the colour lands on
+     text under 24px. --ci-crema and --ci-mute are unchanged and still correct for headings, rules,
+     and decorative fills, where the requirement is 3:1 rather than 4.5:1 and they already pass.
+     Cream is DARKER than white, so cream is the harder ground and these are measured against it.
+       --ci-crema-text  #94693A  4.56:1 on cream (was #B88348, 3.10)
+       --ci-mute-text   #7D705E  4.55:1 on cream (was #8C7E6A, 3.73)
+       --ci-crema-fill  #96683A  cream text ON it reaches 4.56:1 (was #B88348, 3.10)
+       --ci-mute-fill   #7D705E  cream text ON it reaches 4.55:1 (was #8C7E6A, 3.73)
+     Do not "simplify" these back onto --ci-crema/--ci-mute. */
+  --ci-crema-text:#94693A;--ci-mute-text:#7D705E;
+  --ci-crema-fill:#96683A;--ci-mute-fill:#7D705E;
+  /* POC23 - BOTTEGA ACCENT, sanctioned by Steve 2026-08-22 and recorded in Brand Standards.
+     Bottega is deliberately "the shop apart" and wears a cool slate scheme rather than the
+     espresso/cream/gold of the coffee shelves. It was previously an INLINE gradient on the hero
+     plus a separately hardcoded badge colour - the same idea in two places with two values, which
+     is how it escaped the palette rule in the first place. SCOPED TO BOTTEGA ONLY. */
+  --ci-bottega-dark:#1A1A2A;--ci-bottega-mid:#3A3A5A;--ci-bottega-badge:#2A2A3A;--ci-bottega-tint:#C8C8D8;
   --ci-font-display:"Marcellus","Georgia",serif;
   --ci-font-body:"Inter","Helvetica Neue","Arial",sans-serif;
   --ci-radius:8px;--ci-page-max:1120px;
@@ -44,7 +65,7 @@ body{background:var(--ci-cream);color:var(--ci-coffee);font-family:var(--ci-font
 nav{display:flex;gap:.15rem;align-items:center;flex-wrap:wrap}
 nav button{background:none;border:none;cursor:pointer;font-family:var(--ci-font-body);font-size:.82rem;font-weight:500;color:var(--ci-espresso);padding:.35rem .6rem;border-radius:4px;transition:background 200ms,color 200ms;white-space:nowrap}
 nav button:hover{background:var(--ci-hairline);color:var(--ci-coffee)}
-nav button.active{color:var(--ci-crema);font-weight:600}
+nav button.active{color:var(--ci-crema-text);font-weight:600}
 .nav-item{position:relative;display:flex;align-items:center}
 .shop-menu{display:none;position:absolute;top:100%;left:0;background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);box-shadow:0 8px 24px rgba(59,31,18,.12);min-width:272px;padding:.4rem;z-index:200}
 .nav-item:hover .shop-menu,.nav-item:focus-within .shop-menu{display:block}
@@ -56,10 +77,10 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .shop-div{height:1px;background:var(--ci-hairline);margin:.35rem .3rem}
 .shop-menu .men{font-size:.76rem;color:var(--ci-espresso);display:block;line-height:1.35}
 .icon-btn{background:none;border:none;cursor:pointer;color:var(--ci-espresso);padding:.3rem;display:flex;align-items:center;transition:color 200ms}
-.icon-btn:hover{color:var(--ci-crema)}
+.icon-btn:hover{color:var(--ci-crema-text)}
 .icon-btn svg{width:19px;height:19px;display:block}
 .sign-in-btn{display:flex;align-items:center;gap:.35rem;background:none;border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);cursor:pointer;font-family:var(--ci-font-body);font-size:.8rem;font-weight:500;color:var(--ci-espresso);padding:.35rem .75rem;transition:all 200ms;white-space:nowrap}
-.sign-in-btn:hover{border-color:var(--ci-crema);color:var(--ci-crema)}
+.sign-in-btn:hover{border-color:var(--ci-crema);color:var(--ci-crema-text)}
 .sign-in-btn.signed-in{background:var(--ci-coffee);color:var(--ci-cream);border-color:var(--ci-coffee)}
 .cart-count{background:var(--ci-crema);color:var(--ci-cream);font-size:.62rem;font-weight:600;min-width:15px;height:15px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 4px;margin-left:-4px;margin-top:-10px}
 .cart-count.show{display:inline-flex}
@@ -92,7 +113,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
      in the middle of the bar (.header-inner is space-between). */
   .header-quick{display:flex;align-items:center;gap:.35rem;margin-left:auto}
   .hq-btn{background:none;border:none;cursor:pointer;color:var(--ci-espresso);display:flex;align-items:center;justify-content:center;min-height:44px;padding:0 .55rem;font-family:var(--ci-font-body);font-size:.95rem;font-weight:500;line-height:1}
-  .hq-btn:hover{color:var(--ci-crema)}
+  .hq-btn:hover{color:var(--ci-crema-text)}
   .hq-cart{min-width:44px;padding:0 .3rem}
   .hq-cart svg{width:21px;height:21px;display:block}
   /* .header-right collapses into a full-width dropdown panel under the bar */
@@ -140,7 +161,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .modal-overlay.active{display:flex}
 .modal{background:var(--ci-cream);border-radius:12px;max-width:540px;width:100%;padding:2.5rem 2rem;position:relative;max-height:90vh;overflow-y:auto}
 .signin-modal{background:var(--ci-cream);border-radius:12px;max-width:400px;width:100%;padding:2rem;position:relative}
-.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;font-size:1.4rem;color:var(--ci-mute);line-height:1}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;font-size:1.4rem;color:var(--ci-mute-text);line-height:1}
 .modal-close:hover{color:var(--ci-coffee)}
 .modal h2,.signin-modal h2{font-family:var(--ci-font-display);font-size:1.9rem;font-weight:400;color:var(--ci-coffee);margin-bottom:.3rem}
 .modal .subtitle,.signin-modal .subtitle{font-family:var(--ci-font-display);font-size:1.05rem;color:var(--ci-espresso);margin-bottom:1.75rem}
@@ -149,12 +170,12 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .quiz-step{display:none}
 .quiz-step.active{display:block}
 .quiz-q{font-weight:600;font-size:.95rem;color:var(--ci-coffee);margin-bottom:1rem}
-.quiz-q-note{font-size:.78rem;color:var(--ci-mute);margin:-.6rem 0 1rem;line-height:1.5}
+.quiz-q-note{font-size:.78rem;color:var(--ci-mute-text);margin:-.6rem 0 1rem;line-height:1.5}
 .quiz-options{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.5rem}
 .quiz-opt{background:var(--ci-ivory);border:1.5px solid var(--ci-hairline);border-radius:var(--ci-radius);padding:.85rem 1rem;cursor:pointer;transition:all 200ms;display:flex;align-items:flex-start;gap:.75rem}
 .quiz-opt:hover{border-color:var(--ci-crema)}
 .quiz-opt.selected{border-color:var(--ci-crema);background:rgba(196,106,31,.07)}
-.quiz-opt-mark{flex-shrink:0;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--ci-hairline);display:flex;align-items:center;justify-content:center;font-family:var(--ci-font-display);font-weight:400;font-size:.95rem;color:var(--ci-crema);margin-top:.05rem}
+.quiz-opt-mark{flex-shrink:0;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--ci-hairline);display:flex;align-items:center;justify-content:center;font-family:var(--ci-font-display);font-weight:400;font-size:.95rem;color:var(--ci-crema-text);margin-top:.05rem}
 .quiz-opt.selected .quiz-opt-mark{border-color:var(--ci-crema);background:var(--ci-crema);color:var(--ci-cream)}
 .quiz-opt-text strong{display:block;font-size:.9rem;color:var(--ci-coffee)}
 .quiz-opt-text span{font-size:.8rem;color:var(--ci-espresso)}
@@ -162,10 +183,10 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .quiz-dot{width:28px;height:4px;border-radius:2px;background:var(--ci-hairline);transition:background 300ms}
 .quiz-dot.done{background:var(--ci-crema)}
 .quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
-.skip-link{background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--ci-mute);font-family:var(--ci-font-body);text-decoration:underline;text-underline-offset:2px}
-.skip-link:hover{color:var(--ci-crema)}
+.skip-link{background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--ci-mute-text);font-family:var(--ci-font-body);text-decoration:underline;text-underline-offset:2px}
+.skip-link:hover{color:var(--ci-crema-text)}
 .quiz-result{text-align:center;padding:.5rem 0}
-.quiz-result .result-mark{font-family:var(--ci-font-display);font-size:1.6rem;font-weight:400;color:var(--ci-crema);margin-bottom:.5rem}
+.quiz-result .result-mark{font-family:var(--ci-font-display);font-size:1.6rem;font-weight:400;color:var(--ci-crema-text);margin-bottom:.5rem}
 .quiz-result h3{font-family:var(--ci-font-display);font-size:1.5rem;font-weight:400;color:var(--ci-coffee);margin-bottom:.4rem}
 .quiz-result p{font-size:.9rem;color:var(--ci-espresso);margin-bottom:1.25rem}
 .quiz-result .tags{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem}
@@ -176,10 +197,10 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .signin-tab{flex:1;background:none;border:none;cursor:pointer;font-family:var(--ci-font-body);font-size:.85rem;font-weight:500;padding:.6rem;color:var(--ci-espresso);transition:all 200ms}
 .signin-tab.active{background:var(--ci-coffee);color:var(--ci-cream)}
 .form-field{margin-bottom:1rem}
-.form-field label{display:block;font-size:.78rem;font-weight:600;color:var(--ci-crema);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem}
+.form-field label{display:block;font-size:.78rem;font-weight:600;color:var(--ci-crema-text);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem}
 .form-field input{width:100%;border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);padding:.65rem .85rem;font-family:var(--ci-font-body);font-size:.9rem;background:var(--ci-ivory);color:var(--ci-coffee)}
 .form-field input:focus{outline:2px solid var(--ci-crema);outline-offset:1px;border-color:transparent}
-.note{font-size:.78rem;color:var(--ci-mute);margin-top:.5rem}
+.note{font-size:.78rem;color:var(--ci-mute-text);margin-top:.5rem}
 
 /* ---- profile banner ---- */
 .profile-tags{display:flex;gap:.4rem;flex-wrap:wrap}
@@ -293,7 +314,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .dark-hero .filter-label{color:var(--ci-crema-light)}
 .dark-hero .pill{background:transparent;border:1px solid rgba(255,255,255,.28);color:var(--ci-cream)}
 .dark-hero .pill:hover{border-color:var(--ci-crema-light);color:var(--ci-cream)}
-.dark-hero .pill.active{background:var(--ci-crema);border-color:var(--ci-crema);color:var(--ci-cream)}
+.dark-hero .pill.active{background:var(--ci-crema-fill);border-color:var(--ci-crema-fill);color:var(--ci-cream)}
 .dark-hero .pill.disabled{opacity:.4}
 .dark-hero .filter-region{width:100%}
 .dark-hero .region-note{color:#d4c4b8;font-size:.8rem;margin:.6rem 0 0}
@@ -308,7 +329,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 
 /* ---- main / sections ---- */
 .ci-main{flex:1;max-width:var(--ci-page-max);margin:0 auto;width:100%;padding:2rem 1.5rem 4rem}
-.eyebrow{font-family:var(--ci-font-body);font-weight:600;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ci-crema);margin-bottom:.5rem}
+.eyebrow{font-family:var(--ci-font-body);font-weight:600;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ci-crema-text);margin-bottom:.5rem}
 .section-head{border-bottom:1px solid var(--ci-hairline);padding-bottom:1rem;margin-bottom:2rem;margin-top:3rem}
 .section-head:first-child{margin-top:0}
 .section-head h2{font-family:var(--ci-font-display);font-weight:400;font-size:2rem;color:var(--ci-coffee)}
@@ -368,7 +389,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 
 /* ---- buttons ---- */
 .btn{display:inline-block;font-family:var(--ci-font-body);font-weight:600;font-size:.95rem;padding:.75rem 1.75rem;border-radius:var(--ci-radius);border:2px solid transparent;cursor:pointer;text-decoration:none;transition:background 200ms,color 200ms,border-color 200ms}
-.btn-primary{background:var(--ci-crema);color:var(--ci-cream);border-color:var(--ci-crema)}
+.btn-primary{background:var(--ci-crema-fill);color:var(--ci-cream);border-color:var(--ci-crema-fill)}
 .btn-primary:hover{background:var(--ci-crema-hover);border-color:var(--ci-crema-hover)}
 .btn-secondary{background:transparent;color:var(--ci-coffee);border-color:var(--ci-hairline)}
 .btn-secondary:hover{background:var(--ci-hairline)}
@@ -390,14 +411,14 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .r{background:linear-gradient(135deg,#2a1a0e,#6B4A38);color:var(--ci-crema-light)}
 .p{background:linear-gradient(135deg,#55331B,#8B5E3C);color:var(--ci-crema-light)}
 .g{background:linear-gradient(135deg,#1a3a2a,#0E7A3A,#4a7a3a);color:#d4f0d4}
-.b{background:linear-gradient(135deg,#1a1a2a,#3a3a5a);color:#c8c8d8}
+.b{background:linear-gradient(135deg,var(--ci-bottega-dark),var(--ci-bottega-mid));color:var(--ci-bottega-tint)}
 .card-body{padding:1.25rem}
 .cs{display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .5rem;border-radius:3px;margin-bottom:.5rem}
 .sr{background:#55331B;color:var(--ci-cream)}
-.ss{background:var(--ci-crema);color:var(--ci-cream)}
+.ss{background:var(--ci-crema-fill);color:var(--ci-cream)}
 .sl{background:#6B4A38;color:var(--ci-cream)}
-.so{background:#8C7E6A;color:var(--ci-cream)}
-.sb{background:#2a2a3a;color:#c8c8d8}
+.so{background:var(--ci-mute-fill);color:var(--ci-cream)}
+.sb{background:var(--ci-bottega-badge);color:var(--ci-bottega-tint)}
 .card h3{font-family:var(--ci-font-display);font-weight:400;font-size:1.2rem;color:var(--ci-coffee);margin:0 0 .25rem}
 .rn{font-size:.85rem;color:var(--ci-espresso);margin-bottom:.5rem}
 /* POC15's dual units lengthened this line ("250g" -> "250 g (8.82 oz)") and pushed the
@@ -411,23 +432,23 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .card p{font-size:.9rem;color:var(--ci-ink-soft);margin:0 0 .75rem;max-width:none}
 .cp{font-family:var(--ci-font-body);font-weight:600;font-size:1rem;color:var(--ci-coffee)}
 .card-footer{padding:.75rem 1.25rem;border-top:1px solid var(--ci-hairline);display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap}
-.csz{font-size:.8rem;color:var(--ci-mute)}
-.cpu{font-size:.78rem;font-weight:400;color:var(--ci-mute)}
+.csz{font-size:.8rem;color:var(--ci-mute-text)}
+.cpu{font-size:.78rem;font-weight:400;color:var(--ci-mute-text)}
 
 /* ---- shelf cards ---- */
 .shelf-card{background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);padding:1.25rem;cursor:pointer;transition:box-shadow 200ms,border-color 200ms;border-top:2px solid var(--ci-crema)}
 .shelf-card:hover{box-shadow:0 4px 16px rgba(59,31,18,.1);border-color:var(--ci-crema)}
 .shelf-card h3{font-family:var(--ci-font-display);font-size:1.4rem;font-weight:400;color:var(--ci-coffee);margin-bottom:.1rem}
-.shelf-card .ss2{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ci-mute);margin-bottom:.5rem}
+.shelf-card .ss2{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ci-mute-text);margin-bottom:.5rem}
 .shelf-card p{font-size:.85rem;color:var(--ci-ink-soft);max-width:none;margin:0}
 
 /* ---- filters (shelf / region pills; also used by the taste-console modal) ---- */
 .filter-group{display:flex;flex-direction:column;gap:.4rem}
-.filter-label{font-size:.72rem;font-weight:600;color:var(--ci-crema);letter-spacing:.1em;text-transform:uppercase}
+.filter-label{font-size:.72rem;font-weight:600;color:var(--ci-crema-text);letter-spacing:.1em;text-transform:uppercase}
 .filter-pills{display:flex;gap:.4rem;flex-wrap:wrap}
 .pill{border:1px solid var(--ci-hairline);background:var(--ci-cream);color:var(--ci-espresso);font-size:.8rem;font-weight:500;padding:.25rem .7rem;border-radius:20px;cursor:pointer;transition:all 200ms}
-.pill:hover{border-color:var(--ci-crema);color:var(--ci-crema)}
-.pill.active{background:var(--ci-crema);color:var(--ci-cream);border-color:var(--ci-crema)}
+.pill:hover{border-color:var(--ci-crema);color:var(--ci-crema-text)}
+.pill.active{background:var(--ci-crema-fill);color:var(--ci-cream);border-color:var(--ci-crema-fill)}
 .pill.disabled{opacity:.4;cursor:default}
 /* Gloss beside the Shop shelf pills. Sits in the same flex row so it trails the pills on
    desktop and wraps to its own full-width line on phones. Colour is the brand cream token at
@@ -440,7 +461,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 /* ---- freshness + badges ---- */
 .freshness{display:inline-flex;align-items:center;gap:.3rem;font-size:.78rem;font-weight:600;color:var(--ci-green);background:rgba(14,122,58,.08);padding:.2rem .5rem;border-radius:3px}
 .fw{color:var(--ci-red);background:rgba(200,52,43,.08)}
-.po{text-decoration:line-through;color:var(--ci-mute);font-size:.85rem;margin-right:.25rem}
+.po{text-decoration:line-through;color:var(--ci-mute-text);font-size:.85rem;margin-right:.25rem}
 
 /* ---- callouts ---- */
 .callout{background:var(--ci-cream);border-left:3px solid var(--ci-crema);padding:1rem 1.25rem;margin:1.5rem 0;border-radius:0 var(--ci-radius) var(--ci-radius) 0;font-size:.92rem;color:var(--ci-ink-soft)}
@@ -463,6 +484,18 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 
 /* ---- shelf / dark hero ---- */
 .dark-hero{background:var(--ci-coffee);color:var(--ci-cream);padding:3rem 1.5rem 2rem}
+/* POC23: Bottega's hero was an INLINE style on templates/index.liquid, which is precisely how a
+   colour outside the brand palette went unnoticed - inline styles bypass the token system and never
+   appear in a stylesheet audit. Sanctioned by Steve 2026-08-22 and recorded in Brand Standards.
+   Scoped to Bottega; do not reuse this accent on a coffee shelf. */
+.dark-hero.bottega-hero{background:linear-gradient(135deg,var(--ci-bottega-dark),var(--ci-bottega-mid))}
+/* POC23 - THE DARK-GROUND EXCEPTION, and it is the trap in this whole change. --ci-crema-text is
+   DARKER than --ci-crema, which raises contrast on cream and LOWERS it on brown. The first pass of
+   this batch darkened .inline-link globally and drove "See the map" on the Espresso hero from
+   3.40:1 down to 2.31:1 - a regression caused by the fix. On any dark ground the correction runs the
+   other way: go lighter, not darker. */
+.dark-hero .inline-link,.taste-ribbon .inline-link{color:var(--ci-crema-light)}
+.dark-hero .prose a{color:var(--ci-crema-light)}
 .dark-hero-inner{max-width:var(--ci-page-max);margin:0 auto}
 .dark-hero h1{font-family:var(--ci-font-display);font-size:clamp(2rem,5vw,3rem);font-weight:400;color:var(--ci-cream)}
 .dark-hero .sub{font-size:.9rem;color:var(--ci-crema-light);margin-top:.25rem}
@@ -475,7 +508,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 /* ---- promise ---- */
 .promise-list{list-style:none;padding:0;margin:2rem 0;display:flex;flex-direction:column;gap:1.5rem}
 .promise-list li{display:flex;gap:1.25rem;align-items:flex-start;padding:1.5rem;background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-left:3px solid var(--ci-crema);border-radius:0 var(--ci-radius) var(--ci-radius) 0}
-.pn{font-family:var(--ci-font-display);font-size:2rem;font-weight:400;color:var(--ci-crema);line-height:1;flex-shrink:0;width:2rem}
+.pn{font-family:var(--ci-font-display);font-size:2rem;font-weight:400;color:var(--ci-crema-text);line-height:1;flex-shrink:0;width:2rem}
 .pt h3{font-size:1.05rem;font-weight:600;color:var(--ci-coffee);margin-bottom:.25rem}
 .pt p{font-size:.9rem;color:var(--ci-ink-soft);margin:0;max-width:none}
 
@@ -483,16 +516,16 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .founder-grid{display:grid;grid-template-columns:200px 1fr;gap:2.5rem;align-items:start;margin-top:1.5rem}
 .prose{max-width:72ch}
 .prose p{max-width:65ch;color:var(--ci-ink-soft);margin-bottom:1rem;font-size:.95rem;line-height:1.65}
-.prose a{color:var(--ci-crema);text-decoration:underline;text-underline-offset:2px}
+.prose a{color:var(--ci-crema-text);text-decoration:underline;text-underline-offset:2px}
 .prose a:hover{color:var(--ci-crema-hover)}
 .prose h3{font-family:var(--ci-font-display);font-size:1.4rem;font-weight:400;color:var(--ci-coffee);margin:1.5rem 0 .5rem}
-.afd{font-size:.78rem;color:var(--ci-mute);margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--ci-hairline)}
+.afd{font-size:.78rem;color:var(--ci-mute-text);margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--ci-hairline)}
 
 /* ---- people (team / partners) ---- */
 .people-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.5rem;margin-bottom:1rem}
 .person-photo{width:100%;aspect-ratio:1;background:linear-gradient(135deg,var(--ci-espresso),var(--ci-coffee));border-radius:var(--ci-radius);border:1px solid var(--ci-hairline);display:flex;align-items:center;justify-content:center;font-family:var(--ci-font-display);font-size:.9rem;color:var(--ci-crema-light);text-align:center;padding:.75rem;margin-bottom:.65rem}
 .person-card h4{font-family:var(--ci-font-display);font-weight:400;font-size:1rem;color:var(--ci-coffee);margin:0}
-.person-card .person-role{font-size:.8rem;color:var(--ci-mute);margin:.15rem 0 0}
+.person-card .person-role{font-size:.8rem;color:var(--ci-mute-text);margin:.15rem 0 0}
 .person-card.is-link{cursor:pointer}
 .person-card.is-link .person-photo{transition:border-color 150ms}
 .person-card.is-link h4{transition:color 150ms}
@@ -500,25 +533,25 @@ nav button.active{color:var(--ci-crema);font-weight:600}
    discoverable by hovering, which a touch or keyboard user never does. A real <button> also
    makes the bio keyboard-reachable - the card itself is a div with onclick and cannot be
    tabbed to at all. */
-.person-bio{display:inline-block;margin:.3rem 0 0;padding:0;background:none;border:none;font-family:var(--ci-font-body);font-size:.8rem;font-weight:600;color:var(--ci-crema);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.person-bio{display:inline-block;margin:.3rem 0 0;padding:0;background:none;border:none;font-family:var(--ci-font-body);font-size:.8rem;font-weight:600;color:var(--ci-crema-text);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .person-bio:hover{color:var(--ci-espresso)}
 .person-bio:focus-visible{outline:2px solid var(--ci-crema);outline-offset:3px;border-radius:2px}
-.person-card.is-link:hover h4{color:var(--ci-crema)}
+.person-card.is-link:hover h4{color:var(--ci-crema-text)}
 .person-card.is-link:hover .person-bio{color:var(--ci-espresso)}
 .person-card.is-link:hover .person-photo{border-color:var(--ci-crema)}
 .founder-col{width:200px}
 .founder-photo{width:200px;aspect-ratio:1;object-fit:cover;border-radius:var(--ci-radius);border:1px solid var(--ci-hairline);display:block}
 .founder-name{font-family:var(--ci-font-display);font-weight:400;font-size:1.05rem;color:var(--ci-coffee);margin:.6rem 0 0}
-.founder-col .person-role{font-size:.8rem;color:var(--ci-mute);margin:.15rem 0 0}
+.founder-col .person-role{font-size:.8rem;color:var(--ci-mute-text);margin:.15rem 0 0}
 .story-photo{margin:1.25rem 0}
 .story-photo img{display:block;width:100%;height:auto;border-radius:var(--ci-radius);border:1px solid var(--ci-hairline)}
-.story-photo figcaption{font-size:.8rem;color:var(--ci-mute);margin-top:.5rem}
+.story-photo figcaption{font-size:.8rem;color:var(--ci-mute-text);margin-top:.5rem}
 /* Second stacked tile beneath a founder/company portrait (dog photo, caffè door). */
 .founder-stack{margin:1.1rem 0 0}
 
 /* ---- back button ---- */
 .back-btn{display:inline-flex;align-items:center;gap:.3rem;background:none;border:none;cursor:pointer;font-family:var(--ci-font-body);font-size:.85rem;color:var(--ci-espresso);padding:0;margin-bottom:1.5rem;transition:color 200ms}
-.back-btn:hover{color:var(--ci-crema)}
+.back-btn:hover{color:var(--ci-crema-text)}
 
 /* ---- roaster profile hero ---- */
 .roaster-hero-row{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap}
@@ -533,7 +566,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 /* ---- journal ---- */
 .journal-card{background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);overflow:hidden;margin-bottom:1.25rem}
 .journal-card .jc-body{padding:1.5rem}
-.journal-card .jc-kicker{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ci-crema);margin-bottom:.4rem}
+.journal-card .jc-kicker{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ci-crema-text);margin-bottom:.4rem}
 .journal-card h3{font-family:var(--ci-font-display);font-size:1.6rem;font-weight:400;color:var(--ci-coffee);margin-bottom:.4rem}
 .journal-card p{font-size:.92rem;color:var(--ci-ink-soft);max-width:68ch}
 
@@ -554,7 +587,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .acct-actions .btn{font-size:.82rem;padding:.5rem 1rem}
 
 /* ---- inline text link (button styled as link) ---- */
-.inline-link{background:none;border:none;padding:0;cursor:pointer;font-family:var(--ci-font-body);font-weight:600;font-size:inherit;color:var(--ci-crema);text-decoration:underline;text-underline-offset:2px}
+.inline-link{background:none;border:none;padding:0;cursor:pointer;font-family:var(--ci-font-body);font-weight:600;font-size:inherit;color:var(--ci-crema-text);text-decoration:underline;text-underline-offset:2px}
 .inline-link:hover{color:var(--ci-crema-hover)}
 
 /* ---- founding-member reverse banner ---- */
@@ -580,7 +613,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .account-menu::before{content:"";position:absolute;top:-.35rem;left:0;right:0;height:.35rem}
 .account-wrap.menu-force-closed .account-menu{display:none!important}
 .account-menu a{display:block;padding:.5rem .7rem;border-radius:6px;cursor:pointer;text-decoration:none;font-size:.85rem;color:var(--ci-espresso)}
-.account-menu a:hover{background:var(--ci-cream);color:var(--ci-crema)}
+.account-menu a:hover{background:var(--ci-cream);color:var(--ci-crema-text)}
 
 /* ---- cart ---- */
 .cart-banner{background:var(--ci-coffee);color:var(--ci-cream);border-radius:var(--ci-radius);padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:.9rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
@@ -593,9 +626,9 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .cart-line h4{font-family:var(--ci-font-display);font-size:1.05rem;font-weight:400;color:var(--ci-coffee)}
 .qty-stepper{display:inline-flex;align-items:center;gap:.5rem;margin-top:.5rem}
 .qty-stepper button{width:24px;height:24px;border:1px solid var(--ci-hairline);background:var(--ci-cream);border-radius:4px;cursor:pointer;color:var(--ci-coffee);font-size:1rem;line-height:1;display:flex;align-items:center;justify-content:center;padding:0}
-.qty-stepper button:hover{border-color:var(--ci-crema);color:var(--ci-crema)}
+.qty-stepper button:hover{border-color:var(--ci-crema);color:var(--ci-crema-text)}
 .qty-n{min-width:1.4rem;text-align:center;font-weight:600;font-size:.9rem;color:var(--ci-coffee)}
-.cart-empty{text-align:center;padding:3rem 1rem;color:var(--ci-mute)}
+.cart-empty{text-align:center;padding:3rem 1rem;color:var(--ci-mute-text)}
 .cart-summary{background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);padding:1.25rem;margin-top:1rem}
 .cart-summary .row{display:flex;justify-content:space-between;gap:1rem;font-size:.9rem;padding:.3rem 0;color:var(--ci-espresso)}
 .cart-summary .row span:last-child{text-align:right;white-space:nowrap}
@@ -603,19 +636,19 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .tag-pill{display:inline-block;font-size:.72rem;background:rgba(196,106,31,.1);color:var(--ci-crema-hover);border:1px solid var(--ci-crema-light);padding:.15rem .5rem;border-radius:20px;margin:.15rem .15rem 0 0}
 
 /* ---- footer ---- */
-.ci-footer{border-top:1px solid var(--ci-hairline);padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.8rem;color:var(--ci-mute);background:var(--ci-cream)}
+.ci-footer{border-top:1px solid var(--ci-hairline);padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.8rem;color:var(--ci-mute-text);background:var(--ci-cream)}
 .footer-links{display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
 /* POC22: the footer now mixes <button> (SPA routes) with <a> (Shopify policy pages, which
    deliberately leave the SPA). Both must render identically - a policy link that looked
    different would read as a different KIND of thing, which it is not from the reader's side. */
-.footer-links button,.footer-links a{background:none;border:none;padding:0;cursor:pointer;font-size:.8rem;color:var(--ci-mute);text-decoration:underline;text-underline-offset:2px;font-family:var(--ci-font-body);line-height:1.4}
-.footer-links button:hover,.footer-links a:hover{color:var(--ci-crema)}
+.footer-links button,.footer-links a{background:none;border:none;padding:0;cursor:pointer;font-size:.8rem;color:var(--ci-mute-text);text-decoration:underline;text-underline-offset:2px;font-family:var(--ci-font-body);line-height:1.4}
+.footer-links button:hover,.footer-links a:hover{color:var(--ci-crema-text)}
 /* Company line + the quiet legal pair. Terms and Privacy are fine print and sit here rather than
    in .footer-links, which carries what a shopper actually wants before buying. */
 .footer-id{display:flex;flex-direction:column;gap:.3rem}
 .footer-legal{display:flex;gap:.9rem}
-.footer-legal a{color:var(--ci-mute);text-decoration:underline;text-underline-offset:2px;font-size:.75rem}
-.footer-legal a:hover{color:var(--ci-crema)}
+.footer-legal a{color:var(--ci-mute-text);text-decoration:underline;text-underline-offset:2px;font-size:.75rem}
+.footer-legal a:hover{color:var(--ci-crema-text)}
 
 /* ---- toast ---- */
 .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(120%);opacity:0;visibility:hidden;background:var(--ci-coffee);color:var(--ci-cream);padding:.75rem 1.25rem;border-radius:var(--ci-radius);font-size:.85rem;z-index:600;transition:transform 300ms,opacity 300ms,visibility 300ms;box-shadow:0 8px 24px rgba(59,31,18,.25)}
@@ -652,10 +685,10 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 /* ---- home landing (POC5 model) ---- */
 .home-jump{position:sticky;top:68px;z-index:80;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;padding:.6rem 1rem;background:rgba(251,248,241,.9);backdrop-filter:blur(6px);border-bottom:1px solid var(--ci-hairline)}
 .home-jump button{font-family:var(--ci-font-body);font-size:.8rem;font-weight:600;color:var(--ci-espresso);background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:999px;padding:.35rem .95rem;cursor:pointer;transition:all 150ms}
-.home-jump button:hover{border-color:var(--ci-crema);color:var(--ci-crema)}
+.home-jump button:hover{border-color:var(--ci-crema);color:var(--ci-crema-text)}
 #sec-story,#sec-shelves,#sec-promise{scroll-margin-top:118px}
 .founder-signature{display:block;width:184px;max-width:56%;height:auto;margin:1.1rem 0 .05rem}
-.founder-sign{font-family:var(--ci-font-display);color:var(--ci-mute);margin-top:.1rem}
+.founder-sign{font-family:var(--ci-font-display);color:var(--ci-mute-text);margin-top:.1rem}
 /* Clear the compact mobile/tablet header (62px) so the sticky jump-bar isn't buried under it,
    and keep the chips in one compact, horizontally-scrollable, tappable row. */
 @media (max-width:1024px), (hover:none) and (pointer:coarse){
@@ -693,8 +726,8 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 
 /* ---- account: founding status + subscription mock (POC5) ---- */
 .status-chip{display:inline-block;margin-left:.5rem;font-size:.7rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:.14rem .55rem;border-radius:999px;vertical-align:middle;white-space:nowrap}
-.sc-active{color:var(--ci-crema);border:1px solid var(--ci-crema)}
-.sc-paused,.sc-lapsed{color:var(--ci-mute);border:1px solid var(--ci-hairline)}
+.sc-active{color:var(--ci-crema-text);border:1px solid var(--ci-crema)}
+.sc-paused,.sc-lapsed{color:var(--ci-mute-text);border:1px solid var(--ci-hairline)}
 .sub-manage{background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);padding:1.1rem 1.25rem}
 .sub-line{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
 .sub-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.85rem}
@@ -707,15 +740,15 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .order-top{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem}
 .order-no{font-weight:600;color:var(--ci-espresso);font-size:.88rem}
 .order-amt{font-weight:600;color:var(--ci-coffee);font-size:.88rem;white-space:nowrap}
-.order-sub{font-size:.78rem;color:var(--ci-mute);margin-top:.12rem}
+.order-sub{font-size:.78rem;color:var(--ci-mute-text);margin-top:.12rem}
 .order-again{font-size:.76rem;margin-top:.35rem;display:inline-block}
-.bom-cue{color:var(--ci-crema);font-weight:600;font-size:.72rem;letter-spacing:.02em;margin-top:.15rem}
+.bom-cue{color:var(--ci-crema-text);font-weight:600;font-size:.72rem;letter-spacing:.02em;margin-top:.15rem}
 /* ---- shop: region line (POC5+); .tc-groups is the taste-console modal's group wrapper ---- */
 .tc-groups{display:flex;flex-wrap:wrap;gap:1.1rem 2rem}
-.region-learn{background:none;border:none;color:var(--ci-crema);font-weight:600;font-size:.72rem;letter-spacing:normal;text-transform:none;cursor:pointer;margin:0;padding:0;text-align:left;align-self:start;font-family:var(--ci-font-body)}
+.region-learn{background:none;border:none;color:var(--ci-crema-text);font-weight:600;font-size:.72rem;letter-spacing:normal;text-transform:none;cursor:pointer;margin:0;padding:0;text-align:left;align-self:start;font-family:var(--ci-font-body)}
 .region-learn:hover{text-decoration:underline}
 .filter-region{width:100%}
-.region-note{font-size:.8rem;color:var(--ci-mute);margin:.6rem 0 0;max-width:64ch}
+.region-note{font-size:.8rem;color:var(--ci-mute-text);margin:.6rem 0 0;max-width:64ch}
 /* Roasters "Filter By Region" toggle + collapsible panel (POC9). The panel reuses the shared
    region filter; [hidden] needs an explicit rule because .filter-group sets display:flex. */
 .region-toggle{background:none;border:none;cursor:pointer;font-family:var(--ci-font-body);font-weight:600;font-size:.82rem;letter-spacing:.02em;color:var(--ci-crema-light);margin-top:1rem;padding:.5rem 0;text-align:left;min-height:44px}
@@ -729,7 +762,7 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .contact-form{max-width:520px;margin-top:.5rem;display:flex;flex-direction:column;gap:1.1rem}
 .cf-field{display:flex;flex-direction:column;gap:.35rem}
 .cf-field label,.cf-reason legend{font-size:.8rem;font-weight:600;color:var(--ci-espresso);letter-spacing:.02em}
-.cf-opt{font-weight:400;color:var(--ci-mute)}
+.cf-opt{font-weight:400;color:var(--ci-mute-text)}
 .contact-form input,.contact-form textarea{font-family:var(--ci-font-body);font-size:.95rem;color:var(--ci-espresso);background:#fff;border:1px solid var(--ci-hairline);border-radius:8px;padding:.6rem .7rem;width:100%}
 .contact-form input:focus,.contact-form textarea:focus{outline:none;border-color:var(--ci-crema);box-shadow:0 0 0 2px rgba(184,131,72,.2)}
 .contact-form textarea{resize:vertical;min-height:120px}
@@ -750,13 +783,13 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .region-list{display:flex;flex-direction:column;gap:1.05rem;max-width:72ch}
 .region-row.is-here{border-left:3px solid var(--ci-crema);padding-left:1rem}
 .region-row h3{font-family:var(--ci-font-display);font-weight:400;font-size:1.12rem;color:var(--ci-coffee);margin:0 0 .1rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
-.region-meta{font-size:.78rem;color:var(--ci-crema);font-weight:600;letter-spacing:.02em;margin:0 0 .25rem}
+.region-meta{font-size:.78rem;color:var(--ci-crema-text);font-weight:600;letter-spacing:.02em;margin:0 0 .25rem}
 .region-desc{color:var(--ci-ink-soft);margin:0}
-.region-here{font-family:var(--ci-font-body);font-size:.66rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ci-cream);background:var(--ci-crema);border-radius:999px;padding:.12rem .5rem}
+.region-here{font-family:var(--ci-font-body);font-size:.66rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ci-cream);background:var(--ci-crema-fill);border-radius:999px;padding:.12rem .5rem}
 
 .founder-lives,.beats{margin:.6rem 0}
 .founder-lives p,.beats p{margin:.4rem 0}
-.founder-lives strong,.beats strong{color:var(--ci-crema)}
+.founder-lives strong,.beats strong{color:var(--ci-crema-text)}
 
 /* ============================================================================
    TYPE INTEGRITY - do not remove (added 2026-08-18)
@@ -826,8 +859,8 @@ strong, b { font-weight: 600; }
 .fs-row input:focus-visible{outline:2px solid var(--ci-crema);outline-offset:1px}
 .fs-row button{font-family:var(--ci-font-body);font-weight:600;font-size:.85rem;padding:.6rem 1.1rem;border-radius:var(--ci-radius);border:1px solid var(--ci-crema);background:var(--ci-crema);color:var(--ci-cream);cursor:pointer;white-space:nowrap}
 .fs-row button:hover{background:var(--ci-crema-hover);border-color:var(--ci-crema-hover)}
-.fs-note{font-size:.76rem;color:var(--ci-mute);margin:0}
-.fs-msg{font-size:.85rem;color:var(--ci-crema);font-weight:600;margin:0}
+.fs-note{font-size:.76rem;color:var(--ci-mute-text);margin:0}
+.fs-msg{font-size:.85rem;color:var(--ci-crema-text);font-weight:600;margin:0}
 @media (max-width:640px){.footer-signup{padding-top:1.25rem}}
 /* ---- gift option in the cart (POC16) ---- */
 .gift-box{background:var(--ci-ivory);border:1px solid var(--ci-hairline);border-radius:var(--ci-radius);padding:.9rem 1.1rem;margin-top:1.25rem}
@@ -904,16 +937,21 @@ h1 .ita, h2 .ita, h3 .ita, h4 .ita,
 .rating-mark{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin:0 0 1rem}
 .rm-stars{display:inline-flex;gap:2px;line-height:1;font-size:.95rem}
 .rm-stars.big{font-size:1.35rem;gap:3px}
+/* POC23: the EMPTY star sits at the hairline value on purpose and is deliberately below AA - it is
+   decorative, not informational. POC17 chose it so an unrated product reads as a NULL rather than as
+   a zero-out-of-five verdict; the adjacent numeral and "Not yet rated" carry the actual information,
+   and the glyphs are aria-hidden. Darkening it would make an unrated coffee look badly reviewed,
+   which is the opposite of accessible. Do not "fix" this to 4.5:1. */
 .rm-star{color:var(--ci-hairline)}
-.rm-star.on{color:var(--ci-crema)}
+.rm-star.on{color:var(--ci-crema-text)}
 .rm-val{font-family:var(--ci-font-display);font-size:1.05rem;color:var(--ci-coffee);line-height:1;
   font-variant-numeric:tabular-nums}
-.rm-link{background:none;border:none;padding:0;font:inherit;font-size:.85rem;color:var(--ci-crema-hover);
+.rm-link{background:none;border:none;padding:0;font:inherit;font-size:.85rem;color:var(--ci-crema-text);
   text-decoration:underline;text-underline-offset:2px;cursor:pointer;min-height:24px}
 .rm-link:hover{color:var(--ci-espresso)}
 .rating-mark.is-empty{align-items:flex-start;flex-direction:column;gap:.35rem}
 .rating-mark.is-empty .rm-stars{font-size:.95rem}
-.rm-hint{font-size:.85rem;color:var(--ci-mute);border-left:2px solid var(--ci-crema);
+.rm-hint{font-size:.85rem;color:var(--ci-mute-text);border-left:2px solid var(--ci-crema);
   padding:.5rem 0 .5rem .75rem;max-width:38ch;line-height:1.5}
 
 /* reorder rate. Rendered only above POC_REORDER_FLOOR and never on Bottega - see the JS. */
@@ -923,16 +961,16 @@ h1 .ita, h2 .ita, h3 .ita, h4 .ita,
 .rv-summary{display:flex;align-items:baseline;flex-wrap:wrap;gap:.65rem;margin:0 0 .35rem}
 .rv-val{font-family:var(--ci-font-display);font-size:1.6rem;color:var(--ci-coffee);line-height:1;
   font-variant-numeric:tabular-nums}
-.rv-of,.rv-ct{font-size:.85rem;color:var(--ci-mute)}
-.rv-note{font-size:.85rem;color:var(--ci-mute);max-width:60ch;margin:.75rem 0 1.5rem}
+.rv-of,.rv-ct{font-size:.85rem;color:var(--ci-mute-text)}
+.rv-note{font-size:.85rem;color:var(--ci-mute-text);max-width:60ch;margin:.75rem 0 1.5rem}
 .rv-list{display:flex;flex-direction:column;gap:1.5rem;max-width:72ch}
 .rv{border-top:1px solid var(--ci-hairline);padding-top:1.25rem}
 .rv-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:.6rem;margin-bottom:.4rem}
 .rv-title{font-size:1rem;font-weight:600;margin:0;color:var(--ci-espresso)}
 .rv-body{margin:0 0 .5rem;color:var(--ci-ink-soft)}
-.rv-by{font-size:.8rem;color:var(--ci-mute);margin:0}
+.rv-by{font-size:.8rem;color:var(--ci-mute-text);margin:0}
 .rv-vf{color:var(--ci-green);font-weight:600}
 .rv-reply{margin-top:.75rem;border-left:2px solid var(--ci-hairline);padding-left:.9rem}
-.rv-reply-who{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ci-mute);
+.rv-reply-who{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ci-mute-text);
   font-weight:600;margin:0 0 .25rem}
 .rv-reply p{font-size:.9rem;color:var(--ci-ink-soft);margin:0}

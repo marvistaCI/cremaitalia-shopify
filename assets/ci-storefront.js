@@ -571,16 +571,16 @@
       // Empty is RENDERED, not hidden - on the detail view only. It is the only thing on the page
       // telling a purchaser that a route to rate exists. In a grid the same null is suppressed
       // entirely (13.5.1): one is an invitation, thirteen is a wall.
-      return '<div class="rating-mark is-empty">' +
-        '<span class="rm-stars">' + starGlyphs(0) + '</span>' +
+      return '<div class="rating-mark is-empty" role="group" aria-label="Not yet rated">' +
+        '<span class="rm-stars" aria-hidden="true">' + starGlyphs(0) + '</span>' +
         '<button class="rm-link" onclick="toggleRatingHint()">Not yet rated</button>' +
         '<div class="rm-hint" id="rm-hint" hidden>No ratings exist for this product. ' +
         'Have you purchased this product? If yes, check your email and be the first to submit a rating.</div>' +
         '</div>';
     }
     var v = r.rating.value, n = r.rating_count;
-    return '<div class="rating-mark">' +
-      '<span class="rm-stars">' + starGlyphs(v) + '</span>' +
+    return '<div class="rating-mark" role="group" aria-label="Rated ' + v.toFixed(1) + ' out of 5 from ' + n + (n === 1 ? ' rating' : ' ratings') + '">' +
+      '<span class="rm-stars" aria-hidden="true">' + starGlyphs(v) + '</span>' +
       '<span class="rm-val">' + v.toFixed(1) + '</span>' +
       '<button class="rm-link" onclick="openReviews(\'' + p.handle + '\')">' +
       n + (n === 1 ? ' rating' : ' ratings') + '</button>' +
@@ -1392,7 +1392,7 @@
     if (!el) return;
     if (!cart.length) {
       el.innerHTML = '<div class="cart-empty"><p style="font-weight:600;color:var(--ci-espresso)">Your bag is empty.</p>' +
-        '<p style="font-size:.9rem;margin-top:.25rem">Start with a <button onclick="showPage(\'sorpresa\')" style="background:none;border:none;color:var(--ci-crema);font-weight:600;cursor:pointer;text-decoration:underline">Sorpresa collection</button> or build a <button onclick="showPage(\'roccia\')" style="background:none;border:none;color:var(--ci-crema);font-weight:600;cursor:pointer;text-decoration:underline">Roccia subscription</button>.</p></div>';
+        '<p style="font-size:.9rem;margin-top:.25rem">Start with a <button onclick="showPage(\'sorpresa\')" style="background:none;border:none;color:var(--ci-crema-text);font-weight:600;cursor:pointer;text-decoration:underline">Sorpresa collection</button> or build a <button onclick="showPage(\'roccia\')" style="background:none;border:none;color:var(--ci-crema-text);font-weight:600;cursor:pointer;text-decoration:underline">Roccia subscription</button>.</p></div>';
       return;
     }
     var html = '';
