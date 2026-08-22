@@ -92,6 +92,27 @@ ordinary post, so the eventual swap needs a **business address service**, not ju
 
 1. **Link the policies from the storefront footer** — POC theme, plus a scoped live-theme push to
    widen the coming-soon footer beyond Privacy Policy. Code's work.
+
+   **Decided 2026-08-22: four named links, NOT one "Legal notices" link.** Three reasons, recorded so
+   this is not re-litigated. (a) **There is no destination** — `/policies`, `/policies/` and
+   `/pages/policies` all 404; Shopify has no policy index route, so a single link needs a page we
+   build and maintain, i.e. a third home for content that already has two. (b) **The label collides
+   with the Shopify field we deliberately left unset** — "Legal notice" is the Impressum slot, and a
+   footer link by that name pointing somewhere else invites a future session to go looking for it.
+   (c) **Shipping and Returns are purchase content, not legal content.** A shopper wants the free
+   shipping threshold and *love your first bag, or we send a different one, free* **before** buying;
+   "Legal" signals fine print nobody clicks. Terms and Privacy genuinely are fine print.
+
+   **Shape:** `Shipping` and `Returns` join the main footer list; `Terms` and `Privacy` go in a quiet
+   muted line beside the company line, which is where fine print belongs and keeps the main list short
+   per the brand's "fewer elements" rule.
+
+   **And it removes a duplication rather than adding one.** The POC footer's existing
+   `showPage('shipping')` renders a 417-character **condensed paraphrase of the published shipping
+   policy** — free-shipping threshold, $8.50 flat, both carriers, all three transit bands — a second
+   home for facts that will drift from the policy the moment either is edited. **Retire that page**
+   and point `Shipping` at `/policies/shipping-policy`. Leaving the SPA is the production-correct
+   behaviour anyway: in the real theme these are ordinary pages.
 2. **Set the return and cancellation rules** — the structured config that powers self-serve returns,
    still unset. Should mirror the published refund policy.
 3. **Decide the privacy policy**, before the taste-profile metafield join ships.
