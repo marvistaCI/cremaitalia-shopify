@@ -113,13 +113,34 @@ ordinary post, so the eventual swap needs a **business address service**, not ju
    home for facts that will drift from the policy the moment either is edited. **Retire that page**
    and point `Shipping` at `/policies/shipping-policy`. Leaving the SPA is the production-correct
    behaviour anyway: in the real theme these are ordinary pages.
-2. **Set the return and cancellation rules** — the structured config that powers self-serve returns,
+2. **Add the automatic-renewal disclosure beside the subscription toggle** — POC theme, and the one
+   POC change with statutory shape rather than housekeeping. `v2-deltas.md` B1 called for **two
+   placements**, the Terms page and the point of consent; only the Terms half shipped.
+
+   The toggle in `ci-storefront.js` (`#pd-sub`) currently reads *"10% off every shipment and free
+   shipping, your standing subscriber benefit on Roccia, Sorpresa, and Selezione. Cancel anytime.
+   Default is a one-time purchase."* That is good merchandising and **not a renewal disclosure**: it
+   never says the card is charged again automatically, at what frequency, or at what amount. The
+   cadence pills carry the frequency but are revealed only **after** the box is ticked, so the
+   frequency is absent at the moment of the affirmative act.
+
+   Proposed second line, adjacent to the first:
+
+   > Subscribing charges your card automatically at the cadence you choose, at the price shown, until
+   > you cancel. No minimum and no cancellation fee, and cancelling stops the next shipment immediately.
+
+   **Set it at the same size as the benefit line, not smaller.** The instinct to shrink legal text is
+   exactly what "clear and conspicuous" exists to prevent, and small grey print under a subscribe
+   toggle is the pattern regulators look for. This is one of the few places where the brand's
+   quiet-and-small reflex is the wrong call.
+
+3. **Set the return and cancellation rules** — the structured config that powers self-serve returns,
    still unset. Should mirror the published refund policy.
-3. **Decide the privacy policy**, before the taste-profile metafield join ships.
-4. **Counsel pass before launch** — the automatic-renewal section, arbitration (omitted for now), and
+4. **Decide the privacy policy**, before the taste-profile metafield join ships.
+5. **Counsel pass before launch** — the automatic-renewal section, arbitration (omitted for now), and
    the interim choices in `ready-to-paste.md`: the 30-day satisfaction window, the billed-but-unshipped
    refund, and the Lutz address pending a registered agent.
-5. **Swap the address** once a registered agent is selected. Note the caution in `v2-deltas.md` C1: an
+6. **Swap the address** once a registered agent is selected. Note the caution in `v2-deltas.md` C1: an
    RA accepts service of process, not customer mail, and many refuse ordinary post.
 
 **The caveat lives here and in the tracker, not on the public pages.** A visible "unreviewed" banner
