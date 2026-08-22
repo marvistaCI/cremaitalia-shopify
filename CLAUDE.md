@@ -3180,7 +3180,6 @@ when resuming.**
 | **Newest POC preview** | "Crema Italia POC21 Preview" | `152029167785` |
 | Prior preview | "Crema Italia POC20 Preview" | `152028446889` |
 | Prior preview | "Crema Italia POC19 Preview" | `152017764521` |
-| Prior preview (over cap, prune pending) | "Crema Italia POC18 Preview" | `152016912553` |
 
 **Scorecard: 7.9/10 as of 2026-08-22 (POC20)** — the deployed storefront has been scored five times
 against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20).
@@ -3237,8 +3236,11 @@ POC18 and POC19 previews and the live theme are untouched. Preview:
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
 2026-07-06). To refresh: `shopify theme push --theme 152029167785`.
 
-**POC18, POC19, POC20 and POC21 previews exist — one over the three-newest cap, prune pending Steve's go** — at the three-newest cap Steve set on 2026-08-06,
-enforced as `crema-poc-deploy` Step 5. **POC17 (`152003018921`) was deleted 2026-08-22** on Steve's
+**Only POC19, POC20 and POC21 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
+enforced as `crema-poc-deploy` Step 5. **POC18 (`152016912553`) was deleted 2026-08-22** on Steve's
+explicit go, id/name/role re-verified against a live `theme list --json` in the same breath as the
+delete; its batch is on `origin/main` and redeployable. Earlier the same day: **POC17
+(`152003018921`) was deleted** on Steve's
 explicit go, after computing the keep/prune split from a live `theme list --json` rather than by eye
 and re-verifying its id, name and role immediately before the delete; its batch is commits
 `318ea7e`..`5e71413`, on `origin/main`, so it is redeployable. The delete ran **after** the POC20 push
