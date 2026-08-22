@@ -19,30 +19,51 @@ v2, ready to become a Cowork prompt.
 
 ---
 
-## Live status, read from the Shopify admin 2026-08-22
+## Live status — four policies PUBLISHED and verified 2026-08-22
 
-| Policy | Shopify status |
-|---|---|
-| Privacy policy | **Automated** — Shopify generates and auto-updates one |
-| Return and refund policy | No policy set |
-| Terms of service | No policy set |
-| Shipping policy | No policy set |
-| Legal notice | No policy set |
-| **Contact information** | **Required** — flagged by Shopify, unset |
-| Return and cancellation **rules** | No rules set — the structured returns config, separate from the written policy |
+Steve pasted four policies from `ready-to-paste.md`. **Verified by fetching the public URLs, not by
+reading the admin** — every one returns HTTP 200 and carries its expected text.
 
-**Two corrections to the project record, both from reading rather than assuming.**
+| Policy | Status | URL |
+|---|---|---|
+| Contact information | **Published** (Shopify marked it Required) | `/policies/contact-information` |
+| Shipping policy | **Published** | `/policies/shipping-policy` |
+| Return and refund policy | **Published** | `/policies/refund-policy` |
+| Terms of service | **Published**, incl. the automatic-renewal disclosure | `/policies/terms-of-service` |
+| Privacy policy | **Still Shopify's automated one** (`Last updated: May 11, 2026`) | `/policies/privacy-policy` |
+| Legal notice | Not set — **and should stay that way**, see below | 404 |
+| Return and cancellation **rules** | Still unset — the structured returns config | — |
 
-**A privacy policy exists.** Every scoring pass since POC13 recorded *"no privacy policy"* and the
-CLAUDE.md §10 open item says the legal pages *"do not exist anywhere in the repo."* Shopify has an
-automated one. What is true is narrower and still worth fixing: **the storefront links none of them.**
-The POC footer carries Promise, Shipping, About, FAQ, Journal and Contact, and no policy links.
-Shopify links policies from the **checkout** footer automatically; the theme covers nothing.
+**Privacy was not replaced, and that is a live choice rather than an oversight.** `ready-to-paste.md`
+§5 framed it as a real decision: the automated policy updates itself as Shopify's practices change and
+ours would not, but it cannot know about Loop, Judge.me, or the taste profile. The moment the taste
+profile becomes a customer metafield joined to reviews, the automated policy is describing a different
+business than the one we run. **Decide before that ships, not after.**
 
-**Checkout is not hard-gated on them.** Cowork checked this on 2026-08-20 and it corrects a framing
-this repo has repeated: Shopify's documentation describes no technical gate blocking checkout until
-the four pages exist. They matter for Shopify Payments review, consumer-protection expectations and
-trust — which is reason enough — but "checkout requires them" overstates it.
+### Legal notice — leave it unset, deliberately
+
+Shopify offers the field because several jurisdictions require an *imprint*: Germany's Impressum
+(§5 DDG, formerly TMG), and equivalents in Austria and Switzerland. It is a statutory disclosure of
+who operates the site — legal name, address, contact, register entry, VAT ID, managing director — and
+in Germany its absence is directly actionable.
+
+**No US federal or Florida law imposes an equivalent.** The merchant-identity need that a US regulator
+or a payment processor actually looks for is met by the **Contact information** page, which is why
+Shopify marks that one Required and this one optional. We ship to US addresses only (stated in the
+shipping policy), so no EU obligation attaches.
+
+**Revisit only if we ever sell into the EU or DACH.** Not on the roadmap; Canada is the market
+mentioned as a possible second. If that changes, this is a legal requirement rather than a nicety.
+
+### The storefront still links almost nothing
+
+The live coming-soon footer (`snippets/ci-footer.liquid`) links **Privacy Policy only** — so the one
+policy link on the public site points at the automated policy we did not write, and the four we did
+write are reachable only by typing the URL. The POC theme's footer links **none** of them.
+
+Shopify links all policies from the **checkout** footer automatically, so nothing is broken at the
+point of sale. But a customer deciding whether to trust the store never reaches checkout. **This is
+Code's work and belongs in the next POC batch** (and a scoped push for the live theme's footer).
 
 ---
 
@@ -56,23 +77,34 @@ original. **This also removes what looked like a 3PL dependency** — no returns
 the refund policy is not blocked on selecting a fulfilment partner. **Bottega equipment is the
 exception** and needs its own clause; a grinder is durable and returnable.
 
-**Publish the registered agent's address, not the Lutz home address.** Steve, 2026-08-22 — **and no
-registered agent has been selected yet**, so this is now a blocking dependency for the contact
-information page. See `v2-deltas.md` for the caution that comes with it.
+**Address: the Lutz address is what shipped, as an interim.** Steve first chose the registered
+agent's address (2026-08-22) — then, with no agent selected and the pages otherwise ready, chose to
+publish `17716 Royal Eagle Ln, Lutz, FL 33549` rather than let one unmade decision hold four finished
+policies. **So the earlier decision is deferred, not reversed**, and it is item 5 below. Two things
+make the interim defensible: Florida publishes the registered agent's address on Sunbiz, so if Steve
+is his own agent the Lutz address is already public; and see the caution in `v2-deltas.md` C1 — a
+registered agent accepts service of process, not customer mail, and many will refuse or discard
+ordinary post, so the eventual swap needs a **business address service**, not just an RA.
 
 ---
 
-## Order of work
+## What is left
 
-1. **Contact information** — Shopify marks it Required. Blocked only on the registered agent.
-2. **Shipping policy** — Cowork's 3.4 is ready; apply the deltas.
-3. **Return and refund policy** — Cowork's 3.3 is ready; two CONFIRM items remain.
-4. **Terms of service** — the auto-renewal disclosure is missing and is the one part I would route
-   through counsel rather than ship on confidence.
-5. **Privacy policy** — the automated one is a reasonable base and a poor finish; it cannot know our
-   processors.
-6. **Link all of them from the storefront footer** — a theme change, not a policy one, and the only
-   item on this list that is Code's work rather than Steve's or a lawyer's.
+1. **Link the policies from the storefront footer** — POC theme, plus a scoped live-theme push to
+   widen the coming-soon footer beyond Privacy Policy. Code's work.
+2. **Set the return and cancellation rules** — the structured config that powers self-serve returns,
+   still unset. Should mirror the published refund policy.
+3. **Decide the privacy policy**, before the taste-profile metafield join ships.
+4. **Counsel pass before launch** — the automatic-renewal section, arbitration (omitted for now), and
+   the interim choices in `ready-to-paste.md`: the 30-day satisfaction window, the billed-but-unshipped
+   refund, and the Lutz address pending a registered agent.
+5. **Swap the address** once a registered agent is selected. Note the caution in `v2-deltas.md` C1: an
+   RA accepts service of process, not customer mail, and many refuse ordinary post.
+
+**The caveat lives here and in the tracker, not on the public pages.** A visible "unreviewed" banner
+tells a customer not to rely on what they are reading and tells a payment processor we know the pages
+are incomplete. Every clause published describes what the business actually does, which is the real
+standard.
 
 **None of this is legal advice.** Every draft is grounded in a documented Crema Italia practice rather
 than boilerplate, which is the right way to write a policy and not a substitute for review.
