@@ -3148,6 +3148,57 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   new**), then **pull-and-diff proved** the push - both sides **38** files, zero mismatches, and the
   batch content asserted specifically (new hero present, old sub-line absent, both tokens intact).
 
+- 2026-08-22 - **A BUILD GATE state added to the Decisions sheet, separating build-blocking from
+  launch-blocking (Steve).** Steve asked when to stop tweaking the POC and start the real store, and
+  what he needed in place first. **The answer turned on a distinction the open-items list did not
+  make.** Of the ~25 live open items, most are **launch-blocking** - freight forwarder, customs
+  broker, accounting, referral, affiliates, Klaviyo, legal pages, photography - and none of them
+  changes a line of Liquid. Waiting on them costs weeks and buys nothing. **Build-blocking means: if
+  this is wrong, we rewrite rather than edit.** Twelve items meet that test and now sit in a
+  contiguous **BUILD GATE** block at the top of the Decisions sheet, filterable like every other
+  state and documented in the workbook's own Legend.
+  **Seven were MOVED, not copied**, which is the point - the sheet exists because open items had been
+  living in three places, so a gate that restates an existing row would have recreated the disease it
+  cures. Five are new: the roaster/SKU gate, the pricing-matrix validation, the Grow upgrade, the Loop
+  selling plans, and the POC freeze. Verified against a backup before delivery: no original row lost,
+  the 50 untouched rows byte-identical, the 7 promotions altered in **only** the State, Next action and
+  By when columns, state fills below the block intact, and the autofilter re-ranged to the new last row.
+  **The schedule driver is not the 3PL question.** Steve named that as the one giant gap and it is
+  real, but what it blocks is narrow - it picks between the three sec13.9.2 candidates, which is a data
+  shape, not a page. **The gate that actually sets the start date is one signed roaster and 2-3 real
+  SKUs**, because the whole sec13 data model was reverse-engineered from invented data and Review B
+  already caught two places where a fixture *accident* had been transcribed into the production schema
+  as though it were design. Fixture data cannot find the rest: by construction it agrees with whatever
+  we assumed.
+  **And the POC's own scorecard says when.** It ran **7.9 across POC17 to POC20** - POC18/19/20 moved
+  it zero, correctly, because they were correctness work - and the two dimensions still short of 9 are
+  gated on **photography and real SKUs, not on code**. The POC stopped earning its keep around POC18.
+  Hence the twelfth gate: POC21 becomes the frozen reference at build start, and a POC change after
+  that happens only if it is a decision that needs modelling, never polish.
+  **And the gate rows went into the wrong artifact, which is the sharper lesson.** The workbook was
+  hand-edited in place - carefully, verified against a backup, delivered - and **it is a render.** A
+  **concurrent Code session created `docs/systems-inventory/` at 17:08 the same afternoon**, making
+  `build_inventory.py` the source and the `.xlsx` a generated copy, with a README that says in as many
+  words never to edit the workbook by hand because the next generator run overwrites it. That directory
+  **did not exist when this session listed `docs/` an hour earlier**, so the edit was made against a
+  true reading of a repo that had since changed underneath it. The tell was not the README, which was
+  never opened: it was `git status` reporting a **modified file this session never touched**. The
+  delivered workbook is correct **and fragile** - it holds 12 rows that exist nowhere in the source, and
+  it is missing the other session's Roaster Guide archive row, which exists only in the source. One
+  generator run resolves it in whichever direction happens to run first.
+  **Fixed properly rather than papered over:** `docs/systems-inventory/port_build_gate.py` carries the
+  same change into the generator - 20 asserted single-anchor patches, plus a stable sort so BUILD GATE
+  floats to the top and every other row keeps its order. **Tested end to end on an isolated copy with
+  the output path redirected**, producing 62 decision rows, 12 gate rows contiguous, correct fill,
+  subtitle and legend. **Deliberately NOT applied**, because the other session holds
+  `build_inventory.py` modified and uncommitted, and writing to a file another session is mid-edit on is
+  the exact failure this repo has been burned by twice. Steve applies it when that session is clear;
+  the port is idempotent and refuses to run twice.
+  **Worth stating plainly for next time:** this project keeps learning that live output beats a
+  document. The same rule applies to the *shape* of the repo, not only its contents - **a directory
+  listing is live output too, and it expires.** A second session can turn a hand-editable artifact into
+  a generated one between one tool call and the next.
+
 ---
 
 ## 10. Open questions / TODO
