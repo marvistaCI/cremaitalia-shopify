@@ -3432,12 +3432,51 @@ a real cart, and real customers; none is code.
 > accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
 > gate** on brand identity and product detail rising above 9.
 
-**POC24 is deployed** and is the only POC24 theme — all **38** files byte-match the repo, proved by
+**POC26 is deployed** and is the only POC26 theme - 38 files byte-match the repo, proved by
+pull-and-diff (zero content mismatches, nothing on only one side; `theme list` and
+`git log origin/main..HEAD` run **first**). Batch content asserted on the deployed theme: zero dates
+left in any blurb, the rebase hack gone, POC25's skip link intact.
+
+**What POC26 is:** one fixture sentence, and the contradiction it was hiding. Steve saw an ISO date on
+the Offerta card in a POC24 screenshot and asked whether it was a stale inline comment. It was not -
+`rebaseCatalogDates()` was deliberately string-replacing the date inside `products[12].blurb` to keep
+the prose in step with the field, working exactly as built. **Three things were wrong underneath it.**
+It printed **ISO**, against Standard §5.4's *"DD-MMM-YYYY wherever a date is shown to anyone"*. It
+printed a roast date **at all** on an Offerta product, which **v1.13** retired in favour of a computed
+band. And **the card and the detail view contradicted each other one click apart** - card *"Roasted
+2026-07-21."*, detail *"Roasted between 25-MAR-2026 and 23-MAY-2026"* - the card's date being **32 days
+old, inside the 90-day fresh window**, claiming an Offerta coffee was fresher than its own shelf
+permits. **They could never have agreed by construction:** the band derives from **policy**,
+`roast_date` from the **rebase** (freshest = 10 days old), which necessarily drags the Offerta lot into
+the fresh window. **POC19 half-migrated Offerta** - the detail moved to the band, the card kept quoting
+the field. **The sweep reframed the fix:** a first pass called it duplication, but **12 of 17 blurbs
+restate their own notes**, so that is the *convention* - tasting notes as a sentence plus **at most one
+distinguishing fact**. The blurb was correctly **shaped** and chose the wrong **kind** of fact; every
+other one holds still. Four products carry no extra fact at all, so the fix needed no invented copy.
+**0 of 30 cards quote a date (was 2); 0 ISO dates visible anywhere (was 1).** Detail:
+`docs/POC26_change_list.md`.
+
+**What POC25 is:** the **skip link** - WCAG 2.4.1 Bypass Blocks, **Level A**, the only Level A
+criterion the storefront was known to fail and the reason Accessibility was capped at 8.0 in the POC24
+re-score. A visually-hidden `Skip to content` anchor, first focusable element, targeting a permanent
+`#ci-content` wrapper **rather than a `<main>`** - 19 of the 20 `<main>` elements are `display:none` at
+any moment, so a link to any one of them would be dead on every other page. `position:fixed`, not
+absolute, so it does not scroll away from a user who tabs to it late.
+**It also caught a bug that would have shipped.** The link was first written as `class="skip-link"` -
+**a class already owned by the taste quiz's skip and Back buttons.** Being later in the stylesheet, the
+new rules won and gave **five quiz controls** `position:absolute; top:-4rem`, moving the hero CTA's own
+navigation off screen. `theme check` passed, the JS was clean, and the skip link itself worked
+perfectly; it was caught only by enumerating `.skip-link` in the live DOM and finding **six** elements
+where one was expected. Renamed `.skip-to-content`, recorded at both sites. **In a 900-line stylesheet
+with no naming convention, a new class name is an assertion that needs checking.** Detail:
+`docs/POC25_change_list.md`.
+
+**What POC24 was:** it is the only POC24 theme — all **38** files byte-match the repo, proved by
 pull-and-diff on 2026-08-22 (both sides 38 files, zero content mismatches, nothing on only one side;
 `theme list` **and** `git log origin/main..HEAD` run **before** the push). Batch content asserted on
 the deployed theme.
 
-**What POC24 is:** tap targets (commit `53afe0a`), built after Steve asked what two carried scorecard
+**What POC24 was:** tap targets (commit `53afe0a`), built after Steve asked what two carried scorecard
 findings actually meant — **and after I told him both were closed when only one was.** POC23 fixed
 the checkbox's accessible name; the tap target was never touched. **Every interactive control now
 meets this project's 44px convention**, against WCAG 2.2 AA's 24x24 floor: `#pd-sub` **18x18 -> 44x44**
@@ -3545,7 +3584,12 @@ here.** This paragraph used to hardcode them, and it went stale the moment the t
 pruned — twice. Open the preview in a **real browser**; a `curl` of a `preview_theme_id` link is NOT
 a valid check (see §9 2026-07-06). Refresh with `shopify theme push --theme <id from the table>`.
 
-**Only POC22, POC23 and POC24 previews now exist** — at the three-newest cap Steve set on
+**Only POC24, POC25 and POC26 previews now exist** - at the three-newest cap, enforced as
+`crema-poc-deploy` Step 5. **POC22 (`152029757609`) was deleted 2026-08-22** on Steve's explicit go,
+id/name/role re-verified against a live `theme list --json` in the same breath as the delete; its batch
+is commit `e63d9c4` and it is redeployable. The Step 6.4 sweep found one surviving reference, a §9 line
+in past tense describing the day it shipped - narrative, left alone.
+Earlier: **POC21 was deleted** - at the three-newest cap Steve set on
 2026-08-06, enforced as `crema-poc-deploy` Step 5. **POC21 (`152029167785`) was deleted 2026-08-22**
 on Steve's explicit go, id/name/role re-verified against a live `theme list --json` in the same
 breath as the delete; its batch is commit `69e6296` and it is redeployable. **POC20 (`152028446889`)
