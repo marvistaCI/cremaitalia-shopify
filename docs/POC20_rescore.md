@@ -160,8 +160,27 @@ Unchanged from POC17, and worth restating because nothing on it got cheaper:
   cheapest thing nobody has started.
 - **Real photography.** Gates brand identity and product detail above 9. Three `ci-temp-*` stand-ins
   remain, two of which cannot ship for recorded reasons.
-- **The IA question.** Whether the four shelves are commercial programmes wearing the costume of a
-  navigation axis. Five passes, still unresolved. A design debate, not a fix.
+- ~~**The IA question.** Whether the four shelves are commercial programmes wearing the costume of a
+  navigation axis. Five passes, still unresolved. A design debate, not a fix.~~
+  **WITHDRAWN 2026-08-22 — the finding was wrong, and had never been tested against the data.** Its
+  sharpest line, *"a shelf you can stand on two of at once is not a shelf,"* is empirically false:
+  `shelf` is never a list in the catalogue, and subscription maps exactly onto Roccia (9 of 9, 0
+  elsewhere). **Nothing stands on two shelves.** The error underneath was applying library-science
+  taxonomy rules to retail merchandising, which are different disciplines with different jobs - a
+  taxonomy exists for retrieval, a shop floor for browsing, and the shelf metaphor is precisely what
+  licenses mixed axes. The four **do** share one axis the critique missed: *what are you here for* -
+  my regular coffee, surprise me, something special, a bargain. And the site already carries a proper
+  single-axis taxonomy in the Shop facets (region, roast, flavour, caffeine), so it has **both**:
+  shelves for intent, facets for attributes, which is the normal structure rather than a confusion.
+  **The grain of truth landed elsewhere and is already tracked.** Offerta is a lifecycle stage rather
+  than a chosen shelf, which produced §13.9.2 (one physical SKU, two Shopify products, one bin);
+  Sorpresa is a bundle rather than a coffee, which produced the BOM design. Both real, neither a
+  navigation problem.
+  **How it survived five passes:** it was written in the POC13 audit and inherited rather than
+  re-derived - the same failure this repo has now logged four times (the "wedged" screenshot tool,
+  the stale "not yet deployed" line, "checkout requires the legal pages"). *"Costume"* also presumes
+  the design is pretending to be something it is not, which presumes bad faith and is bad criticism
+  independent of whether the point held.
 - **Semantic markup and a formal accessibility pass.** 76 `div onclick` elements are reachable but
   announce poorly; no contrast or screen-reader pass has been run end to end.
 - **Real reviews.** Not a build task. The mechanism waits on customers.

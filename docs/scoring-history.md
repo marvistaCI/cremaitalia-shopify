@@ -63,10 +63,21 @@ packaging"* — was the 214th word on the page.
 | F9 | Medium | No structured data, oversized images, 722 KB orphaned file |
 | F10 | Medium | The meta description lowercased a proper noun |
 
-Also argued, and still unresolved five passes later: **the four shelves are commercial programmes
-wearing the costume of one navigation axis** — a category system partitions on a single axis, and
-Roccia (purchase mode), Sorpresa (format), Selezione (scarcity) and Offerta (price state) partition on
-four. *"A shelf you can stand on two of at once is not a shelf."*
+Also argued: **the four shelves are commercial programmes wearing the costume of one navigation
+axis** — a category system partitions on a single axis, and Roccia (purchase mode), Sorpresa (format),
+Selezione (scarcity) and Offerta (price state) partition on four. *"A shelf you can stand on two of at
+once is not a shelf."*
+
+> **WITHDRAWN 2026-08-22, and it should never have been carried this far.** Tested against the
+> catalogue for the first time on Steve's challenge: `shelf` is never a list, and subscription maps
+> exactly onto Roccia (9 of 9, 0 elsewhere) — **nothing stands on two shelves**, so the quoted line is
+> simply false. The error was applying taxonomy rules to merchandising; the shelf metaphor is what
+> licenses mixed axes, every wine shop stocks *New Arrivals / Under $20 / Natural / Large Format*, and
+> the four here do share an axis the critique missed: **what are you here for.** The site also already
+> carries a single-axis taxonomy in the Shop facets, so it has shelves for intent *and* facets for
+> attributes. The grain of truth (Offerta is a lifecycle stage; Sorpresa is a bundle) landed in the
+> **data model** — §13.9.2 and the BOM design — and both are tracked. **It survived five passes because
+> it was inherited rather than re-derived**, the fourth logged instance of that failure in this repo.
 
 ---
 
