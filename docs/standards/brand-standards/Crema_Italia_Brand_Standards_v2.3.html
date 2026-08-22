@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Crema Italia — Brand & Document Standards v2.2</title>
+<title>Crema Italia — Brand &amp; Document Standards v2.3</title>
 
 <!-- Local brand fonts: Marcellus (display) + Inter (body), .ttf embedded. -->
 <link rel="stylesheet" href="fonts.css">
@@ -97,11 +97,11 @@
   <div class="metastrip">
     <div><div class="lab">Issued by</div><div class="val">Crema Italia, LLC<br>Lutz, Florida, USA</div></div>
     <div><div class="lab">Audience</div><div class="val">Internal team<br>&amp; brand contributors</div></div>
-    <div><div class="lab">Status</div><div class="val">Authoritative<br>Version 2.2</div></div>
+    <div><div class="lab">Status</div><div class="val">Authoritative<br>Version 2.3</div></div>
   </div>
   <div class="foot">
     <div class="flag-strip"></div>
-    <p class="muted" style="font-size:8.5pt;margin-top:8pt">August 2026 · Version 2.2 · English</p>
+    <p class="muted" style="font-size:8.5pt;margin-top:8pt">August 2026 · Version 2.3 · English</p>
   </div>
 </div>
 
@@ -110,7 +110,7 @@
   <p class="eyebrow">The canonical reference</p>
   <h1>Crema Italia Brand &amp; Document Standards</h1>
   <div class="flag-rule"></div>
-  <p class="sub" style="font-size:9.5pt">Version 2.2 · August 2026 · Owner: Crema Italia, LLC · Lutz,
+  <p class="sub" style="font-size:9.5pt">Version 2.3 · August 2026 · Owner: Crema Italia, LLC · Lutz,
   Florida, USA · cremaitalia.com · Applies to: all Crema Italia documents (DOCX, PDF, Markdown),
   web pages, decks, email templates, and partner-facing collateral.</p>
 
@@ -120,7 +120,17 @@
   Onboarding &amp; Partnership Guide is the visual reference; this document codifies it.</p>
 
   <div class="callout">
-    <p class="eyebrow">What changed in v2.2 (2026-08-21)</p>
+    <p class="eyebrow">What changed in v2.3 (2026-08-22)</p>
+      <p>Two <strong>accessible text tokens</strong> added to §3.4, and one error in that section
+      corrected. A 16-page audit of the storefront found <strong>127 rendered instances</strong> of
+      text below WCAG AA, and two colours accounted for all of them: Crema Gold and Mute, used at
+      small sizes. This Standard had already predicted the first case and the site broke the rule
+      anyway; it had also <em>sanctioned</em> the second, listing Mute at 3.7 : 1 as suitable for
+      captions and fine print, which are exactly the sizes it fails at. The remedy is a pair of
+      darkened siblings used only below 24 px, leaving Crema Gold and Mute unchanged everywhere they
+      already pass. §3.5 now also records the <strong>Bottega accent</strong> as a sanctioned,
+      scoped exception rather than drift.</p>
+      <p class="eyebrow" style="margin-top:10pt">What changed in v2.2 (2026-08-21)</p>
       <p>One addition to <strong>Voice &amp; tone</strong>: card copy may be terser than detail
       copy for the same fact, and that difference is a deliberate register choice rather than a
       discrepancy to reconcile. Substance must still match everywhere. Copy-only; colour, type,
@@ -218,18 +228,43 @@
       <tr><td>Espresso Soft <code>#6B4A38</code></td><td>7.4 : 1</td><td>AAA</td></tr>
       <tr><td>Ink soft <code>#5A4A3F</code></td><td>8.0 : 1</td><td>AAA</td></tr>
       <tr><td>Crema Gold <code>#B88348</code></td><td>3.1 : 1</td><td><strong>Large display only</strong> — ≥ 18 pt / 24 px (or bold ≥ 14 pt)</td></tr>
-      <tr><td>Mute <code>#8C7E6A</code></td><td>3.7 : 1</td><td>Captions / fine print only</td></tr>
+      <tr><td>Mute <code>#8C7E6A</code></td><td>3.7 : 1</td><td><strong>Large display only</strong> — see the correction below</td></tr>
+      <tr><td>Crema Gold <em>text</em> <code>#94693A</code></td><td>4.6 : 1</td><td><strong>AA</strong> — gold at any size, incl. body and small text</td></tr>
+      <tr><td>Mute <em>text</em> <code>#7D705E</code></td><td>4.6 : 1</td><td><strong>AA</strong> — captions, fine print, metadata</td></tr>
+      <tr><td>Crema Gold <em>fill</em> <code>#96683A</code></td><td>4.6 : 1</td><td><strong>AA</strong> — for Cream text set on a gold fill (buttons, badges)</td></tr>
     </tbody>
   </table>
   <div class="callout">
-    <p style="margin-bottom:0"><strong>Rule:</strong> Crema Gold’s contrast on cream (3.1 : 1) is
-    lower than the terracotta it replaced — it clears WCAG only for <strong>large text</strong>.
-    Use gold for large headings, short bold accent runs, links, and key numerals; <strong>never</strong>
-    body copy or small text. When a gold element could fall below ~18 px, set it in Espresso Brown instead.</p>
+    <p><strong>Rule:</strong> Crema Gold <code>#B88348</code> and Mute <code>#8C7E6A</code> clear WCAG
+    only for <strong>large text</strong> (≥ 24 px, or bold ≥ 18.66 px). Keep them for large headings,
+    rules, decorative fills and short bold accent runs. <strong>Below 24 px, use the darkened sibling
+    instead</strong>: <code>#94693A</code> for gold, <code>#7D705E</code> for mute. Same hue, same
+    saturation, less lightness — the difference is barely perceptible side by side and it is the
+    difference between legible and not for a reader with moderate vision loss.</p>
+    <p><strong>Correction (v2.3).</strong> Earlier versions listed Mute at 3.7 : 1 as suitable for
+    <em>“captions / fine print only.”</em> That was backwards: captions and fine print are precisely
+    the small sizes where 3.7 : 1 fails. The Standard sanctioned a failing usage, and the storefront
+    followed it faithfully.</p>
+    <p style="margin-bottom:0"><strong>The direction reverses on dark grounds.</strong> A darker token
+    raises contrast on cream and <em>lowers</em> it on brown. On Espresso or any dark band, correct by
+    going <strong>lighter</strong> — Crema Light <code>#E9AB6E</code> or Cream — never by reaching for
+    the darkened text tokens above. (Crema Light was <code>#E8A86A</code> through v2.2; it is nudged
+    here because it fell 0.05 short of AA on the lightest brown ground in use.)</p>
   </div>
 
   <h3>3.5 Don’t introduce new colors</h3>
   <p>If a chart or web feature seems to need a new hue, derive it from Crema Light, Espresso, or a desaturated Tricolore Green. The brand should never sprout a sixth or seventh accent.</p>
+  <div class="callout">
+    <p class="eyebrow">The one sanctioned exception: Bottega</p>
+    <p><strong>La Bottega wears a cool slate scheme rather than the espresso/cream/gold of the four
+    coffee shelves</strong>, because it is deliberately the shop apart: equipment and merchandise, never
+    subscriber-discounted, not part of the coffee catalogue. Approved 2026-08-22.</p>
+    <p style="margin-bottom:0"><code>#1A1A2A</code> and <code>#3A3A5A</code> (hero gradient),
+    <code>#2A2A3A</code> (shelf badge), <code>#C8C8D8</code> (tint on those grounds). <strong>Scoped to
+    Bottega surfaces only</strong> — never on a coffee shelf, a product page for coffee, or any shared
+    chrome. It must live in named tokens: it went unnoticed for months precisely because it was written
+    as an inline style and two hardcoded values, which no palette audit of a stylesheet can see.</p>
+  </div>
 </section>
 
 <!-- ============ TYPOGRAPHY ============ -->
@@ -418,7 +453,7 @@
   <p class="muted" style="font-size:8pt;margin-top:8pt">Document maintained by Crema Italia, LLC.
   Companion files: <code>Crema Italia Brand CSS.css</code> (v1.2), the finalized logo set in
   <code>Logo Assets/</code>, and this document’s editable source
-  <code>Crema_Italia_Brand_Standards_v2.2.html</code>. Supersedes Brand Standards v2.1 (July 2026), v2.0 (July 2026) and v1.0 (May 2026).</p>
+  <code>Crema_Italia_Brand_Standards_v2.3.html</code>. Supersedes Brand Standards v2.2 (August 2026), v2.1 (July 2026), v2.0 (July 2026) and v1.0 (May 2026).</p>
 </section>
 
 </div>

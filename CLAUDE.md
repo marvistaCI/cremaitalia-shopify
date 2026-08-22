@@ -14,7 +14,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > **renders**. A Standard says *what is true now*; this file's §9 + `DECISIONS_LOG.md` say
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
-> - **Brand Standards** (v2.2) — look & voice: `docs/standards/brand-standards/`
+> - **Brand Standards** (v2.3) — look & voice: `docs/standards/brand-standards/`
 > - **Store Operating Standards** (v1.15) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
@@ -363,7 +363,7 @@ leave a document you just touched on a superseded palette, font, or logo.
 
 "Current" is defined by exactly two files, named in the §11 reference index:
 1. **Brand Standards** — the greatest-version `Crema_Italia_Brand_Standards_vX.Y.pdf`
-   (today: **v2.2**).
+   (today: **v2.3**).
 2. **Brand CSS** — `Crema Italia Brand CSS.css` (today: **v1.2**).
 
 **The refresh checklist (run on every edited doc):**
@@ -376,7 +376,7 @@ leave a document you just touched on a superseded palette, font, or logo.
 
 **How we keep it honest — the brand-version stamp.** Every generated doc carries, in
 its footer or metadata, the brand version it was built against, e.g.
-`Built to Brand Standards v2.2`. On the next edit, compare that stamp to the current
+`Built to Brand Standards v2.3`. On the next edit, compare that stamp to the current
 version in §11: if it's behind, refresh before doing anything else. The stamp turns
 "did anyone remember?" into a one-line check anyone (or any agent) can verify.
 
@@ -3568,7 +3568,7 @@ draft-naming callout near the top of this file and the §9 2026-07-05 entry).
 `shopify theme dev` and confirmed it lands correctly: taste-profile banner active with
 the right tags, Shop page filtered to matches, nav fully clickable. The batch is vetted.
 
-**Brand (current — Brand Standards v2.2; artist rebrand 2026-07-01 palette/type, no-em-dash
+**Brand (current — Brand Standards v2.3; artist rebrand 2026-07-01 palette/type, no-em-dash
 voice rule 2026-07-14).** Palette:
 Espresso `#55331B`, Crema Gold `#B88348`, hover `#9C6E3C`, green/red/cream unchanged.
 Display font **Marcellus** (Google Font stand-in for the outlined Montecatini wordmark);

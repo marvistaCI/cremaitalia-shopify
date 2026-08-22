@@ -1,11 +1,11 @@
-# Brand Standards (v2.2) — source of truth
+# Brand Standards (v2.3) — source of truth
 
 As of **2026-07-13 (Option A)**, this repo folder is the **canonical source** of the Brand Standards.
 
-- **Editable source:** `Crema_Italia_Brand_Standards_v2.2.html` (+ `Crema Italia Brand CSS.css`,
+- **Editable source:** `Crema_Italia_Brand_Standards_v2.3.html` (+ `Crema Italia Brand CSS.css`,
   `fonts.css`, and current fonts in `assets/fonts/` — Marcellus display + Inter body; retired Lora is
   intentionally not carried).
-- **Render:** `Crema_Italia_Brand_Standards_v2.2.pdf` is a read-only render of the HTML. Regenerate it
+- **Render:** `Crema_Italia_Brand_Standards_v2.3.pdf` is a read-only render of the HTML. Regenerate it
   with the `crema-italia-pdf-builder` skill's `render_pdf.py` (WeasyPrint) — it renders the HTML **as
   authored**, including the `@page` running headers/footers and page numbers. On Windows this needs the
   MSYS2 GTK/Pango native libs; `render_pdf.py` auto-adds `C:\msys64\mingw64\bin` to the DLL search path
@@ -21,4 +21,4 @@ Palette/type summary (full detail in the HTML): Espresso `#55331B`, Crema Gold `
 `#FBF8F1`, tricolore green/red as thin rules only; display = Marcellus, body = Inter, wordmark art =
 Montecatini (logo only). ™ never ®.
 
-> **Follow-up:** the PDF here is the 2026-08-21 render (v2.2); re-render from the HTML if the source changes.
+> **Follow-up:** the PDF here is the 2026-08-22 render (v2.3); re-render from the HTML if the source changes.

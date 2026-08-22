@@ -2,7 +2,7 @@
 
 **Version 1.15 · 2026-08-22**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
-**Companion standards:** Brand Standards v2.2 (look & voice) · Collaboration Standard v1.1 (how we work).
+**Companion standards:** Brand Standards v2.3 (look & voice) · Collaboration Standard v1.1 (how we work).
 
 > **v1.15 (2026-08-22)** changes **which system owns the subscriber rate**, on measured platform
 > behaviour rather than intent. §3's no-codes `MAX` policy is untouched. The v1.3 mechanism - one
