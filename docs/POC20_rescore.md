@@ -7,6 +7,26 @@
 
 ---
 
+> ⚠️ **POC21 shipped AFTER this pass, and the 7.9 does not cover it.** The hero was rewritten later the
+> same day (commit `69e6296`, theme `152029167785`): three declarative lines replacing a two-line H1
+> and a sub-line that had a dangling modifier and an unverifiable claim. **Steve's call was to hold the
+> score rather than re-score** — re-scoring every batch turns a comparison instrument into noise, and
+> the top end is gated on real photography either way. The next pass should run when photography lands.
+>
+> **For whoever scores next:** the dimension most likely to move on POC21 is **Value proposition
+> clarity**, currently 8.0 — the hero is that dimension's primary surface, and it went from a sentence
+> with no grammatical subject making a claim the 90-day window does not support, to a precise enforced
+> one plus a differentiator (the donation pledge) that nobody else on the shelf can make. Copy &
+> editorial voice is already at 9.5 and held down by a live card-vs-detail freshness inconsistency, so
+> it is the less likely mover of the two.
+>
+> **One live dependency to check before scoring that hero:** it names **Feeding Tampa Bay** in the
+> third sentence a visitor reads. Steve wrote to them on 2026-08-22 to confirm they can accept the
+> beans. If the answer is no, the copy is false in the most visible place on the site — see the
+> Decisions sheet of the Systems Inventory.
+
+---
+
 ## Verdict: 7.9 → 7.9
 
 **The score did not move, and it should not have.**
