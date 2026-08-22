@@ -3381,7 +3381,7 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC24 (deployed + pull-and-diff proved 2026-08-22) — read this first
+**▶ CURRENT STATE — POC25 (deployed + pull-and-diff proved 2026-08-22) — read this first
 when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
@@ -3406,20 +3406,24 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC24 Preview" | `152030183593` |
+| **Newest POC preview** | "Crema Italia POC25 Preview" | `152030281897` |
+| Prior preview | "Crema Italia POC24 Preview" | `152030183593` |
 | Prior preview | "Crema Italia POC23 Preview" | `152030052521` |
 | Prior preview | "Crema Italia POC22 Preview" | `152029757609` |
 
-**Scorecard: 7.9/10 as of 2026-08-22 (POC20)** — the deployed storefront has been scored five times
-against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20).
-**Trust & social proof moved 3.5 → 6.5 at POC17**, the largest single-dimension move in the project,
-after scoring 3.5 in the first three passes. **POC20 did not move the overall, and should not have** —
-POC18-20 were correctness work (a wrong number removed from two homes, a display replaced because it
-could lie, badly authored fixture data corrected), and the rubric measures what a visitor experiences.
-Only Copy & editorial voice moved, 9.0 → 9.5. Full pass: `docs/POC20_rescore.md`, which also carries
-**the rubric as a reusable prompt** so the next pass uses the same ten dimensions and the same
-guards. Brief: `docs/trust-and-social-proof-brief.md` (marked SUPERSEDED 2026-08-20 — the
-decisions were made; policy now lives in Store Operating Standards §13).
+**Scorecard: 8.3/10 as of 2026-08-22 (POC24)** — the deployed storefront has been scored six times
+against one rubric: 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20) →
+**8.3 (POC24)**. Full pass: `docs/POC24_rescore.md`; series: `docs/scoring-history.md`; artifact:
+https://claude.ai/code/artifact/25207561-daea-4408-aa79-f39960d65446
+**The largest gain is not code** — Trust & social proof 6.5 → 7.5 because Steve published the four
+legal policies, closing the item the first audit called the largest trust gap on the board.
+**Two carried findings were WITHDRAWN** after being tested for the first time: the shelf/IA claim
+(false — `shelf` is never a list, subscription maps exactly onto Roccia 9 of 9) and "76 div onclick
+announce poorly" (false — 76 of 76 carry role + tabindex, fixed back in POC14). **The durable lesson:
+the claims that survived untouched across passes were the ones nobody had ever measured.**
+**Accessibility was held at 8.0 despite a clean measured surface** because one **Level A** criterion
+was unmet — no skip link. **POC25 closed it.** The three remaining ceilings are photography,
+a real cart, and real customers; none is code.
 
 > **Corrected 2026-08-22.** This block said *"7.4 as of 2026-08-19"* and *"a re-score against POC17
 > is the next task"* — but that re-score ran on 2026-08-20 and scored **7.9**, so the authoritative

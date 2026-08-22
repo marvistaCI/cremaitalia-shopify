@@ -174,6 +174,7 @@ since POC3, and arguably a gap in the rule rather than the design.
 ## Pass 6 — POC24 re-score · 8.3 · 22 Aug 2026
 
 Theme `152030183593`. Full report: **`docs/POC24_rescore.md`**.
+Artifact: https://claude.ai/code/artifact/25207561-daea-4408-aa79-f39960d65446
 
 **Verdict.** 7.9 -> **8.3**, the first movement in two passes. Five dimensions moved; the largest
 single gain is **Trust & social proof 6.5 -> 7.5**, and it is **not code** — Steve published four

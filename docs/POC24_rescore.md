@@ -1,6 +1,7 @@
 # Storefront re-score — POC24 · 8.3 · 22 Aug 2026
 
 **Theme:** "Crema Italia POC24 Preview" · `152030183593`
+**Artifact (render):** https://claude.ai/code/artifact/25207561-daea-4408-aa79-f39960d65446
 **Asserted from the page itself:** `Shopify.theme.id === 152030183593`, role `unpublished`, and the
 Shopify preview bar reads *"Crema Italia POC24 Preview · Draft"*. Every figure below was read from
 that live theme, never from the repo or a change list.
