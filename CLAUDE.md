@@ -3282,11 +3282,70 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   zero `page-shipping`. POC20, POC21 and the live theme untouched. Detail:
   `docs/POC22_change_list.md`.
 
+- 2026-08-22 — **POC23: a standing scorecard finding was challenged, tested, and turned out to be half
+  false and half never-measured. Brand Standards v2.2 -> v2.3.** Steve asked about the carried item
+  *"semantic markup... elements announce poorly, and we have not run an end-to-end screen-reader."*
+  **The semantic-markup half is largely FALSE.** 83 of 83 non-semantic clickables carry
+  `role="button"` **and** `tabindex`, and 82 of 83 have an accessible name — POC14's
+  `markKeyboardActivable` stamps every one. The finding predates POC14 and was **inherited four
+  passes without re-testing**, the second such finding withdrawn in a single day (the shelf-IA one
+  went the same morning). One of my own audit flags was also a false positive: I reported the logo as
+  unnamed, then found `alt="Crema Italia"` — my check never looked at `alt`.
+  **The contrast half was TRUE and had never been run.** 16 pages plus product detail plus two
+  modals: **17 failing combinations across 127 rendered instances**, now **zero**. Two colours
+  explained all of it. **The Standard had already predicted one and actively sanctioned the other** —
+  it recorded Crema Gold as 3.1:1 and *"large-display/accent only"* while the site used it for 12px
+  eyebrows and inline links, and it listed Mute at 3.7:1 as fit for *"captions / fine print only"*,
+  which are precisely the small sizes where 3.7:1 fails. The storefront followed the Standard
+  faithfully into a failure. Fixed with **darkened siblings rather than replacements** —
+  `--ci-crema-text` `#94693A` (4.56), `--ci-mute-text` `#7D705E` (4.55), plus `-fill` variants for
+  cream-on-gold — leaving `--ci-crema` and `--ci-mute` untouched for headings, rules and decoration
+  where the bar is 3:1 and they already pass. Applied by regex to `color:` only, with a negative
+  lookbehind protecting `border-color:`/`background-color:`; 61 text declarations moved, 12
+  `border-color` and 8 `background` uses preserved.
+  **The trap, and this batch fell into it before climbing out.** A darker token raises contrast on
+  cream and **lowers it on brown**. Darkening `.inline-link` globally drove *"See the map"* on the
+  Espresso hero from 3.40 to **2.31** — a regression *caused by the fix*, caught only because the
+  audit was re-run rather than assumed. Dark grounds now correct the other way, toward
+  `--ci-crema-light` (itself nudged `#E8A86A` -> `#E9AB6E`, having been 0.05 short of AA on the
+  lightest brown in use).
+  **Two accessibility fixes.** `#pd-sub` had **no accessible name at all** — zero labels, no
+  `aria-label` — the only unnamed control on the site, and the one where it mattered most, because
+  POC22 had placed a legally-required renewal disclosure beside it hours earlier. It now takes
+  `aria-labelledby` **and `aria-describedby` pointing at the renewal paragraph**, so the disclosure is
+  announced *with* the control rather than sitting near it — better than sighted parity. And the
+  rating stars became genuinely decorative (`aria-hidden` plus a labelled `role="group"`), which is
+  what licenses their deliberate sub-AA contrast: POC17 set the empty star at the hairline value so an
+  unrated coffee reads as a **null, not a zero-out-of-five verdict**, and darkening it would make an
+  unrated coffee look badly reviewed. **A code comment nearly shipped a false claim** asserting the
+  stars were already `aria-hidden`; they were not, and checking turned a false comment into a real fix.
+  **Bottega's slate scheme is sanctioned rather than drifting (Steve).** The colours were fine; the
+  storage was not. The hero carried an **inline `style="background:linear-gradient(...)"`**, the shelf
+  badge hardcoded `#2a2a3a`, and the placeholder tile hardcoded the gradient a third time — **one
+  idea, three homes, no token**, which is exactly how a non-palette colour survives a stylesheet
+  audit, because an inline style never appears in one. Now four tokens, a real `.bottega-hero` class,
+  and zero hardcoded navy outside the token line.
+  **Brand Standards v2.2 -> v2.3** via `crema-std-publish`: the two text tokens and the fill variant
+  added to §3.4, the Mute row **corrected** with the error named explicitly, the dark-ground reversal
+  written down, and §3.5 amended so *"never introduce new colours"* records Bottega as a scoped
+  exception rather than reading as a prohibition on something Steve chose. All gates pass at exit 0;
+  v2.2 archived; **both companion Standards re-rendered** because their companion headers moved
+  without their own versions bumping (the `f9ffcb1` blind spot); all three delivered to OneDrive and
+  **md5-verified MATCH**.
+  **A false alarm worth recording.** A screenshot made the home hero look broken. `.hero` proved
+  **byte-identical to git HEAD** — the dark hero is the design, and the apparent breakage was a
+  capture artifact. Checked before reporting, unlike the four inherited findings above.
+  **DEPLOYED** via the `crema-poc-deploy` skill to a NEW unpublished theme **"Crema Italia POC23
+  Preview" (id `152030052521`)**: `theme list` + `git log origin/main..HEAD` run **first** (no POC23,
+  no duplicates, zero unpushed), validation at the documented baseline (15 offenses / 0 errors / 0
+  new), then **pull-and-diff proved** the push — both sides 38 files, zero content mismatches, and the
+  batch content asserted on the deployed theme. POC21, POC22 and the live theme untouched.
+
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC22 (deployed + pull-and-diff proved 2026-08-22) — read this first
+**▶ CURRENT STATE — POC23 (deployed + pull-and-diff proved 2026-08-22) — read this first
 when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
@@ -3311,9 +3370,9 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC22 Preview" | `152029757609` |
+| **Newest POC preview** | "Crema Italia POC23 Preview" | `152030052521` |
+| Prior preview | "Crema Italia POC22 Preview" | `152029757609` |
 | Prior preview | "Crema Italia POC21 Preview" | `152029167785` |
-| Prior preview | "Crema Italia POC20 Preview" | `152028446889` |
 
 **Scorecard: 7.9/10 as of 2026-08-22 (POC20)** — the deployed storefront has been scored five times
 against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20).
@@ -3334,7 +3393,42 @@ decisions were made; policy now lives in Store Operating Standards §13).
 > accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
 > gate** on brand identity and product detail rising above 9.
 
-**POC22 is deployed** and is the only POC22 theme — all **38** files byte-match the repo, proved by
+**POC23 is deployed** and is the only POC23 theme — all **38** files byte-match the repo, proved by
+pull-and-diff on 2026-08-22 (both sides 38 files, zero content mismatches, nothing on only one side;
+`theme list` **and** `git log origin/main..HEAD` were run **before** the push). The diff asserted the
+batch content on the deployed theme: 34 `--ci-crema-text` uses, 4 `--ci-bottega-*` uses,
+`aria-describedby`/`aria-hidden` present, and **zero hardcoded navy** left in the Liquid.
+
+**What POC23 is:** the answer to a standing scorecard item Steve challenged — *"semantic markup where
+it claims that elements announce poorly, and we have not run an end-to-end screen-reader"* (commit
+`2c08080`). Testing it split the claim in half. **The semantic-markup half was largely false:** 83 of
+83 non-semantic clickables already carry `role="button"` and `tabindex` and 82 of 83 have an
+accessible name, because POC14 fixed it — the finding predates POC14 and had been inherited four
+passes without re-testing. **The contrast half was true and had never been measured.** A 16-page
+audit found **17 failing combinations across 127 rendered instances**, now **zero**. Two colours
+explained all of it, and **Brand Standards had already predicted one and sanctioned the other** — it
+recorded Crema Gold as large-display-only and the site used it for 12px eyebrows anyway, while
+listing Mute at 3.7:1 as fit for *"captions / fine print"*, which are exactly the sizes it fails at.
+Fixed with **darkened siblings** (`--ci-crema-text` `#94693A`, `--ci-mute-text` `#7D705E`, plus fill
+variants), leaving `--ci-crema` and `--ci-mute` untouched wherever they already pass at 3:1.
+**The trap, which this batch fell into and climbed out of:** a darker token raises contrast on cream
+and *lowers* it on brown — darkening `.inline-link` globally drove "See the map" on the Espresso hero
+from 3.40 to **2.31**, a regression caused by the fix and caught only because the audit was re-run
+rather than assumed. Dark grounds now correct the other way, toward `--ci-crema-light`.
+Two accessibility fixes: **`#pd-sub` had no accessible name at all** — the only unnamed control on
+the site, and the one where it mattered most, since POC22 had just placed a legally-required renewal
+disclosure beside it; it now takes `aria-labelledby` **and `aria-describedby` pointing at the renewal
+terms**, so the disclosure is announced *with* the control. And the rating stars are now genuinely
+decorative (`aria-hidden` + a labelled `role="group"`), which is what licenses their deliberate
+sub-AA contrast — the empty star stays at the hairline value so an unrated coffee reads as a **null,
+not a zero-out-of-five verdict**. **A code comment nearly shipped a false claim** that the stars were
+already `aria-hidden`; checking turned it into a real fix. **Bottega's slate scheme is now sanctioned
+rather than drifting** (Steve): it lived as an *inline style* plus two hardcoded values — one idea,
+three homes, no token, which is exactly how a non-palette colour escapes a stylesheet audit — and is
+now four tokens, a real `.bottega-hero` class, and **Brand Standards v2.3**. Detail:
+`docs/POC23_change_list.md`.
+
+**What POC22 was:** it is the only POC22 theme — all **38** files byte-match the repo, proved by
 pull-and-diff on 2026-08-22 (both sides 38 files, zero content mismatches, nothing present on only
 one side; `theme list` **and** `git log origin/main..HEAD` were run **before** the push, confirming no
 name collision). The diff also asserted the batch content **on the deployed theme rather than the
@@ -3342,7 +3436,7 @@ repo**: four policy links in the footer, the `sub-renewal` disclosure present in
 occurrences of the removed `page-shipping`. The repo is fully pushed to GitHub, so nothing is
 local-only, and **the repo and this theme are in step**.
 
-**What POC22 is:** the two consequences of the four Shopify policies going live the same day
+**What POC22 was:** the two consequences of the four Shopify policies going live the same day
 (commit `e63d9c4`). **(1) The footer links them.** Nothing on the storefront did — Shopify links
 policies from the **checkout** footer automatically, but a customer deciding whether to trust the
 store never reaches checkout. `Shipping` and `Returns` joined the main list; `Terms` and `Privacy`
@@ -3390,8 +3484,11 @@ POC18 and POC19 previews and the live theme are untouched. Preview:
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
 2026-07-06). To refresh: `shopify theme push --theme 152029167785`.
 
-**Only POC20, POC21 and POC22 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
-enforced as `crema-poc-deploy` Step 5. **POC19 (`152017764521`) was deleted 2026-08-22** on Steve's
+**Only POC21, POC22 and POC23 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
+enforced as `crema-poc-deploy` Step 5. **POC20 (`152028446889`) was deleted 2026-08-22** on Steve's
+explicit go, id/name/role re-verified against a live `theme list --json` in the same breath as the
+delete and after the POC23 push was proven; its batch is commit `ee1fa66` and it is redeployable.
+Earlier the same day: **POC19 (`152017764521`) was deleted** on Steve's
 explicit go, id/name/role re-verified against a live `theme list --json` in the same breath as the
 delete and the delete run **after** the POC22 push was proven by pull-and-diff; its batch is commit
 `502b885` on `origin/main` and redeployable. The Step 6.4 sweep found exactly one surviving reference
