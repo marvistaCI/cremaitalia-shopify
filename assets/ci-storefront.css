@@ -451,6 +451,12 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 .sub-toggle input[type=checkbox]{width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:var(--ci-crema)}
 .sub-toggle-text h4{font-size:.95rem;font-weight:600;color:var(--ci-coffee);margin-bottom:.2rem}
 .sub-toggle-text p{font-size:.82rem;color:var(--ci-espresso);margin:0;max-width:none}
+/* The automatic-renewal disclosure. font-size and color are restated here rather than
+   inherited so that shrinking or greying the benefit line above can never silently shrink
+   or grey this one. It must stay the same size as the copy it sits under: small print beneath
+   a subscribe toggle is what "clear and conspicuous" exists to prevent. See the comment at
+   the render site in ci-storefront.js. */
+.sub-toggle-text .sub-renewal{font-size:.82rem;color:var(--ci-espresso);margin-top:.45rem}
 .cadence{margin-top:1rem;display:none}
 .cadence.show{display:block}
 .cadence .filter-label{margin-bottom:.4rem}
@@ -598,9 +604,18 @@ nav button.active{color:var(--ci-crema);font-weight:600}
 
 /* ---- footer ---- */
 .ci-footer{border-top:1px solid var(--ci-hairline);padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-size:.8rem;color:var(--ci-mute);background:var(--ci-cream)}
-.footer-links{display:flex;gap:1rem;flex-wrap:wrap}
-.footer-links button{background:none;border:none;cursor:pointer;font-size:.8rem;color:var(--ci-mute);text-decoration:underline;text-underline-offset:2px;font-family:var(--ci-font-body)}
-.footer-links button:hover{color:var(--ci-crema)}
+.footer-links{display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+/* POC22: the footer now mixes <button> (SPA routes) with <a> (Shopify policy pages, which
+   deliberately leave the SPA). Both must render identically - a policy link that looked
+   different would read as a different KIND of thing, which it is not from the reader's side. */
+.footer-links button,.footer-links a{background:none;border:none;padding:0;cursor:pointer;font-size:.8rem;color:var(--ci-mute);text-decoration:underline;text-underline-offset:2px;font-family:var(--ci-font-body);line-height:1.4}
+.footer-links button:hover,.footer-links a:hover{color:var(--ci-crema)}
+/* Company line + the quiet legal pair. Terms and Privacy are fine print and sit here rather than
+   in .footer-links, which carries what a shopper actually wants before buying. */
+.footer-id{display:flex;flex-direction:column;gap:.3rem}
+.footer-legal{display:flex;gap:.9rem}
+.footer-legal a{color:var(--ci-mute);text-decoration:underline;text-underline-offset:2px;font-size:.75rem}
+.footer-legal a:hover{color:var(--ci-crema)}
 
 /* ---- toast ---- */
 .toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(120%);opacity:0;visibility:hidden;background:var(--ci-coffee);color:var(--ci-cream);padding:.75rem 1.25rem;border-radius:var(--ci-radius);font-size:.85rem;z-index:600;transition:transform 300ms,opacity 300ms,visibility 300ms;box-shadow:0 8px 24px rgba(59,31,18,.25)}

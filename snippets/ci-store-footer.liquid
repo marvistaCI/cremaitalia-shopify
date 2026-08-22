@@ -28,10 +28,41 @@
     </form>
     <p class="fs-note" id="fs-note">No codes, no daily mail. Unsubscribe in one click.</p>
   </div>
-  <span>Crema Italia, LLC &middot; Lutz, Florida, USA &middot; cremaitalia.com</span>
+  {%- comment -%}
+    Policy links, added POC22 (2026-08-22). Four Shopify-hosted policies went live 2026-08-22 and
+    nothing on the storefront linked them; Shopify links them from the CHECKOUT footer automatically,
+    but a customer deciding whether to trust the store never reaches checkout.
+
+    Two decisions worth not re-litigating (docs/legal/README.md carries the full reasoning):
+
+    1. FOUR NAMED LINKS, not one "Legal notices" link. There is no destination for a single link -
+       /policies, /policies/ and /pages/policies all 404, so Shopify has no policy index route and a
+       single link would need a page we build and maintain. The label would also collide with the
+       Shopify "Legal notice" policy slot we deliberately left unset (it is the EU Impressum field,
+       not required for US-only DTC).
+
+    2. SHIPPING AND RETURNS SIT WITH THE USEFUL LINKS, not with the fine print. They are purchase
+       content: a shopper wants the free-shipping threshold and the replacement promise BEFORE
+       buying, and a "Legal" label signals fine print nobody clicks. Terms and Privacy genuinely are
+       fine print and sit quietly beside the company line.
+
+    Shipping points at the POLICY, not at a POC page. #page-shipping was removed in this batch - it
+    was a 417-character condensed paraphrase of the published shipping policy (same threshold, same
+    $8.50, same carriers, same transit bands), i.e. a second home for facts that would drift the
+    moment either was edited. These links leave the SPA, which is the production-correct behaviour:
+    in the real theme they are ordinary pages.
+  {%- endcomment -%}
+  <div class="footer-id">
+    <span>Crema Italia, LLC &middot; Lutz, Florida, USA &middot; cremaitalia.com</span>
+    <span class="footer-legal">
+      <a href="/policies/terms-of-service">Terms</a>
+      <a href="/policies/privacy-policy">Privacy</a>
+    </span>
+  </div>
   <div class="footer-links">
     <button onclick="showPage('promise')">The Crema Italia Promise</button>
-    <button onclick="showPage('shipping')">Shipping</button>
+    <a href="/policies/shipping-policy">Shipping</a>
+    <a href="/policies/refund-policy">Returns</a>
     <button onclick="showPage('about')">About</button>
     <button onclick="showPage('faq')">FAQ</button>
     <button onclick="showPage('journal')">Journal</button>
