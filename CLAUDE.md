@@ -106,28 +106,45 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > **The browser screenshot tool is NOT broken — don't screenshot the `preview_start` tab
 > (solved 2026-08-18).** Six §9 entries below (POC5, POC6, POC7, POC9, POC12, POC13) record the
 > screenshot tool as "wedged" and fall back to expensive DOM measurement. **It was never wedged.**
-> **THE FIX — two calls:**
+> **THE FIX — three calls, and the third is the one everybody misses:**
 > ```
 > mcp__Claude_Browser__tabs_create              -> returns e.g. tab-1
-> mcp__Claude_Browser__navigate  {tabId:"tab-1", url:"<preview url>"}
-> mcp__Claude_Browser__computer  {tabId:"tab-1", action:"screenshot"}   # works
+> mcp__Claude_Browser__navigate    {tabId:"tab-1", url:"<url>"}
+> mcp__Claude_Browser__tabs_select {tabId:"tab-1"}    # REQUIRED - only the fronted tab composites
+> mcp__Claude_Browser__computer    {tabId:"tab-1", action:"screenshot"}   # works
 > ```
-> **BOTH conditions are required** (corrected twice on 2026-08-18 before landing here):
+> **THREE conditions are required** (the third added 2026-08-22, after the first two proved
+> insufficient; the two before it were each corrected once on 2026-08-18):
 > 1. **A `tabs_create` tab.** The tab `preview_start` makes (`tabId: "seed"`) **never** composites,
->    whatever the pane is doing — proven by querying both at the same instant under identical pane
->    state: seed reported `hidden`, the `tabs_create` tab reported `visible`.
+>    whatever the pane is doing.
 > 2. **A displayed Browser pane.** A `tabs_create` tab goes back to `hidden` the moment the pane is
->    hidden, and screenshots start failing again mid-session. Ask Steve to show the pane.
+>    hidden, and screenshots start failing again mid-session.
+> 3. **That tab must be the FRONTED one.** Only the fronted tab composites. Creating a second tab
+>    steals the front, and screenshots then fail on **both** — including the tab that was working
+>    seconds earlier. `tabs_context` reporting `isActive: true` is **not** sufficient; call
+>    `tabs_select` explicitly.
 >
-> So it is neither purely user-side (first wrong guess) nor purely agent-side (second wrong guess).
-> **Probe `{visibilityState, hidden, hasFocus}` before concluding anything** — `hidden:true` on a
-> `tabs_create` tab means ask for the pane; `hidden:true` on `seed` means make a real tab. Also pass
-> an explicit `{tabId}` to `resize_window`, or the new tab keeps its own default size.
+> **Read the probe correctly — `{visibilityState, hidden, hasFocus}` distinguishes 2 from 3:**
+> - `hidden:true` -> the **pane** is not displayed (condition 2). Ask Steve to show it.
+> - `hidden:false` but the screenshot still times out -> the tab is **not fronted** (condition 3).
+>   Call `tabs_select`. This is the case that looks impossible and wastes the most time, because the
+>   one signal the old version of this callout told you to trust reports healthy.
+>
+> Also pass an explicit `{tabId}` to `resize_window`, or the new tab keeps its own default size.
+> **Note `javascript_tool` works on a hidden, un-fronted tab.** That is what made this durable — DOM
+> reads keep succeeding, so the measurement workaround looks like a sound answer rather than a
+> symptom — but it is also genuinely useful: a hidden tab is still a fully authenticated HTTP client,
+> and on 2026-08-22 the whole A1 platform test was driven through `fetch()` on a hidden tab when the
+> pane was unavailable. **Two admin-specific traps:** the Shopify admin's `s-internal-*` web
+> components return **zero-size bounding rects** when the pane is not compositing, so ref-clicks and
+> coordinate-clicks silently miss while `innerText` still reads fine; and cross-origin iframes (card
+> entry at checkout) can never be driven by script, so paying for a test order always needs the pane.
 > **Two things that made this durable.** (1) The error text — "the Browser pane is not displayed" —
-> reads as a user-side problem and sent at least one session (this one, initially) down the wrong
-> path of asking Steve to open a panel; that does not fix it. (2) JS execution is never gated on
-> visibility, only throttled, so `javascript_tool` kept returning correct DOM geometry on the dead
-> `seed` tab, which made the measurement workaround look like a sound answer rather than a symptom.
+> reads as a user-side problem and has now sent **three** sessions down the wrong path of asking
+> Steve to open a panel; on 2026-08-22 Steve answered "the claude pane is visible, and has been from
+> the start", which is what exposed condition 3. **If Steve says the pane is visible, believe him and
+> look for the third condition.** (2) JS execution is never gated on visibility, only throttled, so
+> `javascript_tool` kept returning correct DOM geometry on a dead tab.
 > **Cost of the error:** POC13 re-rendered `object-fit:cover` crops offline in Pillow to judge
 > photography it could simply have looked at. DOM geometry is authoritative for position, size and
 > keyboard reachability but **cannot** judge crop, colour, composition, or synthesised type — and
@@ -2749,6 +2766,85 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   and the rate is copied onto the instance at signup.** Loop's own information architecture is telling
   us the same thing the forum answer did.
 
+- 2026-08-22 — **Platform Validation Round 2 opened with A1, and A1 is ANSWERED: a discount Function
+  compounds with Loop's selling-plan price adjustment. Standard §12.7 fell out of the same run.**
+  Detail: `docs/production_build_spec.md` **§5.2.3**. Round 1 had closed on documentation and a staff
+  forum post; this is the first time the interaction has been watched on a store. **Live check first,
+  per §6 and §10:** `shopify theme list` and `git log origin/main..HEAD` both matched §10 exactly —
+  POC17/18/19 previews, live theme untouched, nothing unpushed. **No document correction needed**,
+  which is worth recording precisely because the rule exists for the times it is.
+  **The instrument mattered as much as the result.** A throwaway app (`~/code/crema-validation`, its
+  own git repo, outside the theme repo) with one Discount Function that takes a flat 10% off every
+  line and **encodes what it was handed into the discount message**. The cart and checkout then report
+  the function's own inputs back verbatim, so nothing had to be inferred from arithmetic. Registered
+  with `combinesWith` **false on all three classes** — the most restrictive setting Shopify offers —
+  so that a compounding result could not be blamed on a combination rule we mis-set.
+  **The result.** Same $24.95 variant twice. On Loop's 12% *Founder Subscription* plan the Function's
+  10% came off the **already-reduced $21.96**, billing **$19.77** — an effective **20.76%**. The
+  one-time control billed **$22.46**, a clean 10%. `combinesWith: false` made no difference, because a
+  selling-plan adjustment is **not a discount** and never enters the combination contest at all. So a
+  founder would receive 12% off a price that is already 12% off.
+  **The fix, and it is better than the binary the spec assumed.** §5.2 had framed this as "the rate
+  lives in the selling plan OR in a Function, never both". It does not have to be either/or. The
+  Function is **not blind to the subscription** — `sellingPlanAllocation` came back non-null with the
+  plan and its adjustments — so it can decline the line, declaratively via `appliesOnSubscription:
+  false` or in code. But more usefully, on a subscription line Shopify also hands over
+  `compareAtAmountPerQuantity` = the **pre-plan base price** ($24.95), and it is **null on a one-time
+  line**. On exactly the lines where the plan moved the price, we are given the number it moved from.
+  So the Function can compute a **top-up to `MAX`** — discount only the gap between the plan's price
+  and the best rate the customer qualifies for — which preserves Standard §3 exactly, with the plan
+  owning the floor and the Function owning the difference. Without it, barring the Function from
+  subscription lines would silently turn `MAX` into `standing rate` on every subscription line, so a
+  subscriber could never receive the 15% win-back. **Recommendation only; §11/§12.8 is Steve's call
+  (item A2).**
+  **Standard §12.7 answered as a by-product: YES, a Function can read customer tags AND
+  custom-namespace customer metafields.** Open since 2026-07-25 and load-bearing for the entire §11
+  engine. `hasAnyTag`, `hasTags`, `numberOfOrders` and `crema_italia.tier` all returned live values at
+  checkout, the metafield needing **no definition and no access grant**. Two caveats worth more than
+  the answer: the customer object is **null in the cart** and populated only at **checkout**; and
+  **tags propagate late while metafields are immediate** — written in one mutation, the metafield read
+  back on the next page load while both tags still read `N`, flipping to `Y` about two minutes later.
+  So anything that must bite immediately (a resume restoring benefits, a win-back window opening)
+  should be a **metafield, not a tag** — which is a real correction to §11's tag-first design.
+  **That near-miss is the methodological lesson of the session.** The first reading was one keystroke
+  from being written up as "tags never reach Functions", which would have been a false architectural
+  finding of exactly the class this log keeps recording (the stale `index.lock`, the "not yet
+  deployed" line, the "wedged" screenshot tool). It was a propagation lag. **Re-read before
+  concluding.**
+  **Two smaller findings.** The discount `message` renders **verbatim to the customer** on the
+  checkout, so in production it is customer copy under Brand Standards — and under §3's no-codes
+  policy it is the only place a server-side discount explains itself. And **Loop registers its own
+  discount Functions** (`referral Discount`, `Gift program discounts`, `bundle-discount` all appear in
+  the store's discount picker), so Loop's discount surface is larger than §5.2 assumed.
+  **Not closed:** the checkout quotes `Recurring subtotal $21.96 every 4 weeks` — the Function's 10%
+  is **not** in the renewal price, and that held even with `recurringCycleLimit: 12`. That corroborates
+  §5.2's Finding 2 more strongly than anything before it, but it is a checkout **projection**, not a
+  contract. Closing it needs one completed order; card entry sits in a cross-origin iframe and cannot
+  be scripted. Logged as **A1-residual**.
+  **Dev-store state deliberately left behind and flagged in §5.2.3:** the probe discount is **still
+  ACTIVE** and takes 10% off every line, so it must be deactivated before B2, C1 or C3 are run;
+  customer `9796364042464` now carries test tags and a metafield.
+  **Tooling: the "screenshot tool is wedged" callout was wrong AGAIN, and Steve is the one who caught
+  it — again.** The callout listed two conditions (a `tabs_create` tab, a displayed pane) and told the
+  agent to ask Steve to show the pane. Following it, this session did exactly that. Steve: *"the
+  claude pane is visible, and has been from the start."* He was right, and chasing it properly found a
+  **third** condition the callout never named: **only the FRONTED tab composites.** Creating a second
+  tab steals the front and screenshots then fail on **both** — including the tab that worked seconds
+  earlier — while `document.visibilityState` still reports `visible`, which is the one signal the
+  callout told you to trust. `tabs_select` fixes it. The callout is rewritten with all three
+  conditions and with how to read the probe to tell condition 2 from condition 3. **This error string
+  has now misled three sessions.** Also recorded there: a hidden tab is still a fully authenticated
+  HTTP client, and that is not merely a consolation — the entire A1 cart-and-checkout test was driven
+  through `fetch()` on a hidden tab; and the Shopify admin's `s-internal-*` web components return
+  **zero-size bounding rects** when the pane is not compositing, so clicks silently miss while
+  `innerText` reads fine.
+  **Also learned, and reusable:** `shopify store auth` + `shopify store execute` / `shopify app
+  execute` give a fully headless Admin GraphQL channel, which is far more reliable than fighting the
+  admin UI, and `app execute` runs **as the app** (the only way to see the app's own
+  `shopifyFunctions`). The auth flow opens the authorize page in the **default** browser (Comet here),
+  which is not drivable; the URL was recovered from the launched process's command line and completed
+  in the Claude pane instead.
+
 ---
 
 ## 10. Open questions / TODO
@@ -3068,12 +3164,20 @@ decides. Full context in the §9 2026-07-24 and 2026-08-21 entries.
   itself. (2) **The $99-vs-$399 fork dissolves:** contract discount rates are editable **in the Loop
   admin on the FREE tier**, so promoting a founder is a thirty-second admin edit, not an API call.
   Pro is not needed and **Starter stands**.
-  **ONE question left, and it is the only thing still blocking:** does a Shopify discount Function
+  **[SUPERSEDED 2026-08-22 - see the correction directly below.]** ONE question left: does a Shopify discount Function
   **compound** with the selling-plan adjustment on the first order? Cannot be answered by inspection —
   needs a Function deployed and a second test order. Given Finding 1 the expectation is yes, because
   the Function sees $21.96 as the line price. **Until it is answered, the subscriber rate must live in
   the selling plan OR in a Function, never both**, or a founder gets 12% off a price already 12% off.
   Standard §11/§12.8 still need Steve's decision on which system owns the rule.
+  **THAT LAST QUESTION IS NOW ANSWERED — 2026-08-22, see `docs/production_build_spec.md` §5.2.3 and
+  Round 2 item A1 below. They DO compound**, observed on the dev store: a Function's 10% came off
+  Loop's already-reduced $21.96 and billed $19.77, an effective 20.76%, and setting `combinesWith` to
+  false on all three classes did not prevent it. **The either/or framing above is superseded**, and in
+  the customer's favour: the Function can see the subscription line (`sellingPlanAllocation`) and is
+  handed the pre-plan base price (`compareAtAmountPerQuantity`), so it can apply a **top-up to `MAX`**
+  rather than being excluded from subscription lines outright. Standard §11/§12.8 still need Steve's
+  decision on which system owns the rule (item A2).
 
 - [x] ~~**CHOOSE: new vs legacy Shopify customer accounts.**~~ **NOT A CHOICE — settled by the
   platform, verified 2026-07-25.** A store created today runs **new customer accounts only**;
@@ -3137,15 +3241,38 @@ Round 1's value was that **three of its six items changed on contact with a live
 every line here as unproven until a screenshot says otherwise. The dev store
 `crema-italia-development` is the lab and is free; see the 2026-08-21 entries in §9.
 
-*Ordered. A1 blocks a commercial rule and should go first.*
+*Ordered. **A1 is DONE (2026-08-22)** and took Standard §12.7 with it; A2/A3 are now Steve's decisions, and B1/B2/C1-C5 are untouched. NOTE: the A1 probe left an ACTIVE 10%-off-everything discount on the dev store - deactivate it before B2, C1 or C3 (see `production_build_spec.md` §5.2.3).*
 
-- [ ] **A1 — Does a discount Function COMPOUND with the selling-plan price adjustment?** The last
-  unanswered Loop question and the only one that cannot be settled by inspection: it needs a discount
-  Function deployed to the dev store and a second test order against *Founder Subscriptions*.
-  Expectation is **yes it compounds**, because the Function sees the already-reduced $21.96 as the line
-  price. **Until this is answered the subscriber rate lives in the selling plan OR in a Function, never
-  both** — otherwise a founder gets 12% off a price that is already 12% off. Context:
-  `docs/production_build_spec.md` §5.2.2.
+- [x] ~~**A1 — Does a discount Function COMPOUND with the selling-plan price adjustment?**~~ **RUN AND
+  ANSWERED 2026-08-22 — YES, they compound. See `docs/production_build_spec.md` §5.2.3.** A Discount
+  Function was built, deployed to the dev store and driven through a real storefront cart and checkout.
+  Same $24.95 variant, twice: on Loop's 12% *Founder Subscription* plan the Function's 10% came off the
+  **already-reduced $21.96**, billing **$19.77** — an effective **20.76%**; the one-time control billed
+  $22.46, a clean 10%. **`combinesWith` was set to false on all three classes and it made no
+  difference**, because a selling-plan adjustment is not a discount and never enters the combination
+  contest. So a founder would get 12% off a price that is already 12% off.
+  **The fix exists and is cheap:** the Function *can* see the subscription (`sellingPlanAllocation` is
+  non-null), so it can decline the line — either declaratively via `appliesOnSubscription: false`, or in
+  code. **And it need not be all-or-nothing:** on a subscription line Shopify also hands over
+  `compareAtAmountPerQuantity` = the **pre-plan base price** ($24.95; it is null on a one-time line), so
+  the Function can compute a **top-up to `MAX`** — discount only the gap between the plan's price and
+  the best rate the customer qualifies for. That preserves §3 exactly, with the plan owning the floor
+  and the Function owning the difference. Recommendation only; the decision is A2.
+- [x] ~~**Standard §12.7 — can a discount Function read customer tags/metafields?**~~ **ANSWERED
+  2026-08-22: YES, both.** Settled as a by-product of A1 (it is not a Round 2 line item, but the whole
+  §11 engine assumes it and it had been open since 2026-07-25). At checkout the Function read
+  `hasAnyTag`, `hasTags`, `numberOfOrders` and a **custom-namespace** customer metafield
+  (`crema_italia.tier`) — the metafield needing **no definition and no access grant**. Two caveats worth
+  more than the answer: the customer object is **null in the cart** and populated only at **checkout**;
+  and **tags propagate late while metafields are immediate** — written in one mutation, the metafield
+  was readable on the next page load and the tags took a couple of minutes. Anything that must bite
+  immediately (a resume restoring benefits, a win-back window opening) should be a **metafield, not a
+  tag**. **Standard §12.7 not yet amended — Steve's call, per the publish ritual.**
+- [ ] **A1-residual — inspect a real contract with a Function discount live.** The checkout quotes
+  `Recurring subtotal $21.96 every 4 weeks`, i.e. the Function's 10% is **not** in the renewal price,
+  and that held even with `recurringCycleLimit: 12`. That corroborates §5.2's Finding 2 but is a
+  checkout *projection*, not a contract. Needs one completed order; blocked only because card entry is
+  in a cross-origin iframe and needs real UI interaction.
 - [ ] **A2 — Then amend Standard §11/§12.8. Steve's decision, not Code's.** §11 currently specifies a
   Function owns entitlement; the evidence says the rate is contract state and therefore Loop's. This
   changes **which system owns a commercial rule**, so it is a decision, not a correction.

@@ -509,6 +509,146 @@ anyone designs one.
 choose: the rate lives on the selling plan **or** in a Function, never both, or a founder gets 12% off
 a price that is already 12% off.
 
+#### 5.2.3 A1 RUN — they compound, and `combinesWith: false` does not stop it (2026-08-22)
+
+§5.2.2 left exactly one question open and called it the only thing still blocking: *does a Shopify
+discount Function compound with Loop's selling-plan price adjustment on the first order?* It could not
+be answered by inspection. It needed a Function deployed and a second order. **Both were done. The
+answer is yes, and the run produced five further findings the question did not ask for.**
+
+**The instrument.** A throwaway app (`crema-validation`, outside the theme repo, its own git repo) with
+one Discount Function extension, `founder-entitlement`, on the unified Discount API (`api_version
+2026-07`, target `cart.lines.discounts.generate.run`). It takes a flat 10% off every cart line
+unconditionally, and it **encodes what it was handed into the discount message**, so the cart and the
+checkout report the function's own inputs back to us instead of us inferring them. Registered as an
+automatic app discount with `discountClasses: [PRODUCT]`, `appliesOnSubscription: true`, and —
+deliberately — `combinesWith` **all three set to false**.
+
+That last choice is what makes the experiment sharp rather than merely suggestive. "Combines with
+nothing" is the most restrictive setting Shopify offers. If the two still compound under it, the cause
+cannot be a combination rule we mis-set.
+
+##### The result
+
+The same variant, $24.95, twice: once on Loop's *Founder Subscription* selling plan (12%,
+`gid://shopify/SellingPlan/11348607200`), once as a plain one-time purchase as a control.
+
+| Line | Base | Selling plan | Price the Function was handed | Function 10% | Final | Effective |
+|---|---|---|---|---|---|---|
+| **Subscription** | $24.95 | −12% | **$21.96** | −$2.19 | **$19.77** | **20.76%** |
+| One-time (control) | $24.95 | — | $24.95 | −$2.49 | $22.46 | 10.00% |
+
+The function's own report on the subscription line, read off the checkout:
+
+```
+PROBE SP=Y PLANPX=21.96 UNIT=21.96 CMP=24.95 SUB=21.96
+      CID=9796364042464 ORDERS=0 ANYTAG=Y
+      TAGS[FOUNDING-MEMBER:Y,ACTIVE-SUBSCRIBER:Y] MF=FOUNDER
+```
+
+and on the control line: `PROBE SP=N unit=24.95 cmp=? sub=24.95 cust=NONE`.
+
+Checkout totals: `Subtotal $19.77 · TOTAL SAVINGS $2.19 · Recurring subtotal $21.96 every 4 weeks`.
+
+**So a founder would receive 12% off a price that is already 12% off** — and `combinesWith: false` does
+not prevent it, because a selling-plan adjustment is not a discount and therefore never enters the
+combination contest at all. §5.2's Finding 1 is now observed rather than read.
+
+##### The fix exists, and there are two of them
+
+The Function is **not blind to the subscription**. `cartLine.sellingPlanAllocation` came back non-null,
+carrying the plan and its price adjustments (`SP=Y PLANPX=21.96`). So the function knows perfectly well
+that it is looking at a subscription line and can decline to touch it. Two mechanisms:
+
+1. **Declarative, no code:** set `appliesOnSubscription: false` on the discount. Shopify models this
+   explicitly on `DiscountAutomaticAppInput`, alongside `appliesOnOneTimePurchase` and
+   `recurringCycleLimit`.
+2. **In code:** skip any line whose `sellingPlanAllocation` is non-null.
+
+Prefer the declarative one where it suffices — it cannot be defeated by a later code change — and keep
+the in-code check as belt and braces, because the function is the thing that would be wrong.
+
+##### The finding that reconciles §3 with the platform
+
+Excluding subscription lines outright would quietly break Standard §3. `MAX` says a subscriber who
+qualifies for the 15% win-back should receive **15%**, not their standing 12%. If the 12% lives on the
+selling plan and the Function is barred from subscription lines, no campaign can ever out-rank it, and
+`MAX` silently becomes `standing rate` on every subscription line.
+
+**It does not have to.** The Function is handed *both* prices:
+
+- `cost.amountPerQuantity` = **$21.96**, the plan-adjusted price;
+- `cost.compareAtAmountPerQuantity` = **$24.95**, the base price.
+
+That second field is the one that matters, and note the asymmetry: on the **one-time control it was
+null** (`cmp=?`), and on the **subscription line it carried the pre-plan base price**. On exactly the
+lines where the plan has moved the price, Shopify hands us the number it moved from.
+
+So the Function can compute a **top-up to `MAX`** instead of an all-or-nothing exclusion:
+
+```
+target  = base x (1 - MAX(all qualifying rates))    e.g. 24.95 x 0.85 = 21.21   (win-back 15%)
+current = amountPerQuantity                                          = 21.96    (plan already applied)
+top-up  = (current - target) / current                               = 3.42%
+```
+
+Apply nothing when `target >= current` — the plan already delivers at least `MAX`, which is the normal
+case for a founder at 12%. This preserves §3's rule exactly, on subscription and one-time lines alike,
+with the plan owning the floor and the Function owning only the difference. **It is a recommendation,
+not a decision:** it bears directly on §11/§12.8, which is Steve's call (Round 2 item A2).
+
+##### Four more findings the question did not ask for
+
+**(a) Standard §12.7 is answered: YES — a discount Function can read customer tags AND
+custom-namespace customer metafields.** Open since 2026-07-25, and the whole §11 engine assumes it.
+`customer.hasAnyTag`, `customer.hasTags`, `customer.numberOfOrders` and
+`customer.metafield(namespace: "crema_italia", key: "tier")` all returned live values at checkout —
+`ANYTAG=Y`, both tags `Y`, `MF=FOUNDER`. The metafield needed **no metafield definition and no special
+access grant**. Note the customer object is null in the *cart* (`cust=NONE`) and populated at
+**checkout**, which is where it matters.
+
+**(b) But tags propagate late, and metafields do not.** Both were written in the same Admin API
+mutation. On the next checkout load the metafield already read `FOUNDER` while both tags still read
+`N`; they flipped to `Y` a couple of minutes later. This is an operational hazard for §11, which uses
+tags for the benefit gate and for time-boxed campaign eligibility driven by Loop webhooks and Flow:
+**a tag written moments before checkout may not be visible to the Function.** Anything that must take
+effect immediately — a resume that restores benefits, a win-back window opening — should be a
+**customer metafield**, not a tag. (This was very nearly written up as "tags never reach Functions". It
+was a propagation lag. Re-read before concluding.)
+
+**(c) The discount message is customer-visible.** Our debug string rendered verbatim on the checkout,
+under the line item, in the order summary. In production the `message` is **customer copy** and falls
+under Brand Standards — and under §3's no-codes policy it is also the only place a server-side discount
+gets to explain itself.
+
+**(d) Loop ships its own discount Functions.** The store's discount picker lists `referral Discount`,
+`Gift program discounts` and `bundle-discount` under Loop Subscriptions. Loop is not only adjusting
+selling-plan prices; it registers Function discounts in the same class ours competes in. §5.2 assumed
+the selling-plan adjustment was Loop's only discount surface. It is not.
+
+##### What is still not observed
+
+The checkout reports `Recurring subtotal $21.96 every 4 weeks` — i.e. **the Function's 10% is not in
+the renewal price** — and that held after setting `recurringCycleLimit: 12` on the discount. That is
+consistent with §5.2's Finding 2 and with the contract fields observed in §5.2.2, and it is the first
+time we have seen Shopify itself quote a renewal price with a Function discount live on the store.
+**It is still not proof of what orders 2..n bill**, because it is a projection shown at checkout, not a
+contract. Closing it needs a completed order and an inspection of the resulting contract; checkout
+could not be completed here because card entry sits in a cross-origin iframe. Treat Finding 2 as
+strongly corroborated and not yet closed.
+
+##### Dev-store state left behind (know this before the next test)
+
+- The app **crema-validation** is installed, and the automatic discount **"A1 PROBE - flat 10 percent
+  product discount"** (`gid://shopify/DiscountAutomaticNode/1569551253728`) is **ACTIVE**. It takes 10%
+  off every line of every order. **Deactivate or delete it before running B2, C1 or C3**, or their
+  numbers will be wrong for a reason that is easy to miss.
+- Customer `9796364042464` (an empty guest-checkout record) now carries the tags `founding-member` and
+  `active-subscriber` and the metafield `crema_italia.tier = founder`.
+- The store also carries seeded test discounts from before this work, one of which — *"Buy one, get the
+  second 10 percent off"* — is **active and automatic**. Every measurement above used quantity 1, which
+  it cannot fire on.
+
 ## 6. Trust signals, reviews + photography (2026-07-09 review; reviews decided 2026-08-20)
 
 The 2026-07-09 consumer-centric site review (full findings in `docs/POC5_change_list.md`
