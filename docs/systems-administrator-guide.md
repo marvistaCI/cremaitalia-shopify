@@ -22,8 +22,9 @@ grep -n "DECISION PENDING" docs/systems-administrator-guide.md
 
 **If you are reading this because Steve is unavailable, start here.**
 
-1. **Can you get in?** See §2. Without access nothing below is actionable, and §2 currently has no
-   answer. Solve that first.
+1. **Can you get in?** See §2. Without access nothing below is actionable. The credentials are in
+   **1Password**; the part that decides whether you actually get in is the **2FA recovery codes and
+   the Emergency Kit**, not the passwords.
 2. **Is the store up?** `https://cremaitalia.com` should return the storefront. If it does not, the
    cause is most likely DNS (§3.1) rather than Shopify.
 3. **Is email flowing?** Company mail runs on Google Workspace and depends on the **same DNS zone as
@@ -41,14 +42,44 @@ revenue and communications together, including the address on file with the FDA.
 
 ## 2. Access
 
-**DECISION PENDING · raised 2026-08-22 — there is no documented credential store, and no emergency
-access mechanism of any kind.** This is the highest-priority gap in the entire document: every other
-section assumes someone can log in, and today nobody but Steve can.
+**The wallet is 1Password.** Steve holds a **1Password Families** account. All Crema Italia
+credentials belong in a dedicated shared vault there, and this guide refers to that vault rather than
+ever naming a secret.
 
-**Recommended mechanism, for the decision:** a password manager with a built-in emergency-access or
-legacy feature (1Password, Bitwarden and others offer one) — a named trusted person, a waiting period,
-and no secret written in any document. That keeps this guide safe to circulate while making access
-recoverable.
+> **The credentials are not the hard part. The second factors are.**
+>
+> Shopify, Google Workspace, Mercury and Namecheap all sit behind two-factor authentication, and the
+> second factor is Steve's phone. **A password without its second factor gets nobody in.** The actual
+> continuity artifact is the set of **2FA recovery codes** for each of those accounts, plus the
+> **1Password Emergency Kit** — the printed sheet carrying the Secret Key, without which even a known
+> master password will not unlock the vault.
+>
+> A continuity plan that stores passwords and not recovery codes fails at exactly the moment it is
+> needed, and appears complete until then.
+
+**DECISION PENDING · raised 2026-08-22 — the vault exists in principle and is not yet populated or
+shared.** Three parts, and they are separable:
+
+1. **Create a dedicated Crema Italia vault** and move every business credential into it, together with
+   the 2FA recovery codes for Shopify, Google Workspace, Mercury and Namecheap.
+2. **Print the 1Password Emergency Kit and put it somewhere physical** — a safe, or with counsel. It
+   is the one piece that cannot live in the vault it unlocks.
+3. **Name the emergency contact** and grant them access. This is a trust decision, not a technical
+   one; candidates appear in §7.
+
+**DECISION PENDING · raised 2026-08-22 — Families account, or 1Password Business?** Staged answer, on
+the same reasoning the project already applies to the price tool:
+
+- **Now: the Families account is adequate.** The team is one person with all the access, so a
+  dedicated vault plus the Emergency Kit closes the real gap today at no cost.
+- **The trigger to move is the first non-family person who needs a credential** — Lauren or Lucia, and
+  it will happen at launch. At that point Families is the wrong instrument for three reasons that have
+  nothing to do with security: **entity separation** (business assets sitting in a personal account is
+  a mess in any sale, audit or dispute, and cuts against the corporate-structure question already with
+  the CPA), **granular grants** (staff need specific items, not family-wide access), and
+  **offboarding** (a family plan has no clean way to revoke a departed employee).
+- Cost when it comes is roughly the order of a Workspace seat, so the decision is about structure
+  rather than money.
 
 **DECISION PENDING · raised 2026-08-22 — who is the named emergency contact?** Candidates from the
 existing team appear in §7. This is a trust decision, not a technical one.
@@ -208,8 +239,10 @@ Every `DECISION PENDING` above, oldest first. Kept as a list so age is obvious a
 
 | Raised | Decision | §ref |
 |---|---|---|
-| 2026-08-22 | Credential store and emergency access mechanism | §2 |
+| 2026-08-22 | Populate and share the 1Password Crema Italia vault, incl. 2FA recovery codes | §2 |
+| 2026-08-22 | Print the 1Password Emergency Kit and store it physically | §2 |
 | 2026-08-22 | Named emergency contact | §2 |
+| 2026-08-22 | 1Password Families vs Business, and the trigger to move | §2 |
 | 2026-08-22 | Who stops subscriber billing if fulfilment halts | §4 |
 | 2026-08-22 | Verify the Florida annual report date and fee | §6 |
 | 2026-08-22 | Where the deadline calendar lives | §6 |
