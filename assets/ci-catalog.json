@@ -631,11 +631,10 @@
       "subscription": false,
       "sizes": [
         {
-          "size": "3 × 100g",
+          "size": "300g",
           "price": 77.7
         }
       ],
-      "price_unit": "/3×100g",
       "img": {
         "cls": "p",
         "style": "background:linear-gradient(135deg,#5a3a18,#B88348)",

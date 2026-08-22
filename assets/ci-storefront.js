@@ -268,6 +268,15 @@
   }
   function priceCell(p) {
     var first = p.sizes && p.sizes[0] ? p.sizes[0] : { price: 0, size: '' };
+    // POC27: `price_unit` is a per-product override of the denominator. It existed on exactly ONE
+    // product of 17 - the Sorpresa collection, whose unit was written as the composite "3 x 100g".
+    // That composite was the defect: sizeDual() converts each weight TOKEN, so it rendered
+    // "$77.70 /3 x 100 g (3.53 oz)" - converting one bag while the box holds 300 g (10.58 oz), which
+    // reads as $77.70 for 3.53 oz. Steve's fix was structural rather than verbal: the box's unit of
+    // measure is what the BOX weighs, 300 g, and the composition (three 100 g bags) is a NOTE about
+    // what is inside. With no composite unit left, no product needs the override.
+    // The fallback below is kept - a future SKU may genuinely need a custom denominator - but note
+    // that nothing sets it today, so a bug in this branch would be silent.
     var rawUnit = p.price_unit || ('/' + first.size);
     var unit = sizeDual(rawUnit);
     if (p.shelf === 'offerta' && first.original) {
