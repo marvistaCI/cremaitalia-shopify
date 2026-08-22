@@ -225,10 +225,29 @@
 </head>
 
 <body>
+  {%- comment -%}
+    POC25 - SKIP LINK. WCAG 2.4.1 Bypass Blocks is Level A, and it was the only Level A criterion
+    this storefront was known to fail: a keyboard user had to tab the whole header on every page
+    before reaching content. It is the FIRST focusable element in the document, hidden until
+    focused, and it targets a wrapper rather than a <main>.
+
+    Why a wrapper: this is a single-document SPA with one <main> per .page, so at any moment 19 of
+    the 20 are display:none and cannot receive focus. A link to any single one would be dead on
+    every other page. #ci-content always exists and always contains whichever page is active, and
+    tabindex="-1" lets it take programmatic focus without joining the tab order itself.
+
+    The class is .skip-to-content, NOT .skip-link. `.skip-link` was ALREADY TAKEN by the taste
+    quiz's "skip this question" / "Back" buttons, and naming this one .skip-link silently gave
+    five quiz controls position:absolute and top:-4rem - i.e. it moved the hero CTA's own
+    navigation off screen. Caught by enumerating the class before shipping. Do not rename it back.
+  {%- endcomment -%}
+  <a class="skip-to-content" href="#ci-content">Skip to content</a>
   {% render 'ci-header' %}
   {% render 'ci-profile-banner' %}
 
-  {{ content_for_layout }}
+  <div id="ci-content" tabindex="-1">
+    {{ content_for_layout }}
+  </div>
 
   {% render 'ci-store-footer' %}
   <div class="flag-strip flag-bottom" aria-hidden="true"><div></div><div></div><div></div></div>
