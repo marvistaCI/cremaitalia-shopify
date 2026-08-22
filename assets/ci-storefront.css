@@ -469,7 +469,13 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 
 /* ---- subscription toggle ---- */
 .sub-toggle{background:var(--ci-ivory);border:1px solid var(--ci-crema);border-radius:var(--ci-radius);padding:1rem 1.25rem;margin-top:1rem;display:flex;gap:1rem;align-items:flex-start}
-.sub-toggle input[type=checkbox]{width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:var(--ci-crema)}
+.sub-toggle input[type=checkbox]{width:18px;height:18px;margin:0;flex-shrink:0;accent-color:var(--ci-crema)}
+/* POC24 - HIT AREA WITHOUT LAYOUT COST. padding grows the clickable region; the equal negative
+   margin gives the space back, so an 18px box presents a 44x44 target and nothing moves. Same
+   trick POC13 used on the taste ribbon. Do not remove the negative margin without removing the
+   padding - on its own it will push the whole toggle out of alignment. */
+.sub-toggle-hit{display:inline-flex;align-items:flex-start;padding:13px;margin:-11px 0 -13px -13px;cursor:pointer;flex:none}
+.sub-toggle-title{cursor:pointer}
 .sub-toggle-text h4{font-size:.95rem;font-weight:600;color:var(--ci-coffee);margin-bottom:.2rem}
 .sub-toggle-text p{font-size:.82rem;color:var(--ci-espresso);margin:0;max-width:none}
 /* The automatic-renewal disclosure. font-size and color are restated here rather than
@@ -550,7 +556,10 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 .founder-stack{margin:1.1rem 0 0}
 
 /* ---- back button ---- */
-.back-btn{display:inline-flex;align-items:center;gap:.3rem;background:none;border:none;cursor:pointer;font-family:var(--ci-font-body);font-size:.85rem;color:var(--ci-espresso);padding:0;margin-bottom:1.5rem;transition:color 200ms}
+/* POC24: 49x17 across 8 instances site-wide. padding + compensating negative margin, so the
+   target reaches 44px tall while the visible text sits exactly where it did (margin-bottom was
+   1.5rem = 24px; 24 - 14 = 10px keeps the spacing below identical). */
+.back-btn{display:inline-flex;align-items:center;gap:.3rem;background:none;border:none;cursor:pointer;font-family:var(--ci-font-body);font-size:.85rem;color:var(--ci-espresso);padding:14px 0;margin:-14px 0 10px;transition:color 200ms}
 .back-btn:hover{color:var(--ci-crema-text)}
 
 /* ---- roaster profile hero ---- */
@@ -745,7 +754,8 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 .bom-cue{color:var(--ci-crema-text);font-weight:600;font-size:.72rem;letter-spacing:.02em;margin-top:.15rem}
 /* ---- shop: region line (POC5+); .tc-groups is the taste-console modal's group wrapper ---- */
 .tc-groups{display:flex;flex-wrap:wrap;gap:1.1rem 2rem}
-.region-learn{background:none;border:none;color:var(--ci-crema-text);font-weight:600;font-size:.72rem;letter-spacing:normal;text-transform:none;cursor:pointer;margin:0;padding:0;text-align:left;align-self:start;font-family:var(--ci-font-body)}
+/* POC24: 147x15. Same padding/negative-margin pair. */
+.region-learn{background:none;border:none;color:var(--ci-crema-text);font-weight:600;font-size:.72rem;letter-spacing:normal;text-transform:none;cursor:pointer;margin:-15px 0;padding:15px 0;text-align:left;align-self:start;font-family:var(--ci-font-body)}
 .region-learn:hover{text-decoration:underline}
 .filter-region{width:100%}
 .region-note{font-size:.8rem;color:var(--ci-mute-text);margin:.6rem 0 0;max-width:64ch}
@@ -768,7 +778,10 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 .contact-form textarea{resize:vertical;min-height:120px}
 .cf-reason{border:none;padding:0;margin:0}
 .cf-reason legend{margin-bottom:.55rem;padding:0}
-.cf-radio{display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;font-weight:400;color:var(--ci-ink-soft);margin:0 1.1rem .3rem 0;cursor:pointer}
+/* POC24: the <label> already wrapped the radio, so the real target was 326x20 rather than the
+   13x13 input - measuring the input alone overstated the problem by a wide margin. It failed on
+   HEIGHT only, by 4px against WCAG's 24. min-height takes it to this project's 44px convention. */
+.cf-radio{display:inline-flex;align-items:center;min-height:44px;gap:.4rem;font-size:.9rem;font-weight:400;color:var(--ci-ink-soft);margin:0 1.1rem .3rem 0;cursor:pointer}
 .cf-radio input{width:auto;min-height:0;accent-color:var(--ci-crema)}
 .cf-error{color:#C8342B;font-size:.85rem;margin:0}
 .contact-form .btn-primary{align-self:flex-start}

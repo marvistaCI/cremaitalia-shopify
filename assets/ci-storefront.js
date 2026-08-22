@@ -780,8 +780,16 @@
         // disclosure sits beside it, and ROSCA wants informed consent. aria-labelledby names it from
         // the heading; aria-describedby attaches the RENEWAL TERMS, so a blind user hears the
         // disclosure with the control rather than having to go looking for it.
-        '<div class="sub-toggle"><input type="checkbox" id="pd-sub" onchange="toggleSub(this)" aria-labelledby="pd-sub-label" aria-describedby="pd-sub-renewal">' +
-        '<div class="sub-toggle-text"><h4 id="pd-sub-label">Make this a Roccia subscription</h4>' +
+        // POC24: the box measured 18x18 with ZERO labels, below WCAG 2.2 AA's 24x24 minimum and far
+        // below this project's own 44px convention - on the control that carries the renewal
+        // disclosure. Two changes: the input sits inside a <label>, whose padding/negative-margin
+        // pair buys a 44x44 hit area at zero layout cost (the POC13 ribbon trick); and the heading
+        // is a second <label for>, so clicking the title toggles the box the way people expect.
+        // The renewal paragraph is deliberately NOT inside a label - it should be readable and
+        // selectable without toggling a purchase option.
+        '<div class="sub-toggle"><label class="sub-toggle-hit" for="pd-sub">' +
+        '<input type="checkbox" id="pd-sub" onchange="toggleSub(this)" aria-labelledby="pd-sub-label" aria-describedby="pd-sub-renewal"></label>' +
+        '<div class="sub-toggle-text"><h4 id="pd-sub-label"><label for="pd-sub" class="sub-toggle-title">Make this a Roccia subscription</label></h4>' +
         '<p>10% off every shipment and free shipping, your standing subscriber benefit on Roccia, Sorpresa, and Selezione. Default is a one-time purchase.</p>' +
         // The automatic-renewal disclosure, added POC22. The line above is merchandising and is
         // NOT a renewal disclosure: it never says the card is charged again automatically, at what
