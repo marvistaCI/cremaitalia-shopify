@@ -751,6 +751,17 @@ the variant's base price against the selling-plan price, because nothing in the 
 **Also confirmed on the order:** the line's originalUnitPrice is $21.96, i.e. the Function discounted
 from the already-reduced price at the order level too, not just in the cart.
 
+##### A last confirmation, found while tearing the probe down
+
+The probe discount was **deleted** from the store at the end of the session. The contract kept showing
+it: *"Discount code: PROBE ... Active - 10% off on the specified lines - Usage count: 1, Usage limit:
+12"*, unchanged. **A contract's discount snapshot survives deletion of the discount it came from.**
+
+That is the strongest form of the point §11 now rests on. The snapshot is not a reference to a live
+rule that could be edited, re-evaluated or withdrawn - it is a **copy**, and once taken, the only way to
+change what a subscription bills is to change the contract. Deleting or amending the discount does
+nothing to existing subscribers, in either direction.
+
 ##### One access note worth keeping
 
 Reading `orders` failed for our own app with *"This app is not approved to access the Order object"* —
