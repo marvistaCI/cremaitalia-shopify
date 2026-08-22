@@ -3076,6 +3076,33 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   **Still open after this:** A3's decision (whether the theme renders the invisible subscriber benefit
   itself), B1's one UI look at the font picker, and C1/C4/C5's remainders above.
 
+- 2026-08-22 — **POC20 deployed: the smallest batch yet, and the reason it is worth recording is the
+  scoping decision rather than the change.** One data-only commit, `ee1fa66`: all 13 fixture coffees
+  had the store-wide whole-bean policy pasted onto the end of a genuinely per-coffee brewing hint, so
+  every product page told the customer to grind fresh twice. Trimmed to the part that actually varies.
+  **No template, JS, CSS or snippet moved** — `assets/ci-catalog.json` alone, 13 lines. Steve's framing
+  is the durable half: *our test data was wrong, not the feature.* It had been treated as a copy
+  question to settle; it was neither a copy convention nor a feature defect but badly authored fixture
+  data, and the build spec row that had transcribed the defect into the production schema was corrected
+  in the same commit.
+  **Deployed** via the `crema-poc-deploy` skill to a NEW unpublished theme **"Crema Italia POC20
+  Preview" (id `152028446889`)**: `theme list` + `git log origin/main..HEAD` run **first** (no POC20
+  existed, no duplicate names, zero unpushed commits), validation at the documented baseline (**15
+  offenses / 0 errors / 0 new**), then **pull-and-diff proved** the push — both sides **38** files, zero
+  content mismatches, nothing present on only one side, exactly one theme of that name. The diff also
+  asserted the batch content specifically, confirming the double-grind sentence is absent from the
+  deployed catalogue rather than merely absent from the repo.
+  **POC17 (`152003018921`) pruned** on Steve's explicit go under the three-newest cap. Two details worth
+  keeping: the keep/prune split was **computed from live `theme list --json`** rather than eyeballed,
+  and the delete ran **after** the POC20 push was proven, per the skill — never remove a preview until
+  its replacement exists. The Step 6.4 stale-id sweep found exactly two references to the dead id and
+  they were judged by tense, not by file: the §9 entry naming it (historical narrative, left alone) and
+  the §10 CURRENT STATE row (a present-tense claim, corrected). POC18, POC19 and the live theme
+  untouched.
+  **Also retired in this pass:** the ⚠️ drift warning that had stood in §10 since 2026-08-21 saying the
+  repo had moved ahead of POC19. It had, and this batch is exactly the change it named, so the warning
+  went out with the deploy that resolved it rather than being left to rot.
+
 ---
 
 ## 10. Open questions / TODO
@@ -3105,9 +3132,9 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC19 Preview" | `152017764521` |
+| **Newest POC preview** | "Crema Italia POC20 Preview" | `152028446889` |
+| Prior preview | "Crema Italia POC19 Preview" | `152017764521` |
 | Prior preview | "Crema Italia POC18 Preview" | `152016912553` |
-| Prior preview | "Crema Italia POC17 Preview" | `152003018921` |
 
 **Scorecard: 7.4/10 as of 2026-08-19** — the deployed storefront has been scored three times
 against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16). **Trust & social proof has
@@ -3120,26 +3147,34 @@ decisions were made; policy now lives in Store Operating Standards §13).
 > A re-score against POC17 is the next task (Steve, 2026-08-20) and is expected to be **the last one
 > before real photography**, since brand identity and product detail are gated on it.
 
-**POC19 is deployed** and is the only POC19 theme — all **38** files byte-match the repo, proved by
-pull-and-diff on 2026-08-21 (both sides 38 files, zero content mismatches, nothing present on only
+**POC20 is deployed** and is the only POC20 theme — all **38** files byte-match the repo, proved by
+pull-and-diff on 2026-08-22 (both sides 38 files, zero content mismatches, nothing present on only
 one side; `theme list` **and** `git log origin/main..HEAD` were run **before** the push, confirming no
-name collision). The repo is fully pushed to GitHub, so nothing is local-only.
+name collision). The repo is fully pushed to GitHub, so nothing is local-only, and **the repo and
+this theme are in step** — the drift warning that stood here since 2026-08-21 is retired, because the
+change it named is what POC20 shipped.
 
-> ⚠️ **The repo has moved AHEAD of this theme (2026-08-21).** The fixture brewing notes were
-> corrected after the deploy, so POC19 no longer byte-matches the repo. A small data-only change,
-> not worth a deploy on its own; it rides along with the next batch. This warning is the normal
-> state between deploys.
+**What POC20 is:** POC19 plus one data-only commit, `ee1fa66` — the fixture brewing notes. All 13
+fixture coffees had the store-wide whole-bean policy pasted onto the end of a genuinely per-coffee
+brewing hint, so every product page told the customer to grind fresh twice. Trimmed to the part that
+actually varies ("Reserve it for pour-over, where the florals carry"). **No template, JS, CSS or
+snippet changed**, so the reviewable surface is product-page copy only. Steve's framing is the
+durable part: *our test data was wrong, not the feature* — it was neither a copy convention nor a
+feature defect, but badly authored fixture data, and the build spec row that had transcribed the
+defect into the production schema was corrected in the same commit.
 
-POC17 and POC18 previews and the live theme are untouched. Preview:
-`https://crema-italia.myshopify.com?preview_theme_id=152017764521`
+POC18 and POC19 previews and the live theme are untouched. Preview:
+`https://crema-italia.myshopify.com?preview_theme_id=152028446889`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
-2026-07-06). To refresh: `shopify theme push --theme 152017764521`.
+2026-07-06). To refresh: `shopify theme push --theme 152028446889`.
 
-**Only POC17, POC18 and POC19 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
-enforced as `crema-poc-deploy` Step 5. **POC16 (`151983030441`) was deleted 2026-08-21** on Steve's
-explicit go, after re-verifying its id, name and role against a live `theme list --json` immediately
-before the delete; its batch is commits `5812884`..`203b23c`, on `origin/main`, so it is redeployable.
-Earlier deletions: POC15 (`151970840745`) on 2026-08-21; POC14 (`151800610985`) on 2026-08-20; POC12
+**Only POC18, POC19 and POC20 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
+enforced as `crema-poc-deploy` Step 5. **POC17 (`152003018921`) was deleted 2026-08-22** on Steve's
+explicit go, after computing the keep/prune split from a live `theme list --json` rather than by eye
+and re-verifying its id, name and role immediately before the delete; its batch is commits
+`318ea7e`..`5e71413`, on `origin/main`, so it is redeployable. The delete ran **after** the POC20 push
+was proven by pull-and-diff, per the skill — never remove a preview until its replacement exists.
+Earlier deletions: POC16 (`151983030441`) on 2026-08-21; POC15 (`151970840745`) on 2026-08-21; POC14 (`151800610985`) on 2026-08-20; POC12
 (`151798841513`) on 2026-08-19; POC11 (`151797727401`) and POC13 on 2026-08-18; POC10 (`151624024233`)
 and POC4–POC9 on 2026-08-06; the erroneous POC9 duplicate `151615373481` on 2026-07-25.
 
