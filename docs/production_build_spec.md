@@ -217,6 +217,57 @@ Configurations → Edit** on `crema-italia-development` and look. If Marcellus i
 account surface diverges from the storefront on type as well as layout, which is worth knowing before
 anyone designs against it.
 
+#### 5.1.1 B1 — the accounts/checkout branding surface, part-answered (2026-08-22)
+
+B1 asked a small question: *does the branding editor offer Marcellus?* Answering it turned up two
+things that matter more, and left the original question open for a reason worth stating.
+
+**Checkout and customer accounts are now ONE configuration, and it exists on a Basic-plan store.**
+On 2026-07-25 the Checkout settings page exposed only field-level toggles (name / company / address 2 /
+phone). It now carries a **"Configurations — New · Customize checkout and customer accounts"** card
+with an Edit that opens a Checkout Editor at
+`/settings/checkout/editor/profiles/<id>` (`5265129696` on the dev store). The Admin API matches: the
+old `checkoutProfiles` query is gone, replaced by **`checkoutAndAccountsConfiguration(s)`**, and the
+types are named `CheckoutAndAccountsConfigurationBranding*`. The store reports
+`plan.displayName: "Basic App Development", shopifyPlus: false`, so this surface is **not Plus-only**.
+That corroborates §5.1's central de-risk from a second direction.
+
+**Custom uploaded fonts are in the data model.** A font group is one of two things:
+
+| | Shape | Meaning |
+|---|---|---|
+| `shopifyFontGroup` | `baseFontHandle`, `boldFontHandle`, `loadingStrategy` | a handle from Shopify's font library |
+| `customFontGroup` | `weight` + **`genericFileId`** | **an uploaded font file** |
+
+So if the branding configuration is writable on our plan, **the Marcellus question is moot** — we would
+not need Shopify to stock Marcellus, we would upload it (it is an open-licence Google font and the repo
+already carries the TTF under `docs/standards/brand-standards/`). That would make the hosted account
+surface match the storefront on typography, not merely on logo and colour — which is **better than
+§5.1 assumed**, and §5.1's "not the storefront's typography" caveat should be revisited if this
+resolves favourably.
+
+**What is NOT resolved, and why it is not being guessed at.** Reading the `branding` sub-field returns
+`ACCESS_DENIED` for an app holding **both** `read_checkout_branding_settings` and
+`write_checkout_branding_settings`. Two candidate explanations remain and they have opposite
+consequences:
+
+1. **Another scope.** The parent field needed `read_checkout_and_accounts_configurations`, a scope
+   whose name we only found by trying it — the older `*_checkout_branding_settings` pair was
+   necessary but not sufficient. `branding` may want a third.
+2. **Plan gating.** Historically checkout branding was Plus-only. If `branding` is still Plus-gated for
+   *checkout* while the accounts half is open to all plans, an app on Grow may be denied the read while
+   a merchant can still set it in the editor.
+
+**This is worth flagging as a near-miss.** The first `ACCESS_DENIED` was on the parent field with both
+branding scopes granted and `shopifyPlus: false` — which reads exactly like plan gating, and was one
+sentence away from being written up as "the branding API is Plus-only". It was a scope name. The same
+shape as the tag-propagation near-miss in §5.2.3, on the same day.
+
+**To close it, two minutes with the Browser pane displayed:** open
+`/settings/checkout/editor/profiles/5265129696`, look at the typography controls, and note whether the
+font picker lists Marcellus and whether it offers an upload. The editor renders as a canvas, so it
+cannot be read from the DOM — this genuinely needs eyes.
+
 ### 5.2 Loop x Shopify Functions — the entitlement model does not survive contact (platform spike, 2026-08-21)
 
 Standard §12.8 called this *"the highest-risk integration in the design"* and *"the one place `MAX`
@@ -639,10 +690,12 @@ strongly corroborated and not yet closed.
 
 ##### Dev-store state left behind (know this before the next test)
 
-- The app **crema-validation** is installed, and the automatic discount **"A1 PROBE - flat 10 percent
-  product discount"** (`gid://shopify/DiscountAutomaticNode/1569551253728`) is **ACTIVE**. It takes 10%
-  off every line of every order. **Deactivate or delete it before running B2, C1 or C3**, or their
-  numbers will be wrong for a reason that is easy to miss.
+- The app **crema-validation** is installed. The automatic discount **"A1 PROBE - flat 10 percent
+  product discount"** (`gid://shopify/DiscountAutomaticNode/1569551253728`) was set to **EXPIRED**
+  immediately after these measurements and before B2 was run, by giving it a past `endsAt`. It is left
+  in place rather than deleted so the A1-residual order test can re-enable it by clearing `endsAt`.
+  **While it is active it takes 10% off every line of every order** - check its status before trusting
+  any figure from this store.
 - Customer `9796364042464` (an empty guest-checkout record) now carries the tags `founding-member` and
   `active-subscriber` and the metafield `crema_italia.tier = founder`.
 - The store also carries seeded test discounts from before this work, one of which — *"Buy one, get the
@@ -812,6 +865,55 @@ not, the recommendation changes.
 **Freshness gating remains ours whatever the answer**, and it is the harder half: a collection must
 become unavailable when *any* component leaves the freshness window (§5), which is a rule no bundle app
 knows about.
+
+#### 7.1.1 B2 — native bundles DO derive availability from components, and refuse to be sold from the back office (2026-08-22)
+
+§7.1 recommended Shopify's own Bundles app over a paid one, with a ten-minute check outstanding
+because sources conflicted on whether native bundles decrement component inventory. **They do better
+than decrement: the bundle has no stock of its own, and its sellable quantity is derived from its
+components continuously.**
+
+Built headlessly via `productBundleCreate` (the same native API the Bundles app drives), so this tests
+the platform rather than one app's UI. Two tracked components at 100 each, combined **1 x A + 2 x B**:
+
+| Event | Component A | Component B | Bundle sellable |
+|---|---|---|---|
+| Bundle created | 100 | 100 | **50** |
+| Component B adjusted to 10 | 100 | 10 | **5** |
+
+`50 = min(100/1, 100/2)` and `5 = min(100/1, 10/2)`. The derivation is `min(floor(stock / qty))` across
+components, and it honours the per-component quantity — which is what Standard §7's "availability
+auto-gates on component stock" requires, delivered natively.
+
+Three practical details:
+
+- **Recomputation is asynchronous.** The bundle still read `50` about six seconds after the component
+  moved, and had settled to `5` by roughly twenty. A component going out of stock does **not** instantly
+  gate the bundle, so a brief oversell window exists. Worth knowing before anyone builds an alert on it.
+- **The bundle variant is priced as the sum of its components** ($30.00 = $10 + 2 x $10) at creation,
+  and is created in **DRAFT** status. Standard §2.3's collection pricing is therefore an override of a
+  default, not a blank field.
+- **`inventoryQuantity` and `sellableOnlineQuantity` agree**, so the derived figure is the one the
+  storefront gates on.
+
+**The finding that was not being looked for: the Admin API will not sell a bundle.** `orderCreate` with
+the bundle variant fails with *"Line items variant cannot be a variant with components"*. Bundles are
+decomposed by the storefront/checkout pipeline, and back-office order creation is refused outright.
+
+That has a concrete consequence for us: **a Sorpresa collection cannot be put on a manually created or
+API-created order** — replacements, goodwill re-sends, a wholesale order, an imported order, or a
+migration script all hit this. The workaround is to order the component coffees individually, which
+means the replacement order will not read as a Sorpresa in reporting. Worth confirming whether the
+admin's own "Create order" UI and `draftOrderCreate` are refused the same way before anyone designs a
+customer-service flow around it.
+
+**Still not observed:** that a completed storefront order actually decrements component stock. The
+derivation above makes it near-certain — the bundle holds no stock to decrement — but it was not
+watched, because `orderCreate` is refused and a storefront checkout needs card entry in a cross-origin
+iframe. Same blocker as A1-residual, and closable in the same sitting.
+
+**Dev-store state left behind:** products `B2 PROBE component A`, `B2 PROBE component B` and
+`B2 PROBE bundle (A + B)` (DRAFT), with component B's stock deliberately left at 10.
 
 ## 8. Fully responsive — mobile & tablet (REQUIRED — Steve, 2026-07-12)
 

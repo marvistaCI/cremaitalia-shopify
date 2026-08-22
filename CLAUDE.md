@@ -2902,6 +2902,54 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   free, needs no licence, and can include external addresses so Lauren could work it without a seat;
   and the Workspace tier and seat count.
 
+- 2026-08-22 — **Round 2 continued: B2 answered, B1 part-answered, and a second near-miss of the same
+  shape as the morning's.** Detail: `docs/production_build_spec.md` **§5.1.1** (B1) and **§7.1.1** (B2).
+  **B2 — native bundles do better than decrement component inventory: the bundle holds no stock at
+  all.** Built headlessly with `productBundleCreate`, the same native API the Bundles app drives, so
+  this tests the platform rather than one app's UI. A bundle of **1 x A + 2 x B** with both components
+  at 100 reported sellable **50**; dropping component B to 10 moved it to **5**. That is
+  `min(floor(stock / qty))` across components, honouring per-component quantity — exactly what Standard
+  §7 asks for, delivered natively, so the §7.1 recommendation to skip a paid bundle app **stands**.
+  Three details worth carrying: recomputation is **asynchronous** (still stale at ~6s, settled by ~20s),
+  so there is a brief oversell window; the bundle variant is priced as the **sum of its components** and
+  created **DRAFT**, which makes Standard §2.3's collection pricing an override of a default rather than
+  a blank field; and `inventoryQuantity` and `sellableOnlineQuantity` agree, so the derived figure is
+  the one the storefront gates on.
+  **The finding nobody was looking for: the Admin API refuses to sell a bundle.** `orderCreate` returns
+  *"Line items variant cannot be a variant with components"*. So **a Sorpresa collection cannot be put
+  on a manually created or API-created order** — replacements, goodwill re-sends, wholesale, imports and
+  migration scripts all hit it, and the workaround of ordering the component coffees individually means
+  the replacement will not read as a Sorpresa in reporting. Whether the admin's own "Create order" UI
+  and `draftOrderCreate` are refused the same way is unchecked and should be, before anyone designs a
+  customer-service flow.
+  **B1 — the small question is still open; the two things found on the way to it are larger.** (1)
+  **Checkout and customer accounts are now ONE configuration, and it is present on a Basic-plan store.**
+  On 2026-07-25 the Checkout settings page offered only field-level toggles; it now carries a
+  "Configurations · Customize checkout and customer accounts" card opening a Checkout Editor, and the
+  Admin API has replaced `checkoutProfiles` with `checkoutAndAccountsConfiguration(s)`. The store
+  reports `shopifyPlus: false`, so the surface is **not Plus-only** — an independent second
+  corroboration of §5.1's central de-risk. (2) **Custom uploaded fonts are in the data model**: a font
+  group is either a Shopify font handle or a `customFontGroup` carrying an uploaded font file. If
+  branding is writable on our plan then the Marcellus question is **moot** — we would upload Marcellus
+  (open licence, TTF already in the repo) and the hosted account surface would match the storefront on
+  typography, which is **better than §5.1 assumed** and means that caveat should be revisited.
+  **Still unresolved:** reading the `branding` sub-field returns `ACCESS_DENIED` to an app holding both
+  `read_` and `write_checkout_branding_settings`. Either a third scope is required or `branding` is
+  Plus-gated, and those have opposite consequences.
+  **The near-miss, and it is the second in one day.** The first `ACCESS_DENIED` arrived on a store
+  reporting `shopifyPlus: false`, with both branding scopes granted — which reads exactly like plan
+  gating and was one sentence from being written up as "the branding API is Plus-only". It was a
+  **scope name**: the parent field needed `read_checkout_and_accounts_configurations`, discovered only
+  by guessing it into the app config and redeploying. Paired with the morning's tag-propagation lag
+  (§5.2.3), the pattern is now explicit enough to state as a rule: **on this platform an access error
+  and a plan limit are indistinguishable from one sample, and a stale read and a missing capability are
+  indistinguishable from one read. Vary one thing and look again before writing either down.**
+  **Tooling note that made the day's work possible:** `shopify store auth` / `store execute` and
+  `shopify app execute` give a fully headless Admin GraphQL channel; `app execute` runs **as the app**,
+  which is the only way to see the app's own `shopifyFunctions` and the only way to exercise
+  app-granted scopes. Almost everything in A1, B1 and B2 was done through it rather than through the
+  admin UI, which cannot be clicked while the Browser pane is not compositing.
+
 ---
 
 ## 10. Open questions / TODO
@@ -3298,7 +3346,7 @@ Round 1's value was that **three of its six items changed on contact with a live
 every line here as unproven until a screenshot says otherwise. The dev store
 `crema-italia-development` is the lab and is free; see the 2026-08-21 entries in §9.
 
-*Ordered. **A1 is DONE (2026-08-22)** and took Standard §12.7 with it; A2/A3 are now Steve's decisions, and B1/B2/C1-C5 are untouched. NOTE: the A1 probe left an ACTIVE 10%-off-everything discount on the dev store - deactivate it before B2, C1 or C3 (see `production_build_spec.md` §5.2.3).*
+*Ordered. **A1 and B2 are DONE (2026-08-22)**, A1 took Standard §12.7 with it, and **B1 is part-answered** (one UI look left). A2/A3 are Steve's decisions; C1-C5 untouched. NOTE: the A1 probe discount was set to EXPIRED on 2026-08-22 before B2 ran, so the dev store is clean; re-enable it (`discountAutomaticAppUpdate`, clear `endsAt`) only for the A1-residual order test.*
 
 - [x] ~~**A1 — Does a discount Function COMPOUND with the selling-plan price adjustment?**~~ **RUN AND
   ANSWERED 2026-08-22 — YES, they compound. See `docs/production_build_spec.md` §5.2.3.** A Discount
@@ -3337,12 +3385,43 @@ every line here as unproven until a screenshot says otherwise. The dev store
   line, just a lower price. Decide whether the theme renders "Founding Member 12%" itself from
   base-vs-plan price, and note Shopify's discount analytics will report **zero** discounts on
   subscription orders regardless.
-- [ ] **B1 — Does the accounts/checkout branding editor offer Marcellus?** Two minutes: Settings →
-  Checkout → Configurations → Edit. Decides whether the hosted account surface diverges from the
-  storefront on type as well as layout (§5.1).
-- [ ] **B2 — Do native Bundles decrement COMPONENT inventory?** Ten minutes: build a two-component
-  bundle, place a test order, watch component stock. Sources conflict; the §7.1 recommendation changes
-  if they do not.
+- [~] **B1 — Does the accounts/checkout branding editor offer Marcellus? PART-ANSWERED 2026-08-22, see
+  `docs/production_build_spec.md` §5.1.1.** Two findings bigger than the question. (1) **Checkout and
+  customer accounts are now ONE configuration and it exists on a Basic-plan store** — the settings page
+  carries a "Configurations · Customize checkout and customer accounts" card opening a Checkout Editor
+  (`/settings/checkout/editor/profiles/5265129696`), and the Admin API has replaced `checkoutProfiles`
+  with `checkoutAndAccountsConfiguration(s)`. The dev store reports `shopifyPlus: false`, so this
+  surface is **not Plus-only** — a second, independent corroboration of §5.1's de-risk. (2) **Custom
+  uploaded fonts are in the data model**: a font group is either a Shopify font handle *or* a
+  `customFontGroup` carrying an uploaded font file (`genericFileId`). If branding is writable on our
+  plan then **Marcellus is moot — we would upload it** (open licence, TTF already in the repo), and the
+  account surface would match the storefront on type, which is **better than §5.1 assumed**.
+  **Unresolved:** reading the `branding` sub-field returns `ACCESS_DENIED` to an app holding both
+  `read_/write_checkout_branding_settings`. Either a third scope is needed (the parent field needed
+  `read_checkout_and_accounts_configurations`, a name found only by trying it) or `branding` is
+  Plus-gated. **Near-miss worth noting: this was one sentence from being written up as "Plus-only" when
+  the first denial was actually a scope name.** Closing it is still the original two minutes **with the
+  Browser pane displayed** — the editor renders as a canvas and cannot be read from the DOM.
+- [x] ~~**B2 — Do native Bundles decrement COMPONENT inventory?**~~ **ANSWERED 2026-08-22 — better than
+  decrement. See `docs/production_build_spec.md` §7.1.1. The §7.1 recommendation stands.** Built
+  headlessly via `productBundleCreate` (the native API the Bundles app drives), so this tests the
+  platform, not one app's UI. A bundle of **1 x A + 2 x B**, components at 100 each, reported sellable
+  **50**; dropping component B to 10 moved it to **5**. That is `min(floor(stock / qty))` across
+  components, honouring per-component quantity — exactly Standard §7's "availability auto-gates on
+  component stock", delivered natively. **The bundle holds no stock of its own.** Three details:
+  recomputation is **asynchronous** (~6s still stale, settled by ~20s), so a brief oversell window
+  exists; the bundle variant is priced as the **sum of its components** and created **DRAFT**, so §2.3
+  collection pricing is an override of a default rather than a blank field; and `inventoryQuantity` and
+  `sellableOnlineQuantity` agree.
+  **Unlooked-for finding: the Admin API refuses to sell a bundle.** `orderCreate` fails with *"Line
+  items variant cannot be a variant with components"*. So **a Sorpresa collection cannot go on a
+  manually created or API-created order** — replacements, goodwill re-sends, wholesale, imports and
+  migration scripts all hit this, and the workaround (ordering components individually) means the
+  replacement will not read as a Sorpresa in reporting. **Check whether the admin's own "Create order"
+  UI and `draftOrderCreate` are refused the same way** before designing a customer-service flow.
+  **Not observed:** that a completed storefront order decrements component stock — near-certain, since
+  the bundle has no stock to decrement, but `orderCreate` is refused and a storefront checkout needs
+  card entry in a cross-origin iframe. Same blocker as A1-residual; closable in the same sitting.
 - [ ] **C1 — Build one customer-account UI extension and look at it.** §5.1 is research, not a spike.
   Nobody has rendered a component-library page or confirmed an extension can **write** a customer
   metafield — which is the mechanism the taste profile depends on (§6.1).
