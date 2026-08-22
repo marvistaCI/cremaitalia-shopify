@@ -2962,6 +2962,50 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   app-granted scopes. Almost everything in A1, B1 and B2 was done through it rather than through the
   admin UI, which cannot be clicked while the Browser pane is not compositing.
 
+- 2026-08-22 — **A1-residual run on a real order, and it REVERSES a claim published the same morning:
+  a Function discount IS snapshotted onto the subscription contract and does reach renewals.** Steve
+  paid the staged checkout (card entry is a cross-origin iframe and can never be scripted, so this
+  always needs a person), producing order **#1002** and Loop contract **#15302394080**. Detail:
+  `docs/production_build_spec.md` §5.2.3.
+  **What was published this morning and is now corrected.** §5.2.3 said *"the Function's 10% is not in
+  the renewal price"*, inferred from the checkout's `Recurring subtotal $21.96 every 4 weeks` — which
+  held even at `recurringCycleLimit: 12` and looked like solid corroboration of Finding 2. **It is a
+  projection that excludes contract-level discounts.** The contract carries `Subscription discount
+  12.00%` (the plan) **and** our Function as a contract-level discount reading *"10% off on the
+  specified lines, Usage count: 1, Usage limit: 12"* — the limit being exactly the `recurringCycleLimit`
+  that was set. Renewals bill **$19.77**, not $21.96. **Trust the contract, not the checkout summary.**
+  **`recurringCycleLimit` turns out to be the precise control the whole question needed:** `1` = first
+  order only and **is the default when the field is omitted**, `N` = the first N cycles, **`0` =
+  indefinitely** (from the schema's own description). That last value is the dangerous one — left
+  applying to subscription lines at `0`, the 20.76% compounding measured this morning is **permanent on
+  every renewal**, not a first-order slip. `appliesOnSubscription: false` is the guard.
+  **What it does NOT change, and this matters for A2:** the discount is still a **snapshot taken at
+  signup**. A customer promoted to Founding Member afterwards is never re-evaluated, and a change to the
+  standing rate never reaches an existing contract. **Entitlement is contract state, not computed
+  state** — Finding 2's architectural conclusion survives intact. What changed is that a Function
+  *can* put state onto the contract, which it was not credited with before.
+  **It also improves the hybrid option**: a campaign top-up on a subscription signup should be
+  one-time, and `recurringCycleLimit: 1` delivers exactly that, declaratively, with no code.
+  **A3 is now proven from both sides**, on two orders differing in exactly one way. #1001 (plan only):
+  the line's *original* price is already the reduced $21.96, `totalDiscounts` **$0.00**,
+  `discountApplications` **empty**. #1002 (plan + Function): same $21.96 original, discounted to
+  **$19.77**, `totalDiscounts` **$2.19**, and a proper `AutomaticDiscountApplication` carrying the
+  percentage and message. **The selling-plan 12% leaves no trace whatsoever** — the order cannot even be
+  used to reconstruct it, because the line's own "original" price is post-adjustment. So if the rate
+  lives on the plan, **Shopify's discount analytics report zero discounts for the entire subscriber
+  programme**, and the theme must render the benefit itself from base-vs-plan price.
+  **Two access facts worth carrying to the production build:** reading `orders` failed for our own app
+  with *"This app is not approved to access the Order object"* — **protected customer data approval** is
+  a launch requirement for any app of ours that reads orders — while the Shopify CLI connector app could;
+  and `subscriptionContracts` was denied to both, so the contract had to be read from **Loop's admin**.
+  **Method note, and it is the third of the day.** Three claims in one session were one step from being
+  published wrong: tags "never reach Functions" (propagation lag), the branding API "is Plus-only" (a
+  scope name), and now "Functions do not reach renewals" (a checkout projection standing in for a
+  contract). Two were caught; **this one was published and had to be retracted.** The common shape is
+  taking a *derived display* for the *underlying record*. The rule this project already has — live
+  output beats a document — needs a sharper edge: **a summary screen is not live output about the thing
+  it summarises. Read the record.**
+
 ---
 
 ## 10. Open questions / TODO
@@ -3358,7 +3402,7 @@ Round 1's value was that **three of its six items changed on contact with a live
 every line here as unproven until a screenshot says otherwise. The dev store
 `crema-italia-development` is the lab and is free; see the 2026-08-21 entries in §9.
 
-*Ordered. **A1 and B2 are DONE (2026-08-22)**, A1 took Standard §12.7 with it, and **B1 is part-answered** (one UI look left). A2/A3 are Steve's decisions; C1-C5 untouched. NOTE: the A1 probe discount was set to EXPIRED on 2026-08-22 before B2 ran, so the dev store is clean; re-enable it (`discountAutomaticAppUpdate`, clear `endsAt`) only for the A1-residual order test.*
+*Ordered. **A1, A1-residual and B2 are DONE (2026-08-22)**, A1 took Standard §12.7 with it, **A3 is measured** (the decision it feeds is still Steve's), and **B1 is part-answered** (one UI look left). A2 is Steve's decision; C1-C5 untouched. NOTE: the A1 probe discount was set to EXPIRED on 2026-08-22 before B2 ran, so the dev store is clean; re-enable it (`discountAutomaticAppUpdate`, clear `endsAt`) only for the A1-residual order test.*
 
 - [x] ~~**A1 — Does a discount Function COMPOUND with the selling-plan price adjustment?**~~ **RUN AND
   ANSWERED 2026-08-22 — YES, they compound. See `docs/production_build_spec.md` §5.2.3.** A Discount
@@ -3385,18 +3429,38 @@ every line here as unproven until a screenshot says otherwise. The dev store
   was readable on the next page load and the tags took a couple of minutes. Anything that must bite
   immediately (a resume restoring benefits, a win-back window opening) should be a **metafield, not a
   tag**. **Standard §12.7 not yet amended — Steve's call, per the publish ritual.**
-- [ ] **A1-residual — inspect a real contract with a Function discount live.** The checkout quotes
-  `Recurring subtotal $21.96 every 4 weeks`, i.e. the Function's 10% is **not** in the renewal price,
-  and that held even with `recurringCycleLimit: 12`. That corroborates §5.2's Finding 2 but is a
-  checkout *projection*, not a contract. Needs one completed order; blocked only because card entry is
-  in a cross-origin iframe and needs real UI interaction.
+- [x] ~~**A1-residual — inspect a real contract with a Function discount live.**~~ **DONE 2026-08-22,
+  and it CORRECTED an earlier claim in this same block. See `docs/production_build_spec.md` §5.2.3.**
+  Steve completed the checkout (card entry is a cross-origin iframe and cannot be scripted), producing
+  order **#1002** and Loop contract **#15302394080**. **The Function's discount IS snapshotted onto the
+  subscription contract** and does reach recurring orders — the contract carries `Subscription discount
+  12.00%` (the plan) *and* our Function as a contract-level discount with `Usage count: 1, Usage limit:
+  12`, the limit being exactly the `recurringCycleLimit: 12` that was set.
+  **The claim it corrects:** the checkout's `Recurring subtotal $21.96 every 4 weeks` was read this
+  morning as "the Function's 10% is not in the renewal price". It is a **projection that excludes
+  contract-level discounts**, and the contract says renewals bill **$19.77**. Trust the contract.
+  **`recurringCycleLimit` is the control:** `1` = first order only (**the default when omitted**), `N`
+  = the first N cycles, **`0` = indefinitely**.
+  **What it does not change:** the discount is still a **snapshot taken at signup**, so a customer
+  promoted to founder later is never re-evaluated and a standing-rate change never reaches an existing
+  contract. **Entitlement is contract state, not computed state** — Finding 2's conclusion stands.
+  **What it does change is the danger:** left applying to subscription lines with `recurringCycleLimit:
+  0`, the 20.76% compounding is **permanent on every renewal**, not a first-order slip.
+  **And it hands §3 a clean mechanism:** a campaign top-up on a subscription signup should be one-time,
+  and `recurringCycleLimit: 1` is exactly that, declaratively, with no code.
 - [ ] **A2 — Then amend Standard §11/§12.8. Steve's decision, not Code's.** §11 currently specifies a
   Function owns entitlement; the evidence says the rate is contract state and therefore Loop's. This
   changes **which system owns a commercial rule**, so it is a decision, not a correction.
-- [ ] **A3 — The subscriber benefit is INVISIBLE on a Shopify order** (proven, §5.2.2): no discount
-  line, just a lower price. Decide whether the theme renders "Founding Member 12%" itself from
-  base-vs-plan price, and note Shopify's discount analytics will report **zero** discounts on
-  subscription orders regardless.
+- [~] **A3 — The subscriber benefit is INVISIBLE on a Shopify order. PROVEN FROM BOTH SIDES 2026-08-22**
+  on two orders differing in exactly one way. #1001 (plan only): the line's "original" price is already
+  the reduced $21.96, `totalDiscounts` **$0.00**, `discountApplications` **empty**. #1002 (plan +
+  Function): same $21.96 original, discounted to **$19.77**, `totalDiscounts` **$2.19**, and a proper
+  `AutomaticDiscountApplication` carrying the percentage and message. **The plan's 12% leaves no trace
+  at all** - the order cannot even be used to reconstruct it, because the line's own original price is
+  already post-adjustment. **Still Steve's decision:** whether the theme renders "Founding Member 12%"
+  itself from base-vs-plan price. The reporting consequence is now confirmed rather than predicted - if
+  the rate lives on the plan, **Shopify's discount analytics report zero discounts for the entire
+  subscriber programme**.
 - [~] **B1 — Does the accounts/checkout branding editor offer Marcellus? PART-ANSWERED 2026-08-22, see
   `docs/production_build_spec.md` §5.1.1.** Two findings bigger than the question. (1) **Checkout and
   customer accounts are now ONE configuration and it exists on a Basic-plan store** — the settings page

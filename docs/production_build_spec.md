@@ -600,6 +600,8 @@ PROBE SP=Y PLANPX=21.96 UNIT=21.96 CMP=24.95 SUB=21.96
 and on the control line: `PROBE SP=N unit=24.95 cmp=? sub=24.95 cust=NONE`.
 
 Checkout totals: `Subtotal $19.77 · TOTAL SAVINGS $2.19 · Recurring subtotal $21.96 every 4 weeks`.
+**Do not trust that last figure** - see the A1-residual subsection below. The checkout's recurring
+projection excludes contract-level discounts and understates what renewals actually bill.
 
 **So a founder would receive 12% off a price that is already 12% off** — and `combinesWith: false` does
 not prevent it, because a selling-plan adjustment is not a discount and therefore never enters the
@@ -677,16 +679,84 @@ gets to explain itself.
 selling-plan prices; it registers Function discounts in the same class ours competes in. §5.2 assumed
 the selling-plan adjustment was Loop's only discount surface. It is not.
 
-##### What is still not observed
+##### A1-residual RUN — and it CORRECTS the paragraph that used to sit here
 
-The checkout reports `Recurring subtotal $21.96 every 4 weeks` — i.e. **the Function's 10% is not in
-the renewal price** — and that held after setting `recurringCycleLimit: 12` on the discount. That is
-consistent with §5.2's Finding 2 and with the contract fields observed in §5.2.2, and it is the first
-time we have seen Shopify itself quote a renewal price with a Function discount live on the store.
-**It is still not proof of what orders 2..n bill**, because it is a projection shown at checkout, not a
-contract. Closing it needs a completed order and an inspection of the resulting contract; checkout
-could not be completed here because card entry sits in a cross-origin iframe. Treat Finding 2 as
-strongly corroborated and not yet closed.
+**The paragraph this replaces said "the Function's 10% is not in the renewal price". That was wrong.**
+It was inferred from the checkout's `Recurring subtotal $21.96 every 4 weeks`, which turns out to be a
+projection that **excludes contract-level discounts**. Steve completed the order (card entry is a
+cross-origin iframe and cannot be scripted); order **#1002** and Loop contract **#15302394080** say
+something different, and the contract is the authority.
+
+**The contract carries BOTH mechanisms, side by side:**
+
+```
+Base price:            $24.95
+Subscription discount: 12.00%          <- Loop's selling plan
+Plan:                  Founder Subscriptions
+                       $21.96 x 1  -$2.19  =  $19.77
+Discount code:         PROBE SP=Y planPx=21.96 ... mf=founder    <- our Function
+                       Active - 10% off on the specified lines
+                       Usage count: 1     Usage limit: 12
+```
+
+So a Shopify Function discount **is snapshotted onto the subscription contract** and does reach
+recurring orders. `Usage limit: 12` is exactly the `recurringCycleLimit: 12` set on the discount.
+Shopify's staff quote in §5.2 — *"whatever discounts they got on that first order which are marked as
+`appliesOnSubscription` should carry forward up to the `recurringCycleLimit`"* — is now observed rather
+than read, and it means the opposite of what the checkout screen implied.
+
+**`recurringCycleLimit` is the control, and it is precise** (from the schema's own description):
+
+| Value | Behaviour |
+|---|---|
+| `1` | first order only — **this is the default** when the field is omitted |
+| `N` | the first N billing cycles |
+| **`0`** | **indefinitely** |
+
+**What this does and does not change.** It does **not** rescue "a Function evaluates entitlement per
+order" — the discount is still a **snapshot taken at signup**. A customer promoted to Founding Member
+afterwards is never re-evaluated, and a change to the standing rate never reaches an existing contract.
+Finding 2's architectural conclusion stands: **entitlement is contract state, not computed state.**
+
+What it does change is the **danger**, and the danger is worse than first-order compounding: if a
+Function discount is left applying to subscription lines with `recurringCycleLimit: 0`, the 20.76%
+observed in the table above is not a one-off on the first order — it is **permanent, on every renewal,
+for the life of the contract**. `appliesOnSubscription: false` is the guard.
+
+And it gives §3 a clean mechanism it did not obviously have: a campaign top-up on a subscription
+signup should be **one-time**, and `recurringCycleLimit: 1` is exactly that, declaratively, with no
+code.
+
+##### The order record — and the A3 contrast, now measured on two real orders
+
+The two orders differ in exactly one way, which makes the comparison clean: #1001 had only the selling
+plan, #1002 had the selling plan and the Function.
+
+| | #1001 (plan only) | #1002 (plan + Function) |
+|---|---|---|
+| Line original unit price | $21.96 | $21.96 |
+| Line discounted unit price | $21.96 | **$19.77** |
+| Order `totalDiscounts` | **$0.00** | **$2.19** |
+| `discountApplications` | **empty** | `AutomaticDiscountApplication`, `EACH`, `ENTITLED`, 10% |
+
+**This is A3, proven from both sides.** The selling-plan 12% leaves *no trace whatsoever* on the order
+— no discount line, no discount total, and the line's own "original" price is already the reduced
+$21.96, so the order record cannot even be used to reconstruct the benefit. A Function discount, by
+contrast, is a first-class `discountApplication` carrying its percentage and message.
+
+Two consequences: **Shopify's discount analytics will report zero discounts for the entire subscriber
+programme** if the rate lives on the plan; and the theme must render "Founding Member 12%" itself, from
+the variant's base price against the selling-plan price, because nothing in the order carries it.
+
+**Also confirmed on the order:** the line's originalUnitPrice is $21.96, i.e. the Function discounted
+from the already-reduced price at the order level too, not just in the cart.
+
+##### One access note worth keeping
+
+Reading `orders` failed for our own app with *"This app is not approved to access the Order object"* —
+**protected customer data approval**, which is a launch requirement for any app we build that reads
+orders. The Shopify CLI connector app could read them. Subscription contracts were denied to both, so
+the contract above was read from Loop's admin.
 
 ##### Dev-store state left behind (know this before the next test)
 
