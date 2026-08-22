@@ -3409,7 +3409,6 @@ when resuming.**
 | **Newest POC preview** | "Crema Italia POC27 Preview" | `152030412969` |
 | Prior preview | "Crema Italia POC26 Preview" | `152030347433` |
 | Prior preview | "Crema Italia POC25 Preview" | `152030281897` |
-| Prior preview | "Crema Italia POC24 Preview" | `152030183593` |
 
 **Scorecard: 8.3/10 as of 2026-08-22 (POC24)** — the deployed storefront has been scored six times
 against one rubric: 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20) →
@@ -3610,7 +3609,13 @@ here.** This paragraph used to hardcode them, and it went stale the moment the t
 pruned — twice. Open the preview in a **real browser**; a `curl` of a `preview_theme_id` link is NOT
 a valid check (see §9 2026-07-06). Refresh with `shopify theme push --theme <id from the table>`.
 
-**Only POC24, POC25 and POC26 previews now exist** - at the three-newest cap, enforced as
+**Only POC25, POC26 and POC27 previews now exist** - at the three-newest cap, enforced as
+`crema-poc-deploy` Step 5. **POC24 (`152030183593`) and POC23 (`152030052521`) were deleted
+2026-08-22** on Steve's explicit go, both ids/names/roles re-verified against a live
+`theme list --json` in the same breath as the delete; their batches are commits `53afe0a` and
+`2c08080` and both are redeployable. **POC24 is the theme the 8.3 score was measured against**, and
+`docs/POC24_rescore.md` still names its id - that is provenance, not a live claim: a scoring report
+has to say what it scored, so the sweep correctly left it. Earlier: **POC22, POC23 and POC24 existed** - at the three-newest cap, enforced as
 `crema-poc-deploy` Step 5. **POC22 (`152029757609`) was deleted 2026-08-22** on Steve's explicit go,
 id/name/role re-verified against a live `theme list --json` in the same breath as the delete; its batch
 is commit `e63d9c4` and it is redeployable. The Step 6.4 sweep found one surviving reference, a §9 line
