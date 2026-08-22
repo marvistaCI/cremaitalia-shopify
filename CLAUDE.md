@@ -3213,11 +3213,80 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   listing is live output too, and it expires.** A second session can turn a hand-editable artifact into
   a generated one between one tool call and the next.
 
+- 2026-08-22 — **The four legal policies went live, and POC22 shipped the two consequences. One of
+  them was found only because Steve asked a question I had not thought to ask.** Steve pasted four
+  policies into Settings -> Policies from `docs/legal/ready-to-paste.md`; they were **verified by
+  fetching the public URLs rather than reading the admin**, all returning HTTP 200 with the expected
+  text. **Two of my three verification failures were my own measurement, again** — an auto-renewal
+  needle that spanned a line wrap, and a placeholder regex `\[.*\]` matching theme JavaScript on
+  every page (the tell was an identical count of 19 across all five). Same family as the `DKIM1`
+  grep matching a hostname and `document.fonts.check` returning true for synthesised faces. The one
+  real finding: **privacy is still Shopify's automated policy**, which is a live choice rather than
+  an oversight, and the trigger to replace it is the taste-profile customer metafield, since the
+  automated policy cannot know about Loop, Judge.me or a profiling join.
+  **A claim this repo repeated for months was wrong and is corrected.** §10 said *"the legal pages
+  checkout requires (privacy, terms, refund, shipping)"*. **Shopify gates checkout on none of them
+  and marks only Contact information Required.** Cowork established this on 2026-08-20 and I wrote
+  the correction into `docs/legal/README.md` and then left the wrong sentence standing in the open
+  items. What actually drives each page is different in each case: Contact information is Shopify's
+  requirement, a privacy policy is CalOPPA's, the automatic-renewal clause is ROSCA's, and shipping
+  and refund are underwriting and chargeback defence rather than law. **The refund policy is the one
+  that pays for itself, and not for legal reasons** — in a dispute the card network asks what terms
+  the cardholder agreed to, and without a published policy the question is decided on their account
+  of what they expected, which for a seller of perishable food that cannot be taken back means
+  losing the goods and the money.
+  **Legal notice stays unset, deliberately.** It is the EU *Impressum* field (Germany §5 DDG,
+  Austria, Switzerland) and has no US equivalent; the merchant-identity need is met by Contact
+  information, which is why Shopify marks that one Required and this one optional. Revisit only if
+  the EU or DACH ever becomes a market.
+  **POC22, and the second item is the one that matters.** Steve asked *"do we need something added
+  for a POC?"* about the footer links — and the answer turned out to be larger than the footer.
+  **(1) The footer now links the policies.** Nothing on the storefront did. A single **"Legal
+  notices"** link was considered and rejected for three reasons: `/policies`, `/policies/` and
+  `/pages/policies` all **404**, so Shopify has no policy index route and one link would need a page
+  we build and maintain; the label collides with the Shopify slot we had just decided to leave empty;
+  and **Shipping and Returns are purchase content, not legal content** — a shopper wants the
+  free-shipping threshold and the replacement promise *before* buying, and "Legal" signals fine print
+  nobody clicks. `Shipping` and `Returns` joined the main list, `Terms` and `Privacy` sit quietly
+  beneath the company line. **It removed a duplication rather than adding one:** `#page-shipping` was
+  a **417-character condensed paraphrase** of the published shipping policy — same threshold, same
+  $8.50, same carriers, same transit bands — and is deleted, with `Shipping` pointing at the policy.
+  Leaving the SPA is the production-correct behaviour, not a compromise.
+  **(2) The automatic-renewal disclosure now sits where consent is given.** `v2-deltas.md` B1
+  specified **two placements** and only the Terms page had shipped. The toggle copy was good
+  merchandising and not a disclosure: it never said the card is charged **again, automatically**, at
+  what **frequency**, or at what **amount**. **And driving it surfaced something reading could not:**
+  `#pd-cadence` computes `display:none` until the box is ticked, so the cadence pills — the only place
+  the frequency appeared — were **absent from the screen at the moment of the affirmative act.** The
+  new line closes that with *"at the cadence you choose"* rather than by revealing the pills early.
+  *"Cancel anytime"* was moved out of the line above so cancellation is stated once, beside the
+  renewal terms it qualifies.
+  **The design decision matters more than the wording, and it inverts a brand reflex.** The
+  disclosure is set at the **same size as the benefit line** (verified computed-equal: both 13.12px,
+  `rgb(107,74,56)`, weight 400, opacity 1) and must stay that way. The instinct to shrink and grey
+  legal text is **precisely what "clear and conspicuous" exists to defeat**, and small print under a
+  subscribe toggle is the pattern regulators look for — so this is one of the few places where this
+  brand's quiet-and-small reflex is the wrong call. Commented at **both** the render site
+  (`ci-storefront.js`) and the style site (`ci-storefront.css`), with size and colour **restated**
+  rather than inherited so a later edit to the benefit line cannot silently shrink this one.
+  **Verified** at 375 and 1280 by DOM geometry **and by looking**: footer buttons and anchors render
+  computed-identical (a policy link that looked different would read as a different kind of thing),
+  no horizontal overflow at either width, single row at 1280, all four policy URLs returning **HTTP
+  200 through the theme** rather than merely appearing as `href`s. `theme check` at the documented
+  baseline (**15 offenses / 0 errors / 0 new**).
+  **DEPLOYED** via the `crema-poc-deploy` skill to a NEW unpublished theme **"Crema Italia POC22
+  Preview" (id `152029757609`)**: `theme list` + `git log origin/main..HEAD` run **first** (no POC22
+  existed, no duplicate names), then **pull-and-diff proved** the push — both sides **38** files, zero
+  content mismatches, nothing on only one side, exactly one theme of that name. The diff also asserted
+  the batch content **on the deployed theme**: four policy links, the `sub-renewal` disclosure, and
+  zero `page-shipping`. POC20, POC21 and the live theme untouched. Detail:
+  `docs/POC22_change_list.md`.
+
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC16 (deployed + pull-and-diff proved 2026-08-19) — read this first
+**▶ CURRENT STATE — POC22 (deployed + pull-and-diff proved 2026-08-22) — read this first
 when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
@@ -3242,9 +3311,9 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC21 Preview" | `152029167785` |
+| **Newest POC preview** | "Crema Italia POC22 Preview" | `152029757609` |
+| Prior preview | "Crema Italia POC21 Preview" | `152029167785` |
 | Prior preview | "Crema Italia POC20 Preview" | `152028446889` |
-| Prior preview | "Crema Italia POC19 Preview" | `152017764521` |
 
 **Scorecard: 7.9/10 as of 2026-08-22 (POC20)** — the deployed storefront has been scored five times
 against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20).
@@ -3265,15 +3334,35 @@ decisions were made; policy now lives in Store Operating Standards §13).
 > accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
 > gate** on brand identity and product detail rising above 9.
 
-**POC21 is deployed** and is the only POC21 theme — all **38** files byte-match the repo, proved by
+**POC22 is deployed** and is the only POC22 theme — all **38** files byte-match the repo, proved by
 pull-and-diff on 2026-08-22 (both sides 38 files, zero content mismatches, nothing present on only
 one side; `theme list` **and** `git log origin/main..HEAD` were run **before** the push, confirming no
-name collision). The diff also asserted the batch content: the new hero present, the old dangling
-sub-line gone, both settings tokens intact. The repo is fully pushed to GitHub, so nothing is local-only, and **the repo and
-this theme are in step** — the drift warning that stood here since 2026-08-21 is retired, because the
-change it named is what POC20 shipped.
+name collision). The diff also asserted the batch content **on the deployed theme rather than the
+repo**: four policy links in the footer, the `sub-renewal` disclosure present in the JS, and zero
+occurrences of the removed `page-shipping`. The repo is fully pushed to GitHub, so nothing is
+local-only, and **the repo and this theme are in step**.
 
-**What POC21 is:** the hero rewrite (commit `69e6296`). Three declarative lines replacing a two-line
+**What POC22 is:** the two consequences of the four Shopify policies going live the same day
+(commit `e63d9c4`). **(1) The footer links them.** Nothing on the storefront did — Shopify links
+policies from the **checkout** footer automatically, but a customer deciding whether to trust the
+store never reaches checkout. `Shipping` and `Returns` joined the main list; `Terms` and `Privacy`
+sit quietly beneath the company line. A single **"Legal notices"** link was considered and rejected:
+`/policies` and its variants all **404**, so there is no destination without building a third home
+for the content; the label would collide with the Shopify *Legal notice* slot we deliberately left
+unset (the EU Impressum field); and Shipping and Returns are **purchase content**, so filing them
+under "Legal" would bury the two best pre-purchase reassurances on the site. The change also
+**removed a duplication rather than adding one** — `#page-shipping` was a 417-character condensed
+paraphrase of the published shipping policy and is deleted. **(2) The automatic-renewal disclosure
+now sits where consent is given.** `v2-deltas.md` B1 specified two placements and only the Terms page
+had shipped; the toggle copy was merchandising that never said the card is charged **again,
+automatically**, at what frequency, or at what amount — and `#pd-cadence` computes `display:none`
+until the box is ticked, so the frequency was **absent from the screen at the moment of the
+affirmative act**. It is set at the **same size as the benefit line and must stay that way**: small
+print under a subscribe toggle is exactly what "clear and conspicuous" exists to defeat, which makes
+this one of the few places where the brand's quiet-and-small reflex is wrong. Commented at both the
+render site and the style site. Detail: `docs/POC22_change_list.md`.
+
+**What POC21 was:** the hero rewrite (commit `69e6296`). Three declarative lines replacing a two-line
 H1 and a 180-character sub-line that had a **dangling modifier** - *"From a small, named group of
 artisan Italian roasters, air-freighted whole-bean so it reaches you..."* never supplied a subject for
 *air-freighted*. The old promise, *"weeks from the roast date, not months"*, was also **not reliably
