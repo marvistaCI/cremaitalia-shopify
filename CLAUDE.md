@@ -3537,10 +3537,10 @@ durable part: *our test data was wrong, not the feature* — it was neither a co
 feature defect, but badly authored fixture data, and the build spec row that had transcribed the
 defect into the production schema was corrected in the same commit.
 
-POC18 and POC19 previews and the live theme are untouched. Preview:
-`https://crema-italia.myshopify.com?preview_theme_id=152029167785`
-(open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
-2026-07-06). To refresh: `shopify theme push --theme 152029167785`.
+**Preview link and refresh command: take the id from the table at the top of this block, never from
+here.** This paragraph used to hardcode them, and it went stale the moment the theme it named was
+pruned — twice. Open the preview in a **real browser**; a `curl` of a `preview_theme_id` link is NOT
+a valid check (see §9 2026-07-06). Refresh with `shopify theme push --theme <id from the table>`.
 
 **Only POC22, POC23 and POC24 previews now exist** — at the three-newest cap Steve set on
 2026-08-06, enforced as `crema-poc-deploy` Step 5. **POC21 (`152029167785`) was deleted 2026-08-22**
