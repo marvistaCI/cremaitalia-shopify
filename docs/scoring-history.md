@@ -171,6 +171,35 @@ since POC3, and arguably a gap in the rule rather than the design.
 
 ---
 
+## Pass 6 — POC24 re-score · 8.3 · 22 Aug 2026
+
+Theme `152030183593`. Full report: **`docs/POC24_rescore.md`**.
+
+**Verdict.** 7.9 -> **8.3**, the first movement in two passes. Five dimensions moved; the largest
+single gain is **Trust & social proof 6.5 -> 7.5**, and it is **not code** — Steve published four
+legal policies, closing the rung the very first audit called the largest trust item on the board.
+Accessibility, Value proposition, Mobile and Conversion each moved +0.5, and Navigation +0.5 for the
+footer policy links and one duplication removed.
+
+**Bias declared:** POC21 through POC24 were built in the same session as this pass, so contested
+dimensions were held down. **Accessibility is capped at 8.0 despite a clean measured surface** —
+0 contrast failures across 16 pages, 0 tap targets below the standard, 76 of 76 controls keyboard
+activable, 0 unnamed form controls — because **one Level A criterion is unmet**: there is no skip
+link (WCAG 2.4.1). A dimension failing Level A cannot honestly score in the nines.
+
+**Two carried findings were WITHDRAWN** after being tested for the first time. The shelf/IA claim is
+empirically false (`shelf` is never a list; subscription maps exactly onto Roccia, 9 of 9). The
+"76 div onclick announce poorly" claim predates the POC14 batch that fixed it — 76 of 76 carry
+`role` and `tabindex`.
+
+**The durable lesson, now the most reliable finding in the series: the claims that survived untouched
+across passes were the ones nobody had ever measured.** Three further measurement artifacts were
+caught and discarded during this pass alone, including a screenshot that appeared to show mobile
+overflow and did not.
+
+
+---
+
 ## Open findings across all passes
 
 | | From | Status |
