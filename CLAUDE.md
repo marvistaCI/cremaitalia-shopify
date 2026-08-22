@@ -3130,6 +3130,52 @@ decides. Full context in the §9 2026-07-24 and 2026-08-21 entries.
   about $1.3M a year.** The old figure was out by more than an order of magnitude. Revisit Advanced at
   seven figures, not before.
 
+**▶ PLATFORM VALIDATION ROUND 2 — assumptions we have WRITTEN DOWN but never OBSERVED
+(opened 2026-08-22).** Round 1 (above) is closed. What remains is a different category: places where
+the spec asserts how Shopify, Loop or an app behaves, and nobody has watched it happen on a store.
+Round 1's value was that **three of its six items changed on contact with a live store**, so treat
+every line here as unproven until a screenshot says otherwise. The dev store
+`crema-italia-development` is the lab and is free; see the 2026-08-21 entries in §9.
+
+*Ordered. A1 blocks a commercial rule and should go first.*
+
+- [ ] **A1 — Does a discount Function COMPOUND with the selling-plan price adjustment?** The last
+  unanswered Loop question and the only one that cannot be settled by inspection: it needs a discount
+  Function deployed to the dev store and a second test order against *Founder Subscriptions*.
+  Expectation is **yes it compounds**, because the Function sees the already-reduced $21.96 as the line
+  price. **Until this is answered the subscriber rate lives in the selling plan OR in a Function, never
+  both** — otherwise a founder gets 12% off a price that is already 12% off. Context:
+  `docs/production_build_spec.md` §5.2.2.
+- [ ] **A2 — Then amend Standard §11/§12.8. Steve's decision, not Code's.** §11 currently specifies a
+  Function owns entitlement; the evidence says the rate is contract state and therefore Loop's. This
+  changes **which system owns a commercial rule**, so it is a decision, not a correction.
+- [ ] **A3 — The subscriber benefit is INVISIBLE on a Shopify order** (proven, §5.2.2): no discount
+  line, just a lower price. Decide whether the theme renders "Founding Member 12%" itself from
+  base-vs-plan price, and note Shopify's discount analytics will report **zero** discounts on
+  subscription orders regardless.
+- [ ] **B1 — Does the accounts/checkout branding editor offer Marcellus?** Two minutes: Settings →
+  Checkout → Configurations → Edit. Decides whether the hosted account surface diverges from the
+  storefront on type as well as layout (§5.1).
+- [ ] **B2 — Do native Bundles decrement COMPONENT inventory?** Ten minutes: build a two-component
+  bundle, place a test order, watch component stock. Sources conflict; the §7.1 recommendation changes
+  if they do not.
+- [ ] **C1 — Build one customer-account UI extension and look at it.** §5.1 is research, not a spike.
+  Nobody has rendered a component-library page or confirmed an extension can **write** a customer
+  metafield — which is the mechanism the taste profile depends on (§6.1).
+- [ ] **C2 — Stand up the roaster metaobject definition (§13.4) on the dev store**, including the
+  `publishable` and `onlineStore` capabilities and a photo `file_reference`, and read it from Liquid.
+  Designed in detail, never built.
+- [ ] **C3 — Model one SKU with two lots (§13.9) in Shopify** and see whether the mapping survives
+  contact. Includes §13.9.2, still **OPEN**: one physical SKU, two products, one bin, and FIFO handing
+  the full-price buyer the aged bag. Now also a 3PL qualifying question (Standard §12.9).
+- [ ] **C4 — Judge.me metaobject syndication is UNPROVEN, not refuted.** `reviews.product_reviews`
+  returned nil on the dev store and the standard definition never appeared; probable cause is Shop
+  channel eligibility, which a Partners dev store lacks. Two questions for Judge.me support: does
+  syndication require Shop eligibility, and does a syndicated review populate `author` with the
+  customer reference (that second answer decides whether the palate-match join is free).
+- [ ] **C5 — Shopify Flow for Offerta aging has never been tested.** Standard §12.2 phases the price
+  tool on it. Liquid date comparison is unreliable in Flow; assume Run-code.
+
 - [ ] Also still open and launch-gating, though not build-blocking: pricing numbers never
   validated against real landed costs (Standard §12.3); real catalog data + photography;
   3PL not selected (blocks the no-waste Promise copy, and the transit/$8.50 claims); email
