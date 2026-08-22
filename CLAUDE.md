@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.2) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.14) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.15) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > **Editing protocol:** Code owns the repo and all Standard sources; **Cowork proposes,
@@ -3006,6 +3006,76 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   output beats a document — needs a sharper edge: **a summary screen is not live output about the thing
   it summarises. Read the record.**
 
+- 2026-08-22 — **Round 2 items C1-C5 run, and A2 DECIDED: Store Operating Standards v1.14 → v1.15.**
+  Two things in one stretch — the data model in §13 was stood up on a real store for the first time,
+  and Steve took the entitlement decision the morning's measurements had teed up. Detail:
+  `docs/production_build_spec.md` **§16** (C items) and Standard **§11** (the decision).
+  **A2 — Steve's call: Option 1, designed for Option 3.** The **Loop selling plan owns subscription
+  lines** (founder 12% and subscriber 10% as two plans, promotion = migrating a contract by hand on
+  Loop's free tier, bounded by §4's 222 cap); a **Function owns one-time lines**, computing `MAX` from
+  customer tags and metafields; and **`appliesOnSubscription: false` is the guard**, because a
+  selling-plan adjustment is a price change rather than a discount and a Function discount compounds on
+  top of it. Published as v1.15 through `crema-std-publish`: source edited, **§12.7 closed
+  verified-yes** and **§12.8 closed answered**, cross-references swept, **both touched sources
+  re-rendered** (Store Operating v1.15 *and* Collaboration v1.1, whose companion header moved without
+  its own version — the `f9ffcb1` blind spot), all gates pass at exit 0, v1.14 archived with a table
+  row, both delivered to OneDrive and **md5-verified MATCH**.
+  **One gap is accepted knowingly rather than overlooked.** With the rate on the plan, no campaign can
+  out-rank it on a subscription line. Checked against the whole §3 table, exactly **one** ever could —
+  the **win-back 15%** at re-subscribe; every other campaign rate is at or below the 10% standing rate.
+  The remedy is designed and deliberately unbuilt: the Function is handed
+  `compareAtAmountPerQuantity` (the pre-plan base price, present on subscription lines and **null** on
+  one-time lines), so it can discount only the *gap* up to `MAX`, with `recurringCycleLimit: 1` making
+  it genuinely one-time. Build it if win-back re-subscribes turn out to matter.
+  **C2 — the roaster metaobject works exactly as §13.4 designed**, on a Basic-plan store, with all four
+  capabilities (`publishable`, `onlineStore`, `renderable`, `translatable`). **The §13.4.2 draft trap is
+  real and worse than described:** a DRAFT entry does not merely resolve to `nil` — the collection
+  reports **size zero** and the loop body never runs, so a "for each roaster" page renders empty with no
+  error anywhere. ACTIVE flipped it to 1 immediately. `onlineStore` gave a genuine native URL
+  (`/pages/roasters/gardelli-probe`), so the roaster page need not be a route we build. And the staged
+  image upload chain ran end to end — `stagedUploadsCreate` → multipart POST (**HTTP 201**) →
+  `fileCreate` → `metaobjectUpdate` → `image_url` in Liquid — which is the mechanism an external roaster
+  application form depends on. **Caution recorded:** `image_url` returns a **protocol-relative** URL,
+  the same trap POC14 hit with `asset_url` in Open Graph tags.
+  **C3 — lots model cleanly, and §13.9.2 turns out to be a bigger problem than it was written as.** Two
+  lot records referenced from a product through `crema_italia.lots` (`list.metaobject_reference`) read
+  through Liquid with every field resolved. But the headline is the SKU finding: **Shopify permits
+  duplicate SKUs across products and gives each variant its own `InventoryItem`**, so two products
+  sharing one physical SKU have **completely independent stock pools** — built it, adjusted one to 30,
+  and the other stayed at 40. Shopify believed in 70 units where 40 bags exist. §13.9.2 framed the risk
+  as FIFO handing a full-price buyer the aged bag; underneath that sits **overselling**, and candidate
+  **B (segregate by location only) does not address it at all**, because locations are tracked per
+  inventory item. Candidate **C (never overlap)** gains ground on effort as well as correctness, since
+  any split means a manual transfer between two pools every time.
+  **Two corrections to §13.9's onboarding order, both live traps.** (1) Step 1 says to enable Storefront
+  access or *"Liquid cannot read them"* — **Liquid read ours with `storefront: NONE`.** That setting
+  governs the **Storefront GraphQL API**, not `shop.metaobjects`; keep the step for headless surfaces
+  but do not blame it when a Liquid template renders nothing, because that will be the draft trap
+  instead. (2) A product created through the Admin API with `status: ACTIVE` is **not published to the
+  Online Store** — `publishedAt: null`, invisible to Liquid until `publishablePublish` runs. **"Active"
+  and "published" are different things and the admin shows the reassuring one.**
+  **C1 — the full-page account target exists and deploys on this plan**, confirming §5.1 from the build
+  side rather than from documentation. **One constraint, learned from a deploy failure:**
+  *"`customer-account.page.render` cannot be combined with any other targets"* — a full-page extension
+  is **exclusive**, so the POC's account page is one extension and anything added to Shopify's native
+  order or profile pages must be separate ones. Rendering it still needs a person (new customer accounts
+  sign in by emailed code). The taste-profile write is de-risked regardless: Admin `metafieldsSet` on a
+  customer works without a definition or access grant (proven earlier the same day), so
+  **extension → `network_access` → our backend → Admin API** is a certain path.
+  **C4 — unchanged, and now stated cleanly.** Aggregates populate (`reviews.rating`,
+  `reviews.rating_count`); `reviews.product_reviews` is **null**; and listing every metaobject
+  definition on the store returns **three**, none of them `product_review` — a firmer statement than
+  Round 1 could make, since a truthy empty drop makes the obvious existence check useless. Status stays
+  **UNPROVEN, not refuted**; the two questions for Judge.me support still stand. Nothing here disturbs
+  §13.5.1, which needs only the aggregate.
+  **C5 — not testable in a sitting, and worth saying why.** Flow is not installed, installing it is a UI
+  action, and the job that matters is a **daily scheduled trigger**, so a real test costs a day per
+  iteration. The design guidance stands; when it is tested, **test the failure mode**, because the
+  reported problem is that date comparison in Flow conditions fails **silently** — which on our shelves
+  means coffee quietly never leaving the freshness window.
+  **Still open after this:** A3's decision (whether the theme renders the invisible subscriber benefit
+  itself), B1's one UI look at the font picker, and C1/C4/C5's remainders above.
+
 ---
 
 ## 10. Open questions / TODO
@@ -3402,7 +3472,7 @@ Round 1's value was that **three of its six items changed on contact with a live
 every line here as unproven until a screenshot says otherwise. The dev store
 `crema-italia-development` is the lab and is free; see the 2026-08-21 entries in §9.
 
-*Ordered. **A1, A1-residual and B2 are DONE (2026-08-22)**, A1 took Standard §12.7 with it, **A3 is measured** (the decision it feeds is still Steve's), and **B1 is part-answered** (one UI look left). A2 is Steve's decision; C1-C5 untouched. NOTE: the A1 probe discount was set to EXPIRED on 2026-08-22 before B2 ran, so the dev store is clean; re-enable it (`discountAutomaticAppUpdate`, clear `endsAt`) only for the A1-residual order test.*
+*Ordered. **A1, A1-residual, A2, B2, C2 and C3 are DONE (2026-08-22)**; **A3 is measured** and **C1/C4 part-answered**; **B1** needs one UI look and **C5** cannot be closed in a sitting. A2 was decided by Steve and published as Store Operating Standards **v1.15**. NOTE: the A1 probe discount was set to EXPIRED on 2026-08-22 before B2 ran, so the dev store is clean; re-enable it (`discountAutomaticAppUpdate`, clear `endsAt`) only for the A1-residual order test.*
 
 - [x] ~~**A1 — Does a discount Function COMPOUND with the selling-plan price adjustment?**~~ **RUN AND
   ANSWERED 2026-08-22 — YES, they compound. See `docs/production_build_spec.md` §5.2.3.** A Discount
@@ -3448,9 +3518,16 @@ every line here as unproven until a screenshot says otherwise. The dev store
   0`, the 20.76% compounding is **permanent on every renewal**, not a first-order slip.
   **And it hands §3 a clean mechanism:** a campaign top-up on a subscription signup should be one-time,
   and `recurringCycleLimit: 1` is exactly that, declaratively, with no code.
-- [ ] **A2 — Then amend Standard §11/§12.8. Steve's decision, not Code's.** §11 currently specifies a
-  Function owns entitlement; the evidence says the rate is contract state and therefore Loop's. This
-  changes **which system owns a commercial rule**, so it is a decision, not a correction.
+- [x] ~~**A2 — Then amend Standard §11/§12.8.**~~ **DECIDED BY STEVE 2026-08-22 and PUBLISHED as Store
+  Operating Standards v1.15.** Option 1, designed for Option 3: the **Loop selling plan owns
+  subscription lines** (founder 12% / subscriber 10% as two plans; promotion = migrating a contract by
+  hand on Loop's free tier, bounded by §4's 222 cap), a **Function owns one-time lines**, and
+  **`appliesOnSubscription: false`** is the guard. **§12.7 closed verified-yes; §12.8 closed answered.**
+  One gap accepted knowingly: the **win-back 15%** is the only campaign that could out-rank the standing
+  rate on a subscription line, and under this model it cannot. The remedy is designed and unbuilt - the
+  Function is handed `compareAtAmountPerQuantity` (pre-plan base price, null on one-time lines) so it can
+  discount only the gap up to `MAX`, with `recurringCycleLimit: 1` making it one-time. Build it if
+  win-back re-subscribes matter commercially.
 - [~] **A3 — The subscriber benefit is INVISIBLE on a Shopify order. PROVEN FROM BOTH SIDES 2026-08-22**
   on two orders differing in exactly one way. #1001 (plan only): the line's "original" price is already
   the reduced $21.96, `totalDiscounts` **$0.00**, `discountApplications` **empty**. #1002 (plan +
@@ -3498,23 +3575,53 @@ every line here as unproven until a screenshot says otherwise. The dev store
   **Not observed:** that a completed storefront order decrements component stock — near-certain, since
   the bundle has no stock to decrement, but `orderCreate` is refused and a storefront checkout needs
   card entry in a cross-origin iframe. Same blocker as A1-residual; closable in the same sitting.
-- [ ] **C1 — Build one customer-account UI extension and look at it.** §5.1 is research, not a spike.
-  Nobody has rendered a component-library page or confirmed an extension can **write** a customer
-  metafield — which is the mechanism the taste profile depends on (§6.1).
-- [ ] **C2 — Stand up the roaster metaobject definition (§13.4) on the dev store**, including the
-  `publishable` and `onlineStore` capabilities and a photo `file_reference`, and read it from Liquid.
-  Designed in detail, never built.
-- [ ] **C3 — Model one SKU with two lots (§13.9) in Shopify** and see whether the mapping survives
-  contact. Includes §13.9.2, still **OPEN**: one physical SKU, two products, one bin, and FIFO handing
-  the full-price buyer the aged bag. Now also a 3PL qualifying question (Standard §12.9).
-- [ ] **C4 — Judge.me metaobject syndication is UNPROVEN, not refuted.** `reviews.product_reviews`
-  returned nil on the dev store and the standard definition never appeared; probable cause is Shop
-  channel eligibility, which a Partners dev store lacks. Two questions for Judge.me support: does
-  syndication require Shop eligibility, and does a syndicated review populate `author` with the
-  customer reference (that second answer decides whether the palate-match join is free).
-- [ ] **C5 — Shopify Flow for Offerta aging has never been tested.** Standard §12.2 phases the price
-  tool on it. Liquid date comparison is unreliable in Flow; assume Run-code.
-
+- [~] **C1 — Build one customer-account UI extension and look at it. BUILT AND DEPLOYED 2026-08-22;
+  the looking still needs a person.** See `docs/production_build_spec.md` §16.3.
+  **`customer-account.page.render` is a real target and deploys on this plan**, confirming §5.1 from the
+  build side. **Constraint found via a deploy failure:** it *"cannot be combined with any other
+  targets"* - a full-page extension is **exclusive**, so the POC account page is one extension and
+  anything on Shopify's native order/profile pages must be separate ones. **Not seen:** the rendered
+  component library in our palette (new customer accounts sign in by emailed code, so it cannot be
+  scripted). **De-risked anyway:** Admin `metafieldsSet` writes customer metafields with no definition
+  and no access grant, so **extension -> `network_access` -> our backend -> Admin API** is a certain
+  path for the §6.1 taste profile.
+- [x] ~~**C2 — Stand up the roaster metaobject definition (§13.4) on the dev store.**~~ **DONE
+  2026-08-22, end to end. See §16.1.** All four capabilities enabled on a Basic-plan store
+  (`publishable`, `onlineStore`, `renderable`, `translatable`). **The §13.4.2 draft trap is real and
+  worse than described:** a DRAFT entry does not merely resolve to `nil` - the collection reports
+  **size zero** and the loop body never runs, so a "for each roaster" page renders empty with no error.
+  ACTIVE flipped it to 1. `onlineStore` gave a genuine native URL (`/pages/roasters/gardelli-probe`).
+  The staged image chain ran end to end - `stagedUploadsCreate` -> POST (**HTTP 201**) -> `fileCreate`
+  -> `metaobjectUpdate` -> `image_url` - which is what makes an external roaster application form
+  possible. **Caution:** `image_url` returns a **protocol-relative** URL, the POC14 `asset_url` trap.
+- [x] ~~**C3 — Model one SKU with two lots (§13.9) in Shopify.**~~ **DONE 2026-08-22, and §13.9.2 is
+  a bigger problem than it was written as. See §16.2.** Lots model cleanly - two records referenced via
+  `crema_italia.lots` (`list.metaobject_reference`) read through Liquid with every field resolved.
+  **The headline: Shopify permits duplicate SKUs across products and gives each variant its own
+  `InventoryItem`, so two products sharing one physical SKU have completely independent stock pools.**
+  Built it, adjusted one to 30, and the other stayed at 40 - Shopify believing in 70 units where 40 bags
+  exist. So the risk is not only mis-picking under FIFO, it is **overselling**, and candidate **B
+  (segregate by location only) does not address it**, because locations are per inventory item.
+  **Candidate C (never overlap) gains ground.** §13.9.2 stays OPEN as Steve's decision and a 3PL
+  qualifying question (Standard §12.9).
+  **Two corrections to §13.9's onboarding order, both live traps:** Liquid read our metaobjects with
+  `storefront: NONE` (that setting governs the **Storefront GraphQL API**, not `shop.metaobjects`); and
+  a product created via Admin API with `status: ACTIVE` is **not published** (`publishedAt: null`,
+  invisible to Liquid until `publishablePublish`). **"Active" and "published" are different things.**
+- [~] **C4 — Judge.me metaobject syndication: RE-CHECKED 2026-08-22, unchanged, and now stated
+  cleanly. See §16.4.** Aggregates populate (`reviews.rating` = 2.0, `reviews.rating_count` = 1);
+  **`reviews.product_reviews` is null**; and listing every metaobject definition on the store returns
+  **three**, none of them `product_review` - a firmer statement than Round 1 could make, since a truthy
+  empty drop makes the obvious existence check useless. **Status stays UNPROVEN, not refuted.** The two
+  questions for Judge.me support still stand. Nothing here disturbs §13.5.1, which needs only the
+  aggregate.
+- [ ] **C5 — Shopify Flow for Offerta aging: NOT TESTABLE in a sitting, and worth knowing why.
+  See §16.5.** Flow is **not installed** on the dev store, installing it is a UI action, and the job that
+  matters is a **daily scheduled trigger**, so a real test costs a day per iteration. Design guidance
+  unchanged (Run code for the date arithmetic; two jobs; only the unpublish-at-window-end one fully
+  automatic). **When it is tested, test the failure mode** - the reported problem is that date comparison
+  in Flow conditions fails **silently**, which on our shelves means coffee quietly never leaving the
+  freshness window.
 - [ ] Also still open and launch-gating, though not build-blocking: pricing numbers never
   validated against real landed costs (Standard §12.3); real catalog data + photography;
   3PL not selected (blocks the no-waste Promise copy, and the transit/$8.50 claims); email

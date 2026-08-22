@@ -1799,3 +1799,166 @@ Roaster Onboarding happens **once per roaster** and is a relationship. Product O
 different owners, different cadences, different outputs, and different failure modes - a badly
 onboarded roaster costs a partnership, a badly onboarded product costs a wrong label or a wrong
 price. Designing them as one process would optimise for neither.
+
+## 16. Round 2 items C1-C5 — the data model, built on a real store (2026-08-22)
+
+§13 was designed on paper and §14 written from the POC. This section is what happened when the design
+was actually stood up on `crema-italia-development`. **Three claims in §13 were wrong** and are
+corrected here rather than left to be discovered mid-build.
+
+### 16.1 C2 — the roaster metaobject, proven end to end
+
+The whole of §13.4 was built and exercised: definition, capabilities, a record, the draft trap, the
+native URL, and a photograph uploaded through the two-step staged upload.
+
+**All four capabilities enabled on a Basic-plan store** — `publishable`, `onlineStore` (url handle
+`roasters`), `renderable`, `translatable`. Nothing here is plan-gated.
+
+**§13.4.2's trap is real, and worse than "renders as nothing".** With the single entry set to DRAFT, a
+Liquid template reading `shop.metaobjects.ci_roaster` returned:
+
+```
+all_count=0        first_is_nil=YES        loop_visited=(empty)
+```
+
+So it is not merely that a draft entry resolves to `nil` — **the collection reports a size of zero and
+the loop body never runs.** A roaster page built as "for each roaster" will render an empty list with
+no error anywhere. Flipping the same record to ACTIVE, unchanged otherwise, gave `all_count=1` and the
+loop visited it. **The publish-time check in §15.2 is not optional.**
+
+**`onlineStore` really does give a native page.** The active entry reported
+`system.url = /pages/roasters/gardelli-probe`. §13.4.1's "the roaster profile page can be native" is
+confirmed — we do not have to route it ourselves.
+
+**The staged image upload works exactly as §13.4.3 describes**, which is what makes an external roaster
+application form possible:
+
+```
+stagedUploadsCreate (resource: IMAGE, httpMethod: "POST")
+  -> multipart POST to the returned Google Storage URL         -> HTTP 201
+  -> fileCreate  { originalSource: resourceUrl }               -> gid://shopify/MediaImage/...
+  -> metaobjectUpdate  { key: "logo", value: <that gid> }
+  -> Liquid: {{ r.logo | image_url: width: 400 }}
+```
+
+**A caution on the last line.** `image_url` returns a **protocol-relative** URL
+(`//shop.myshopify.com/cdn/...`). This is the same trap POC14 hit with `asset_url` when emitting Open
+Graph tags - some consumers will not follow it. Force it absolute anywhere the URL leaves the page
+(JSON-LD, OG, feeds).
+
+### 16.2 C3 — one SKU, two lots, and the finding that changes §13.9.2
+
+**Lots model cleanly.** A `ci_lot` metaobject definition plus a product metafield
+`crema_italia.lots` of type `list.metaobject_reference` (constrained to that definition) reads through
+Liquid with every field resolved:
+
+```
+product=C3 PROBE ROCCIA coffee   sku=CI-C3-001-250   lots_count=2
+lot=LOT-0001 roasted=2026-05-20 qty=60 cost=6.1
+lot=LOT-0002 roasted=2026-07-28 qty=90 cost=6.35
+```
+
+**§13.9.2 is answered, and the problem is bigger than the one it describes.** §13.9.2 frames it as
+*"one physical SKU, two Shopify products, one warehouse bin"* with FIFO handing the full-price buyer
+the aged bag. That is true, but underneath it sits something more mechanical:
+
+> **Shopify permits duplicate SKUs across products, and gives each variant its own `InventoryItem`.
+> The two products therefore have completely independent stock pools.**
+
+Built directly: two products, both with SKU `CI-C3-001-250`, both stocked at 40. They came back with
+different inventory item ids, and adjusting one down to 30 **left the other at 40**. Shopify believed
+in 70 units where 40 bags exist.
+
+So the risk is not only mis-picking — it is **overselling**. Split 40 physical bags into a Roccia
+product and an Offerta product and Shopify will happily sell 40 of each. Nothing reconciles them; the
+SKU string is a label, not a key.
+
+**What this does to the three candidate resolutions in §13.9.2:**
+
+- **B (segregate by location only, same SKU) is not sufficient on the Shopify side.** Locations are
+  tracked per inventory item, and two products still have two items. It solves the warehouse question
+  and leaves the overselling question untouched.
+- **A (distinct suffixed SKU)** at least makes the duplication visible and matches what Shopify is
+  already doing internally.
+- **C (never overlap)** avoids the whole class, and remains the strongest option.
+
+Whichever is chosen, an Offerta split means **moving units between two pools**, and that transfer is a
+manual, error-prone step someone has to perform in the admin every time. That is a standing operational
+cost that §13.9.2 did not price, and it argues for C on effort grounds as well as correctness.
+
+**Correction to §13.9's onboarding order, step 1.** It says to enable Storefront access on each
+metaobject definition because *"definitions are private by default and Liquid cannot read them
+otherwise"*. **Liquid read ours with `storefront: NONE`** - the roaster record, its fields, its logo and
+its URL all rendered. The `storefront` access setting governs the **Storefront GraphQL API** (headless
+and app surfaces), not Liquid's `shop.metaobjects`. Leave the step in for anything headless; do not
+blame it when a Liquid template renders nothing, because that will be the draft trap above instead.
+
+**Second correction, and it is a live trap.** A product created through the Admin API with
+`status: ACTIVE` is **not published to the Online Store** - it comes back `publishedAt: null` and is
+invisible to Liquid (`all_products[handle]` returned empty) until `publishablePublish` runs against the
+Online Store publication. "Active" and "published" are different things and the admin shows the
+reassuring one. Any scripted product creation in Product Onboarding (§15.2) must publish explicitly.
+
+### 16.3 C1 — customer-account UI extensions: the full-page target exists, with one constraint
+
+Generated and deployed a `ui_extension` of type `customer_account_ui` against the dev store.
+
+**`customer-account.page.render` is a real, valid target and deploys on this plan** - §5.1's central
+claim stands, now from the build side rather than from documentation. The generator's default is
+`customer-account.order-status.block.render`; the full-page target had to be asked for.
+
+**The constraint, learned from a deploy failure:**
+
+> *"The target `customer-account.page.render` cannot be combined with any other targets."*
+
+A full-page extension is **exclusive** - it cannot also contribute blocks to Shopify's own account
+pages. So the POC's account page becomes **one** full-page extension, and anything we want to add to
+the native order or profile pages must be **separate** extensions. Worth knowing before the work is
+scoped as a single unit.
+
+`api_access = true` (Storefront API) is on by default and `network_access` is available but commented
+out - the latter is what lets an extension call our own backend.
+
+**Still not done, and it needs a person:** rendering it. New customer accounts sign in by emailed code,
+so reaching the account surface as a customer cannot be scripted. Two things remain unseen - what the
+component library actually looks like in our palette, and whether an extension can **write** a customer
+metafield directly.
+
+**That second one is de-risked regardless.** Admin API `metafieldsSet` writes customer metafields
+without a metafield definition and without special access (proven in §5.2.3 when
+`crema_italia.tier` was set and read back by a Function). So even if direct writes from the extension
+are awkward, the path **extension -> `network_access` -> our backend -> Admin API** is certain, and the
+taste-profile requirement in §6.1 is safe either way.
+
+### 16.4 C4 — Judge.me syndication: unchanged, and the definition is now confirmed absent
+
+Re-checked on the same store, four weeks on. **Aggregates populate; individual records do not.**
+
+| Metafield | Value |
+|---|---|
+| `reviews.rating` | `{"scale_min":"1.0","scale_max":"5.0","value":"2.0"}` |
+| `reviews.rating_count` | `1` |
+| `reviews.product_reviews` | **null** |
+
+And a cleaner statement than Round 1 managed: listing every metaobject definition on the store returns
+**three** - our two probes and the app's own FAQ type. **There is no `product_review` definition at
+all.** Round 1 could only say `shop.metaobjects.product_review` was falsy, which was untrustworthy
+because a truthy empty drop is returned for definitions that do not exist.
+
+**Status unchanged: UNPROVEN, not refuted.** The Shop-channel-eligibility hypothesis still fits, and
+the two questions for Judge.me support in §6.1 are still the way to settle it. Nothing here changes the
+§13.5.1 design, because the discreet rating control needs only the aggregate - which works.
+
+### 16.5 C5 — Flow: not testable in this session, and the reason is worth stating
+
+**Shopify Flow is not installed on the dev store**, so nothing was exercised. Two things make this the
+one Round 2 item that cannot be closed in a sitting:
+
+1. Installing Flow is a UI action.
+2. The job we care about is a **daily scheduled trigger**, so a real test costs a day per iteration.
+
+The design guidance in §13.9's step 10 is unchanged and still the right shape: **Run code** for the
+date arithmetic rather than Flow's Liquid conditions, two jobs, and only the unpublish-at-window-end
+one fully automatic. When it is tested, test the failure mode rather than the happy path - the reported
+problem is that date comparison in Flow conditions **fails silently**, which on our shelves would mean
+coffee quietly never leaving the freshness window.

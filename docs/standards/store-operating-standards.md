@@ -1,8 +1,21 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.14 · 2026-08-21**
+**Version 1.15 · 2026-08-22**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.2 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.15 (2026-08-22)** changes **which system owns the subscriber rate**, on measured platform
+> behaviour rather than intent. §3's no-codes `MAX` policy is untouched. The v1.3 mechanism - one
+> Shopify Function evaluating every discount - was built and tested against Loop on a dev store and
+> fails twice: a Function discount **compounds** with a selling-plan price adjustment (measured at an
+> effective 20.76% where 12% was intended, and `combinesWith: false` does not prevent it, because a
+> plan adjustment is not a discount), and **Functions are not re-run on recurring orders** - the rate is
+> snapshotted onto the contract at signup. So the **Loop selling plan now owns subscription lines** and
+> the **Function owns one-time lines**, with `appliesOnSubscription: false` as the guard. One
+> consequence is accepted knowingly: the **win-back 15%** is the only campaign that could out-rank the
+> standing rate on a subscription, and under this model it cannot; a designed-but-unbuilt **top-up to
+> `MAX`** is the remedy if that ever matters. §12.7 closes **verified yes**, §12.8 closes **answered**.
+> Nothing is repriced and no rate changed.
 
 > **v1.14 (2026-08-21)** retires **`peak_flavor_days`** as a setting and closes §12.10, which v1.13 had
 > opened hours earlier. The confusion was never the number - *"brew within 30 days"* sat inches from
@@ -681,24 +694,60 @@ inherit the shelf/size matrix), `days_to_offerta` (Int), `offerta_transition_dat
 (Boolean), plus taxonomy: `roast_level`, `flavor_profile`, `caffeine`, `shelf`, `region`,
 `roaster_handle`, `best_by_date`. Extend with a structured component-SKU BOM field on bundles (§7).
 
-**The discount engine — INTENDED IMPLEMENTATION, NOT YET VERIFIED (2026-07-25).** §3's no-codes policy
-is locked; *this* is how we currently intend to deliver it, and it is the part that may change if the
-platform disagrees (§12.7, §12.8). Nothing else in this Standard depends on these details.
+**The discount engine — REVISED v1.15 (2026-08-22) on measured platform behaviour.** §3's no-codes,
+`MAX` policy is unchanged and still locked. What changed is **which system owns the rate**, because the
+v1.3 mechanism — one Function evaluating everything — was tested and does not survive contact.
 
-- **One Shopify Function evaluates every discount** and returns the single highest applicable rate
-  (`MAX`, §3). One evaluator is deliberate: split the work between a Function and any code- or
-  automatic-discount, and Shopify's own combination rules decide what stacks — which `MAX` forbids.
-- **Its inputs** are (a) the **customer's tags/metafields** — founder number, subscription state,
-  first-time, win-back and abandoned-cart windows; (b) the **cart** itself, for the volume tiers, which
-  need no customer state at all; and (c) a **shop-level toggle** for a date-boxed campaign such as BFCM.
-- **Tags are maintained by Shopify Flow + Loop webhooks**, never by the theme — a customer can cancel
-  from an email link and never touch storefront UI, so entitlement must be server-side (see the account
-  split below).
-- **Campaign eligibility is a time-boxed tag, not a code.** A win-back email links to the store; the
-  15% is already attached to that customer for 30 days.
-- **Unverified:** that a discount Function can read customer tags/metafields in its input query
-  (§12.7), and how this Function coexists with **Loop's own selling-plan subscription discount** —
-  the one remaining discount source we do not author (§12.8).
+**Two owners, split by line type:**
+
+- **Subscription lines — the Loop selling plan owns the rate.** Founder 12% and subscriber 10% are
+  **two selling plans**; a customer's rate is decided by which plan their contract is on, fixed at
+  signup. Promoting someone to Founding Member is **migrating their contract** — a manual edit in the
+  Loop admin, available on Loop's free tier, and bounded by the 222-slot cap in §4.
+- **One-time lines — a Shopify Function owns the rate.** It evaluates `MAX` across the standing
+  entitlement and every qualifying campaign, reading the customer's tags and metafields plus the cart.
+- **The Function must not touch subscription lines.** Set `appliesOnSubscription: false`. A
+  selling-plan adjustment is a **price change, not a discount**, so it never enters Shopify's
+  combination contest and a Function discount **compounds on top of it** — measured at an effective
+  **20.76%** where 12% was intended.
+
+**Why the single-evaluator model had to go.** Discount Functions are **not re-run when recurring
+orders are created**; a Function discount is *snapshotted onto the subscription contract* at signup,
+carrying a `recurringCycleLimit` (`1` = first order only and the default, `N` = N cycles, `0` =
+indefinitely). A snapshot cannot re-evaluate, so a Function can never enforce a later tier change, a
+standing-rate change, or the §3.1 benefit lapse on an existing subscription. **Entitlement is contract
+state, not computed state.**
+
+**The one place this knowingly bends §3, accepted deliberately.** With the rate on the plan, a campaign
+cannot out-rank it on a subscription line. Checked against the §3 table, only **one** campaign ever
+could: the **win-back 15%** at re-subscribe — every other campaign rate is at or below the 10% standing
+rate, so `MAX` is unaffected by them. That single gap is accepted for now.
+
+**Designed for, not built: a top-up to `MAX` on subscription lines.** Shopify hands the Function both
+the plan-adjusted price and, on a subscription line only, `compareAtAmountPerQuantity` = the **pre-plan
+base price**. So the Function can discount *only the gap* between the plan's price and the best rate
+the customer qualifies for, restoring `MAX` exactly, with `recurringCycleLimit: 1` making the campaign
+genuinely one-time. Build this if and when win-back re-subscribes matter commercially; the design must
+not foreclose it.
+
+**Inputs the Function may rely on (verified, §12.7):** customer `hasTags` / `hasAnyTag`,
+`numberOfOrders`, and custom-namespace customer **metafields** — the last needing no metafield
+definition and no access grant. The customer object is **null in the cart** and populated at
+**checkout**.
+
+**One operational rule that falls out of it: prefer a metafield to a tag for anything that must bite
+immediately.** Tag writes propagate on a delay of minutes; metafield writes are readable on the next
+page load. A tag written by Flow or a Loop webhook moments before checkout may not be visible to the
+Function — so a resume that restores benefits, or a win-back window opening, belongs in a metafield.
+
+**Two consequences for reporting and the storefront, both measured:** a selling-plan discount leaves
+**no trace on the order** — no discount line, no discount total, and the line's own "original" price is
+already reduced — so **Shopify's discount analytics will report zero discounts for the entire
+subscriber programme**, and **the theme must render the subscriber benefit itself** from the variant's
+base price against the selling-plan price.
+
+**Campaign eligibility remains a time-boxed tag or metafield, never a code** (§3). A win-back email
+links to the store; the 15% is already attached to that customer.
 
 **Customer tags:** `founding-member-NNN` (durable; set at signup, removed only on account closure —
 NO `founding_rate_forfeited`, retired per §4), plus subscription-state tags derived from Loop
@@ -715,9 +764,10 @@ discount is `MAX(standing, any qualifying campaign discount)` per the no-stackin
   ("are you sure") prompt in its cancel flow.
 - **Native Shopify accounts** own the general address book + profile (name/email/password) + order
   history + buy-again + marketing consent.
-- **Shopify Functions + a customer tag/metafield** own the **entitlement** (who gets 12/10/0),
-  driven by Loop webhooks — the authoritative, server-side downgrade path (a customer can cancel via
-  an email link and never touch theme UI).
+- **Entitlement is split by line type (v1.15):** the **Loop selling plan** carries the rate on
+  subscription lines, and a **Shopify Function + customer tags/metafields** carries it on one-time
+  lines. Tags and metafields are still maintained server-side by Flow and Loop webhooks, never by the
+  theme, because a customer can cancel from an email link and never touch storefront UI.
 
 **The SKU price-maintenance engine (approach LOCKED 2026-07-13 — phased).** Landed-cost × markup with
 the approval governance (§2.4) is **not a native Shopify feature**. Chosen path:
@@ -753,15 +803,22 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    collections, §1). Both the reward form (e.g. a 250g bag, account credit) and the capture/tracking tooling are
    open; decide before any referral discount is enabled. The §3 table carries Referral as **TBD** until then.
    **Constraint added v1.3:** the chosen form must not require issuing a discount code (§3).
-7. **UNVERIFIED — can a Shopify discount Function read customer tags/metafields?** The whole §11 engine
-   assumes yes. Confidence is reasonable, not established. **Verify on a free development store before
-   the production build** — a minimal Function that reads one tag and takes 10% off is enough to settle
-   it. If the answer is no, §11's mechanism changes; §3's policy does not.
-8. **UNVERIFIED — how does our discount Function coexist with Loop's selling-plan subscription
-   discount?** Loop is the only discount source in the system we do not author, so it is the one place
-   `MAX` could be violated without us doing anything wrong: a Loop selling-plan discount and our
-   Function could collide or double-apply. **Highest-risk integration in the design.** Verify on the
-   same dev store, with a real Loop subscription, before the production build.
+7. ~~**UNVERIFIED — can a Shopify discount Function read customer tags/metafields?**~~ **RESOLVED
+   2026-08-22 — YES, both.** Settled exactly as this item prescribed: a minimal Function deployed to the
+   development store, reading one tag and taking 10% off. At checkout it read `hasAnyTag`, `hasTags`,
+   `numberOfOrders` and a **custom-namespace customer metafield**, the metafield needing **no definition
+   and no access grant**. Two caveats now carried in §11: the customer object is **null in the cart** and
+   present only at **checkout**, and **tags propagate on a delay while metafields are immediate**, so
+   anything that must take effect immediately belongs in a metafield.
+8. ~~**UNVERIFIED — how does our discount Function coexist with Loop's selling-plan subscription
+   discount?**~~ **ANSWERED 2026-08-22 — they compound, and it forced the v1.15 change to §11.** It was
+   correctly called the highest-risk integration. Measured on a real subscription: a Function's 10% came
+   off Loop's already-reduced price, billing an effective **20.76%**, and setting `combinesWith` to false
+   on all three classes made no difference, because a selling-plan adjustment is a **price change, not a
+   discount**, and never enters the combination contest. A second finding compounded it: **Functions are
+   not re-run on recurring orders**, so the rate is snapshotted onto the contract at signup. The
+   resolution is in §11: the plan owns subscription lines, the Function owns one-time lines, and
+   `appliesOnSubscription: false` is the guard.
 10. ~~**Where does the peak-flavour message live?**~~ **RESOLVED v1.14 (2026-08-21), opened v1.13.**
    Opened and closed within a day. The setting is **retired**; the message is merged into the
    whole-bean sentence (§5), reworded to count **from receiving** rather than from roast. The
