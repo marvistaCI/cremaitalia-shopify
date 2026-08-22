@@ -3103,6 +3103,51 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   repo had moved ahead of POC19. It had, and this batch is exactly the change it named, so the warning
   went out with the deploy that resolved it rather than being left to rot.
 
+- 2026-08-22 — **POC21: the hero rewritten, and the freshness claim moved from unverifiable to
+  enforced.** Worked interactively with Steve across a dozen drafts; the durable part is the reasoning,
+  not the wording. Detail: `docs/POC21_change_list.md`. **The old sub-line was broken two ways.** It had
+  a **dangling modifier** - *"From a small, named group of artisan Italian roasters, air-freighted
+  whole-bean so it reaches you..."* never supplied a subject for *air-freighted*, so the sentence had no
+  spine. And its promise, *"weeks from the roast date, not months"*, was **not reliably true**: a bag can
+  be listed at two weeks and bought at day eighty, reaching that customer at roughly twelve weeks, and
+  the 90-day window permits it. The warm phrasing was the one overclaiming.
+  **What replaced it states the gate we actually enforce, in settings rather than literals** (build spec
+  §11): *most bags sell within 14 to `{{ freshness_window_days }}` days of roasting, and none after
+  `{{ offerta_fresh_days }}`*. **14, not 7** - roast-to-pickup is 7 days and then come air freight,
+  customs and 3PL receiving, so a bag cannot be on sale at 7 days; 14 also matches the Roaster Guide v8
+  goal statement's two-to-thirteen weeks. The **donation pledge moved into the hero** and names Feeding
+  Tampa Bay, because specificity is what makes effort felt and nobody else can say it.
+  **An earlier draft would have shipped a false claim, and the token is what caught it.** *"No bag more
+  than `{{ freshness_window_days }}` days past roasting"* is contradicted by an entire shelf of our own
+  store - Offerta sells 91 to 150 days. Writing the setting name forced the question *which number is
+  this promise about?*, which the literal 90 would never have prompted.
+  **Three drafts were reverted for register**, all on the POC11 rule *say the customer-visible
+  consequence, not the mechanism*: *"into our inventory"* and *"available for purchase"* both describe
+  our systems rather than the customer's experience, and *"most bags are **consumed** within..."* claims
+  behaviour we do not control - which is exactly the distinction **POC19 settled when it retired
+  `peak_flavor_days`**, so a consumption claim in the hero would have walked that back in the most
+  visible place on the site. *"A select group"* was declined under §6 and Brand Standards §3.1: *small*
+  is a countable fact and *named* is a promise kept on the Roasters page, while *select* is an adjective
+  about our own taste - the anti-pattern POC15 removed from this same page.
+  **The commercial distinction that decided line 2 is Steve's, and it is worth keeping.** US companies
+  sell *"Italian roasts"* without being roasters **in Italy**: *Italian* on *roasters* can be read as a
+  style, while *roasted in Italy* is a location and cannot be borrowed. **That choice then solved the
+  layout**, which nobody expected - because line 2 carries Italy as a place, line 1 no longer needed the
+  word, and deleting it took the binding line from **18.159x to 15.126x**, buying **18.4px -> 21.3px at
+  375**. At 18px against a 17.6px sub-line the two blocks read as two paragraphs in different colours;
+  at 21.3px the headline is a headline again (1.21:1, and 1.79:1 at 1280). The CSS carries the new
+  arithmetic and a warning not to copy the old 13.838x back, since that number belonged to a two-line
+  hero and is now a trap.
+  **Method note worth keeping:** the same-size-as-the-paragraph defect was caught **by looking**. Every
+  geometry assertion passed - three lines, no overflow, CTA above the fold - while the hierarchy was
+  gone. Also a correction: mid-session I claimed shortening a headline line would not buy font size,
+  which was true of the two-line variants measured at the time and wrong as a general claim.
+  **Deployed** via the `crema-poc-deploy` skill to a NEW unpublished theme **"Crema Italia POC21
+  Preview" (id `152029167785`)**: `theme list` + `git log origin/main..HEAD` run **first** (no POC21,
+  no duplicates, zero unpushed), validation at the documented baseline (**15 offenses / 0 errors / 0
+  new**), then **pull-and-diff proved** the push - both sides **38** files, zero mismatches, and the
+  batch content asserted specifically (new hero present, old sub-line absent, both tokens intact).
+
 ---
 
 ## 10. Open questions / TODO
@@ -3132,9 +3177,10 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC20 Preview" | `152028446889` |
+| **Newest POC preview** | "Crema Italia POC21 Preview" | `152029167785` |
+| Prior preview | "Crema Italia POC20 Preview" | `152028446889` |
 | Prior preview | "Crema Italia POC19 Preview" | `152017764521` |
-| Prior preview | "Crema Italia POC18 Preview" | `152016912553` |
+| Prior preview (over cap, prune pending) | "Crema Italia POC18 Preview" | `152016912553` |
 
 **Scorecard: 7.9/10 as of 2026-08-22 (POC20)** — the deployed storefront has been scored five times
 against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20).
@@ -3155,12 +3201,27 @@ decisions were made; policy now lives in Store Operating Standards §13).
 > accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
 > gate** on brand identity and product detail rising above 9.
 
-**POC20 is deployed** and is the only POC20 theme — all **38** files byte-match the repo, proved by
+**POC21 is deployed** and is the only POC21 theme — all **38** files byte-match the repo, proved by
 pull-and-diff on 2026-08-22 (both sides 38 files, zero content mismatches, nothing present on only
 one side; `theme list` **and** `git log origin/main..HEAD` were run **before** the push, confirming no
-name collision). The repo is fully pushed to GitHub, so nothing is local-only, and **the repo and
+name collision). The diff also asserted the batch content: the new hero present, the old dangling
+sub-line gone, both settings tokens intact. The repo is fully pushed to GitHub, so nothing is local-only, and **the repo and
 this theme are in step** — the drift warning that stood here since 2026-08-21 is retired, because the
 change it named is what POC20 shipped.
+
+**What POC21 is:** the hero rewrite (commit `69e6296`). Three declarative lines replacing a two-line
+H1 and a 180-character sub-line that had a **dangling modifier** - *"From a small, named group of
+artisan Italian roasters, air-freighted whole-bean so it reaches you..."* never supplied a subject for
+*air-freighted*. The old promise, *"weeks from the roast date, not months"*, was also **not reliably
+true**: a bag listed at two weeks and bought at day eighty reaches that customer at twelve weeks, which
+the 90-day window permits. It now states the gate we enforce, in **settings rather than literals** -
+*most bags sell within 14 to `{{ freshness_window_days }}` days of roasting, and none after
+`{{ offerta_fresh_days }}`* - and puts the donation pledge in the hero, naming Feeding Tampa Bay.
+**Line 2 says "roasted in Italy", not "Italian roasters"**, because US companies sell Italian roasts
+without being roasters in Italy: a place cannot be borrowed, a style can. That choice also freed line 1
+from the word *Italian*, which took the binding line from 18.159x to 15.126x and bought **18.4px ->
+21.3px at 375** - the difference between a headline and a second paragraph. Detail:
+`docs/POC21_change_list.md`.
 
 **What POC20 is:** POC19 plus one data-only commit, `ee1fa66` — the fixture brewing notes. All 13
 fixture coffees had the store-wide whole-bean policy pasted onto the end of a genuinely per-coffee
@@ -3172,11 +3233,11 @@ feature defect, but badly authored fixture data, and the build spec row that had
 defect into the production schema was corrected in the same commit.
 
 POC18 and POC19 previews and the live theme are untouched. Preview:
-`https://crema-italia.myshopify.com?preview_theme_id=152028446889`
+`https://crema-italia.myshopify.com?preview_theme_id=152029167785`
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
-2026-07-06). To refresh: `shopify theme push --theme 152028446889`.
+2026-07-06). To refresh: `shopify theme push --theme 152029167785`.
 
-**Only POC18, POC19 and POC20 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
+**POC18, POC19, POC20 and POC21 previews exist — one over the three-newest cap, prune pending Steve's go** — at the three-newest cap Steve set on 2026-08-06,
 enforced as `crema-poc-deploy` Step 5. **POC17 (`152003018921`) was deleted 2026-08-22** on Steve's
 explicit go, after computing the keep/prune split from a live `theme list --json` rather than by eye
 and re-verifying its id, name and role immediately before the delete; its batch is commits
