@@ -3406,7 +3406,8 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC26 Preview" | `152030347433` |
+| **Newest POC preview** | "Crema Italia POC27 Preview" | `152030412969` |
+| Prior preview | "Crema Italia POC26 Preview" | `152030347433` |
 | Prior preview | "Crema Italia POC25 Preview" | `152030281897` |
 | Prior preview | "Crema Italia POC24 Preview" | `152030183593` |
 
@@ -3432,12 +3433,37 @@ a real cart, and real customers; none is code.
 > accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
 > gate** on brand identity and product detail rising above 9.
 
-**POC26 is deployed** and is the only POC26 theme - 38 files byte-match the repo, proved by
+**POC27 is deployed** and is the only POC27 theme - 38 files byte-match the repo, proved by
+pull-and-diff (zero content mismatches, nothing on only one side; `theme list` and
+`git log origin/main..HEAD` run **first**). Batch content asserted on the deployed theme: the Sorpresa
+size reads `300g`, `price_unit` is gone from all 17 products, no blurb carries a date, POC25's skip
+link intact.
+
+**What POC27 is:** the Sorpresa box gets its own unit of measure - **Steve's reframing, and it beat
+the fix that was on the table**. The collection's price line read `$77.70 /3 × 100 g (3.53 oz)`:
+`sizeDual()` converts each weight **token**, so it converted one bag while the box holds 300 g, and a
+code comment advertised this as a feature (*"handles composite units like a collection's /3x100g"*).
+At a glance it reads **$77.70 for 3.53 oz**. The proposal was to reword the conversion and delete the
+note chip *"Three 100 g bags"* as a duplicate of the size selector. **Steve instead made the box's
+unit of measure what the box weighs - 300 g - with the composition becoming a note about what is
+inside.** Better three ways: the denominator becomes `/300 g (10.58 oz)`, **the same shape as every
+other product**, not a special case; it matches the production shape, since a native bundle variant
+has a weight and B2 proved that variant is real; and **the duplication dissolves rather than being
+deleted** - the note was only a duplicate because the size said the same thing, so deleting it would
+have removed a fact to fix a collision the right model never creates. The ambiguity is now
+**structurally impossible**: with no composite unit, there is no token to pick the wrong one of.
+`price_unit` went with it - a per-product denominator override present on **exactly one product of
+17**, invented solely to express `/3×100g`; the `||` fallback stays in `priceCell()` with a note that
+nothing sets it today, so a bug there would be silent. **The size string is a cart-matching identifier
+and becomes a Shopify variant title in production**, so the change was verified by adding to cart and
+confirming the line renders, not assumed. Detail: `docs/POC27_change_list.md`.
+
+**What POC26 was:** it is the only POC26 theme - 38 files byte-match the repo, proved by
 pull-and-diff (zero content mismatches, nothing on only one side; `theme list` and
 `git log origin/main..HEAD` run **first**). Batch content asserted on the deployed theme: zero dates
 left in any blurb, the rebase hack gone, POC25's skip link intact.
 
-**What POC26 is:** one fixture sentence, and the contradiction it was hiding. Steve saw an ISO date on
+**What POC26 was:** one fixture sentence, and the contradiction it was hiding. Steve saw an ISO date on
 the Offerta card in a POC24 screenshot and asked whether it was a stale inline comment. It was not -
 `rebaseCatalogDates()` was deliberately string-replacing the date inside `products[12].blurb` to keep
 the prose in step with the field, working exactly as built. **Three things were wrong underneath it.**
