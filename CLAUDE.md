@@ -3818,8 +3818,14 @@ every line here as unproven until a screenshot says otherwise. The dev store
   validated against real landed costs (Standard §12.3); real catalog data + photography;
   3PL not selected (blocks the no-waste Promise copy, and the transit/$8.50 claims); email
   platform not chosen (win-back, abandoned-cart, 60-day-grace campaigns all assume one);
-  and the legal pages checkout requires (privacy, terms, refund, shipping) do not exist
-  anywhere in the repo. **The mailboxes are CLOSED (2026-08-22)** — this line used to say
+  **The legal pages are CLOSED (2026-08-22)** — this line used to say "the legal pages
+  checkout requires (privacy, terms, refund, shipping) do not exist anywhere in the repo",
+  which was wrong twice. They exist and are published: contact information, shipping, refund
+  and terms are live and URL-verified, privacy is Shopify's automated one. And **"checkout
+  requires" was an overstatement this repo repeated for months** — Shopify gates checkout on
+  none of them and marks only **Contact information** Required. What actually drives the rest
+  is law and underwriting, not the platform. See `docs/legal/README.md`. **The mailboxes are
+  CLOSED (2026-08-22)** — this line used to say
   "info@ / support@ mailboxes not created", which was wrong about info@ and is now wrong
   about all three: company email is Google Workspace, and `info@`, `support@` and `contact@`
   all exist as aliases on `steve.roberts@cremaitalia.com`. POC9's contact routing is
