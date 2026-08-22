@@ -3190,10 +3190,24 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   same change into the generator - 20 asserted single-anchor patches, plus a stable sort so BUILD GATE
   floats to the top and every other row keeps its order. **Tested end to end on an isolated copy with
   the output path redirected**, producing 62 decision rows, 12 gate rows contiguous, correct fill,
-  subtitle and legend. **Deliberately NOT applied**, because the other session holds
-  `build_inventory.py` modified and uncommitted, and writing to a file another session is mid-edit on is
-  the exact failure this repo has been burned by twice. Steve applies it when that session is clear;
-  the port is idempotent and refuses to run twice.
+  subtitle and legend. It was held back at first, because the other session had
+  `build_inventory.py` modified and uncommitted and writing to a file another session is mid-edit on is
+  the exact failure this repo has been burned by twice. **Steve then said that session was on hold, and
+  the port was applied.** Sequence, and the order is the point: its uncommitted change was **committed
+  on its own first** (`bf7a468`) so it could not be swept into an unrelated commit, then the port ran,
+  then the generator, then the workbook was verified against **two** baselines - the pre-today original
+  and the hand edit. Result: 62 decision rows, 12 gate rows contiguous, the other session's archive row
+  intact, the other four sheets byte-identical to the pre-today baseline.
+  **The verification earned its keep on a small thing.** Comparing render against render caught **one**
+  real difference across all twelve rows: three phrases had lost their quotation marks, because the text
+  moved from a hand-typed cell into a double-quoted Python literal where `"specified, never validated"`
+  could not survive unescaped. Cosmetic, entirely mine, and invisible to any check that only counted rows
+  or matched on state. Fixed with escapes and regenerated rather than accepted. **A port is a
+  transcription, and transcriptions lose things that a row count cannot see.**
+  **Also worth knowing about that concurrent session:** it committed its own work at 17:26 (`fdc27e7`,
+  the legal pages, paste-ready with every placeholder resolved) before pausing - which is exactly what
+  the two-sessions rule prescribes, and it means the legal-pages gap named as launch-blocking earlier
+  the same afternoon is being closed in parallel.
   **Worth stating plainly for next time:** this project keeps learning that live output beats a
   document. The same rule applies to the *shape* of the repo, not only its contents - **a directory
   listing is live output too, and it expires.** A second session can turn a hand-editable artifact into
