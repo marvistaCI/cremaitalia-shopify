@@ -897,10 +897,15 @@ Emit it **only when at least one real review exists**, never for zero (Standard 
   genuinely useful once shelves are real collection URLs.
 - `FAQPage` on the FAQ page. The content already exists and is already in Q/A shape.
 - `ItemList` on shelf/collection pages.
-- Revisit `Organization.sameAs` (once social profiles exist), `contactPoint` (once info@
-  and support@ are created), and `WebSite.potentialAction` (only if real search ships).
-  All three are omitted today because claiming them would be false; the omission comments
-  are in `layout/theme.liquid`.
+- Revisit `Organization.sameAs` (once social profiles exist) and `WebSite.potentialAction`
+  (only if real search ships). Both are omitted today because claiming them would be false;
+  the omission comments are in `layout/theme.liquid`.
+- **`contactPoint` is UNBLOCKED as of 2026-08-22** — it was deferred here "once info@ and
+  support@ are created", and they now exist (Google Workspace aliases; `contact@` too).
+  A published phone number is the remaining input, and the storefront currently carries
+  none anywhere — no `tel:` link exists in the theme — so decide whether the Dialpad number
+  is published before emitting a `contactPoint` with an email and no telephone. Emitting
+  email-only is valid; it is a choice, not a fallback.
 
 ---
 

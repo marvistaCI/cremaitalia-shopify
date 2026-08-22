@@ -2845,6 +2845,63 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   which is not drivable; the URL was recovered from the launched process's command line and completed
   in the Claude pane instead.
 
+- 2026-08-22 — **The business's non-Shopify systems inventoried for the first time, and the
+  infrastructure they run on was found, fixed and verified in the same session.** Steve asked for
+  a complete register of every system Crema Italia subscribes to. The artifact is
+  `Operations\In USA\shopify\Systems\Systems Inventory.xlsx` (OneDrive, Cowork's lane to read,
+  Code's to maintain): 39 systems, 43 decisions, a cost roll-up and a sources sheet. Sources were the
+  three Standards, `production_build_spec.md`, the OneDrive brief and operations tree, and a sweep of
+  48 MB of Code session transcripts for vendor names discussed but never written down. **The reason it
+  was worth doing is what it found: four systems the business depends on were recorded NOWHERE.**
+  **Registrar and DNS: Namecheap, for both.** Never named in any document. Renewals paid through
+  29-APR-2027. **PremiumDNS was subscribed and switched off** — the nameservers pointed at BasicDNS,
+  so a paid service was answering no queries. Steve flipped it to `pdns1/pdns2.registrar-servers.com`
+  the same session. Verified by querying the new nameservers **directly** rather than reading the
+  admin screen: every record carried over, both nameservers agreeing, public resolvers updated within
+  minutes, site HTTP 200. Done pre-launch, which was the cheapest possible moment. **A Namecheap SSL
+  certificate is also subscribed and can NEVER be used** — the storefront serves a Let's Encrypt
+  certificate that Shopify provisions and renews at its load balancer, and Shopify accepts no
+  third-party certificate on any plan. Same paid-for-and-unused shape as PremiumDNS, except this one
+  cannot be switched on.
+  **Email: Google Workspace**, also unnamed anywhere. Primary user `steve.roberts@cremaitalia.com`,
+  with aliases `info@`, `sroberts@`, `steve@`, `usagent@`, `roasters@` — and `support@` + `contact@`
+  added this session, closing POC9's contact routing. **§10 said `info@` did not exist; it did, and had
+  since June.** `usagent@` being confirmed live matters independently — it is the address on file with
+  the FDA as US Agent contact for every roaster registration.
+  **There was no SPF record at all.** Not a soft failure: zero `v=spf1` at the apex, so DKIM alone was
+  authenticating every message. Confirmed by Google's own DMARC aggregate report, which Steve supplied
+  — `dkim: pass`, `spf: none`, evaluated as fail. Fixed the same session with
+  `v=spf1 include:_spf.google.com ~all`, verified at the authoritative nameservers and at public
+  resolvers, as exactly one SPF record. Lookup cost is 1 of the permitted 10, because `_spf.google.com`
+  currently returns a flat ip4/ip6 record with no nested includes.
+  **Telephony: Dialpad**, unnamed anywhere, and compliance-relevant in a way that is easy to miss for a
+  phone system — the brief puts `+1-813-376-4821` on file with the FDA, so if that is the Dialpad line,
+  the subscription lapsing breaks a regulatory contact of record rather than merely losing calls.
+  Unconfirmed. In the other direction, **the storefront publishes no phone number at all** — no `tel:`
+  link exists in the theme — so a capability is being paid for that the site does not use.
+  **Costs, stated in one place for the first time:** $139/mo committed today (Shopify Basic $39 +
+  Claude Max $100), $290/mo across the decided stack at launch. Nine systems are **not costed at all**,
+  several of them launch-blocking: 3PL, freight forwarder, customs broker, accounting, customer service,
+  referral tooling.
+  **Three method lessons, all the same shape as ones already in this log.** (1) **An absence is the
+  weakest evidence there is.** I twice built a confident conclusion on a DNS query returning nothing —
+  once on a record name I had mistyped, once on a host name I had guessed. Both times the record was
+  fine and the query was wrong. (2) **A check that matches text rather than meaning can report the exact
+  opposite of the truth.** A grep for the literal `DKIM1` matched the *hostname* `dkim1...` and missed
+  `dkim3`/`dkim4`, reporting two perfectly healthy Shopify DKIM chains as dead. Had Steve acted on that
+  report he would have deleted four working records and broken Shopify's mail signing. The check that
+  worked matched `p=MII`, the actual key material. Same family as `document.fonts.check` returning true
+  for synthesised faces, the truthy empty Liquid drop, and case-sensitive matching defeated by
+  `text-transform`. (3) **Live output beats a document, and it beats a vendor's marketing page and a
+  settings screen too** — DNSSEC turned out not to be the PremiumDNS differentiator, and `info@` existed
+  despite this file saying otherwise.
+  **Open after this session:** which of two healthy Shopify sender identities (SendGrid `p662` vs
+  Mailgun `p581`) actually signs — do not delete either until a real message's `DKIM-Signature`
+  selector proves it, because both plausibly serve the same live store; whether the Namecheap SSL
+  serves anything else before it is cancelled; alias vs Google Group for `support@`, since a Group is
+  free, needs no licence, and can include external addresses so Lauren could work it without a seat;
+  and the Workspace tier and seat count.
+
 ---
 
 ## 10. Open questions / TODO
@@ -3307,8 +3364,12 @@ every line here as unproven until a screenshot says otherwise. The dev store
   validated against real landed costs (Standard §12.3); real catalog data + photography;
   3PL not selected (blocks the no-waste Promise copy, and the transit/$8.50 claims); email
   platform not chosen (win-back, abandoned-cart, 60-day-grace campaigns all assume one);
-  info@ / support@ mailboxes not created (POC9's contact routing needs them); and the legal
-  pages checkout requires (privacy, terms, refund, shipping) do not exist anywhere in the repo.
+  and the legal pages checkout requires (privacy, terms, refund, shipping) do not exist
+  anywhere in the repo. **The mailboxes are CLOSED (2026-08-22)** — this line used to say
+  "info@ / support@ mailboxes not created", which was wrong about info@ and is now wrong
+  about all three: company email is Google Workspace, and `info@`, `support@` and `contact@`
+  all exist as aliases on `steve.roberts@cremaitalia.com`. POC9's contact routing is
+  unblocked. See the 2026-08-22 §9 entry.
 
 - [ ] **DESIGN: Roaster Onboarding and Product Onboarding as two distinct processes** (Steve,
   2026-08-21) — see `docs/production_build_spec.md` §15. **Roaster Onboarding** (courting to signed,
