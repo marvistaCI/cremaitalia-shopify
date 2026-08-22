@@ -73,9 +73,21 @@
       var oldRoast = p.roast_date;
       p.roast_date = isoDay(Date.parse(oldRoast) + shift);
       if (p.best_by) p.best_by = isoDay(Date.parse(p.best_by) + shift);
-      // The Offerta blurb quotes its own roast date in prose; keep the two in step.
-      if (p.blurb) p.blurb = p.blurb.split(oldRoast).join(p.roast_date);
     });
+    // POC26: a blurb-rewrite used to live here, because one fixture blurb ended
+    // "Roasted 2026-05-30." and the rebase had to keep the prose in step with the field.
+    // The sentence is gone and the hack with it. WHY IT MATTERED, so it is not recreated:
+    //   - it printed an ISO date, against Standard §5.4's "DD-MMM-YYYY wherever a date is shown";
+    //   - it printed a roast date AT ALL on an Offerta product, which v1.13 retired in favour of a
+    //     computed band, so the card and the detail view disagreed on the same screen;
+    //   - and the two could never agree by construction, because the band is derived from POLICY
+    //     (today minus the windows) while roast_date is derived from the REBASE (freshest = 10 days
+    //     old), which necessarily dragged the Offerta lot inside the fresh window. The card claimed
+    //     32 days where its own detail page said 91 to 150.
+    // The convention for a blurb is: tasting notes as a sentence, plus at most one DISTINGUISHING
+    // FACT - "Natural process.", "Panama micro-lot.", "A signature blend." Every one of those holds
+    // still. A blurb must never carry a fact that changes with time; those belong in fields, where
+    // the render layer can format them to the Standard.
   }
 
   var FLAVOR_LABEL = { fruit: 'Fruit & Floral', sweet: 'Sweet & Chocolate', terroir: 'Bold & Spiced', any: '' };
