@@ -3136,16 +3136,24 @@ when resuming.**
 | Prior preview | "Crema Italia POC19 Preview" | `152017764521` |
 | Prior preview | "Crema Italia POC18 Preview" | `152016912553` |
 
-**Scorecard: 7.4/10 as of 2026-08-19** — the deployed storefront has been scored three times
-against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16). **Trust & social proof has
-scored 3.5 in all three passes** and is the only dimension that has never moved; it is the next
-batch's subject. Brief: `docs/trust-and-social-proof-brief.md` (marked SUPERSEDED 2026-08-20 — the
+**Scorecard: 7.9/10 as of 2026-08-22 (POC20)** — the deployed storefront has been scored five times
+against one rubric, 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20).
+**Trust & social proof moved 3.5 → 6.5 at POC17**, the largest single-dimension move in the project,
+after scoring 3.5 in the first three passes. **POC20 did not move the overall, and should not have** —
+POC18-20 were correctness work (a wrong number removed from two homes, a display replaced because it
+could lie, badly authored fixture data corrected), and the rubric measures what a visitor experiences.
+Only Copy & editorial voice moved, 9.0 → 9.5. Full pass: `docs/POC20_rescore.md`, which also carries
+**the rubric as a reusable prompt** so the next pass uses the same ten dimensions and the same
+guards. Brief: `docs/trust-and-social-proof-brief.md` (marked SUPERSEDED 2026-08-20 — the
 decisions were made; policy now lives in Store Operating Standards §13).
 
-> **That 7.4 is the score of POC16, not of what is deployed now.** POC17 shipped the trust work the
-> 3.5 was measuring the absence of, so the figure is stale in the one dimension it was flagging.
-> A re-score against POC17 is the next task (Steve, 2026-08-20) and is expected to be **the last one
-> before real photography**, since brand identity and product detail are gated on it.
+> **Corrected 2026-08-22.** This block said *"7.4 as of 2026-08-19"* and *"a re-score against POC17
+> is the next task"* — but that re-score ran on 2026-08-20 and scored **7.9**, so the authoritative
+> state block was a full pass behind, which is the exact drift class it exists to prevent. Both
+> figures are now current. **Two findings are open and carried across three passes**: N4, the rating
+> count link is a 65x24 tap target against this project's own 44px standard, and N5, `#pd-sub` has no
+> accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
+> gate** on brand identity and product detail rising above 9.
 
 **POC20 is deployed** and is the only POC20 theme — all **38** files byte-match the repo, proved by
 pull-and-diff on 2026-08-22 (both sides 38 files, zero content mismatches, nothing present on only
