@@ -3390,12 +3390,15 @@ POC18 and POC19 previews and the live theme are untouched. Preview:
 (open in a real browser — a `curl` of a `preview_theme_id` link is NOT a valid check, see §9
 2026-07-06). To refresh: `shopify theme push --theme 152029167785`.
 
-**Only POC19, POC20 and POC21 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
-enforced as `crema-poc-deploy` Step 5. **POC18 (`152016912553`) was deleted 2026-08-22** on Steve's
+**Only POC20, POC21 and POC22 previews now exist** — at the three-newest cap Steve set on 2026-08-06,
+enforced as `crema-poc-deploy` Step 5. **POC19 (`152017764521`) was deleted 2026-08-22** on Steve's
 explicit go, id/name/role re-verified against a live `theme list --json` in the same breath as the
-delete; its batch is on `origin/main` and redeployable. Earlier the same day: **POC17
-(`152003018921`) was deleted** on Steve's
-explicit go, after computing the keep/prune split from a live `theme list --json` rather than by eye
+delete and the delete run **after** the POC22 push was proven by pull-and-diff; its batch is commit
+`502b885` on `origin/main` and redeployable. The Step 6.4 sweep found exactly one surviving reference
+to the dead id, a §9 line in past tense describing the day it was deployed — narrative, which is
+*supposed* to name a dead id, so it was left alone. Earlier the same day: **POC18 (`152016912553`)
+was deleted**, id/name/role re-verified the same way; and **POC17
+(`152003018921`)**, after computing the keep/prune split from a live `theme list --json` rather than by eye
 and re-verifying its id, name and role immediately before the delete; its batch is commits
 `318ea7e`..`5e71413`, on `origin/main`, so it is redeployable. The delete ran **after** the POC20 push
 was proven by pull-and-diff, per the skill — never remove a preview until its replacement exists.
@@ -3403,7 +3406,7 @@ Earlier deletions: POC16 (`151983030441`) on 2026-08-21; POC15 (`151970840745`) 
 (`151798841513`) on 2026-08-19; POC11 (`151797727401`) and POC13 on 2026-08-18; POC10 (`151624024233`)
 and POC4–POC9 on 2026-08-06; the erroneous POC9 duplicate `151615373481` on 2026-07-25.
 
-**What POC19 is:** the freshness copy pass (commit `502b885`), built against Standards **v1.13 and
+**What POC19 was:** the freshness copy pass (commit `502b885`), built against Standards **v1.13 and
 v1.14**, which were amended *first* so the build could not contradict them. Offerta shows a **computed
 band** — *"Roasted between 24-MAR-2026 and 22-MAY-2026"* — rather than a roast date, because an Offerta
 product can hold more than one lot on a slow mover and a single date is only mostly honest. Main
