@@ -470,6 +470,19 @@ a:focus-visible {
 }
 .ci-footer__links a:hover { color: var(--ci-crema); }
 
+/* Policy row, added 2026-08-22. Quieter than the row above it - smaller, and set at the muted
+   value rather than inherited - because these are fine print and the row above is not. It is a
+   second <ul> rather than more <li>s in the first so the two groups cannot reflow into each
+   other on a narrow screen. */
+.ci-footer__legal {
+  margin-top: 0.55rem;
+  gap: 1rem;
+}
+.ci-footer__legal a {
+  font-size: 0.72rem;
+  opacity: 0.85;
+}
+
 /* ── 11. Password Page Chrome ────────────────────────────── */
 /* Hide Shopify's default password-page elements if they leak in. */
 

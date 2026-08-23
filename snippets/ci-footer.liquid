@@ -9,9 +9,28 @@
     <div class="tricolore-rule" aria-hidden="true"></div>
     <p class="ci-footer__line">Crema Italia, LLC &middot; Lutz, Florida, USA &middot; cremaitalia.com</p>
     <ul class="ci-footer__links">
-      <li><a href="/policies/privacy-policy">Privacy Policy</a></li>
       <li><a href="mailto:info@cremaitalia.com">Contact</a></li>
       <li><a href="https://instagram.com/cremaitaliaco" target="_blank" rel="noopener noreferrer">@cremaitaliaco</a></li>
+    </ul>
+    {%- comment -%}
+      Policy links, added 2026-08-22. Four policies were published that day and this footer linked
+      only Privacy - so the other three were reachable on the real domain by typing the URL and by
+      no other route. Shopify links all of them from the CHECKOUT footer automatically, but nobody
+      reaches checkout from a coming-soon page.
+
+      Two deliberate choices, both matching what the POC storefront footer does:
+        - They sit in their OWN quieter row rather than joining Contact and Instagram. These are
+          fine print; those two are things a visitor might actually want.
+        - Contact information is included even though Shopify marks it a "policy": it carries the
+          legal name and physical address, which is the merchant-identity disclosure a visitor
+          handing over an email address has most reason to want.
+    {%- endcomment -%}
+    <ul class="ci-footer__links ci-footer__legal">
+      <li><a href="/policies/privacy-policy">Privacy</a></li>
+      <li><a href="/policies/terms-of-service">Terms</a></li>
+      <li><a href="/policies/shipping-policy">Shipping</a></li>
+      <li><a href="/policies/refund-policy">Returns</a></li>
+      <li><a href="/policies/contact-information">Contact information</a></li>
     </ul>
   </div>
 </footer>
