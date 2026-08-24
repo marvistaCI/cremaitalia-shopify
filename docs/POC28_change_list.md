@@ -1,10 +1,11 @@
-# POC28 — the shipping repricing reaches the cart (STAGED, not deployed)
+# POC28 — the shipping repricing reaches the cart
 
 **Deployment state is NOT recorded here.** `CLAUDE.md` §10 CURRENT STATE is authoritative.
 
-**Status: built and committed, NOT deployed.** Steve's call, 2026-08-24: fold it into the next
-batch rather than deploy a two-constant change on its own. This file is the ledger so the work is
-not lost between now and whenever that batch happens.
+This file is the build record. It was written while the batch was staged, on Steve's call to
+fold the repricing into a batch rather than deploy a two-constant change on its own. The
+"Verification when this deploys" section below is retained as the checklist that was actually
+run, not as a pending item.
 
 ---
 

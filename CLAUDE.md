@@ -3455,12 +3455,95 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   Steve pastes into Settings → Policies. Also still open: `docs/legal/README.md` carries the old
   figures, and the POC cart holds `FREE_SHIP_THRESHOLD = 55` plus a **bare `8.5` literal** — itself a
   build-spec §11 violation, a commercial rule shipped as a number in code.
+  **[Both closed the same day.** `docs/legal/README.md` turned out **not** to need fixing on reading
+  it - line 112 describes what the *now-deleted* POC shipping page contained, which is narrative, not
+  a statement of policy. The POC cart was fixed in `c91ee87` and deployed as POC28, below. The
+  published policy page is still outstanding and is Steve's paste.**]
+
+- 2026-08-24 — **Steve's provisional-values rule, and it retired work I had just done - which is the
+  evidence it is right.** While recording the v1.16 changes I annotated six freshness sites with
+  *"Until v1.16 this read X"*, wrote *"was $55 / $8.50"* into the §8 rule statement, and framed the
+  benchmark as *"we were at the 20th percentile"*. Steve stopped it: *"We're not live... why do we
+  care that it was once $55? Making the change to $69 won't result in testable outcomes. Instead, if
+  we indeed go live at $69 - then we'll have a data point worth retaining should we change it in the
+  future."*
+  **He is right, and the principle generalises past shipping: history is worth keeping when someone
+  ACTED on it.** A price a customer paid is a fact you may have to answer for. A superseded draft
+  nobody transacted under is just a draft. Nobody ever shipped under $55/$8.50 and no coffee was ever
+  donated at 60 days, so annotating every site turned the Standard into a **narration of its own
+  bugs** - and the version changelog and the archive row already carry what moved, read once, in one
+  place. All of it stripped from the body; the freshness failure is now stated **once**, in §5.5, as
+  the reason the rule exists rather than at every site it touches.
+  **Recorded as a standing rule in three places**, weighted so it cannot be missed: a callout at the
+  **top of the Store Operating Standards**, before the changelog, because it qualifies every number
+  below it; **§12.13**, which is the one §12 item that **cannot close at the production build** -
+  it closes in the window between build-complete and go-public; and the **CLAUDE.md pointer block**,
+  which loads every session. *While we are in the POC process and before launch, every number is a
+  modelling placeholder. Good enough to build and reason against; not good enough to charge money
+  against. Nothing acquires authority by having been written down, versioned and rendered to a PDF.*
+  **Two guardrails so it cannot be misread in either direction.** It does **not** license leaving
+  contradictions in place - a value disagreeing with another value is a defect at any stage, because
+  we reason against these numbers now. It **does** mean *"we already decided that"* is never an
+  argument against re-examining a number before launch: the decision log records what we chose, it
+  does not make the choice correct.
+  **The gap this exposed is §8.3**, which did not exist. §8 stated shipping rates as if permanent,
+  with **no review rule at all**, while §5.4 has explicit governance for freshness. §8.3 now sets the
+  review triggers (annual carrier GRI, mid-year surcharges, 3PL change), names the **threshold** as
+  the lever that moves first rather than the flat rate (threshold moves lift AOV and read as normal
+  merchant variation; flat-rate moves are the visible price of shipping and cost conversion on
+  exactly the small first orders we want), and records that **the exposure is weight and zone, not
+  dollars** - the worst cell being a cart that *just clears* the threshold while heavy and going far.
+  **And the finding underneath it, folded into §12.3:** `SKU_LAST_COST` is **inbound** landed cost -
+  EUR price plus freight, tariff and handling to the warehouse. **Outbound shipping to the customer
+  appears nowhere in the pricing formula**, yet we absorb it on every subscription shipment and every
+  order above the threshold. The matrix does not overstate margin by a rounding error; it omits a
+  cost line that scales with volume.
+
+- 2026-08-24 — **POC28 deployed: the shipping repricing reaches the cart, and a literal that should
+  never have been one.** Ledger: `docs/POC28_change_list.md`. `FREE_SHIP_THRESHOLD` moved 55 -> 69 to
+  match Standard v1.16 - but **the flat rate had never been a constant at all.** It was a bare `8.5`
+  sitting inline in the cart summary math, which build spec §11 prohibits. **The asymmetry is the
+  lesson:** the threshold was findable by name and the flat rate was not, so a sweep for one could
+  never surface the other, and the two would drift apart silently. Both are now named constants
+  pointing at the Standard section that owns them, with a `PROD:` note that in production they come
+  from Shopify shipping profiles rather than the theme. A `templates/index.liquid` comment naming the
+  old threshold as spec-locked now names **neither** number - a comment restating a commercial rule
+  is a second home for that rule.
+  **Deliberately not modelled:** the contiguous-U.S. carve-out and the after-discount threshold
+  basis. Both are Shopify shipping-profile and checkout behaviour the POC does not own
+  (`production_build_spec.md` §0), and the POC's single unified shipping estimate is a testing aid,
+  not a model of the rate engine.
+  **DEPLOYED** via the `crema-poc-deploy` skill to a NEW unpublished theme **"Crema Italia POC28
+  Preview" (id `152051744937`)**: `theme list` + `git log origin/main..HEAD` run **first** (no POC28
+  existed, no duplicate names, zero unpushed), validation at the documented baseline (**15 offenses /
+  0 errors / 0 new**), then **pull-and-diff proved** the push - both sides **38** files, zero content
+  mismatches, nothing on only one side, exactly one theme of that name. The diff also asserted the
+  batch content **on the deployed theme** rather than the repo: `FREE_SHIP_THRESHOLD = 69`,
+  `FLAT_SHIP_RATE = 12.5`, zero occurrences of the old 55 threshold, zero bare `8.5` literals, zero
+  stale `$55` comments, five policy links in `ci-footer.liquid`. Commit `c91ee87`.
+  **Commit `2b80122` rode along** because `snippets/ci-footer.liquid` and `assets/crema-italia.css`
+  sit in the repo root and go out with any theme push. Harmless on a preview - the POC storefront
+  renders `ci-store-footer.liquid` while `ci-footer.liquid` serves `password.liquid` and
+  `404.liquid`. **Its real destination is the LIVE theme and that push has NOT happened**; the
+  classifier denied it this session. Deploying POC28 does not discharge it, and §10 says so.
+  **Two stale state claims corrected in the same pass**, both found by doing the ritual rather than
+  by looking for them: §10's own header still read **"CURRENT STATE - POC25"** three deploys later,
+  and `docs/POC28_change_list.md` carried a **"Status: NOT deployed"** banner that the deploy made
+  false - precisely the class of stale banner that produced the 2026-07-24 duplicate theme.
+  **Coordination incident worth recording.** A concurrent Code session ran a broad `git add` at
+  10:58:50 and swept this session's uncommitted Standard edits into **its** commit, `c80d3fe`, whose
+  message is about the deploy skill. Nothing was lost - content intact, working tree matched HEAD,
+  the render was newer than the source and still md5-matched OneDrive - but 103 lines of Store
+  Operating Standards changes now sit under a commit message about something else. Already pushed and
+  another session was live, so it was **not** rewritten. This is the exact hazard the 2026-07-04
+  two-sessions rule names: never run broad `git add` commands that can touch files another session
+  owns.
 
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC25 (deployed + pull-and-diff proved 2026-08-22) — read this first
+**▶ CURRENT STATE — POC28 (deployed + pull-and-diff proved 2026-08-24) — read this first
 when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
@@ -3485,19 +3568,19 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC27 Preview" | `152030412969` |
+| **Newest POC preview** | "Crema Italia POC28 Preview" | `152051744937` |
+| Prior preview | "Crema Italia POC27 Preview" | `152030412969` |
 | Prior preview | "Crema Italia POC26 Preview" | `152030347433` |
-| Prior preview | "Crema Italia POC25 Preview" | `152030281897` |
 
-> ⚠ **DRIFT: the repo has moved AHEAD of the deployed POC27 preview (2026-08-24).** Two commits
-> touch theme files since POC27 went out, so a preview link is **not** the repo:
-> **`c91ee87`** repriced the POC cart to the v1.16 shipping pair ($69 / $12.50) - the deployed
-> preview still computes the retired **$55 / $8.50** - and **`2b80122`** added the policy links to
-> the coming-soon footer. **Steve's call: fold both into the next POC batch** rather than deploy a
-> two-constant change on its own. Ledger: `docs/POC28_change_list.md`. **This warning goes out with
-> the deploy that resolves it**, not later. Note `2b80122`'s real destination is the **live** theme
-> (`150557294761`), a separate scoped push that the classifier blocked on 2026-08-24 and which is
-> **still outstanding** - deploying POC28 does not discharge it.
+> **The live theme is still one scoped push behind (2026-08-24).** Commit **`2b80122`** links the
+> five policies from the **coming-soon** footer, and it rode out to POC28 because
+> `snippets/ci-footer.liquid` sits in the repo root - but its real destination is the **live** theme
+> (`150557294761`), and that push has **not** happened. The classifier denied it on 2026-08-24 and
+> it needs Steve's hands:
+> `shopify theme push --theme 150557294761 --only snippets/ci-footer.liquid --only assets/crema-italia.css --allow-live`.
+> Until it runs, cremaitalia.com's footer links **only** Privacy, and the other four policies are
+> reachable on the real domain by typing the URL and by no other route. **Deploying a POC does not
+> discharge this.**
 
 **Scorecard: 8.3/10 as of 2026-08-22 (POC24)** — the deployed storefront has been scored six times
 against one rubric: 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20) →
@@ -3521,7 +3604,29 @@ a real cart, and real customers; none is code.
 > accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
 > gate** on brand identity and product detail rising above 9.
 
-**POC27 is deployed** and is the only POC27 theme - 38 files byte-match the repo, proved by
+**POC28 is deployed** and is the only POC28 theme - **38 files byte-match the repo**, proved by
+pull-and-diff (zero content mismatches, nothing on only one side; `theme list` and
+`git log origin/main..HEAD` run **first**, no collision). Validation at the documented baseline
+(**15 offenses / 0 errors / 0 new**). Batch content asserted **on the deployed theme**:
+`FREE_SHIP_THRESHOLD = 69`, `FLAT_SHIP_RATE = 12.5`, zero occurrences of the old 55 threshold, zero
+bare `8.5` literals, zero stale `$55` comments, and five policy links in `ci-footer.liquid`.
+
+**What POC28 is:** the v1.16 shipping repricing reaching the cart, and a literal that should never
+have been one. `FREE_SHIP_THRESHOLD` moved 55 -> 69 - but the flat rate had **never been a constant
+at all**, it was a bare `8.5` inline in the summary math, which is a commercial rule shipped as a
+literal (build spec §11 prohibits exactly this). That asymmetry is the interesting part: the
+threshold was findable by name and the flat rate was not, so a sweep for one could never surface the
+other. Both are now named constants pointing at the Standard section that owns them, and a `PROD:`
+note records that in production they come from Shopify shipping profiles rather than the theme. A
+`templates/index.liquid` comment that named the old threshold as spec-locked now names **neither**
+number - a comment restating a commercial rule is a second home for it. **Deliberately not modelled:**
+the contiguous-U.S. carve-out and the after-discount threshold basis, both of which are Shopify
+shipping-profile and checkout behaviour the POC does not own (`production_build_spec.md` §0). Commit
+`c91ee87`; ledger `docs/POC28_change_list.md`. Commit **`2b80122`** rode along because it touches
+repo-root files - harmless on a preview, since the POC storefront renders `ci-store-footer.liquid`
+while `ci-footer.liquid` serves `password.liquid` and `404.liquid`.
+
+**What POC27 was:** it is the only POC27 theme - 38 files byte-match the repo, proved by
 pull-and-diff (zero content mismatches, nothing on only one side; `theme list` and
 `git log origin/main..HEAD` run **first**). Batch content asserted on the deployed theme: the Sorpresa
 size reads `300g`, `price_unit` is gone from all 17 products, no blurb carries a date, POC25's skip
