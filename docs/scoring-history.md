@@ -1,6 +1,6 @@
 # Storefront scoring history
 
-**The version-controlled record of every audit pass.** Five passes, one rubric, ten dimensions, equal
+**The version-controlled record of every audit pass.** Six passes, one rubric, ten dimensions, equal
 weights, unchanged throughout — which is the entire reason the numbers are comparable.
 
 **Why this file exists.** The first four passes were published only as artifacts on claude.ai. They
@@ -8,29 +8,32 @@ were not in the repo, not backed up to GitHub, and not diffable — a scoring hi
 service. This file is the durable record. The artifacts remain the *rendered* versions and are linked
 per pass; nothing here depends on them being reachable.
 
-> **The rubric itself, as a reusable prompt, lives in `docs/POC20_rescore.md`** — including the six
-> measurement traps this project has actually hit. Do not re-derive it; paste it.
+> **The rubric lives in the `crema-storefront-score` skill** (`.claude/skills/crema-storefront-score/`)
+> — the ten dimensions, the equal weighting, the **seven** measurement traps this project has
+> actually hit, and the contract requiring every report to publish the prompt it ran. **Resolve it
+> from there,** not from a previous report. `docs/POC20_rescore.md` carried it until 2026-08-24 and
+> its copy is now frozen — the seventh trap was earned at P24 and had never reached it.
 
 ---
 
 ## The table
 
-| Dimension | P13 | P15 | P16 | P17 | P20 |
-|---|---|---|---|---|---|
-| Brand identity & visual craft | 8.5 | 9.0 | 9.0 | 9.0 | 9.0 |
-| Copy & editorial voice | 7.5 | 8.5 | 9.0 | 9.0 | **9.5** |
-| Product detail quality | 8.0 | 8.5 | 8.5 | 9.0 | 9.0 |
-| Value proposition clarity | 4.0 | 6.5 | 8.0 | 8.0 | 8.0 |
-| Mobile experience | 7.0 | 7.0 | 8.0 | 8.0 | 8.0 |
-| Technical SEO & performance | 4.0 | 7.0 | 7.5 | 8.0 | 8.0 |
-| Accessibility | 2.0 | 7.0 | 7.5 | 7.5 | 7.5 |
-| Conversion mechanics | 3.5 | 5.5 | 6.5 | 7.0 | 7.0 |
-| Navigation & information architecture | 6.0 | 6.0 | 6.5 | 6.5 | 6.5 |
-| Trust & social proof | 3.5 | 3.5 | 3.5 | **6.5** | 6.5 |
-| **Overall** | **5.4** | **6.9** | **7.4** | **7.9** | **7.9** |
+| Dimension | P13 | P15 | P16 | P17 | P20 | P24 |
+|---|---|---|---|---|---|---|
+| Brand identity & visual craft | 8.5 | 9.0 | 9.0 | 9.0 | 9.0 | 9.0 |
+| Copy & editorial voice | 7.5 | 8.5 | 9.0 | 9.0 | **9.5** | 9.5 |
+| Product detail quality | 8.0 | 8.5 | 8.5 | 9.0 | 9.0 | 9.0 |
+| Value proposition clarity | 4.0 | 6.5 | 8.0 | 8.0 | 8.0 | **8.5** |
+| Mobile experience | 7.0 | 7.0 | 8.0 | 8.0 | 8.0 | **8.5** |
+| Technical SEO & performance | 4.0 | 7.0 | 7.5 | 8.0 | 8.0 | 8.0 |
+| Accessibility | 2.0 | 7.0 | 7.5 | 7.5 | 7.5 | **8.0** |
+| Conversion mechanics | 3.5 | 5.5 | 6.5 | 7.0 | 7.0 | **7.5** |
+| Navigation & information architecture | 6.0 | 6.0 | 6.5 | 6.5 | 6.5 | **7.0** |
+| Trust & social proof | 3.5 | 3.5 | 3.5 | **6.5** | 6.5 | **7.5** |
+| **Overall** | **5.4** | **6.9** | **7.4** | **7.9** | **7.9** | **8.3** |
 
-**Stated ceiling: 8.5.** Roughly 0.6 remains, and all of it now needs a photographer, a lawyer, a
-design decision, or a customer.
+**Stated ceiling: 8.5.** After P24 roughly **0.2** remains, and all of it needs a photographer, a
+real cart, or a customer. Nothing cheap and contained is left.
 
 **Scored on the mechanism, not the proof** (Steve's standing direction): whether the mechanism is
 right and shipped, rather than what a visitor can see today. The store is pre-launch, the catalogue is
@@ -210,23 +213,35 @@ overflow and did not.
 | F9 | P13 | **Partial** — `Product`/`aggregateRating` deliberately absent until per-product URLs exist |
 | F10 | P13 | Closed in POC16 — the meta description moved out of the Shopify admin into the theme |
 | N3 | P15 | Open — the temporary product shot; tracked in `docs/photography-todo.md` |
-| N4 | P17 | **Open** — 65 × 24 tap target against a 44px standard |
-| N5 | P17 | **Open** — `#pd-sub` has no accessible name |
-| N6 | P20 | **Open** — green used as a fill and as body colour |
+| N4 | P17 | **Closed in POC24** — padded to 44px at zero layout cost |
+| N5 | P17 | **Closed in POC23** — `aria-labelledby` plus `aria-describedby` onto the renewal terms |
+| N6 | P20 | **Open** — green used as a fill and as body colour; arguably a gap in the rule |
+| F1 | P24 | **Closed in POC25** — skip link added; WCAG 2.4.1 Level A now met |
+| F2 | P24 | **Open** — no human screen-reader pass has ever been run |
+| F3 | P24 | **Open** — 76 simulated buttons; a durability risk, not a defect a user meets |
+| F4 | P24 | **Open** — privacy is still Shopify's automated policy |
 
-**And the one that predates all of them:** the **legal pages** — privacy, terms, refund, shipping —
-have been launch-gating since July and are named in every pass since. The cheapest item on the board
-and the only one nobody had started.
+**And the one that predated all of them is CLOSED.** The **legal pages** — privacy, terms, refund,
+shipping — were launch-gating since July and named in every pass. Steve published them on
+**2026-08-22**, verified live by fetching the URLs, and POC22 linked all four from the footer. It
+was the largest single trust item on the board, and it was never a code problem.
 
 ---
 
-## What is left between 7.9 and 8.5
+## What is left between 8.3 and 8.5
 
-- **Real photography** — gates brand identity and product detail above 9
-- **The legal pages** — the largest single trust item
-- **The IA question** — five passes, unresolved; a design debate rather than a fix
-- **Semantic markup and a formal accessibility pass** — 76 `div onclick` elements reachable but
-  announcing poorly; no contrast or screen-reader pass run end to end
-- **Real reviews** — not a build task; the mechanism waits on customers
+- **Real photography** — gates brand identity and product detail above 9. Three `ci-temp-*`
+  stand-ins remain, two of which cannot ship for recorded reasons
+- **A real cart** — holds conversion mechanics at about 7.5; the entitlement architecture is
+  decided (Store Operating Standards §11) and unbuilt
+- **Real customers** — holds trust at about 7.5; the mechanism is built and waits
+- **A human screen-reader pass** — everything measured to date is computed from the
+  accessibility tree, which cannot judge reading *order*
 
-*Nothing cheap and contained remains.*
+*Nothing cheap and contained remains, and the storefront stopped being the constraint several
+batches ago.*
+
+> **Two items that stood on this list for five passes are gone, and neither was fixed — both were
+> WITHDRAWN as false** once tested for the first time: the shelf/IA question, and "76 `div onclick`
+> elements announce poorly." See Pass 6. **The claims that survived untouched across passes were
+> the ones nobody had ever measured.**

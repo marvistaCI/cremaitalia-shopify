@@ -3748,6 +3748,62 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   Logged to `DECISIONS_LOG.md` 2026-08-24 with the application left **open** against Cowork, and a
   standing follow-up for Code to diff the result against the baseline when it lands.
 
+- 2026-08-24 — **Measurement became a skill, and the reason is that the rubric had been living in a
+  report (Steve).** Six scoring passes ran between 2026-08-18 and 2026-08-22 — POC13 5.4, POC15 6.9,
+  POC16 7.4, POC17 7.9, POC20 7.9, POC24 8.3 — on ten dimensions with equal weights never altered.
+  **The instrument worked; the way it was stored did not**, and it failed in the three ways this
+  project keeps logging.
+  **(1) Six reports were published without the prompt that drove them.** Scores visible, method not,
+  so no pass was auditable and none reproducible without opening a different document. **(2) A
+  pointer went stale inside one pass.** `docs/POC20_rescore.md` closed by telling the next scorer to
+  paste its own block; `docs/scoring-history.md` pointed at that file; `CLAUDE.md` §10 still reported
+  a score one full pass behind. Three homes, three states. **(3) A trap lived in exactly one
+  document** — the **CAPTURE CROP** trap was earned at P24 and written only into
+  `docs/POC24_rescore.md`, whose rubric section said "unchanged from the P20 pass." **So the block a
+  scorer would actually resolve had six traps where seven had been learned**, and resolving it the
+  documented way could never have surfaced the seventh. Verified before fixing: `grep -c` returned 1
+  in POC24 and 0 everywhere else.
+  **The fix is `.claude/skills/crema-storefront-score/` (commit `fde129a`), and it is now the only
+  source.** It carries the ten dimensions and equal weighting as immutable, the 8.5 ceiling with a
+  table of what holds it there, Steve's standing *score the mechanism, not the proof* direction, and
+  the merged eight-step rubric. **Two edits were made to the block, the only two ever made:** STEP 5
+  gained the seventh trap, placed with the other rendering traps; STEP 8 gained the report contract
+  and lost a stale "five-pass table" phrase that would have been wrong at the next pass. Both are
+  disclosed at every site rather than silently absorbed.
+  **The REPORT CONTRACT is the durable half.** Every pass now ends with a section titled *"The prompt
+  that drove this measurement"* carrying the fully resolved prompt **verbatim and complete** — not a
+  pointer, not a delta, not "unchanged from the previous pass" — plus the skill commit SHA and date,
+  plus any trap the pass earned, **merged back into the skill in the same commit**. Same commit is
+  the whole point: a delta that lives only in a report is precisely failure (3). Applied
+  retroactively to `docs/POC24_rescore.md`, whose pointer body it replaces.
+  **A second rule came out of the same gap: no scorecard artifact is published without its source
+  committed.** Six artifacts had been published across the series and **not one had an editable
+  source anywhere** — renders with no source, which is the exact failure
+  `crema-italia-pdf-builder` exists to prevent. `docs/POC24_scorecard.html` is the first, and only
+  the last artifact was in scope; the earlier five are left alone.
+  **Byte-identity is verified by diffing, never by eye**, across skill, report and artifact. One
+  wrinkle worth carrying: four dimension names contain `&`, so the HTML block needs `&amp;` escaping
+  and the check must **decode before comparing** — a raw byte diff of the HTML against the markdown
+  would fail on a page that is in fact correct.
+  **`docs/POC20_rescore.md` is FROZEN, not deleted.** Its copy of the block was made byte-identical
+  to the skill and carries a provenance note saying plainly that both edits postdate the pass, so it
+  is not read as what P20 knew. `docs/scoring-history.md` had its header corrected (it said *"Five
+  passes"* above six), its rubric pointer repointed at the skill, and — **found while fixing those,
+  not flagged in the handoff** — its tail sections reconciled: the P24 column was missing from the
+  table entirely, the open-findings table still listed N4 and N5 as **Open** when Pass 6 in the same
+  file records both closed, the legal pages were still described as *"the only one nobody had
+  started"* two days after Steve published them, and the closing section was scored against 7.9 while
+  carrying two findings Pass 6 had withdrawn. **A document contradicting itself is a defect at any
+  stage**, and this one contradicted itself about the very pass it had just documented.
+  **Not done, and it is the one open item:** the artifact could not be republished because the
+  publish requires a favicon and the existing one is shell metadata, unreadable from the page —
+  `WebFetch` returns the iframe, which does not carry it. Steve's instruction was explicitly to keep
+  it unchanged (he navigates by tab icon), so it was asked rather than guessed. **The artifact WAS
+  readable**, which the handoff warned it might not be: the allowlist wall Cowork hit
+  (`*.frame.claudeusercontent.com`) does not apply here, so the existing design was edited rather
+  than rebuilt blind.
+  **Cowork is logging this to `DECISIONS_LOG.md` directly** — Code did not write that file, per lane.
+
 ---
 
 ## 10. Open questions / TODO
@@ -3790,6 +3846,8 @@ when resuming.**
 against one rubric: 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20) →
 **8.3 (POC24)**. Full pass: `docs/POC24_rescore.md`; series: `docs/scoring-history.md`; artifact:
 https://claude.ai/code/artifact/25207561-daea-4408-aa79-f39960d65446
+**The rubric itself now lives in the `crema-storefront-score` skill** — resolve it from there,
+never from a previous report, and publish it back in the report per the skill's contract.
 **The largest gain is not code** — Trust & social proof 6.5 → 7.5 because Steve published the four
 legal policies, closing the item the first audit called the largest trust gap on the board.
 **Two carried findings were WITHDRAWN** after being tested for the first time: the shelf/IA claim

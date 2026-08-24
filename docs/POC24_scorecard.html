@@ -1,0 +1,415 @@
+<title>Storefront Scorecard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root{
+    --cream:#FBF8F1; --ivory:#FFFFFF; --espresso:#55331B; --soft:#6B4A38;
+    --gold:#B88348; --gold-text:#94693A; --gold-light:#E9AB6E;
+    --green:#0E7A3A; --red:#C8342B; --hair:#D9D2C2; --mute:#7D705E;
+    --ink:#55331B; --page:#FBF8F1; --card:#FFFFFF;
+    --shadow:0 1px 2px rgba(85,51,27,.05);
+    --display:"Marcellus","Georgia",serif;
+    --body:"Inter","Helvetica Neue",Arial,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --cream:#191410; --ivory:#211A15; --page:#191410; --card:#211A15;
+      --espresso:#F0E7DA; --ink:#F0E7DA; --soft:#C9B7A5;
+      --hair:#3A2E25; --mute:#A69884;
+      --gold:#D9A263; --gold-text:#E0AE73; --gold-light:#E9AB6E;
+      --shadow:0 1px 2px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --cream:#191410; --ivory:#211A15; --page:#191410; --card:#211A15;
+    --espresso:#F0E7DA; --ink:#F0E7DA; --soft:#C9B7A5;
+    --hair:#3A2E25; --mute:#A69884;
+    --gold:#D9A263; --gold-text:#E0AE73; --gold-light:#E9AB6E;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--page); color:var(--ink);
+    font-family:var(--body); font-size:16px; line-height:1.6;
+    margin:0; padding:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  .flag{display:flex;height:2px}
+  .flag i{flex:1}
+  .flag i:nth-child(1){background:var(--green)}
+  .flag i:nth-child(2){background:var(--cream)}
+  .flag i:nth-child(3){background:var(--red)}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px 96px}
+  header.masthead{padding:56px 0 40px;border-bottom:1px solid var(--hair);margin-bottom:40px}
+  .eyebrow{
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold-text);font-weight:600;margin:0 0 14px;
+  }
+  h1{
+    font-family:var(--display);font-weight:400;
+    font-size:clamp(30px,5vw,46px);line-height:1.12;
+    margin:0 0 18px;text-wrap:balance;color:var(--ink);
+  }
+  .standfirst{font-size:17px;color:var(--soft);max-width:60ch;margin:0}
+
+  .score-hero{
+    display:flex;flex-wrap:wrap;align-items:baseline;gap:18px 28px;
+    margin:32px 0 0;padding:24px 26px;
+    background:var(--card);border:1px solid var(--hair);border-radius:10px;
+    box-shadow:var(--shadow);
+  }
+  .big{font-family:var(--display);font-size:64px;line-height:1;color:var(--gold-text)}
+  .big small{font-size:24px;color:var(--mute)}
+  .delta{
+    font-family:var(--mono);font-size:14px;font-weight:500;
+    color:var(--green);background:rgba(14,122,58,.10);
+    padding:5px 11px;border-radius:999px;
+  }
+  .score-hero p{margin:0;font-size:14px;color:var(--mute);flex:1 1 240px;min-width:220px}
+
+  h2{
+    font-family:var(--display);font-weight:400;font-size:26px;
+    margin:56px 0 6px;color:var(--ink);text-wrap:balance;
+  }
+  h2 + .sub{color:var(--mute);font-size:14px;margin:0 0 22px}
+  h3{font-size:15px;font-weight:600;margin:32px 0 8px;color:var(--ink)}
+  p{margin:0 0 16px}
+  strong{font-weight:600}
+  a{color:var(--gold-text)}
+
+  .callout{
+    border-left:3px solid var(--gold);
+    background:var(--card);border-radius:0 8px 8px 0;
+    padding:20px 24px;margin:0 0 28px;box-shadow:var(--shadow);
+  }
+  .callout.warn{border-left-color:var(--red)}
+  .callout p:last-child{margin-bottom:0}
+  .callout .label{
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    font-weight:600;color:var(--mute);margin:0 0 10px;
+  }
+
+  .tablewrap{overflow-x:auto;margin:0 0 28px;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--hair)}
+  th{
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--mute);font-weight:600;white-space:nowrap;
+  }
+  td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+  tr.total td{border-top:2px solid var(--hair);border-bottom:none;font-weight:600;padding-top:14px}
+  .now{color:var(--gold-text);font-weight:600}
+  .up{color:var(--green);font-family:var(--mono);font-size:13px}
+  .flat{color:var(--mute)}
+
+  /* score bar */
+  .bar{position:relative;height:6px;background:var(--hair);border-radius:3px;min-width:96px;width:96px}
+  .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--gold)}
+  .bar u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--soft);opacity:.55}
+
+  pre{
+    font-family:var(--mono);font-size:12.5px;line-height:1.65;
+    background:var(--card);border:1px solid var(--hair);border-radius:8px;
+    padding:18px 20px;overflow-x:auto;margin:0 0 28px;color:var(--ink);
+  }
+  .flagline{color:var(--red);font-weight:500}
+
+  ol.findings{list-style:none;counter-reset:f;padding:0;margin:0}
+  ol.findings li{
+    counter-increment:f;position:relative;padding:0 0 0 46px;margin:0 0 24px;
+  }
+  ol.findings li::before{
+    content:"F" counter(f);position:absolute;left:0;top:1px;
+    font-family:var(--mono);font-size:12px;font-weight:500;
+    color:var(--gold-text);border:1px solid var(--hair);
+    padding:3px 7px;border-radius:5px;background:var(--card);
+  }
+  ol.findings h4{margin:0 0 6px;font-size:15px;font-weight:600}
+
+  .gates{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin:0 0 28px}
+  .gate{background:var(--card);border:1px solid var(--hair);border-radius:8px;padding:16px 18px;box-shadow:var(--shadow)}
+  .gate .cap{font-family:var(--mono);font-size:20px;color:var(--gold-text);display:block;margin-bottom:4px}
+  .gate .what{font-size:13px;color:var(--mute);line-height:1.5}
+
+  /* provenance strip for the resolved prompt — mono metadata, not a card */
+  .resolved{
+    display:flex;flex-wrap:wrap;gap:6px 26px;margin:0 0 22px;
+    font-family:var(--mono);font-size:12.5px;color:var(--mute);
+  }
+  .resolved b{font-weight:500;color:var(--ink)}
+
+  footer{margin-top:64px;padding-top:22px;border-top:1px solid var(--hair);font-size:13px;color:var(--mute)}
+  @media (max-width:640px){
+    .wrap{padding:0 18px 64px}
+    header.masthead{padding:36px 0 28px}
+    .big{font-size:52px}
+  }
+</style>
+
+<div class="flag" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">Crema Italia · Storefront scorecard · Pass 6</p>
+  <h1>The claims that survived were the ones nobody measured</h1>
+  <p class="standfirst">Sixth re-score of the deployed storefront against one unchanged rubric. Two long-standing findings were tested for the first time and both turned out to be false. One new Level&nbsp;A gap was found, and has since been closed.</p>
+
+  <div class="score-hero">
+    <div>
+      <span class="big">8.3<small>/10</small></span>
+    </div>
+    <div><span class="delta">▲ +0.4 from 7.9</span></div>
+    <p>Theme <code>152030183593</code>, asserted from the page itself. 22 August 2026.</p>
+  </div>
+</header>
+
+<div class="callout warn">
+  <p class="label">Bias declaration — read before the numbers</p>
+  <p><strong>Four of the batches scored here were built in the same session as this pass.</strong> Five of the ten dimensions moved on work done hours earlier, so contested dimensions were held down rather than up.</p>
+  <p><strong>Accessibility is capped at 8.0 despite a clean measured surface</strong>, because one Level&nbsp;A criterion was unmet. And <strong>the single largest gain is not code</strong> — Steve published the four legal policies; the contribution here was linking them.</p>
+  <p>One correction belongs at the top: earlier in this session two carried findings were reported as closed. <strong>Only one was.</strong> That was caught by Steve asking what they meant, not by an audit.</p>
+</div>
+
+<h2>Six passes, one rubric</h2>
+<p class="sub">Ten dimensions, equal weights, never altered — comparability across passes is the whole value.</p>
+
+<div class="tablewrap">
+<table>
+  <thead>
+    <tr>
+      <th>Dimension</th>
+      <th class="n">P13</th><th class="n">P15</th><th class="n">P16</th>
+      <th class="n">P17</th><th class="n">P20</th><th class="n">P24</th>
+      <th class="n">Δ</th><th>Trajectory</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Brand identity &amp; visual craft</td><td class="n">8.5</td><td class="n">9.0</td><td class="n">9.0</td><td class="n">9.0</td><td class="n">9.0</td><td class="n now">9.0</td><td class="n flat">—</td>
+      <td><span class="bar"><i style="width:90%"></i><u style="left:90%"></u></span></td></tr>
+    <tr><td>Copy &amp; editorial voice</td><td class="n">7.5</td><td class="n">8.5</td><td class="n">9.0</td><td class="n">9.0</td><td class="n">9.5</td><td class="n now">9.5</td><td class="n flat">—</td>
+      <td><span class="bar"><i style="width:95%"></i><u style="left:95%"></u></span></td></tr>
+    <tr><td>Product detail quality</td><td class="n">8.0</td><td class="n">8.5</td><td class="n">8.5</td><td class="n">9.0</td><td class="n">9.0</td><td class="n now">9.0</td><td class="n flat">—</td>
+      <td><span class="bar"><i style="width:90%"></i><u style="left:90%"></u></span></td></tr>
+    <tr><td>Value proposition clarity</td><td class="n">4.0</td><td class="n">6.5</td><td class="n">8.0</td><td class="n">8.0</td><td class="n">8.0</td><td class="n now">8.5</td><td class="n up">+0.5</td>
+      <td><span class="bar"><i style="width:85%"></i><u style="left:80%"></u></span></td></tr>
+    <tr><td>Mobile experience</td><td class="n">7.0</td><td class="n">7.0</td><td class="n">8.0</td><td class="n">8.0</td><td class="n">8.0</td><td class="n now">8.5</td><td class="n up">+0.5</td>
+      <td><span class="bar"><i style="width:85%"></i><u style="left:80%"></u></span></td></tr>
+    <tr><td>Technical SEO &amp; performance</td><td class="n">4.0</td><td class="n">7.0</td><td class="n">7.5</td><td class="n">8.0</td><td class="n">8.0</td><td class="n now">8.0</td><td class="n flat">—</td>
+      <td><span class="bar"><i style="width:80%"></i><u style="left:80%"></u></span></td></tr>
+    <tr><td>Accessibility</td><td class="n">2.0</td><td class="n">7.0</td><td class="n">7.5</td><td class="n">7.5</td><td class="n">7.5</td><td class="n now">8.0</td><td class="n up">+0.5</td>
+      <td><span class="bar"><i style="width:80%"></i><u style="left:75%"></u></span></td></tr>
+    <tr><td>Conversion mechanics</td><td class="n">3.5</td><td class="n">5.5</td><td class="n">6.5</td><td class="n">7.0</td><td class="n">7.0</td><td class="n now">7.5</td><td class="n up">+0.5</td>
+      <td><span class="bar"><i style="width:75%"></i><u style="left:70%"></u></span></td></tr>
+    <tr><td>Navigation &amp; information architecture</td><td class="n">6.0</td><td class="n">6.0</td><td class="n">6.5</td><td class="n">6.5</td><td class="n">6.5</td><td class="n now">7.0</td><td class="n up">+0.5</td>
+      <td><span class="bar"><i style="width:70%"></i><u style="left:65%"></u></span></td></tr>
+    <tr><td>Trust &amp; social proof</td><td class="n">3.5</td><td class="n">3.5</td><td class="n">3.5</td><td class="n">6.5</td><td class="n">6.5</td><td class="n now">7.5</td><td class="n up">+1.0</td>
+      <td><span class="bar"><i style="width:75%"></i><u style="left:65%"></u></span></td></tr>
+    <tr class="total"><td>Overall</td><td class="n">5.4</td><td class="n">6.9</td><td class="n">7.4</td><td class="n">7.9</td><td class="n">7.9</td><td class="n now">8.3</td><td class="n up">+0.4</td>
+      <td><span class="bar"><i style="width:83%"></i><u style="left:79%"></u></span></td></tr>
+  </tbody>
+</table>
+</div>
+
+<p style="font-size:13.5px;color:var(--mute)">Sum 82.5, mean <strong>8.25</strong>, reported to one decimal as 8.3. Stated because it is a borderline round rather than a comfortable one. The tick on each bar marks the previous pass.</p>
+
+<h2>Measured from the deployed theme</h2>
+<p class="sub">Every figure read from the live preview, never from the repo or a change list.</p>
+
+<pre>theme asserted                152030183593  "Crema Italia POC24 Preview"  unpublished
+                              + Shopify preview bar reads POC24 / Draft
+
+contrast failures             0        16 pages + product detail + 2 modals; was 127 instances
+tap targets below 24x24       0        after WCAG 2.5.8 inline exemptions; was 4 classes
+subscription control          292x44 effective, 2 labels, named + described
+keyboard activable            76 of 76 non-semantic clickables carry role + tabindex
+form controls unnamed         0
+synthesised type faces        0        enumerated the font set, not fonts.check
+real italic axis loaded       yes      Inter 400 / 500 / 600 italic
+heading order skips           0        one h1 per page
+exposed main landmarks        1        19 of 20 removed by display:none
+<span class="flagline">skip link                     NONE     Level A gap — see F1 (closed after this pass)</span>
+
+em-dashes in customer text    0
+banned brand register         0        one string match checked and cleared
+ops vocabulary leaks          0
+italic on English             0
+
+og / twitter tags             13       og:image resolves
+JSON-LD                       graph: Organization, WebSite   canonical: yes   lang: en
+
+mobile 375                    header 62px; Shop + cart + hamburger without opening the menu
+                              first CTA at 0.73 screens, above the fold
+                              horizontal overflow: none
+hero contrast on brown        h1 10.56 · sub-line 5.61 · CTA text on fill 4.56 · all pass
+
+policies linked from footer   4 of 4, all resolving</pre>
+
+<h2>Two findings withdrawn</h2>
+<p class="sub">Both had survived four or five passes by being inherited rather than re-derived.</p>
+
+<div class="callout">
+  <p class="label">The shelf / information-architecture claim</p>
+  <p>Its sharpest line was <em>“a shelf you can stand on two of at once is not a shelf.”</em> Tested against the catalogue for the first time: <strong>shelf is never a list, and subscription maps exactly onto Roccia, 9 of 9.</strong> Nothing stands on two shelves.</p>
+  <p>The error underneath was applying library-science taxonomy rules to retail merchandising. A shelf metaphor is precisely what licenses mixed axes — every wine shop stocks <em>New Arrivals</em>, <em>Under $20</em> and <em>Natural</em> side by side. The four shelves do share one axis the critique missed: <strong>what are you here for.</strong></p>
+</div>
+
+<div class="callout">
+  <p class="label">“76 elements announce poorly”</p>
+  <p><strong>76 of 76 carry <code>role</code> and <code>tabindex</code></strong> and 75 have an accessible name. The finding predates the batch that fixed it and was carried forward four times unexamined.</p>
+</div>
+
+<h2>New findings</h2>
+
+<ol class="findings">
+  <li>
+    <h4>No skip link — WCAG 2.4.1 Bypass Blocks, Level A</h4>
+    <p>A keyboard user had to tab the entire header on every page before reaching content. The only Level&nbsp;A criterion known to be unmet, and the reason accessibility is capped at 8.0 rather than scored on its measured surface. <strong>Closed immediately after this pass</strong> — and the fix turned up a class-name collision that would have moved five taste-quiz controls off screen.</p>
+  </li>
+  <li>
+    <h4>No human screen-reader pass has ever been run</h4>
+    <p>Everything above is computed from the accessibility tree. Necessary, not sufficient: it cannot say whether the reading <em>order</em> of the product page makes sense, or whether the renewal disclosure lands before or after the control it describes in actual speech.</p>
+  </li>
+  <li>
+    <h4>76 controls are simulated buttons, not real ones</h4>
+    <p>They announce correctly and activate on Enter and Space, so no user meets a defect. It is a durability risk: every new card has to remember to route through the helper. Production should use real <code>button</code> elements.</p>
+  </li>
+  <li>
+    <h4>Privacy is still Shopify’s automated policy</h4>
+    <p>It cannot name Loop, Judge.me, or the taste profile. The trigger is specific rather than aspirational: <strong>the moment the taste profile becomes a customer metafield joined to reviews</strong>, the automated policy is describing a different business than the one being run.</p>
+  </li>
+</ol>
+
+<h2>What stands between 8.3 and higher</h2>
+<p class="sub">Three ceilings, and none of them is code.</p>
+
+<div class="gates">
+  <div class="gate">
+    <span class="cap">9.0</span>
+    <span class="what"><strong>Brand identity &amp; product detail</strong> cannot pass 9 while three temporary photographs remain. Two cannot ship for recorded reasons: one is a US café with English chalkboards, the other shows third-party trademarks.</span>
+  </div>
+  <div class="gate">
+    <span class="cap">7.5</span>
+    <span class="what"><strong>Conversion mechanics</strong> cannot pass this until the cart is real. Cart and checkout are mocked by design; the entitlement architecture is decided and unbuilt.</span>
+  </div>
+  <div class="gate">
+    <span class="cap">7.5</span>
+    <span class="what"><strong>Trust &amp; social proof</strong> cannot pass this until real customers exist. Ratings are fixture data, and individual review records remain unproven rather than refuted.</span>
+  </div>
+</div>
+
+<p>Every one waits on a signed roaster, a photographer, or a customer. The storefront stopped being the constraint several batches ago.</p>
+
+<h2>A note on method</h2>
+
+<div class="callout">
+  <p class="label">Seven false alarms in one session, none of them defects</p>
+  <p>A screenshot that appeared to show mobile overflow (a capture crop — the widest text ends at 359px inside a 375px viewport). A JSON-LD type reading null (the block uses <code>@graph</code>). Twenty <code>main</code> elements (nineteen removed from the accessibility tree by <code>display:none</code>). A contact radio measured at 13×13 (its label makes it 326×20). An inline link flagged as too small (exempt, because it sits mid-sentence). A focus rule that would not apply (<code>:focus</code> cannot match in an unfocused document). An element that would not move even with <code>!important</code> (a hidden page does not advance CSS transitions).</p>
+  <p><strong>Every one was a property of the measurement, not the code.</strong> That is the argument for the rubric’s explicit method section — and the reason the two withdrawn findings above matter more than any score movement. A finding that is never tested does not decay. It hardens.</p>
+</div>
+
+<h2>The prompt that drove this measurement</h2>
+<p class="sub">Published in full, because a pointer is not a prompt.</p>
+
+<p>This section is the reason the rubric now lives in a skill. Until <strong>24 August 2026</strong> its body said only <em>“unchanged from the P20 pass — see <code>docs/POC20_rescore.md</code>”</em> plus the one trap below. Six passes were published that way: the scores were visible and the method was not, so no pass was reproducible without hunting for the rubric in another document — and the trap this pass earned sat in exactly one file, missing from the block a scorer would actually have resolved.</p>
+
+<div class="resolved">
+  <span>Resolved from <b>.claude/skills/crema-storefront-score/SKILL.md</b></span>
+  <span>commit <b>fde129a</b></span>
+  <span>24 August 2026</span>
+</div>
+
+<div class="callout">
+  <p class="label">Two things below postdate this pass</p>
+  <p>Marked so this is not read as a false record. <strong>P24 ran with six traps in STEP 5, not seven</strong> — the <strong>CAPTURE CROP</strong> trap is the one <em>this pass earned</em>, from the screenshot named in the method note above. And <strong>STEP 8’s report contract did not exist</strong>; it was written on 24 August as the remedy.</p>
+  <p>Everything else is the rubric exactly as run. It is published merged rather than frozen because the contract’s purpose is that a reader holds the current, complete instrument — and knows precisely which parts of it this pass did not have.</p>
+</div>
+
+<pre>Re-score the deployed Crema Italia storefront against the standing rubric.
+
+STEP 1 — MEASURE THE RIGHT THING.
+Open the deployed preview theme in a real browser and assert the theme id from the page
+itself (`Shopify.theme.id`) before recording any figure. A `curl` of a preview_theme_id
+link silently returns the live coming-soon page. Every figure in the report must come
+from the live theme, never from the repo or a change list.
+
+STEP 2 — LOOK, DO NOT ONLY MEASURE.
+Take screenshots and read them. DOM geometry is authoritative for position, size and
+keyboard reachability, and blind to crop, colour, composition and synthesised type. Six
+consecutive passes on this project measured without looking and missed brand-critical
+defects in all four of those categories.
+
+STEP 3 — SCORE THESE TEN DIMENSIONS, 0-10, EQUAL WEIGHTS.
+  1. Brand identity &amp; visual craft
+  2. Copy &amp; editorial voice
+  3. Product detail quality
+  4. Value proposition clarity
+  5. Mobile experience
+  6. Technical SEO &amp; performance
+  7. Accessibility
+  8. Conversion mechanics
+  9. Navigation &amp; information architecture
+ 10. Trust &amp; social proof
+Overall = the mean, to one decimal. Never change the weights or the dimension list; the
+comparability across passes is the whole value.
+
+STEP 4 — SCORE THE MECHANISM, NOT THE PROOF.
+Steve's standing direction: score on whether the mechanism is right and shipped, not on
+what a visitor can see today. The store is pre-launch, the catalogue is fixture data and
+the photography is temporary, so the mechanism is what can actually be built.
+
+STEP 5 — GUARD AGAINST THE KNOWN MEASUREMENT TRAPS.
+  - Measure form inputs WITH A PRODUCT OPEN. Controls inside the product detail do not
+    exist in the DOM otherwise; POC16 recorded a clean "0 of 14" by measuring with no
+    product open and missed an unlabelled checkbox.
+  - `document.fonts.check()` returns true for faces that do not exist, because it reports
+    "can render", including by synthesis. Enumerate `[...document.fonts]` instead.
+  - Hidden `.page` elements return empty `innerText`. Keep pages active while reading.
+  - A screenshot that appears to show clipping or overflow may be a CAPTURE CROP. Before
+    reporting it, measure the widest rendered text with Range client rects and compare
+    documentElement.scrollWidth to window.innerWidth.
+  - `text-transform:uppercase` defeats case-sensitive matching.
+  - Match on meaning, not on a string that correlates with it. A grep for "DKIM1" once
+    matched a hostname and reported healthy records as dead.
+  - An absence is the weakest evidence there is. Before concluding something is missing,
+    run a control query that you know should succeed.
+
+STEP 6 — CARRY FORWARD, DO NOT RE-DERIVE.
+Read the previous pass's open findings and state explicitly, for each, whether it is
+fixed, unchanged, or a regression. A finding that silently disappears between passes is
+a measurement failure, not a fix.
+
+STEP 7 — DECLARE BIAS.
+If you are scoring work you built in the same session, say so, and hold contested
+dimensions down rather than up. Name the grounds that are inconvenient for the work.
+
+STEP 8 — REPORT.
+Give the full pass table (every pass to date), the measured evidence block, findings
+carried forward, new findings, and what remains between the current score and the
+stated 8.5 ceiling. Say plainly if the score did not move and why that is the correct
+outcome.
+
+Then end the report with a section titled "The prompt that drove this measurement"
+carrying this entire prompt verbatim and complete, the skill commit SHA it was resolved
+from, and the date. If this pass earned a new trap or refinement, state it inline AND
+merge it back into the skill in the same commit. A delta that lives only in a report is
+the defect this contract exists to kill.</pre>
+
+<h3>The trap this pass earned</h3>
+<p>Merged into STEP 5 of the skill in the same commit, and reproduced here because a delta that lives only in a report is the defect the contract exists to kill.</p>
+
+<pre>  - A screenshot that appears to show clipping or overflow may be a CAPTURE CROP. Before
+    reporting it, measure the widest rendered text with Range client rects and compare
+    documentElement.scrollWidth to window.innerWidth.</pre>
+
+<footer>
+  Crema Italia, LLC · Lutz, Florida, USA · cremaitalia.com<br>
+  Pass 6 of an ongoing series. Rubric: <code>.claude/skills/crema-storefront-score/</code>. Full record: <code>docs/POC24_rescore.md</code> and <code>docs/scoring-history.md</code>. This page's source: <code>docs/POC24_scorecard.html</code>.
+</footer>
+
+</div>

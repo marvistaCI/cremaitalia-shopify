@@ -176,11 +176,103 @@ on a signed roaster, a photographer, or a customer.
 
 ---
 
-## The rubric, as a reusable prompt
+---
 
-Unchanged from the P20 pass — see `docs/POC20_rescore.md`. Do not alter the ten dimensions or the
-equal weighting; comparability across passes is the whole value. One line worth adding to step 5's
-trap list, earned this pass:
+## The prompt that drove this measurement
+
+Published in full per the report contract, which this pass is the reason for. A pointer is not a
+prompt: the previous body of this section said only "unchanged from the P20 pass - see
+`docs/POC20_rescore.md`" plus the one trap below, which is how that trap came to live in exactly
+one document.
+
+**Resolved from:** `.claude/skills/crema-storefront-score/SKILL.md` at commit **`fde129a`**
+(`fde129ad78e20aa32b1a125f9eed353a0792c47b`), 2026-08-24.
+
+> **Two things below postdate this pass, and are marked so this is not read as a false record.**
+> P24 ran with **six** traps in STEP 5, not seven - the **CAPTURE CROP** trap is the one *this
+> pass earned*, from a screenshot that appeared to show the mobile hero clipped and did not (the
+> widest rendered text ends at 359px inside a 375px viewport). And **STEP 8's report contract did
+> not exist**; it was written on 2026-08-24 as the remedy. Everything else is the rubric exactly
+> as run. The text is published merged rather than frozen because the contract's purpose is that a
+> reader holds the current, complete instrument - and knows precisely which parts of it this pass
+> did not have.
+
+```
+Re-score the deployed Crema Italia storefront against the standing rubric.
+
+STEP 1 — MEASURE THE RIGHT THING.
+Open the deployed preview theme in a real browser and assert the theme id from the page
+itself (`Shopify.theme.id`) before recording any figure. A `curl` of a preview_theme_id
+link silently returns the live coming-soon page. Every figure in the report must come
+from the live theme, never from the repo or a change list.
+
+STEP 2 — LOOK, DO NOT ONLY MEASURE.
+Take screenshots and read them. DOM geometry is authoritative for position, size and
+keyboard reachability, and blind to crop, colour, composition and synthesised type. Six
+consecutive passes on this project measured without looking and missed brand-critical
+defects in all four of those categories.
+
+STEP 3 — SCORE THESE TEN DIMENSIONS, 0-10, EQUAL WEIGHTS.
+  1. Brand identity & visual craft
+  2. Copy & editorial voice
+  3. Product detail quality
+  4. Value proposition clarity
+  5. Mobile experience
+  6. Technical SEO & performance
+  7. Accessibility
+  8. Conversion mechanics
+  9. Navigation & information architecture
+ 10. Trust & social proof
+Overall = the mean, to one decimal. Never change the weights or the dimension list; the
+comparability across passes is the whole value.
+
+STEP 4 — SCORE THE MECHANISM, NOT THE PROOF.
+Steve's standing direction: score on whether the mechanism is right and shipped, not on
+what a visitor can see today. The store is pre-launch, the catalogue is fixture data and
+the photography is temporary, so the mechanism is what can actually be built.
+
+STEP 5 — GUARD AGAINST THE KNOWN MEASUREMENT TRAPS.
+  - Measure form inputs WITH A PRODUCT OPEN. Controls inside the product detail do not
+    exist in the DOM otherwise; POC16 recorded a clean "0 of 14" by measuring with no
+    product open and missed an unlabelled checkbox.
+  - `document.fonts.check()` returns true for faces that do not exist, because it reports
+    "can render", including by synthesis. Enumerate `[...document.fonts]` instead.
+  - Hidden `.page` elements return empty `innerText`. Keep pages active while reading.
+  - A screenshot that appears to show clipping or overflow may be a CAPTURE CROP. Before
+    reporting it, measure the widest rendered text with Range client rects and compare
+    documentElement.scrollWidth to window.innerWidth.
+  - `text-transform:uppercase` defeats case-sensitive matching.
+  - Match on meaning, not on a string that correlates with it. A grep for "DKIM1" once
+    matched a hostname and reported healthy records as dead.
+  - An absence is the weakest evidence there is. Before concluding something is missing,
+    run a control query that you know should succeed.
+
+STEP 6 — CARRY FORWARD, DO NOT RE-DERIVE.
+Read the previous pass's open findings and state explicitly, for each, whether it is
+fixed, unchanged, or a regression. A finding that silently disappears between passes is
+a measurement failure, not a fix.
+
+STEP 7 — DECLARE BIAS.
+If you are scoring work you built in the same session, say so, and hold contested
+dimensions down rather than up. Name the grounds that are inconvenient for the work.
+
+STEP 8 — REPORT.
+Give the full pass table (every pass to date), the measured evidence block, findings
+carried forward, new findings, and what remains between the current score and the
+stated 8.5 ceiling. Say plainly if the score did not move and why that is the correct
+outcome.
+
+Then end the report with a section titled "The prompt that drove this measurement"
+carrying this entire prompt verbatim and complete, the skill commit SHA it was resolved
+from, and the date. If this pass earned a new trap or refinement, state it inline AND
+merge it back into the skill in the same commit. A delta that lives only in a report is
+the defect this contract exists to kill.
+```
+
+### The trap this pass earned
+
+Merged into STEP 5 of the skill in commit `fde129a`, and reproduced here because a delta that
+lives only in a report is the defect the contract exists to kill:
 
 ```
   - A screenshot that appears to show clipping or overflow may be a CAPTURE CROP. Before
