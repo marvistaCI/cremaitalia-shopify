@@ -3489,6 +3489,16 @@ when resuming.**
 | Prior preview | "Crema Italia POC26 Preview" | `152030347433` |
 | Prior preview | "Crema Italia POC25 Preview" | `152030281897` |
 
+> ⚠ **DRIFT: the repo has moved AHEAD of the deployed POC27 preview (2026-08-24).** Two commits
+> touch theme files since POC27 went out, so a preview link is **not** the repo:
+> **`c91ee87`** repriced the POC cart to the v1.16 shipping pair ($69 / $12.50) - the deployed
+> preview still computes the retired **$55 / $8.50** - and **`2b80122`** added the policy links to
+> the coming-soon footer. **Steve's call: fold both into the next POC batch** rather than deploy a
+> two-constant change on its own. Ledger: `docs/POC28_change_list.md`. **This warning goes out with
+> the deploy that resolves it**, not later. Note `2b80122`'s real destination is the **live** theme
+> (`150557294761`), a separate scoped push that the classifier blocked on 2026-08-24 and which is
+> **still outstanding** - deploying POC28 does not discharge it.
+
 **Scorecard: 8.3/10 as of 2026-08-22 (POC24)** — the deployed storefront has been scored six times
 against one rubric: 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20) →
 **8.3 (POC24)**. Full pass: `docs/POC24_rescore.md`; series: `docs/scoring-history.md`; artifact:
