@@ -3394,6 +3394,94 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   the three-preview cap**: POC21's prune needs Steve's explicit go by name and id, which the deploy
   instruction did not carry.
 
+- 2026-08-22 — **POC25: the skip link, and a class collision that would have shipped.** Ledger:
+  `docs/POC25_change_list.md`. Closes **F1** from the POC24 re-score - **WCAG 2.4.1 Bypass Blocks,
+  Level A**, the only Level A criterion the storefront was known to fail and the sole reason
+  Accessibility was capped at 8.0 against an otherwise clean measured surface. A visually-hidden
+  `Skip to content` anchor, **first focusable element in the document**, targeting a permanent
+  `#ci-content` wrapper **rather than a `<main>`** - this is a one-document SPA with one `<main>` per
+  `.page`, so **19 of the 20 are `display:none` at any moment** and a link to any single one would be
+  dead on every other page. `position:fixed`, not `absolute`, because an absolutely positioned skip
+  link scrolls away from a user who tabs to it late; that was changed mid-build after measuring at
+  two scroll positions.
+  **The reason this entry is worth reading is the collision.** The link was first written as
+  `class="skip-link"` - **a class already owned by the taste quiz's own skip and Back buttons.** Being
+  later in the stylesheet the new rules won, giving **five quiz controls** `position:absolute;
+  top:-4rem`, moving the hero CTA's own navigation off screen. **It would have shipped:** `theme
+  check` passed at the documented baseline, the JS was clean, and the skip link itself worked
+  perfectly. It was caught only by enumerating `.skip-link` in the live DOM and finding **six**
+  elements where one was expected. Renamed `.skip-to-content`, recorded in comments at both the
+  markup and the style site. **The general rule: in a 900-line stylesheet with no naming convention,
+  a new class name is an assertion that needs checking** - one `querySelectorAll` before writing the
+  rule costs five seconds.
+  **Four measurement artifacts, all mine, none of them defects** - more false alarms than any other
+  single item in the project, every one a property of the test rather than the code: `:focus` could
+  not match because `document.hasFocus()` was false; a `.75rem` setter looked rejected and was not; a
+  rect read `-129` instead of `-64` because `getBoundingClientRect()` is viewport-relative and the
+  page was scrolled (chasing that one is what exposed the `absolute`-vs-`fixed` weakness); and the
+  element would not move even with `!important` because **a hidden page does not advance CSS
+  transitions**, so the animated `top` was frozen at its start value. That last one is the same root
+  cause as the long-misdiagnosed screenshot timeout - a non-compositing page - and the visible
+  symptom differs every time, which is what makes it expensive. **Not verified:** a human has never
+  seen the focus state; everything is computed. One Tab press on a deployed preview would close it.
+  Commit `d01d7e2`; deployed as **"Crema Italia POC25 Preview" (`152030281897`)**, pruned 2026-08-24
+  under the three-newest cap and redeployable from that commit.
+
+- 2026-08-22 — **POC26: one fixture sentence, and the contradiction it was hiding.** Ledger:
+  `docs/POC26_change_list.md`. Steve saw an ISO date on the Offerta card in a POC24 screenshot and
+  asked whether it was a stale inline comment. **It was not** - `rebaseCatalogDates()` was
+  deliberately string-replacing the date inside `products[12].blurb` to keep the prose in step with
+  the field, working exactly as built. **Three things were wrong underneath it.** It printed **ISO**,
+  against Standard §5.4's *"DD-MMM-YYYY wherever a date is shown to anyone."* It printed a roast date
+  **at all** on an Offerta product, which **v1.13** retired in favour of a computed band. And **the
+  card and the detail view contradicted each other one click apart** - card *"Roasted 2026-07-21."*,
+  detail *"Roasted between 25-MAR-2026 and 23-MAY-2026"* - the card's date being **32 days old,
+  inside the 90-day fresh window**, claiming an Offerta coffee was fresher than its own shelf permits.
+  **They could never have agreed by construction:** the band derives from **policy**, `roast_date`
+  from the **rebase** (freshest = 10 days old), which necessarily drags the Offerta lot into the fresh
+  window. **POC19 half-migrated Offerta** - the detail moved to the band, the card kept quoting the
+  field.
+  **The sweep reframed the fix.** A first pass called it duplication, but **12 of 17 blurbs restate
+  their own notes**, so that is the *convention*: tasting notes as a sentence plus **at most one
+  distinguishing fact**. The blurb was correctly **shaped** and chose the wrong **kind** of fact -
+  every other extra fact holds still, and a time-varying fact is the only kind that can go stale or
+  contradict a policy moving independently of it. Four products carry no extra fact at all, so the fix
+  needed no invented copy, only deletion. The rule is recorded at the site: **a blurb may carry a
+  distinguishing fact, never a time-varying one; time-varying facts belong in fields, where the render
+  layer formats them to the Standard.** **0 of 30 cards quote a date (was 2); 0 ISO dates visible
+  anywhere (was 1)**, and exactly one surface now states an Offerta coffee's age, derived from policy.
+  **Flagged, not changed (Steve's call):** `tour-ditalia-1` states "Three 100 g bags" in three places,
+  but unlike the date it is **stable** and cannot drift into contradiction. Commit `c495ace`; deployed
+  as **"Crema Italia POC26 Preview" (`152030347433`)**.
+
+- 2026-08-22 — **POC27: the Sorpresa box gets its own unit of measure - and Steve's reframing beat
+  the fix on the table.** Ledger: `docs/POC27_change_list.md`. The collection's price line read
+  `$77.70 /3 × 100 g (3.53 oz)`: `sizeDual()` converts each weight **token**, so it converted one bag
+  while the box holds 300 g - and a code comment advertised this as a feature (*"handles composite
+  units like a collection's /3x100g"*). At a glance it reads **$77.70 for 3.53 oz**. It is the only
+  SKU where a quantity multiplier sits between the denominator and its conversion; every other product
+  is a single bag, so the two agree by construction.
+  **The proposal was to reword the conversion and delete the note chip "Three 100 g bags" as a
+  duplicate of the size selector. Steve instead made the box's unit of measure what the box weighs -
+  300 g - with the composition becoming a note about what is inside.** Better three ways: the
+  denominator becomes `/300 g (10.58 oz)`, **the same shape as every other product**, not a special
+  case; it matches the production shape, since a native bundle variant has a weight and B2 proved that
+  variant is real; and **the duplication dissolves rather than being deleted** - the note was only a
+  duplicate because the size said the same thing, so deleting it would have removed a fact to fix a
+  collision the right model never creates. The ambiguity is now **structurally impossible**: with no
+  composite unit, there is no token to pick the wrong one of. `price_unit` went with it - a per-product
+  denominator override present on **exactly one product of 17**, invented solely to express
+  `/3×100g`; the `||` fallback stays in `priceCell()` with a note that nothing sets it today, so a bug
+  there would be silent. **The size string is a cart-matching identifier** and becomes a Shopify
+  variant title in production, so the change was verified **by adding to cart** and confirming the line
+  renders, not assumed from the catalogue.
+  **A method note worth keeping:** the edit failed twice before landing, and both diagnoses were
+  wrong. The multiplication sign is **U+00D7**, which the terminal renders as a replacement character,
+  so the first theory - "wrong character" - was false; the codepoints were correct throughout. The
+  actual cause was assuming `"size"` and `"price"` sat on one line in the JSON. **Two wrong theories
+  about an encoding problem that was really a whitespace assumption.** Commit `e9dd8bb`; deployed as
+  **"Crema Italia POC27 Preview" (`152030412969`)**.
+
 - 2026-08-24 — **Store Operating Standards v1.15 → v1.16: two decisions that were locked on
   2026-08-23 and then never applied here. The interesting part is the shape of the failure, not
   either decision.** Raised by the coordinator, verified against live output before anything was
