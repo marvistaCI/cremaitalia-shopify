@@ -3595,6 +3595,53 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   two-sessions rule names: never run broad `git add` commands that can touch files another session
   owns.
 
+- 2026-08-24 — **Two coordinator findings swept. The first was already closed and the coordinator
+  was reading THIS FILE for it; the second does not exist, but looking for it found five that do.**
+  **(1) The published shipping policy is current.** The coordinator flagged that cremaitalia.com
+  still stated $55/$8.50, and said plainly that it could not fetch the page itself and was repeating
+  `CLAUDE.md`'s claim. Fetched: **HTTP 200, $69 and $12.50**, zero occurrences of the old pair, and
+  it carries **both** v1.16 provisions the POC deliberately does not model - the contiguous-U.S.
+  carve-out and the after-discount basis - plus the calculated-rate treatment for AK/HI/PR that
+  §12.11 parks as an open question. Steve had pasted it; the repo source agrees. **The whole v1.16
+  shipping change has now landed on every surface it touches.** The stale sentence is corrected in
+  place above. Worth naming the shape: this project's rule is *live output beats every document*,
+  and here **the document being believed was this one**. A scheduled agent with no CLI and no fetch
+  can only ever read documents, so its findings are leads, not facts - which the coordinator itself
+  said, and the honesty is what made it useful rather than harmful.
+  **(2) §12.3's pricing gap does not propagate, and the reason is a design that worked.** The
+  Commerce Playbook **v4** (note: CLAUDE.md §9's 2026-06-29 entry still names v3, which is archived)
+  carries **no pricing numbers at all** - every rate and markup factor is a pointer, and the matrix
+  section says so in capitals. That pointer-not-copy design was adopted in the v3→v4 rewrite
+  *because* the Playbook's own copy of the matrix had drifted and stood wrong for six days. It
+  worked: there is nothing there for §12.3 to contradict. The **roaster-facing** documents have no
+  exposure by construction either - Roaster Guide v8, both languages, contains zero occurrences of
+  *markup*, *landed cost* or any retail price; the only price in them is the roaster's own wholesale
+  EUR/kg. §12.3 is entirely downstream of that number and invisible to the roaster. Confirmed in the
+  same pass: **v8 states roast-to-pickup as an absolute seven (7) days**, so the relative "45-day
+  arrival clause" flagged as a v8 item on 2026-08-21 is already resolved - there is no `45` anywhere
+  in the guide.
+  **(3) What the sweep did find: five live contradictions in Playbook v4, none about pricing.**
+  Written up as `Coordination\handoff-playbook-v4-drift-2026-08-24.md` (Cowork's lane; Code cannot
+  edit a OneDrive `.docx`). The two that matter: **`days_to_offerta`, default 45, retired in Standard
+  v1.12, is still specified in three places** including the data model, so the Playbook teaches an
+  Offerta transition at half the real boundary; and **"by day 90 post-roast, discontinue
+  availability"** is off by sixty days *and inverts the shelf* - day 90 is where Offerta **begins**,
+  not ends, so as written the document stops selling at the moment the real shelf starts. Also: a
+  retired peak-flavour-style consumption claim used as an example, a shipping pointer aimed at §3
+  when shipping has been §8 since v1.16, and an unbounded "paused subscriptions retain the privilege"
+  that omits §3.1's 60-day grace on pause-all.
+  **The correction to my own record:** the 2026-08-24 v1.16 entry above says `days_to_offerta` "is
+  now gone from every live surface." That was true of the Standard, which is what the sweep covered.
+  **The Playbook is a live surface and still has it in three places.** A sweep's scope and its claim
+  have to match, and mine did not.
+  **And the recurrence is the finding, not the drift.** The Playbook has now been caught a version
+  behind three times - v1.2 in 22 places, v1.3 in 24, v1.6 in 21 today - each fixed by relabelling.
+  Every section number those pointers cite still resolves correctly, so the label has **never once
+  carried information the section number did not**; it has only ever been a thing to get wrong. The
+  handoff recommends dropping the version from the pointers entirely rather than performing the same
+  maintenance a fourth time. That is the same move as retiring a duplicated value: **delete the
+  second home rather than keep syncing it.**
+
 ---
 
 ## 10. Open questions / TODO
