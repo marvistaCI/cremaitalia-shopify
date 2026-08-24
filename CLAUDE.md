@@ -18,6 +18,23 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > - **Store Operating Standards** (v1.16) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
+> ⚠ **EVERY VALUE IN THE STANDARDS IS PROVISIONAL UNTIL THE SITE GOES PUBLIC (Steve,
+> 2026-08-24).** While we are in the POC process and before launch, treat every number as a
+> **modelling placeholder, not a settled decision** - prices, costs, markups, discounts,
+> thresholds, minimums, maximums, windows, cadences. They are good enough to build and reason
+> against; they are **not** good enough to charge money against, and none of them acquires
+> authority merely by having been written down, versioned and rendered to a PDF. **One deliberate
+> analysis pass happens after the live site is built and before it is made public** - earlier is
+> impossible, later is too late. **After that we live with our wins and our losses; before it,
+> changing a number costs only the edit.** This does NOT license leaving contradictions in place
+> (a value disagreeing with another value is a defect at any stage, because we reason against
+> these numbers now), and it DOES mean "we already decided that" is never an argument against
+> re-examining a number before launch. **Corollary, and it saves real effort: do not preserve
+> superseded pre-launch values as history** - nobody transacted under them, so they are drafts,
+> not facts. What becomes worth keeping is the first value we actually go live with and what it
+> then does in the market. Full rule: Store Operating Standards top callout + §12.13, the one §12
+> item that cannot close at the production build.
+
 > **Editing protocol:** Code owns the repo and all Standard sources; **Cowork proposes,
 > Code applies** — any edit Steve asks Cowork to make to a repo artifact is converted into
 > a prompt for Code. The coordination callouts below are being consolidated into the

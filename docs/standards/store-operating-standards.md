@@ -4,25 +4,50 @@
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.3 (look & voice) · Collaboration Standard v1.1 (how we work).
 
-> **v1.16 (2026-08-24)** lands two decisions Steve locked on 2026-08-23, both of which had been
-> agreed and then left unapplied here - so until this bump the Standard disagreed with the project
-> brief on shipping, and with **itself** on freshness.
+> ## EVERY VALUE IN THIS STANDARD IS PROVISIONAL UNTIL THE SITE GOES PUBLIC (Steve, 2026-08-24)
 >
-> **Outbound shipping is repriced: free at $69+, flat $12.50 under, and the free tier is contiguous
-> U.S. only.** The old $55/$8.50 pair was set from carrier cost in April 2026, i.e. as cost recovery
-> rather than as a lever; a 21-seller benchmark put us at the 20th percentile on threshold *and*
-> below the median flat rate, conceding both levers at once. The threshold is measured **after
-> discounts**. Roccia subscription shipping is unchanged - free, no minimum. See §8.
+> **While we are in the POC process and before the site is live, treat every number here as a
+> modelling placeholder, not a settled decision.** Prices, costs, markups, discounts, thresholds,
+> minimums, maximums, windows and cadences are all in that category. They are good enough to build
+> and reason against. They are **not** good enough to charge money against, and none of them
+> acquires authority merely by having been written down, versioned, and rendered to a PDF.
 >
-> **Every freshness value becomes a dated declaration, and no live freshness rule states a number in
-> prose - it names the token.** §5.4 had been applying that pattern correctly to one claim and not
-> the others, and the others drifted: §5's donation threshold still read **60 days** while §5.4's own
-> table read past **150**, a ninety-day contradiction inside one document that survived two version
-> bumps. Six sites are corrected, `days_to_offerta` is gone from every live surface, and §5.5 records
-> the classification rule saying which numbers become tokens and - the half that actually prevents
-> recurrence - which must stay literals. Storage moves off theme settings because
-> `settings_data.json` does not survive a theme swap, and this store spins up preview themes
-> routinely. **The migration itself is not built yet and §5.4 says so.** No window changed.
+> **There is one deliberate analysis pass, and it happens at a specific moment: after the live site
+> is built, before it is made public.** Not earlier - the numbers cannot be validated against a store
+> that does not exist. Not later - once we are public the values are commitments customers act on.
+> **After that point we live with our wins and our losses, good decisions and poor ones alike.**
+> Before it, changing a number costs nothing but the edit.
+>
+> **What this does and does not license.** It does **not** license leaving contradictions in place:
+> a value that disagrees with another value is a defect at any stage, because we are reasoning
+> against these numbers now. It **does** mean that "we already decided that" is not an argument
+> against re-examining a number before launch. The decision log records what we chose and why; it
+> does not make the choice correct.
+>
+> **Do not preserve superseded pre-launch values as history.** Nobody transacted under them, so they
+> are drafts rather than facts. What becomes worth keeping is the first value we actually go live
+> with, and what it then does in the market - that is a real data point for the next change. The
+> version changelog below carries what moved between revisions; the body states only what is true.
+>
+> Tracked as §12.13, which cannot close before launch.
+
+> **v1.16 (2026-08-24)** lands two decisions Steve locked on 2026-08-23, and adds the
+> provisional-values rule above (§12.13) and shipping-rate governance (§8.3).
+>
+> **Outbound shipping repriced (§8):** free at **$69+**, flat **$12.50** under, free tier
+> **contiguous U.S. only**, threshold measured **after discounts**. Roccia subscription shipping
+> unchanged - free, no minimum. §8.3 is new and sets when the rates are reviewed, which lever moves
+> first, and why the exposure is weight and zone rather than dollars.
+>
+> **Freshness values become dated declarations (§5.5):** no live freshness rule states a number in
+> prose, it names the token. Six sites corrected; `days_to_offerta` removed from every live surface.
+> §5.5 carries the classification rule - which numbers become tokens, and which must stay literals.
+> Storage moves off theme settings, because `settings_data.json` does not survive a theme swap and
+> this store spins up preview themes routinely; **that migration is not built yet and §5.4 says so.**
+> No window changed.
+>
+> **§12.3 amended:** outbound shipping to the customer is absent from the pricing formula entirely,
+> which matters because we absorb it on most orders.
 
 > **v1.15 (2026-08-22)** changes **which system owns the subscriber rate**, on measured platform
 > behaviour rather than intent. §3's no-codes `MAX` policy is untouched. The v1.3 mechanism - one
@@ -1051,6 +1076,21 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    **(d) What exactly does the no-bare-literal lint cover?** §5.5 specifies this source and the theme
    templates. Whether it also covers `docs/production_build_spec.md`, the legal policy sources and
    the OneDrive brief is open - each is a place a freshness number has already been written by hand.
+
+13. **Pre-launch validation of every value in this Standard - the gate that cannot close early.**
+   Opened 2026-08-24, and it is the reason for the callout at the top of this document. **After the
+   live site is built and before it is made public**, walk the numbers deliberately rather than
+   inheriting them: the pricing matrix and markups (§2.2) against real landed costs *including
+   outbound shipping* (§12.3), the discount rates and the `MAX` interaction (§3), the shipping
+   threshold and flat rate against real blended cost per order (§8.3), the freshness windows against
+   real consumption (§5.4, which may only shorten them), the Founding Member cap (§4), and every
+   minimum, maximum and cadence elsewhere in this file.
+
+   **The timing is the whole point.** Earlier is impossible - these cannot be validated against a
+   store that does not exist. Later is too late - once public, they are commitments customers act on
+   and we live with the outcome. This item therefore **cannot be closed at the production build**
+   like the rest of §12; it closes in the window between build-complete and go-public, and it is the
+   last gate before launch.
 
 ---
 
