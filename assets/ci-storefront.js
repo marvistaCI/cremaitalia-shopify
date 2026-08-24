@@ -41,7 +41,13 @@
   var filterOn = false, savedTaste = null, pendingSaveProfile = false;
   // (pendingQuizAction retired in POC12 — the quiz no longer routes through sign-in at all.)
 
-  var FREE_SHIP_THRESHOLD = 55;
+  // Commercial rules, never literals (build spec section 11). Repriced 2026-08-24 to match
+  // Store Operating Standards v1.16 section 8: free at $69+, flat $12.50 under, free tier
+  // contiguous US only, threshold measured AFTER discounts. The flat rate used to be a bare
+  // 8.5 sitting inline in the summary math, which is exactly the drift this pair prevents.
+  // PROD: both come from Shopify shipping profiles/rates, not from the theme.
+  var FREE_SHIP_THRESHOLD = 69;
+  var FLAT_SHIP_RATE = 12.5;
 
   /* ---------- POC-only: keep fixture dates plausible relative to today ----------
      The catalog carries ABSOLUTE roast/best-by dates because that is the shape production
@@ -1523,7 +1529,7 @@
     // PROD: Bottega ships from a separate source (not the coffee 3PL), so in production it gets
     // its own Shopify shipping profile/rate and Shopify sums each source. This POC uses one
     // unified estimate. Sales tax is calculated by Shopify Tax at checkout (nexus + address).
-    var shipping = (allSub || subtotal >= FREE_SHIP_THRESHOLD) ? 0 : 8.5;
+    var shipping = (allSub || subtotal >= FREE_SHIP_THRESHOLD) ? 0 : FLAT_SHIP_RATE;
     var total = subtotal - discount + shipping;
     html += '<div class="cart-summary">' +
       '<div class="row"><span>Subtotal</span><span>' + money(subtotal) + '</span></div>' +

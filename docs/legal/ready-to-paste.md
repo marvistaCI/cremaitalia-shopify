@@ -67,11 +67,17 @@ Columbia, and US territories. We do not ship internationally at this time.
 
 What shipping costs
 
-Roccia subscription shipments ship free, always, with no minimum. One-time orders of
-$55 or more ship free. One-time orders under $55 carry a flat $8.50 shipping charge.
+Roccia subscription shipments ship free, always, with no minimum.
+
+One-time orders of $69 or more ship free within the contiguous United States. One-time
+orders under $69 carry a flat $12.50 shipping charge. The $69 threshold is measured on
+your order total after any discount has been applied.
+
+Orders to Alaska, Hawaii, Puerto Rico and US territories are quoted the carrier's
+calculated rate at checkout. Free shipping does not apply to those destinations.
 
 Free shipping on Roccia is part of your subscriber benefit and applies to every
-recurring shipment.
+recurring shipment, to any US address, with no minimum.
 
 Who carries it
 

@@ -708,7 +708,10 @@
     <button class="back-btn" onclick="showPage('shop')">Continue shopping</button>
     <div class="section-head" style="margin-top:0"><p class="eyebrow">Your bag</p><h2>Cart</h2></div>
     <!-- PROD: replaced by Shopify cart + Shopify Checkout. Subscriber sign-in banner,
-         $55 free-shipping threshold, and Roccia upgrade toggle are spec-locked. -->
+         free-shipping threshold, and Roccia upgrade toggle are spec-locked. The threshold
+         and flat rate are NOT named here on purpose: they are commercial rules owned by
+         Store Operating Standards section 8, and naming them in a comment is a second home
+         that drifts silently. See FREE_SHIP_THRESHOLD / FLAT_SHIP_RATE in ci-storefront.js. -->
     <div id="cart-view"></div>
   </main>
 </div>
