@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.3) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.16) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.17) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > ⚠ **EVERY VALUE IN THE STANDARDS IS PROVISIONAL UNTIL THE SITE GOES PUBLIC (Steve,
@@ -3498,6 +3498,34 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   appears nowhere in the pricing formula**, yet we absorb it on every subscription shipment and every
   order above the threshold. The matrix does not overstate margin by a rounding error; it omits a
   cost line that scales with volume.
+  **[WITHDRAWN the same day - Store Operating Standards v1.17.** Steve asked the right question:
+  *"exactly what documents do you refer to as it being missing? This is not a minor gap."* Opening
+  the workbook instead of reasoning from §2.2 showed **the cost model carries outbound shipping in
+  full** - Inputs §D (`Outbound shipping $/order`, ML **$8.25**, uncertain in the Monte Carlo), into
+  Cost Build §C `Per-order variable cost`, into Pricing Scenarios as
+  `Total unit cost = Landed $/bag + Per-order var`, from which MSRP is solved at a target margin.
+  **Nothing is omitted, and the sentence above is wrong.**
+  **What is actually wrong is larger, and it is now computed rather than asserted.** §2.2 and the cost
+  model are **two independent pricing answers that had never been compared**. §2.2 being inbound-only
+  is not itself a defect - a markup multiplier may cover downstream costs implicitly - **the defect
+  is that nobody checked whether it does.** At the model's own ML inputs (landed **$28.45/kg**,
+  per-order variable cost **$14.85**, of which outbound is **56%**), three of five representative
+  SKUs price **below total unit cost**: Sorpresa 100g **-68%**, Roccia 250g **-10%**, Selezione 250g
+  **-3%**; Roccia 500g and 1kg reach only 18% and 31%, against a sheet built around **50-70%**. Two
+  bags per order improves Roccia to 27/39/43% - still short. **Three answers exist for one 250g
+  bag:** §2.2 says **$19.92**, the model's own "Current MSRP" input says **$17**, MSRP-at-60% says
+  **$54.90**. The dominant variable is **units per order**, because outbound and pick-pack are
+  per-*order* costs recovered by a per-*bag* price, so the pre-launch pass must settle basket size
+  first. **Two stale model inputs found in the same pass:** Inputs §E assumes **Shopify Basic** at
+  **2.9%** where the 2026-08-21 spike chose **Grow** (2.7%, because Basic allows zero staff
+  accounts), and the **$8.25** outbound figure was calibrated against the retired $8.50 regime with
+  **no weight/zone split** - precisely the exposure §8.3 names. The model also credits no shipping
+  revenue, which is conservative.
+  **The lesson is the one this log keeps recording, in a new place.** I reasoned from one document
+  (§2.2) to a claim about a second (the workbook) without opening the second. Same shape as the
+  stale-deployment line and the "wedged" screenshot tool. **Open the artifact you are making a claim
+  about.** And it landed in a published Standard and a §9 entry before anyone checked, which is why
+  v1.17 exists hours after v1.16.**]
 
 - 2026-08-24 — **POC28 deployed: the shipping repricing reaches the cart, and a literal that should
   never have been one.** Ledger: `docs/POC28_change_list.md`. `FREE_SHIP_THRESHOLD` moved 55 -> 69 to

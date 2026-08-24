@@ -2,7 +2,7 @@
 
 **Version 1.1 · 2026-07-14**
 **Source of truth:** this file (`docs/standards/collaboration-standard.md`) in the theme repo.
-**Companion standards:** Brand Standards v2.3 (look & voice) · Store Operating Standards v1.16 (commerce).
+**Companion standards:** Brand Standards v2.3 (look & voice) · Store Operating Standards v1.17 (commerce).
 
 > **v1.1 (2026-07-14)** added **§9 Render distribution & the trust certificate** — where the read-only
 > renders live (OneDrive `Standards\`), that **Code** produces and delivers them on every source

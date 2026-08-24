@@ -1,6 +1,6 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.16 · 2026-08-24**
+**Version 1.17 · 2026-08-24**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.3 (look & voice) · Collaboration Standard v1.1 (how we work).
 
@@ -30,6 +30,19 @@
 > version changelog below carries what moved between revisions; the body states only what is true.
 >
 > Tracked as §12.13, which cannot close before launch.
+
+> **v1.17 (2026-08-24)** corrects a claim v1.16 introduced hours earlier, and replaces it with the
+> arithmetic that should have been run first. v1.16's §12.3 said outbound shipping to the customer
+> *"appears nowhere in the pricing formula"* and that the matrix *"omits a cost line that scales with
+> volume."* **The first half is true of §2.2 and the second is wrong.** The landed-cost model carries
+> outbound shipping in full - Inputs §D, into per-order variable cost, into the MSRP-at-target-margin
+> sheet. Nothing was omitted.
+>
+> **What is actually wrong is larger, and it is now computed rather than asserted: §2.2's markup
+> matrix and the cost model have never been reconciled, and at the model's own most-likely inputs
+> they disagree severely** - three of five representative SKUs price below total unit cost. §12.3 now
+> carries the table. Two stale model inputs are recorded with it. **No rule changed and nothing is
+> repriced**; this is §12.3 becoming specific.
 
 > **v1.16 (2026-08-24)** lands two decisions Steve locked on 2026-08-23, and adds the
 > provisional-values rule above (§12.13) and shipping-rate governance (§8.3).
@@ -988,19 +1001,54 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    approval. Rule now in §2.2; field in §11.
 2. ~~**The SKU price-maintenance tool mechanism.**~~ **RESOLVED 2026-07-13** — phased: spreadsheet
    + Shopify Flow (aging) at launch; lightweight custom app when volume justifies. Detail in §11.
-3. **Pricing numbers never validated, and outbound shipping is missing from the model entirely.**
+3. **The markup matrix and the landed-cost model have never been reconciled, and they disagree.**
    The multipliers were specified, never run against real landed costs (the POC cart is mocked).
-   **Pre-launch:** sanity-check several real SKUs through the matrix against
-   `Crema_Italia_Landed_Cost_Model_v1.xlsx` before charging real money.
+   **Pre-launch:** run real SKUs through both and make them agree.
 
-   **The gap found 2026-08-24:** `SKU_LAST_COST` is *inbound* landed cost - EUR purchase price plus
-   freight, tariff and handling to our warehouse (§2.2). **Outbound shipping to the customer appears
-   nowhere in the pricing formula.** But we absorb it on every subscription shipment and on every
-   one-time order above the threshold, which between them will be most orders. So the matrix does not
-   overstate margin by a rounding error, it omits a cost line that scales with volume. The validation
-   must carry **blended outbound cost per order** as a deduction, or every margin figure it produces
-   is optimistic by an unknown amount. This is also what decides whether a carrier increase is
-   answered with a threshold move (§8.3) or a price move.
+   **First, a correction.** v1.16 said outbound shipping *"appears nowhere in the pricing formula"*
+   and that the matrix *"omits a cost line that scales with volume."* **That was wrong and is
+   withdrawn.** `Crema_Italia_Landed_Cost_Model_v1.xlsx` carries outbound shipping in full: Inputs
+   §D (`Outbound shipping $/order`, $6.50 / **$8.25** / $11.50, uncertain in the Monte Carlo), rolled
+   into Cost Build §C `Per-order variable cost`, and into Pricing Scenarios as
+   `Total unit cost = Landed $/bag + Per-order var`, from which MSRP is solved at a target margin.
+   Nothing is omitted.
+
+   **What is true is that §2.2 and that model are two independent pricing answers that have never
+   been compared.** §2.2 is `SKU_LAST_COST × Markup`, where `SKU_LAST_COST` is **inbound** landed cost
+   only. That is not itself a defect - a markup multiplier is allowed to cover downstream costs
+   implicitly. **The defect is that nobody checked whether it does.**
+
+   **Computed 2026-08-24 at the model's own ML inputs** (landed **$28.45/kg**; per-order variable
+   cost **$14.85**, of which outbound shipping is **56%**), loading the per-order cost on a
+   single-bag order as the model's Pricing Scenarios sheet does:
+
+   | SKU | §2.2 price | Model unit cost | Gross margin |
+   |---|---|---|---|
+   | Sorpresa 100g (3.7×) | $10.53 | $17.69 | **−68%** |
+   | Roccia 250g (2.8×) | $19.92 | $21.96 | **−10%** |
+   | Selezione 250g (3.0×) | $21.34 | $21.96 | **−3%** |
+   | Roccia 500g (2.5×) | $35.57 | $29.07 | 18% |
+   | Roccia 1kg (2.2×) | $62.60 | $43.30 | 31% |
+
+   Against a Pricing Scenarios sheet built around **50-70%**. Spreading the per-order cost across a
+   two-bag order improves Roccia to 27% / 39% / 43% - still short of target. **And there are three
+   different answers for the same 250g bag:** §2.2 says **$19.92**, the model's own "Current MSRP"
+   input says **$17**, and the model's MSRP-at-60%-margin says **$54.90**.
+
+   **The single largest variable is units per order**, because outbound shipping and pick-pack are
+   per-*order* costs being recovered by a per-*bag* price. So the pre-launch validation must first
+   settle **the assumed basket size**, then ask whether the matrix delivers target margin at it. AOV
+   is modelled at $42 against bag prices of $17-28, i.e. roughly 1.5-2.5 bags.
+
+   **Two stale model inputs, found in the same pass.** Inputs §E assumes **Shopify Basic** - plan $39,
+   Payments **2.9%** - but the 2026-08-21 platform spike chose **Grow** ($79 billed annually, 2.7%),
+   because Basic includes zero staff accounts. And the **$8.25** outbound figure was calibrated
+   against the retired $8.50 flat-rate regime; it carries **no weight/zone split**, which is exactly
+   the exposure §8.3 names, and the model credits **no shipping revenue**, so the $12.50 collected
+   below the threshold is not offset anywhere. That last one is conservative; the first two are not.
+
+   This is also what decides whether a carrier increase is answered with a threshold move (§8.3) or a
+   price move.
 4. ~~**Pause-semantics reconciliation.**~~ **RESOLVED 2026-07-13** — benefits bound to ≥1
    actively-shipping subscription; pause-all **and** cancel-all trigger a 60-day win-back grace, then
    lapse; reinstated on resume/re-subscribe. Founder status made **durable** (account-level, lost only
@@ -1230,5 +1278,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.16 · 2026-08-24 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.17 · 2026-08-24 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
