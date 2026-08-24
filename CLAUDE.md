@@ -3459,6 +3459,20 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   it - line 112 describes what the *now-deleted* POC shipping page contained, which is narrative, not
   a statement of policy. The POC cart was fixed in `c91ee87` and deployed as POC28, below. The
   published policy page is still outstanding and is Steve's paste.**]
+  **[CLOSED 2026-08-24, later the same day - verified by fetching the live URL, not by reading the
+  admin or this file.** `https://cremaitalia.com/policies/shipping-policy` returns HTTP 200 and reads
+  *"One-time orders of $69 or more ship free within the contiguous United States. One-time orders
+  under $69 carry a flat $12.50 shipping charge. The $69 threshold is measured on your order total
+  after any discount has been applied."* Zero occurrences of $55 or $8.50 anywhere on it, and it
+  carries **both** v1.16 provisions the POC deliberately does not model - the contiguous-U.S.
+  carve-out and the after-discount basis - plus the calculated-rate treatment for AK/HI/PR that §12.11
+  parks as an open question. Steve pasted it. The repo source `docs/legal/ready-to-paste.md` agrees.
+  **The whole v1.16 shipping change has now landed on every surface it touches** - Standard, legal
+  policy source, published policy page, POC cart. Recorded here because a daily coordinator run on
+  2026-08-24 re-flagged the $55/$8.50 gap **from this file rather than from the live page**, which is
+  the failure this project keeps logging in the other direction: a stale document outliving the fact
+  it describes, and a reader believing it. The coordinator said so itself - it could not fetch the
+  page - so the flag was honest; the document it read was not.**]
 
 - 2026-08-24 — **Steve's provisional-values rule, and it retired work I had just done - which is the
   evidence it is right.** While recording the v1.16 changes I annotated six freshness sites with
