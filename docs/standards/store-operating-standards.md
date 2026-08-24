@@ -253,9 +253,8 @@ Retail price = SKU_LAST_COST × Markup[Shelf, Size]
 > shelf/size — editing the table moves every SKU of that shelf/size together. In addition, a SKU may
 > carry an optional **`markup_override`**: leave it blank (the normal case) and the SKU inherits the
 > matrix; set it and it wins **for that SKU only**. That is the entire shape - one table-wide default
-> plus an optional per-SKU override, and no parallel field anywhere. (Until v1.16 this cited
-> `days_to_offerta` as the worked example - a field retired in v1.12 precisely for **being** a
-> parallel field.) An override is a **deliberate exception, not the norm**, and it
+> plus an optional per-SKU override, and **no parallel field anywhere**. An override is a
+> **deliberate exception, not the norm**, and it
 > **routes through the same admin approval** as any price change (§2.4).
 
 ### 2.3 Collection / bundle pricing
@@ -401,18 +400,14 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
   home for that boundary.** A per-SKU override, if it is ever genuinely wanted, overrides that setting;
   it does not get a parallel field.
 - **`offerta_transition_date`** = `roast_date + {freshness_window_days}`. Coffee moves to Offerta
-  when it leaves the freshness window; there is no second boundary. Until v1.16 this line still read
-  `+ days_to_offerta`, contradicting the retirement declared five lines above it.
+  when it leaves the freshness window; there is no second boundary.
 - **Nightly** the system flags lots at/over their transition date. Admin sees a daily digest and
   approves (may auto-approve). On transition: `current_shelf` → Offerta (Shopify Flow), price
   recalculates to the `O[size]` factor, 3PL gets a priority-ship (FIFO) flag.
 - **Offerta listing shows:** original price (struck through) + Offerta price + savings + the *actual*
   remaining freshness window (e.g. "best within 23 days").
 - **Donation threshold:** coffee older than `{offerta_fresh_days}` is removed from sale and donated
-  to **Feeding Tampa Bay** (the no-waste pledge). **The value is named, never typed.** Until v1.16
-  this bullet read "60 days from roast" while §5.4's own table read past **150** - a ninety-day
-  contradiction inside one document, in the section a reader reaches first, surviving two version
-  bumps. That is the whole argument for §5.5.
+  to **Feeding Tampa Bay** (the no-waste pledge). **The value is named, never typed** (§5.5).
 - **Offerta guarantee is modified:** "as-is, defects only" — the standard first-bag satisfaction
   guarantee (§9) does not apply to already-discounted aged lots.
 
@@ -463,6 +458,12 @@ which widens the gap against sellers who claim two years of sealed freshness.
 
 **Every freshness value is a dated declaration, and no live freshness rule states a number in prose -
 it names the token.** Two parts, and the second is the one that prevents recurrence.
+
+*Why the rule exists, stated once here rather than annotated at every site it touches:* §5.4 had been
+applying this pattern correctly to one claim and not the others, and the others drifted - §5's
+donation threshold read **60 days** while §5.4's own table read past **150**, a ninety-day
+contradiction inside one document that survived two version bumps. The pattern was right; it was
+applied once.
 
 **1. Storage is store-level, not theme-level.** A `freshness_policy` metaobject, not
 `settings_data.json`. It survives theme replacement, is editable in Admin without touching theme
@@ -696,12 +697,11 @@ printed tasting card.
 
 - **US-only at launch.** No international.
 - **Free** on every Roccia **subscription** shipment, with **no minimum**.
-- **One-time orders: free at $69+, flat $12.50 under $69** (repriced v1.16; was $55 / $8.50).
-  Free-shipping progress bar in cart, **$69** threshold.
+- **One-time orders: free at $69+, flat $12.50 under $69.** Free-shipping progress bar in cart,
+  **$69** threshold.
 - **The free tier is contiguous U.S. only** - the lower 48 plus DC. Alaska, Hawaii, Puerto Rico and
-  the territories get **calculated carrier rates**. Until v1.16 this promised the same rates across
-  all fifty states and the territories, which guaranteed a loss on every 1 kg order outside the
-  lower 48. Whether those states instead get a *published* flat surcharge is open (§12.11).
+  the territories get **calculated carrier rates**, because a free 1 kg order to those destinations
+  loses money on every unit. Whether they instead get a *published* flat surcharge is open (§12.11).
 - **The threshold is measured AFTER discounts.** The conservative reading, and the one both
   benchmarked competitors who state a basis use. A subscriber's 10% may not push a cart across the
   line at our expense. Interacts with the `MAX` no-stacking rule (§3).
@@ -717,13 +717,60 @@ printed tasting card.
 > for the same bag and the nudge mostly disappears. $12.50 stays inside observed practice: above
 > Miscela d'Oro's $10.95, below Eataly's $14.90.
 >
-> **The threshold moved on evidence, not instinct.** A 21-seller benchmark of direct competitors, all
-> read from first-party live pages on 2026-08-22, put the old $55 at the **20th percentile** (cohort
-> median $75, coffee-DTC sub-median $70) *and* the old $8.50 below the $9.99 median flat rate - we
-> were conceding both levers at once, which almost no competitor does. $69 is level with Miscela
-> d'Oro and just under Vergnano, so it stays the friendliest bar among Italian brand stores while now
-> taking a genuine two-bag or kilo-plus cart to clear. Dataset:
+> **Where $69 sits in the market.** A 21-seller benchmark of direct competitors, read from
+> first-party live pages on 2026-08-22: cohort median threshold **$75**, coffee-DTC sub-median
+> **$70**, median flat rate **$9.99** with a maximum of $14.90. $69 is level with Miscela d'Oro and
+> just under Vergnano, so it stays the friendliest bar among Italian brand stores while still taking
+> a genuine two-bag or kilo-plus cart to clear. $12.50 sits above Miscela d'Oro's $10.95 and below
+> Eataly's $14.90. **This is the comparison set to re-run at the next review** (§8.3), not a
+> one-time justification. Dataset:
 > `Brand and Marketing\Market Research\Crema_Italia_Free_Shipping_Benchmark_v1.xlsx`.
+
+### 8.3 Shipping rates are reviewed, not reacted to (Steve, 2026-08-24)
+
+Carrier costs rise every year. The rates in §8 are a **lever we set**, not a cost we pass through, so
+they need a review cadence the way the freshness windows have a governance rule - otherwise margin
+erodes silently and the only signal is a bad year.
+
+**Review triggers.** (1) **Annually, each autumn**, when USPS and UPS publish their General Rate
+Increase for the coming January. (2) On any **mid-year surcharge** that changes blended cost per
+order by more than a point. (3) Whenever the **3PL or its negotiated rates change**.
+
+**What the review measures.** Not the carrier's headline percentage - **blended outbound cost per
+order**, split into the two bands that behave differently: orders **above** the threshold, where we
+absorb 100% of carrier cost, and orders **below** it, where we collect $12.50 against actual cost.
+
+**The exposure is weight and zone, not dollars, and that mismatch is the whole problem.** The
+threshold is denominated in dollars; carrier cost is driven by weight and zone, and the two are not
+correlated. The worst cell is a cart that **just clears** the threshold while being heavy and going
+far: three 500 g bags at ~$72 to the West Coast crosses the one-pound boundary into UPS Ground at the
+furthest zone, and ships free. Model that cell explicitly at each review. A threshold that looks
+healthy on an average will still lose money on its own worst case.
+
+**The threshold is the preferred lever; the flat rate is not.** Raising the **threshold** moves more
+orders into the paid band and lifts average order value, and customers read it as a number that
+varies between merchants. Raising the **flat rate** is the visible price of shipping and costs
+conversion on exactly the small first orders we most want to convert. So: **move the threshold
+first, and move the flat rate only to keep the spread compelling** (§8), never to chase carrier cost.
+
+**Both directions are allowed, unlike the freshness windows.** §5.4's windows may only be shortened,
+because lengthening walks back a promise a customer bought under. Shipping rates carry no such
+asymmetry and may move either way - but **only prospectively**. An order already placed ships on the
+terms shown when it was placed.
+
+**Three structural options before repricing, in the order they should be considered.** Repricing is
+the most visible lever and the least interesting one.
+1. **Negotiated rates.** A 3PL's contracted carrier rates are routinely better than list, and often
+   better than Shopify Shipping's built-in discount. This is a **3PL selection question and is not
+   currently on the §12.9 qualifying list** - add it: *what are your negotiated USPS and UPS rates
+   from a Tampa origin, by zone and weight band?*
+2. **Packaging weight.** Dimensional weight and the one-pound USPS/UPS boundary are ours to
+   influence. A mailer that keeps a two-bag order under a pound is worth more than a rate
+   negotiation.
+3. **Price, not shipping.** Free shipping is never free; it is amortised into the bag price. If
+   carrier costs rise structurally, the honest answer is often a **pricing review** (§2.2), not a
+   shipping-policy change. See §12.3 - outbound shipping is **not currently in the pricing model at
+   all**.
 
 ### 8.1 Nothing inside a package shows a price (LOCKED — Steve, 2026-08-19)
 
@@ -916,9 +963,19 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    approval. Rule now in §2.2; field in §11.
 2. ~~**The SKU price-maintenance tool mechanism.**~~ **RESOLVED 2026-07-13** — phased: spreadsheet
    + Shopify Flow (aging) at launch; lightweight custom app when volume justifies. Detail in §11.
-3. **Pricing numbers never validated.** The multipliers were specified, never run against real landed
-   costs (the POC cart is mocked). **Pre-launch:** sanity-check several real SKUs through the matrix
-   against `Crema_Italia_Landed_Cost_Model_v1.xlsx` before charging real money.
+3. **Pricing numbers never validated, and outbound shipping is missing from the model entirely.**
+   The multipliers were specified, never run against real landed costs (the POC cart is mocked).
+   **Pre-launch:** sanity-check several real SKUs through the matrix against
+   `Crema_Italia_Landed_Cost_Model_v1.xlsx` before charging real money.
+
+   **The gap found 2026-08-24:** `SKU_LAST_COST` is *inbound* landed cost - EUR purchase price plus
+   freight, tariff and handling to our warehouse (§2.2). **Outbound shipping to the customer appears
+   nowhere in the pricing formula.** But we absorb it on every subscription shipment and on every
+   one-time order above the threshold, which between them will be most orders. So the matrix does not
+   overstate margin by a rounding error, it omits a cost line that scales with volume. The validation
+   must carry **blended outbound cost per order** as a deduction, or every margin figure it produces
+   is optimistic by an unknown amount. This is also what decides whether a carrier increase is
+   answered with a threshold move (§8.3) or a price move.
 4. ~~**Pause-semantics reconciliation.**~~ **RESOLVED 2026-07-13** — benefits bound to ≥1
    actively-shipping subscription; pause-all **and** cancel-all trigger a 60-day win-back grace, then
    lapse; reinstated on resume/re-subscribe. Founder status made **durable** (account-level, lost only

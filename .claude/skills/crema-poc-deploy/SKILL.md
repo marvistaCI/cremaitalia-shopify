@@ -106,10 +106,27 @@ shopify theme push --theme <existing-id>
 Name the theme to match the POC version it actually holds, per the draft-theme naming rule in
 `CLAUDE.md`. A theme whose name lags its contents is what made POC4 look missing in 2026-07-05.
 
-> **Live theme (`150557294761`) is NOT this skill's job.** A live push needs `--allow-live`, is
-> outward-facing, and has been blocked by the auto-mode permission classifier (2026-07-24) — hand
-> those commands to Steve to run himself. Note the classifier did **not** block a theme *delete*
-> (2026-07-25), so do not treat it as a safety net.
+> **Live theme (`150557294761`) is NOT this skill's job** — it is a different theme with a different
+> (looser, older) path, and mixing the two is confusing. A live push needs `--allow-live` and must be
+> `--only` scoped, because this repo's `templates/index.liquid` is the POC SPA and a bare push would
+> replace the coming-soon page with it.
+>
+> **DO NOT hand the command to Steve on the assumption you are blocked. Try it.** This paragraph
+> used to say live pushes "have been blocked by the auto-mode permission classifier (2026-07-24) —
+> hand those commands to Steve to run himself." **That was wrong by 2026-08-24**: a scoped
+> `--allow-live` push of two files went through on the first attempt, no prompt, no block, from an
+> ordinary session. Following the old wording cost Steve a round trip in which he ran a command that
+> did not take, then was asked to paste its output so it could be diagnosed — work that was never
+> his. His words: *"why am I doing your work?"*
+>
+> **The classifier's line is not where any document claims.** The same session that pushed to the
+> live theme successfully was then blocked on a read-only `theme pull`. Do not encode a new theory
+> about where it draws the line; that theory is what caused this. **Attempt the action and report
+> what actually happens.** If it is genuinely denied, say so with the error text and let Steve
+> decide — that is a different thing from pre-emptively declining.
+>
+> Theme *deletes* are not blocked either (2026-08-22, several), so the classifier is not a safety
+> net for destructive actions.
 
 ## Step 4 — Prove it (do not trust the push output)
 
