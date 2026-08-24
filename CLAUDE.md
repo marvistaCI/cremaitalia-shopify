@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.3) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.15) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.16) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > **Editing protocol:** Code owns the repo and all Standard sources; **Cowork proposes,
@@ -3376,6 +3376,68 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   sides, zero mismatches, batch content asserted on the deployed theme. **The store is one theme over
   the three-preview cap**: POC21's prune needs Steve's explicit go by name and id, which the deploy
   instruction did not carry.
+
+- 2026-08-24 — **Store Operating Standards v1.15 → v1.16: two decisions that were locked on
+  2026-08-23 and then never applied here. The interesting part is the shape of the failure, not
+  either decision.** Raised by the coordinator, verified against live output before anything was
+  touched. Both had been **agreed, written up, and logged in `DECISIONS_LOG.md`** — and neither had
+  reached the Standard, so v1.15 disagreed with the project brief on shipping and **with itself** on
+  freshness. A decision being *recorded* is evidently not the same as a decision being *landed*, and
+  the log is not the thing that makes it true; the Standard is.
+  **(1) Outbound shipping repriced (§8): free at $69+, flat $12.50 under, free tier contiguous U.S.
+  only, threshold measured after discounts.** Roccia subscription shipping unchanged — free, no
+  minimum. The old $55/$8.50 pair was set from USPS commercial-base cost in April 2026, i.e. as
+  **cost recovery rather than as a lever**, and a 21-seller benchmark put us at the **20th percentile
+  on threshold and below the median flat rate** — conceding both levers at once, which almost no
+  competitor does. The Standard now says in as many words that **$12.50 is an incentive spread, not a
+  pass-through**, specifically so a future reader does not "correct" it back toward carrier cost;
+  that sentence exists because the number looks wrong until you know why it is not. The
+  contiguous-U.S. carve-out fixes a real loss: §8 had promised the same rates across all fifty states
+  and the territories, which guaranteed a loss on every 1 kg order outside the lower 48.
+  **(2) Freshness values become dated declarations, and no live rule states a freshness number in
+  prose — it names the token (new §5.5).** §5.4 had been applying that pattern correctly to **one**
+  claim and not the others, and the others drifted: **§5's donation threshold read 60 days while
+  §5.4's own table read past 150** — a ninety-day contradiction inside one document, in the section a
+  reader reaches first, which survived two version bumps. Six sites corrected;
+  `days_to_offerta` (retired v1.12) is now gone from every live surface, including §2.2 where it was
+  still the **worked example for per-SKU overrides** — a retired field cited as the model for the
+  pattern it was retired for duplicating.
+  **The durable half is the classification rule, and it is mostly about what NOT to touch.** Tunable
+  gates become tokens; **historical narrative, brand copy, external facts and contractual terms keep
+  their literals**. Templating the history would mean the record of what changed changes whenever
+  policy changes, and the roaster's 12-month sealed-bag warranty is a number a counterparty signed —
+  tokenising it would be a category error. §5.5 also carries the warning in bold: **do not
+  bulk-replace "60 days"**, because §3's subscriber-benefit grace is an unrelated 60 that shares the
+  value by coincidence. That is the same separation Review A's A2 fix made in the theme on
+  2026-08-20, now stated in the Standard rather than only in the code.
+  **One thing deliberately NOT asserted.** The handoff specifies storage moving from theme settings
+  to a `freshness_policy` metaobject, because `settings_data.json` does not survive a theme swap and
+  this store spins up and discards preview themes routinely. **That migration is not built, so §5.4
+  says the theme setting remains the operative store of record and marks the change as decided but
+  pending.** Writing "held as a metaobject" would have made the Standard false on the day it
+  published — the precise failure this project keeps logging. The build is §12.12 and is build-gating.
+  **Three defects found while doing it that nobody had flagged.** The **footer stamp still read
+  v1.14**, never bumped at v1.15, so the document's own closing line had been a version behind for two
+  days. §5.4 said **"the three windows"** above a table of two, left over from `peak_flavor_days`
+  being retired in v1.14. And §7's bundle-QC clause still required roast dates **"within the 60-day
+  window"** — a stale pre-90 literal in a clause a 3PL would actually be held to, and the one site the
+  handoff's own edit list missed. Found by grepping the vocabulary rather than the numbers, which is
+  the method §5.5's lint now encodes.
+  **Published via `crema-std-publish`:** source edited, §12.11 and §12.12 opened so the new
+  cross-references resolve rather than dangle, three present-tense cross-refs swept (companion header,
+  standards README, CLAUDE.md pointer) while the `_archive` record and §9 log entries were left
+  alone as history. **Both touched sources re-rendered** — Store Operating v1.16 **and Collaboration
+  v1.1**, whose companion header moved without its own version bumping, which is the `f9ffcb1` blind
+  spot no version-stamp check can see. All gates pass at exit 0; v1.15 archived with a table row;
+  both delivered to OneDrive `Standards\` and **md5-verified MATCH**, with the Collaboration render
+  confirmed by extracted text to carry "Store Operating Standards v1.16".
+  **NOT done, and the larger of the two remaining:** the **published shipping policy on
+  cremaitalia.com still states $55 / $8.50** (verified by fetching the live URL, not by reading the
+  admin). That is a customer-facing commitment contradicting a locked decision, and it outranks the
+  document drift the coordinator actually flagged. Its source is `docs/legal/ready-to-paste.md`, which
+  Steve pastes into Settings → Policies. Also still open: `docs/legal/README.md` carries the old
+  figures, and the POC cart holds `FREE_SHIP_THRESHOLD = 55` plus a **bare `8.5` literal** — itself a
+  build-spec §11 violation, a commercial rule shipped as a number in code.
 
 ---
 

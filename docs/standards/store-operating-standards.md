@@ -1,8 +1,28 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.15 · 2026-08-22**
+**Version 1.16 · 2026-08-24**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.3 (look & voice) · Collaboration Standard v1.1 (how we work).
+
+> **v1.16 (2026-08-24)** lands two decisions Steve locked on 2026-08-23, both of which had been
+> agreed and then left unapplied here - so until this bump the Standard disagreed with the project
+> brief on shipping, and with **itself** on freshness.
+>
+> **Outbound shipping is repriced: free at $69+, flat $12.50 under, and the free tier is contiguous
+> U.S. only.** The old $55/$8.50 pair was set from carrier cost in April 2026, i.e. as cost recovery
+> rather than as a lever; a 21-seller benchmark put us at the 20th percentile on threshold *and*
+> below the median flat rate, conceding both levers at once. The threshold is measured **after
+> discounts**. Roccia subscription shipping is unchanged - free, no minimum. See §8.
+>
+> **Every freshness value becomes a dated declaration, and no live freshness rule states a number in
+> prose - it names the token.** §5.4 had been applying that pattern correctly to one claim and not
+> the others, and the others drifted: §5's donation threshold still read **60 days** while §5.4's own
+> table read past **150**, a ninety-day contradiction inside one document that survived two version
+> bumps. Six sites are corrected, `days_to_offerta` is gone from every live surface, and §5.5 records
+> the classification rule saying which numbers become tokens and - the half that actually prevents
+> recurrence - which must stay literals. Storage moves off theme settings because
+> `settings_data.json` does not survive a theme swap, and this store spins up preview themes
+> routinely. **The migration itself is not built yet and §5.4 says so.** No window changed.
 
 > **v1.15 (2026-08-22)** changes **which system owns the subscriber rate**, on measured platform
 > behaviour rather than intent. §3's no-codes `MAX` policy is untouched. The v1.3 mechanism - one
@@ -232,8 +252,10 @@ Retail price = SKU_LAST_COST × Markup[Shelf, Size]
 > **Per-SKU override (LOCKED 2026-07-13).** The matrix is the **default** that governs every SKU by
 > shelf/size — editing the table moves every SKU of that shelf/size together. In addition, a SKU may
 > carry an optional **`markup_override`**: leave it blank (the normal case) and the SKU inherits the
-> matrix; set it and it wins **for that SKU only**. This mirrors how `days_to_offerta` works (a
-> default plus a per-SKU override). An override is a **deliberate exception, not the norm**, and it
+> matrix; set it and it wins **for that SKU only**. That is the entire shape - one table-wide default
+> plus an optional per-SKU override, and no parallel field anywhere. (Until v1.16 this cited
+> `days_to_offerta` as the worked example - a field retired in v1.12 precisely for **being** a
+> parallel field.) An override is a **deliberate exception, not the norm**, and it
 > **routes through the same admin approval** as any price change (§2.4).
 
 ### 2.3 Collection / bundle pricing
@@ -350,8 +372,8 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
 ## 5. Freshness & the Offerta transition
 
 - **Freshness statement, main shelves (revised v1.13):** "These beans are within our best-freshness
-  window of `{freshness_window_days}` days." The number comes from theme settings, never typed (§5.4,
-  build spec §11). Never "best by" alone. **Offerta has its own statement** - see §5.4.
+  window of `{freshness_window_days}` days." The number is **resolved from the declaration, never
+  typed** (§5.4, §5.5, build spec §11). Never "best by" alone. **Offerta has its own statement** - see §5.4.
   The peak-flavour clause was removed from this sentence, and **`peak_flavor_days` was retired as a
   setting entirely** (v1.14). The confusion was never the number: *"brew within 30 days"* sat inches
   from Offerta's *"Best within 27 days"*, and the two measured from different things. Steve's
@@ -378,14 +400,19 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
   Coffee moves to Offerta when it leaves the freshness window, so **`freshness_window_days` is the only
   home for that boundary.** A per-SKU override, if it is ever genuinely wanted, overrides that setting;
   it does not get a parallel field.
-- **`offerta_transition_date`** = `roast_date + days_to_offerta`.
+- **`offerta_transition_date`** = `roast_date + {freshness_window_days}`. Coffee moves to Offerta
+  when it leaves the freshness window; there is no second boundary. Until v1.16 this line still read
+  `+ days_to_offerta`, contradicting the retirement declared five lines above it.
 - **Nightly** the system flags lots at/over their transition date. Admin sees a daily digest and
   approves (may auto-approve). On transition: `current_shelf` → Offerta (Shopify Flow), price
   recalculates to the `O[size]` factor, 3PL gets a priority-ship (FIFO) flag.
 - **Offerta listing shows:** original price (struck through) + Offerta price + savings + the *actual*
   remaining freshness window (e.g. "best within 23 days").
-- **Donation threshold:** coffee remaining after **60 days from roast** is removed from sale and
-  donated to **Feeding Tampa Bay** (the no-waste pledge).
+- **Donation threshold:** coffee older than `{offerta_fresh_days}` is removed from sale and donated
+  to **Feeding Tampa Bay** (the no-waste pledge). **The value is named, never typed.** Until v1.16
+  this bullet read "60 days from roast" while §5.4's own table read past **150** - a ninety-day
+  contradiction inside one document, in the section a reader reaches first, surviving two version
+  bumps. That is the whole argument for §5.5.
 - **Offerta guarantee is modified:** "as-is, defects only" — the standard first-bag satisfaction
   guarantee (§9) does not apply to already-discounted aged lots.
 
@@ -400,15 +427,29 @@ ships the oldest fresh lot, Offerta the oldest aged lot.
 FIFO operates only on the **sellable pool**. A lot past the freshness window is off sale entirely
 (§5), so FIFO can never mean shipping something this Standard has already withdrawn.
 
-**The three windows (set 2026-08-21, held as theme settings, not typed into any page):**
+**The windows (values set 2026-08-21; this is the declaration site, and they are never typed into
+any page):**
 
-| Setting | Days | Meaning |
+| Field | Days | Meaning |
 |---|---|---|
 | `freshness_window_days` | **90** | Age 0-90: the coffee sits on Roccia, Sorpresa or Selezione |
 | `offerta_fresh_days` | **150** | Age **91-150**: Offerta, priced accordingly. Past 150 it comes off sale entirely and is donated |
 
+**This declaration is effective from 2026-08-21**, and this table is the only place either number
+appears as a figure. Everywhere else - in this Standard, in the theme, in any generated document -
+the value is **named as a token and resolved at read time** (§5.5).
+
 Boundaries are exclusive - 90 belongs to the main shelves and Offerta starts at 91. No day lives in
-two bands.
+two bands. **The Offerta lower bound is derived** (`freshness_window_days + 1`) and never stored as a
+third field. Storing it is exactly how `days_to_offerta` happened.
+
+> **Where these live is CHANGING (decided 2026-08-23; NOT yet built).** They are held as **theme
+> settings** today, and that is the defect: `settings_data.json` does not survive a theme swap, and
+> this store spins up and discards preview themes routinely, so a policy boundary can be silently
+> reset by a theme replacement. They move to a store-level **`freshness_policy` metaobject** carrying
+> its own `effective_from`, `revision` and `standard_version` - definition in §5.5, open questions in
+> §12.12. **Until that migration ships the theme setting remains the operative store of record.**
+> This note exists so nobody reads the intent as the state.
 
 **Windows may be SHORTENED but never extended.** Lengthening walks back a promise customers already
 bought under. The 2026-08-21 move from 60 to 90 is a **one-time recalibration against research**, made
@@ -417,6 +458,61 @@ so there is nothing to retract. The rule starts from here: as real consumption d
 which widens the gap against sellers who claim two years of sealed freshness.
 
 **Coffee only.** Equipment and merchandise carry no roast date and do not age.
+
+### 5.5 Freshness values are dated declarations, and which numbers are tokens (Steve, 2026-08-23)
+
+**Every freshness value is a dated declaration, and no live freshness rule states a number in prose -
+it names the token.** Two parts, and the second is the one that prevents recurrence.
+
+**1. Storage is store-level, not theme-level.** A `freshness_policy` metaobject, not
+`settings_data.json`. It survives theme replacement, is editable in Admin without touching theme
+code, and is readable from Liquid and the Admin API.
+
+```
+type: freshness_policy                # crema_italia.freshness_policy (singleton)
+  freshness_window_days   Integer     # age 0-N: main shelves
+  offerta_fresh_days      Integer     # age N+1-M: Offerta; past M off sale and donated
+  effective_from          Date        # when THIS declaration took effect
+  revision                Integer     # monotonic; bump on every value change
+  standard_version        Text        # the Store Operating version that authorised this revision
+  notes                   Text        # one line: what changed and why
+```
+
+**2. Every declaration carries an effective date.** *A tunable with no date is exactly as driftable
+as a literal - you simply cannot see the drift.* With one, a reader, a template or an agent can
+assert that the value it holds is the current declaration rather than assuming it: a consumer
+holding a `revision` older than the live one is stale **by construction, not by inspection**.
+
+**The classification rule - and the half that matters is what it leaves alone.** Not every number in
+these sections should become a token. Templating the history would mean the record of what changed
+changes whenever policy changes.
+
+| Class | Treatment | Example |
+|---|---|---|
+| **Tunable gate** - logic branches on it, it can be retuned | **Declaration field. Named as a token in prose, never a literal.** | `freshness_window_days`, `offerta_fresh_days` |
+| **Historical narrative** - a record of a change that happened | **Keep the literal.** History must not move when policy moves. | "the 2026-08-21 move from 60 to 90 is a one-time recalibration" |
+| **Brand copy** - advice we do not enforce | **Keep the literal**, in the repo where the voice rules apply. | "use your beans within 30 days of receiving them" (retired as a setting in v1.14, deliberately) |
+| **External fact** - a claim about the market, not about us | **Keep the literal**; keep the substantiation on file. | the 24-month commercial-coffee claim |
+| **Contractual term** - a number a counterparty signed | **Keep the literal. Never tokenise.** | the roaster's 12-month sealed-bag stability warranty |
+
+**Governance is unchanged, and now belongs to the admin surface rather than only to this document:**
+windows may be **shortened, never extended** (§5.4). A save that increases either window should be
+**rejected with the reason**, because the rule exists precisely for the moment someone is tempted.
+
+**Two enforcement gates, so this stops relying on care.** It relied on care and it failed.
+
+1. **A no-bare-literal check.** Lint this source and the theme templates for bare integers adjacent
+   to freshness vocabulary (*day, days, roast, fresh, donate, Offerta*) outside two allowlisted
+   regions: the §5.4 declaration table and the version-history block. Fail the build with the
+   offending line. **This is the check that would have caught the 60-versus-150 split on the day it
+   was written.**
+2. **Resolve-and-assert on read.** Every consumer reads `revision` and `effective_from` alongside the
+   values.
+
+> **Do not bulk-replace "60 days" in this document.** §3 carries an unrelated **60-day
+> subscriber-benefit grace**, which is not freshness and not in scope. The two were separated
+> deliberately in the theme for this exact reason - they share a value by coincidence, and a
+> find-and-replace corrupts whichever one you were not thinking about.
 
 **A subscription is never filled with coffee that exceeds the freshness promise on its ship date.**
 That is the trigger for §6.1.
@@ -586,7 +682,7 @@ printed tasting card.
 - **Availability is gated by components:** offered only while **all** components are in stock and
   within freshness; auto-pauses and returns automatically as stock rotates.
 - **On-demand 3PL fulfilment:** on order, 3PL pulls components FIFO, assembles box + bags + card,
-  QC's all roast dates within the 60-day window, ships in 1–2 business days.
+  QC's all roast dates within `{freshness_window_days}`, ships in 1–2 business days.
 - **Substitution matrix** (admin-defined per collection): if a component is within 7 days of its transition
   date or out of stock after order, 3PL may substitute a defined alternate from the same roaster;
   customer is told ("Same quality, same roaster, new terroir").
@@ -599,10 +695,35 @@ printed tasting card.
 ## 8. Fulfilment & shipping
 
 - **US-only at launch.** No international.
-- **Free** on every Roccia shipment; **free** on one-time orders **$55+**; **flat $8.50** USPS Ground
-  Advantage under $55. Free-shipping progress bar in cart, **$55** threshold.
+- **Free** on every Roccia **subscription** shipment, with **no minimum**.
+- **One-time orders: free at $69+, flat $12.50 under $69** (repriced v1.16; was $55 / $8.50).
+  Free-shipping progress bar in cart, **$69** threshold.
+- **The free tier is contiguous U.S. only** - the lower 48 plus DC. Alaska, Hawaii, Puerto Rico and
+  the territories get **calculated carrier rates**. Until v1.16 this promised the same rates across
+  all fifty states and the territories, which guaranteed a loss on every 1 kg order outside the
+  lower 48. Whether those states instead get a *published* flat surcharge is open (§12.11).
+- **The threshold is measured AFTER discounts.** The conservative reading, and the one both
+  benchmarked competitors who state a basis use. A subscriber's 10% may not push a cart across the
+  line at our expense. Interacts with the `MAX` no-stacking rule (§3).
 - **Carriers:** USPS Ground Advantage under 1 lb; UPS Ground 1 lb+.
 - **Transit:** East/Southeast 2–3 business days · Midwest/Mountain 3–4 · West Coast 4–5.
+
+> **The $12.50 is an incentive spread, not a cost pass-through - do not "correct" it toward carrier
+> cost.** Our USPS Ground Advantage commercial-base cost on a sub-1-lb order is materially lower, and
+> that is deliberate: the number is the size of the gap the customer is being asked to close, on
+> Steve's principle that *the difference between paying shipping and qualifying for free has to be
+> compelling*. On a two-bag cart around $48, paying shipping costs $60.50 while adding a third bag
+> reaches $72 and ships free - $11.50 more for $24 of coffee. At $9.50 the same choice costs $14.50
+> for the same bag and the nudge mostly disappears. $12.50 stays inside observed practice: above
+> Miscela d'Oro's $10.95, below Eataly's $14.90.
+>
+> **The threshold moved on evidence, not instinct.** A 21-seller benchmark of direct competitors, all
+> read from first-party live pages on 2026-08-22, put the old $55 at the **20th percentile** (cohort
+> median $75, coffee-DTC sub-median $70) *and* the old $8.50 below the $9.99 median flat rate - we
+> were conceding both levers at once, which almost no competitor does. $69 is level with Miscela
+> d'Oro and just under Vergnano, so it stays the friendliest bar among Italian brand stores while now
+> taking a genuine two-bag or kilo-plus cart to clear. Dataset:
+> `Brand and Marketing\Market Research\Crema_Italia_Free_Shipping_Benchmark_v1.xlsx`.
 
 ### 8.1 Nothing inside a package shows a price (LOCKED — Steve, 2026-08-19)
 
@@ -689,10 +810,16 @@ damage replacement, the freshness window, and the no-waste pledge (Feeding Tampa
 
 **Metafields (`crema_italia.*`):** `roast_date` (Date), `lot_id` (Text), `eur_usd_rate` (Decimal),
 `landed_cost_usd` (Currency, locked at receipt), `markup_override` (Decimal, **optional** — blank =
-inherit the shelf/size matrix), `days_to_offerta` (Int), `offerta_transition_date`
-(Date), `current_shelf` (SingleSelect: Roccia|Sorpresa|Selezione|Offerta), `Referral_Gift_Allowed`
+inherit the shelf/size matrix), `offerta_transition_date` (Date, computed - see §5), `current_shelf` (SingleSelect: Roccia|Sorpresa|Selezione|Offerta), `Referral_Gift_Allowed`
 (Boolean), plus taxonomy: `roast_level`, `flavor_profile`, `caffeine`, `shelf`, `region`,
 `roaster_handle`, `best_by_date`. Extend with a structured component-SKU BOM field on bundles (§7).
+
+**Retired fields - do not build, do not reintroduce.** `days_to_offerta` (**RETIRED v1.12**: it was
+the freshness boundary stated a second time, and the two diverged, 45 against 90) and
+`peak_flavor_days` (**RETIRED v1.14**: advice we do not enforce, so it is brand copy, not policy).
+`best_by_date` is retained as a **computed, never-displayed** value (§5.4) - it is the roast date
+plus the window, so displaying it beside the window states one fact twice. The freshness values
+themselves are **not metafields at all**: they are a store-level declaration (§5.5).
 
 **The discount engine — REVISED v1.15 (2026-08-22) on measured platform behaviour.** §3's no-codes,
 `MAX` policy is unchanged and still locked. What changed is **which system owns the rate**, because the
@@ -841,6 +968,33 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    scope - Sorpresa collections already ship with a printed tasting card (§7), so a 3PL that cannot do
    it cannot fulfil Sorpresa at all. The gift card of §8.2 is the same capability asked once.
 
+11. **Shipping to AK, HI, PR and the territories - published surcharge or calculated rates?**
+   Opened v1.16 (2026-08-24). The free tier is contiguous-U.S. only (§8) and those destinations
+   currently get **calculated carrier rates**, which is Steve's choice for now. The alternative is a
+   *published* flat surcharge, the way Vergnano states a flat $32. Calculated rates never lose money
+   but quote an unpredictable number at checkout; a published surcharge is friendlier to read and
+   carries the risk. Low urgency, and it only bites once someone outside the lower 48 orders.
+
+12. **The freshness declaration - four questions left by the 2026-08-23 decision.** The rule is
+   settled in §5.5; these are implementation choices, and they are **build-gating** because getting
+   them wrong means a rewrite rather than an edit.
+
+   **(a) Metaobject or shop metafield?** A singleton policy record could be either. The metaobject is
+   proposed for the typed fields and the Admin editing surface; a shop metafield is simpler. Code's
+   call.
+
+   **(b) If a per-SKU freshness override is ever built, it must read this declaration as its
+   default** rather than introducing a second boundary. **That is precisely how `days_to_offerta`
+   happened** - worth a comment in the code, not only here.
+
+   **(c) Does `best_by_date` survive?** §5.4 says it is never displayed and §11 retains it as a
+   computed value. If nothing reads it, it is a field with no consumer, which is the defect Review A
+   removed elsewhere in this project. Retire it or name its consumer.
+
+   **(d) What exactly does the no-bare-literal lint cover?** §5.5 specifies this source and the theme
+   templates. Whether it also covers `docs/production_build_spec.md`, the legal policy sources and
+   the OneDrive brief is open - each is a place a freshness number has already been written by hand.
+
 ---
 
 ## 13. Reviews & social proof (Steve, 2026-08-20)
@@ -979,5 +1133,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.14 · 2026-08-21 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.16 · 2026-08-24 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
