@@ -3641,6 +3641,24 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   handoff recommends dropping the version from the pointers entirely rather than performing the same
   maintenance a fourth time. That is the same move as retiring a duplicated value: **delete the
   second home rather than keep syncing it.**
+  **[Commissioned the same day, and Steve took the pointer decision: drop the version entirely.]**
+  The handoff now carries a **fenced prompt for Cowork** — exact FIND/REPLACE pairs for six edits, an
+  explicit out-of-scope list, and an instruction to write down rather than fix anything else it
+  notices. Cowork is not reachable as an agent from Code, so this goes through Steve.
+  **The baseline was taken BEFORE the prompt was written**, which is the half that makes the rest
+  provable: md5 `5a937485a45cad51284c451925883d1d`, 112 paragraphs, full file copy and paragraph
+  extract retained. That is the pattern that kept Cowork in bounds on Roaster Guide v7 (2026-08-21) —
+  without a pre-edit baseline, drift is unprovable afterwards, and the whole point of fencing a prompt
+  is being able to show it held.
+  **All eight FIND strings were verified byte-for-byte against the document** before handover — seven
+  unique, plus the version pointer at exactly 21 — because a FIND string that silently fails to match
+  is how a fenced edit turns into a freehand one. The document contains smart quotes; none fall inside
+  a FIND string, which is the kind of thing that only shows up if you check.
+  **On the version decision:** each of the three catches was fixed by relabelling, and each time every
+  section number still resolved. The label has never been load-bearing. Removing it is not tidying —
+  it deletes a class of finding that has now consumed three coordinator runs and three edit passes.
+  Logged to `DECISIONS_LOG.md` 2026-08-24 with the application left **open** against Cowork, and a
+  standing follow-up for Code to diff the result against the baseline when it lands.
 
 ---
 
