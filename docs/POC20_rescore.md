@@ -198,8 +198,17 @@ report rather than left.
 
 ## The rubric, as a reusable prompt
 
-Paste this to run the next pass. It is deliberately explicit about method, because three of the five
-passes were distorted by measurement error rather than by judgement.
+> **FROZEN 2026-08-24 — the live rubric is now the `crema-storefront-score` skill, not this file.**
+> Resolve the prompt from the skill; do not paste from here and do not edit this block again.
+>
+> **Provenance, so this is not read as what P20 knew.** The block below was last edited on
+> 2026-08-24 to make it byte-identical to the skill's canonical text. Two things in it postdate
+> this pass: the seventh trap (**CAPTURE CROP**) was **earned at P24**, and STEP 8 gained the
+> **report contract** and lost a stale "five-pass table" phrase on the same day. Read the trap
+> list as the rubric's current state, not as this pass's knowledge.
+
+It is deliberately explicit about method, because three of the five passes were distorted by
+measurement error rather than by judgement.
 
 ```
 Re-score the deployed Crema Italia storefront against the standing rubric.
@@ -242,6 +251,9 @@ STEP 5 — GUARD AGAINST THE KNOWN MEASUREMENT TRAPS.
   - `document.fonts.check()` returns true for faces that do not exist, because it reports
     "can render", including by synthesis. Enumerate `[...document.fonts]` instead.
   - Hidden `.page` elements return empty `innerText`. Keep pages active while reading.
+  - A screenshot that appears to show clipping or overflow may be a CAPTURE CROP. Before
+    reporting it, measure the widest rendered text with Range client rects and compare
+    documentElement.scrollWidth to window.innerWidth.
   - `text-transform:uppercase` defeats case-sensitive matching.
   - Match on meaning, not on a string that correlates with it. A grep for "DKIM1" once
     matched a hostname and reported healthy records as dead.
@@ -258,9 +270,16 @@ If you are scoring work you built in the same session, say so, and hold conteste
 dimensions down rather than up. Name the grounds that are inconvenient for the work.
 
 STEP 8 — REPORT.
-Give the five-pass table, the measured evidence block, findings carried forward, new
-findings, and what remains between the current score and the stated 8.5 ceiling. Say
-plainly if the score did not move and why that is the correct outcome.
+Give the full pass table (every pass to date), the measured evidence block, findings
+carried forward, new findings, and what remains between the current score and the
+stated 8.5 ceiling. Say plainly if the score did not move and why that is the correct
+outcome.
+
+Then end the report with a section titled "The prompt that drove this measurement"
+carrying this entire prompt verbatim and complete, the skill commit SHA it was resolved
+from, and the date. If this pass earned a new trap or refinement, state it inline AND
+merge it back into the skill in the same commit. A delta that lives only in a report is
+the defect this contract exists to kill.
 ```
 
 ---
