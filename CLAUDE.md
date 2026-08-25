@@ -3804,6 +3804,41 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   than rebuilt blind.
   **Cowork is logging this to `DECISIONS_LOG.md` directly** — Code did not write that file, per lane.
 
+- 2026-08-25 — **Wholesale opened as a question, made build-blocking, and written up. No theme
+  code, no Standard change, nothing decided.** Steve raised a Crema Italia café in Tampa (separate
+  entity, name licence, purchase agreements) and saw that it implied a customer class the storefront
+  has never modelled. **The durable move was separating two things:** the café is a business, the
+  wholesale channel is a channel — and the café is a *bad* justification for the channel, because
+  a customer we already control needs an invoice, not a login. So the channel has to stand on its own
+  reasons, which it may: a second demand curve on the same landed inventory, and volume plus cadence
+  to show the roasters before rates are renegotiated.
+  **What actually blocks the build is narrow, and is not "do we want wholesale":** does a customer
+  carry a class, does a variant carry a second price, and is a shelf the only route to a product.
+  Those three are rewrite-versus-edit. Everything else here is launch-blocking at worst.
+  **Three findings worth keeping.** (1) **A wholesale price is not a flat discount off retail.**
+  Retail is landed cost times a markup that varies by shelf and size, and larger sizes already carry
+  a lower markup, so a flat percentage off retail hands us our **thinnest margin on the 1 kg format
+  cafés buy most of** while overcharging the 250 g bags they shelf. Compute from cost; *present* as
+  a discount. (2) **Flat pricing beat the tiered cost-plus originally floated (Steve's call).** A
+  ladder deepening with age would have made wholesale a standing markdown channel competing with
+  Offerta for the same bags, and trained every account to order late. (3) **Whether the roaster
+  agreements permit wholesale at all has never been asked**, and it sits upstream of everything else
+  in the brief — cheap now, since no roaster has signed.
+  **Artifacts.** Source `docs/wholesale/Crema_Italia_Wholesale_Decision_v1.0.html`; WeasyPrint render
+  delivered to OneDrive `Operations\In USA\Tampa Operations\` (**folder did not exist and was
+  created**), md5-verified MATCH, with a README recording the source/render split. The gate row was
+  added **through `build_inventory.py`, never by hand-editing the workbook** — regenerated and
+  verified against a pre-edit baseline: 62 → 63 decision rows, 12 → 13 gates, gate block
+  contiguous, **all 62 prior rows byte-identical** and the other four sheets untouched.
+  **One render defect found only by looking.** The tricolore rule was rendering as **nothing** —
+  WeasyPrint collapses empty flex children to zero width, and the flex version of that rule is the
+  one in the skill's own template. **All four automated gates passed at exit 0 on a document with a
+  brand element silently missing.** Fixed with a hard-stop gradient and commented at the site. Same
+  lesson as POC14's Open Graph tags: a gate proves the render matches its source, never that the page
+  looks right. Dropping three forced page breaks in the same pass took it 12 pages → 9.
+
+
+
 ---
 
 ## 10. Open questions / TODO

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wholesale or not, that is the decision</title>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="../standards/brand-standards/Crema Italia Brand CSS.css">
+<style>
+@page {
+  size: Letter;
+  margin: 20mm 18mm 18mm 18mm;
+  @bottom-left  { content: "Crema Italia, LLC - Wholesale Decision Brief v1.0";
+                  font-family: "Inter", sans-serif; font-size: 8pt; color: #8C7E6A; }
+  @bottom-right { content: counter(page) " / " counter(pages);
+                  font-family: "Inter", sans-serif; font-size: 8pt; color: #8C7E6A; }
+}
+@page :first { @bottom-left { content: ""; } @bottom-right { content: ""; } }
+
+body { background:#fff; color:var(--ci-coffee); font-family:var(--ci-font-body);
+       font-size:10.2pt; line-height:1.5; }
+main.ci-page { max-width:none; padding:0; }
+
+h1 { font-family:var(--ci-font-display); font-weight:400; font-size:27pt;
+     line-height:1.15; color:var(--ci-coffee); margin:0 0 .35rem; }
+h2 { font-family:var(--ci-font-body); font-weight:600; font-size:12.5pt;
+     color:var(--ci-crema); margin:1.5rem 0 .45rem;
+     break-after:avoid; page-break-after:avoid; }
+h3 { font-family:var(--ci-font-body); font-weight:600; font-size:10.4pt;
+     color:var(--ci-coffee); margin:1rem 0 .25rem;
+     break-after:avoid; page-break-after:avoid; }
+p  { margin:0 0 .6rem; }
+ul, ol { margin:0 0 .7rem; padding-left:1.15rem; }
+li { margin-bottom:.28rem; }
+strong { font-weight:600; }
+code { font-family:"Consolas","Courier New",monospace; font-size:9pt; }
+.lede { font-size:11.4pt; color:var(--ci-ink-soft); line-height:1.45; }
+
+.eyebrow { font-family:var(--ci-font-body); font-size:7.6pt; font-weight:600;
+           letter-spacing:.14em; text-transform:uppercase; color:var(--ci-mute); }
+
+/* Tricolore rule. Painted with a hard-stop gradient, NOT with flex children:
+   WeasyPrint collapses empty flex items to zero width, so the flex version of
+   this rule renders as nothing at all - and it renders as nothing SILENTLY,
+   which no render gate can catch. Verified by looking at the page, 25-AUG-2026.
+   Middle band is hairline, not white, so it is visible on white paper. */
+.flag-rule { height:2px; margin:.7rem 0 1.1rem;
+  background:linear-gradient(to right,
+    #0E7A3A 0%, #0E7A3A 33.333%,
+    #D9D2C2 33.333%, #D9D2C2 66.666%,
+    #C8342B 66.666%, #C8342B 100%); }
+.flag-rule span { display:none; }
+
+table.ci-table { width:100%; border-collapse:collapse; margin:.4rem 0 1rem;
+                 font-size:9.1pt; }
+table.ci-table th { background:#F7F3EA; color:var(--ci-coffee); font-weight:600;
+                    text-align:left; padding:.34rem .45rem;
+                    border:0.5px solid var(--ci-hairline); }
+table.ci-table td { padding:.34rem .45rem; border:0.5px solid var(--ci-hairline);
+                    vertical-align:top; }
+table.ci-table tr { break-inside:avoid; page-break-inside:avoid; }
+
+.callout { border:0.6px solid var(--ci-hairline); border-left:2.5px solid var(--ci-crema);
+           background:#FBF8F1; padding:.6rem .8rem; margin:.7rem 0 1rem;
+           font-size:9.5pt; break-inside:avoid; page-break-inside:avoid; }
+.callout p:last-child { margin-bottom:0; }
+.callout.warn { border-left-color:var(--ci-red); }
+.callout .lbl { display:block; font-size:7.6pt; font-weight:600; letter-spacing:.13em;
+                text-transform:uppercase; color:var(--ci-mute); margin-bottom:.25rem; }
+
+.opt { border:0.6px solid var(--ci-hairline); padding:.65rem .8rem; margin:.55rem 0;
+       break-inside:avoid; page-break-inside:avoid; }
+.opt h3 { margin-top:0; }
+.opt.rec { border-color:var(--ci-crema); background:#FDFBF6; }
+.tag { display:inline-block; font-size:7.4pt; font-weight:600; letter-spacing:.11em;
+       text-transform:uppercase; color:#fff; background:var(--ci-crema);
+       padding:.1rem .38rem; border-radius:2px; margin-left:.35rem; }
+
+/* Keep the open-questions list whole. Its h2 already carries break-after:avoid,
+   so heading and list travel together rather than orphaning question 1. */
+ol.q { break-inside:avoid; page-break-inside:avoid; }
+.q li { margin-bottom:.42rem; }
+.muted { color:var(--ci-mute); }
+.small { font-size:9pt; }
+.pb { break-before:page; page-break-before:always; }
+.cover-foot { margin-top:1.1rem; font-size:9pt; color:var(--ci-mute); }
+</style>
+</head>
+<body>
+<main class="ci-page">
+
+<header>
+  <img src="../standards/brand-standards/assets/ci-cover-logo.png" alt="Crema Italia"
+       style="height:52px; display:block; margin-bottom:1.1rem;">
+  <span class="eyebrow">Decision Brief &middot; Tampa Operations</span>
+</header>
+<div class="flag-rule"><span></span><span></span><span></span></div>
+
+<h1>Wholesale or not, that is the decision</h1>
+<p class="lede">Whether Crema Italia sells to the trade, on what pricing basis, and through
+what mechanism. Raised by the prospect of a Crema Italia caf&egrave; in Tampa, but standing
+or falling on its own merits. <strong>Nothing in this document is decided.</strong> It exists to
+put the question, its consequences and its open ends in one place so the call can be made
+before the production storefront is built.</p>
+
+<p class="cover-foot">Prepared 25-AUG-2026 &middot; Crema Italia, LLC, Lutz, Florida &middot;
+Status: <strong>OPEN &mdash; build-blocking</strong></p>
+
+<div class="callout">
+  <span class="lbl">Standing rule &mdash; every number here is provisional</span>
+  <p>We are pre-launch. Every figure in this brief is a modelling placeholder, not a settled
+  decision: prices, markups, minimums, thresholds and windows alike. They are good enough to
+  reason against and not good enough to charge money against, and none of them acquires
+  authority by having been written down. The deliberate analysis pass happens after the live
+  site is built and before it is made public. Until then, changing a number costs only the edit.</p>
+</div>
+
+<h2>1. Why this blocks the build</h2>
+<p>The narrow, build-blocking question is not <em>&ldquo;do we want wholesale customers?&rdquo;</em>
+It is smaller and much harder to retrofit:</p>
+<ul>
+  <li><strong>Does a customer carry a class?</strong> Retail or trade. If a customer can ever be
+  trade, that flag has to exist from the first day of the production data model.</li>
+  <li><strong>Does a variant carry a second price, or a readable cost?</strong> A wholesale price is
+  not a discount off retail (see &sect;5). Somewhere, per SKU and per size, a second number has to live.</li>
+  <li><strong>Is a shelf the only way to reach a product?</strong> The four shelves are a consumer
+  discovery device. A trade buyer wants a sorted table. If any surface must ever bypass the shelves,
+  the catalogue cannot assume shelves are the only route in.</li>
+</ul>
+<p>Answering &ldquo;no wholesale, ever&rdquo; is a perfectly good answer and closes all three cheaply.
+Answering &ldquo;probably, within eighteen months&rdquo; is also fine, and costs almost nothing
+<em>now</em> and a great deal <em>later</em>. What is not available is leaving it unanswered, because
+the silent default is the first answer while the intention is the second.</p>
+
+<h2>2. Where this came from, and the separation that matters</h2>
+<p>The prompt was a brick-and-mortar Crema Italia caf&eacute; in the Tampa area: a separate legal
+entity, licensed to use the name, buying coffee from Crema Italia LLC under agreement and brewing it
+for the public.</p>
+<p>These are two different things and should be judged separately:</p>
+<ul>
+  <li><strong>The caf&eacute;</strong> is a business with its own economics, entity, lease and risk. Its
+  value to Crema Italia is mostly <em>retail</em>: bags on a shelf, a tasting room, a cup that carries a
+  route back to the online store.</li>
+  <li><strong>The wholesale channel</strong> is a customer class, a pricing basis and an order mechanism.</li>
+</ul>
+<div class="callout">
+  <p>The caf&eacute; is a poor justification for the channel. If we control both sides, the caf&eacute;
+  does not need a login; it needs an invoice. <strong>Building a self-service wholesale storefront to
+  serve one customer we already control would be backwards.</strong> The channel has to stand on reasons
+  of its own.</p>
+</div>
+<p>It does appear to have some. It puts a second demand curve on the same landed inventory, which
+changes what a quarter-pallet purchase decision means. It absorbs volume at a predictable cadence,
+which is what makes import lot-sizing work. And it is intended to <strong>demonstrate volume and
+cadence to the roasters</strong> while the direct-to-consumer book is still accelerating, which
+strengthens our hand when rates are renegotiated.</p>
+
+<h2>3. Settled in discussion, 25-AUG-2026</h2>
+<p>These are Steve&rsquo;s calls from the conversation that produced this brief. They are recorded as
+positions taken, not as published rules; none of them is in a Standard yet.</p>
+
+<table class="ci-table">
+<thead><tr><th style="width:31%">Position</th><th>Reasoning</th></tr></thead>
+<tbody>
+<tr><td><strong>Flat wholesale pricing</strong></td>
+<td>No standing markdown ladder tied to age. A ladder that deepens as coffee ages trains every
+account to wait until day 80 before ordering.</td></tr>
+<tr><td><strong>Aged stock handled as separate, controllable offers</strong></td>
+<td>Occasional and deliberate, not standing. And the expectation is that Offerta counts stay small in
+the first place.</td></tr>
+<tr><td><strong>Buyer pays their own freight, always</strong></td>
+<td>No free-shipping tier of any kind on trade orders.</td></tr>
+<tr><td><strong>Price presented as a discount off retail</strong></td>
+<td>The buyer needs to see and feel real buying power. Part of what keeps retail high is that retail
+carries shipping inside the price.</td></tr>
+<tr><td><strong>Same SKUs, no separate trade pack</strong></td>
+<td>Caf&eacute;s will consume 1&nbsp;kg and may shelf smaller formats for resale.</td></tr>
+<tr><td><strong>No lot selection</strong></td>
+<td>Follows directly from flat pricing: with no age-based price there is nothing for the buyer to
+choose between. The 3PL pulls FEFO.</td></tr>
+<tr><td><strong>Card at checkout</strong></td>
+<td>No net terms, so no credit risk, no invoicing cycle, no chasing.</td></tr>
+<tr><td><strong>High minimum order</strong></td>
+<td>Real trade volume, not a retail customer seeking a trade price. Figure not yet set (&sect;7).</td></tr>
+<tr><td><strong>Tax ID required</strong></td>
+<td>Proof the buyer is genuinely a business.</td></tr>
+<tr><td><strong>Target 5&ndash;20 accounts in year one</strong></td>
+<td>Generate volume while the B2C book accelerates, and establish cadence with the roasters ahead of
+any rate renegotiation.</td></tr>
+<tr><td><strong>Caf&eacute; is a separate entity under licence</strong></td>
+<td>With name licence and purchase agreements, so pricing between the two must be defensible at
+arm&rsquo;s length.</td></tr>
+<tr><td><strong>Decide before the build</strong></td>
+<td>The reason this brief exists.</td></tr>
+</tbody>
+</table>
+
+<h2>4. Four findings that could reshape this before pricing matters</h2>
+<p>Each of these, if it lands badly, changes the shape of the answer rather than its detail. Two are
+platform facts we should verify on the free development store before relying on them; two are not
+technical at all.</p>
+
+<h3>4.1 Shopify&rsquo;s native B2B is almost certainly Plus-only</h3>
+<p>Company profiles, B2B catalogues, per-company price lists and payment terms appear to be gated to
+Shopify Plus, which we already declined at roughly $24,000 a year over a single checkout field. That
+leaves three routes: a third-party wholesale app, a hand-rolled customer-tag approach, or keeping
+wholesale off the storefront entirely.</p>
+<p class="small muted"><strong>Confidence:</strong> high, but unverified on our own store. Worth ten
+minutes on the development store before it is treated as fact.</p>
+
+<h3>4.2 The Liquid <code>customer</code> object may not be reliable enough to gate a storefront on</h3>
+<p>This is the finding that most threatens the &ldquo;separate login shows a different store&rdquo;
+premise. A store created today runs new customer accounts only, and under those, the Liquid
+<code>customer</code> object has been reported null while the visitor is signed in, with details
+expiring after about a day. If the theme cannot reliably tell who is looking, it cannot reliably show
+them a different catalogue.</p>
+<p class="small muted"><strong>Confidence:</strong> this is forum reporting rather than documentation,
+which makes it exactly the sort of thing that passes a test on Tuesday and fails on Wednesday. Cheap to
+test; expensive to discover mid-build.</p>
+
+<h3>4.3 Do our roaster agreements permit wholesale at all?</h3>
+<p>The Roaster Guide and the intro correspondence are written around Crema Italia as a consumer import
+channel &mdash; <em>the premier consumer channel for each of these roasters</em>. Italian roasters
+typically care a great deal about who serves their coffee out of a portafilter, because it is their
+reputation in a cup they did not pull, and several will already have distribution arrangements of their
+own.</p>
+<div class="callout warn">
+  <p><strong>This is a contract question, not a code question, and it sits upstream of everything else
+  in this brief.</strong> No roaster has signed yet, which makes it cheap to raise now and expensive to
+  raise later. It should be settled in the roaster agreement rather than discovered afterwards.</p>
+</div>
+
+<h3>4.4 Wholesale enlarges the one-SKU-two-products problem</h3>
+<p>We already have an unresolved issue where a single physical SKU can back more than one Shopify
+product, and it was proven on the development store that Shopify gives each variant its own independent
+inventory pool &mdash; so it will cheerfully believe in seventy bags when forty exist. That is an
+overselling risk, not merely a mis-picking one. A wholesale product drawing on the same bin would add a
+third claimant.</p>
+<p>The mitigation is already inside this brief: <strong>flat pricing and no lot selection mean wholesale
+does not need its own product at all.</strong> It needs a different <em>price</em> against the same
+stock, which is a much smaller ask and does not split the pool.</p>
+
+<h2>5. Pricing: compute from cost, present as a discount</h2>
+<p>Cost-plus is the right instinct, and expressing it to the buyer as a discount off retail is the right
+presentation. They should not be the same operation.</p>
+
+<h3>Why a flat percentage off retail is the wrong mechanism</h3>
+<p>Retail price is landed cost multiplied by a markup that varies by shelf and size, and larger sizes
+already carry a lower markup because the consumer is being given a volume break. So 1&nbsp;kg retail
+already sits closer to cost than 250&nbsp;g retail does.</p>
+<div class="callout">
+  <p>A flat percentage off retail therefore delivers our <strong>thinnest margin on the exact format
+  caf&eacute;s buy most of</strong>, the 1&nbsp;kg, while overcharging on the 250&nbsp;g bags they shelf
+  for resale. Same account, both formats, one of them mispriced.</p>
+</div>
+<p><strong>The resolution:</strong> compute the wholesale price per SKU and size from fully loaded cost,
+then display it against the retail shelf price so the buyer sees the discount. One price basis,
+controlled margin per format, and the buying-power signal intact.</p>
+
+<h3>Two questions to settle on the cost-plus itself</h3>
+<ul>
+  <li><strong>Markup or margin?</strong> Cost &times;&nbsp;1.30 is a 23.1% gross margin.
+  Cost &divide;&nbsp;0.70 is a 30% margin and a 42.9% markup. These are routinely conflated and the gap
+  is real money.</li>
+  <li><strong>Plus on which cost?</strong> Our recorded cost is <em>inbound</em> landed: the EUR price
+  plus freight, tariff and handling to the warehouse. It does not carry pick-and-pack, 3PL storage, card
+  processing at 2.7%, or breakage. At a 23% gross margin, card fees alone consume roughly an eighth of
+  it. The plus should be set against fully loaded cost, or set high enough that we know what it is
+  absorbing.</li>
+</ul>
+<p class="small">A sanity check against the cost model&rsquo;s most-likely landed figure puts
+cost &times;&nbsp;1.30 at roughly $37/kg, about $16.80/lb, which lands wholesale near 45% of the retail
+250&nbsp;g price. That is inside the conventional wholesale zone for the trade, where 50% of retail is
+the usual default, so the number is not obviously wrong. That is reassurance, not validation.</p>
+
+<h3>The shipping subsidy is most of the answer</h3>
+<p>Retail price carries outbound shipping inside it: free over the threshold, flat below. A trade buyer
+pays their own freight, which means <strong>a meaningful share of the discount we hand them costs us
+nothing at all</strong>. It is simply the shipping we no longer pay. We can offer a headline number that
+reads generously while giving up only a fraction of it in true margin.</p>
+<p>It is also the honest sales line, and honest sells better here: <em>you pay your own freight, so you
+keep what we would otherwise spend delivering to a doorstep.</em></p>
+
+<h3>Resale and channel control</h3>
+<p>At roughly 45% of retail, a wholesale buyer can trivially resell bags online and undercut us. Every
+serious wholesale agreement handles this with channel restrictions, territory, or a minimum advertised
+price policy. <strong>That term needs to exist before the first account, not after the first
+incident.</strong></p>
+
+<h2>6. Freshness: a different curve, not a relaxed one</h2>
+<p>The intuition that caf&eacute;s worry less about freshness is half right, and the correction changes
+the policy.</p>
+<ul>
+  <li><strong>Espresso wants rest.</strong> Most roasters will not pull a good shot on beans younger than
+  about seven days, and many prefer ten to twenty-one days off roast. A bag we would consider ideally
+  fresh at day five is <em>too young</em> for a caf&eacute;.</li>
+  <li><strong>They work through a bag in days, not weeks.</strong> Mid-life coffee performs well for them
+  where a consumer&rsquo;s last cup from a 250&nbsp;g bag might be drawn at day sixty.</li>
+</ul>
+<p>So the trade window is <em>shifted later</em> rather than <em>widened</em>. Something on the shape of
+&ldquo;we ship trade orders between ten days and the end of our main window&rdquo; is a differently
+shaped promise, not a weaker one, and it is defensible in front of a buyer who knows coffee.</p>
+<div class="callout">
+  <p><strong>Flat pricing already protects the freshness posture.</strong> The tiered cost-plus
+  originally floated &mdash; deeper discounts as coffee approaches maximum age &mdash; would have made
+  the wholesale channel a standing markdown ladder for old inventory, competing directly with Offerta
+  for the same bags and training every account to order late. Flat pricing removes all three problems at
+  once. Aged stock, when it exists, goes out as an occasional and separately controlled offer.</p>
+</div>
+<p class="small">One thing to watch rather than assume: the hope that Offerta counts stay small is
+decided by import lot sizing, and will not be knowable for a few cycles. If Offerta turns out to carry
+real volume, the question of who absorbs it reopens.</p>
+
+<h2>7. Minimums, and the tension inside them</h2>
+<p>A high minimum makes each order worth packing and keeps out the retail customer chasing a trade price.
+But a quarter-pallet minimum means the caf&eacute; is holding two to three months of coffee, which is
+precisely the opposite of what we sell.</p>
+<p>A starting position to react to, not a decision:</p>
+<ul>
+  <li><strong>Roughly $500 to $750 per order</strong>, or about 15 to 20&nbsp;kg. For a small caf&eacute;
+  running five to fifteen kilos a week, that is about a month, so they reorder monthly and never hold
+  stale stock.</li>
+  <li><strong>Enforce seriousness through a commitment, not a single large drop.</strong> A quarterly or
+  annual volume commitment does the job the pallet was being asked to do.</li>
+  <li><strong>The minimum&rsquo;s real job</strong> is to exclude the buyer who wants one bag at trade
+  price, and to make the tax-ID and account vetting worth doing.</li>
+</ul>
+<p>Note where that lands: a trade customer buying a fixed quantity on a regular cadence is a subscription.
+<strong>The mechanism built for Roccia may be closer to the right shape for wholesale than the
+one-big-drop model is</strong>, and &ldquo;same as last time&rdquo; is the most common wholesale order in
+the entire trade.</p>
+
+<h3>Tax ID is the wrong document, or at least not the only one</h3>
+<p>An EIN proves a business exists. What actually matters for not charging sales tax is a
+<strong>resale or sales-tax exemption certificate</strong>, collected and retained per state, and kept
+current. Shopify supports marking a customer tax-exempt on all plans; the compliance burden of holding
+valid certificates is ours regardless.</p>
+
+<h2>8. How orders would actually work</h2>
+<p>For 5 to 20 accounts, the honest recommendation is to <strong>build nothing and use draft
+orders</strong>.</p>
+<p>The order is taken by a person, built in the Shopify admin at wholesale prices, and sent as an invoice
+link the buyer pays by card. That delivers every requirement already settled:</p>
+<ul>
+  <li>Custom per-line pricing, natively, with no app and no Plus</li>
+  <li>Card at checkout, no terms, no credit risk</li>
+  <li>Freight charged as its own line</li>
+  <li><strong>The order lands in Shopify as a real order</strong>, so the 3PL receives it through the
+  integration it already has, with no second fulfilment path</li>
+</ul>
+<div class="callout">
+  <p><strong>The structural point: orders must live in Shopify even if browsing does not.</strong> The
+  moment a trade order exists outside Shopify we have created a second inventory truth and a second thing
+  to tell the 3PL about. Draft orders keep the browsing outside and the order inside, which is the right
+  seam.</p>
+</div>
+<p>At twenty accounts ordering monthly this is roughly twenty invoices a month, a few hours of work.
+Self-service gets built when that becomes genuinely annoying, somewhere around twenty-five to thirty
+accounts, and by then we will know what these customers actually order, which we do not now.</p>
+
+<h3>The sales pattern this matches</h3>
+<p>The first order is always human: someone brings samples, they cup it, they ask what happens when a lot
+runs out. Reorders want to be frictionless. So the split is not <em>login versus price list</em>, it is
+<strong>relationship for the first order, self-service for the reorder</strong> &mdash; and at year-one
+volumes, a person and an invoice link is faster than any software we could write.</p>
+
+<h3>Where wholesale prices live</h3>
+<p>We have already committed to building a SKU price-maintenance tool: landed cost times markup with
+approval governance, spreadsheet-assisted at launch, because it is not a native Shopify feature.
+<strong>Wholesale pricing is one more column in a tool already planned</strong>, not a new system. From
+there it reaches the world as a generated trade price list, and as the numbers typed into a draft order.</p>
+
+<h3>One item for the 3PL qualifying questions</h3>
+<p>FEFO is the right pull discipline and it is not the same as FIFO. Many 3PLs pick FIFO by
+<em>receipt date</em>, which only equals FEFO if lots always arrive in roast order. <strong>Ask
+specifically: can you pick FEFO against a lot attribute we supply, rather than by receipt date?</strong>
+This joins the qualifying questions already on the list.</p>
+
+<h2>9. Two side matters that are not wholesale</h2>
+
+<h3>9.1 Custom Sorpresa boxes are contract packing</h3>
+<p>The idea of OEM-packaged collections for a gift-shop buyer &mdash; standard 100&nbsp;g SKUs inside,
+the retailer&rsquo;s packaging outside, never on the Sorpresa shelf and never sold B2C &mdash; is a
+different business from wholesale and should be named as one so it does not quietly become
+&ldquo;just another SKU&rdquo;.</p>
+<ul>
+  <li><strong>Custom print carries minimums</strong>, typically several hundred to a thousand units.
+  Someone fronts that cash: the buyer, or us amortised into unit price against a committed volume.</li>
+  <li><strong>Whose name is the responsible party on the box?</strong> Labelling requires one. If the
+  outer packaging carries a third party&rsquo;s brand, that has a real answer and it is needed before the
+  first box prints.</li>
+  <li><strong>Roaster consent is sharper here than for plain wholesale.</strong> Their coffee inside
+  someone else&rsquo;s box is a different conversation from their coffee in their own bag on a
+  caf&eacute; shelf. Expect some roasters to permit the second and refuse the first.</li>
+</ul>
+
+<h3>9.2 The caf&eacute; name licence has a trademark trap in it</h3>
+<p>We would be licensing an <strong>unregistered</strong> mark to a separate legal entity. The thing to
+get right is that a trademark licence lacking genuine quality-control provisions, and lacking actual
+exercise of them, can be treated as a naked licence &mdash; which in the worst case is treated as
+abandoning rights in the mark.</p>
+<p>This is entirely avoidable with standard drafting, and cheapest to handle in the same conversation as
+the USPTO filing rather than afterwards. It matters more than it otherwise would because the caf&eacute;
+would be the most visible use of the name we have. <strong>One for the attorney, not for us.</strong></p>
+
+<h2>10. The real constraint is not software</h2>
+<p><strong>Who sells 5 to 20 accounts?</strong> Wholesale coffee accounts are won by a person walking in
+with a bag and a thermos, repeatedly. Five to twenty signed accounts is plausibly one to two hundred
+approaches. Lucia is in Italy; Lauren is US operations. That is a job, not a task, and it is the actual
+constraint on the plan &mdash; not the pricing, and certainly not the storefront.</p>
+<p>A second one worth deciding now rather than later: the volume-for-negotiation logic is a legitimate
+<em>purchasing</em> strategy, and any rate improvement won would flow to the retail book as well. But it
+only pays if the improvement materialises. <strong>Decide in advance what evidence would show that it
+did</strong>, otherwise we will simply have added a thin-margin channel and called it strategy.</p>
+
+<h2>11. The decision</h2>
+
+<div class="opt">
+  <h3>Option A &mdash; No wholesale</h3>
+  <p>Direct to consumer only. The caf&eacute;, if it proceeds, buys through an ordinary commercial
+  agreement handled off-platform between two entities.</p>
+  <p class="small"><strong>Commits us to:</strong> no customer class, no second price, shelves as the only
+  route to a product. Cheapest build. Forecloses trade volume as a lever with the roasters.</p>
+</div>
+
+<div class="opt rec">
+  <h3>Option B &mdash; Wholesale as a relationship channel <span class="tag">Recommended</span></h3>
+  <p>Trade accounts are sold by a person, priced from a generated trade price list, and ordered through
+  Shopify draft orders paid by card. No wholesale storefront, no second login, no gated catalogue.</p>
+  <p class="small"><strong>Commits us to:</strong> a customer class, a wholesale price column in the price
+  tool, a trade agreement with channel-control terms, and resale-certificate handling. Near-zero build.
+  Every requirement already settled is met. Self-service can be added later, informed by what these
+  accounts actually order.</p>
+</div>
+
+<div class="opt">
+  <h3>Option C &mdash; Wholesale as a self-service channel</h3>
+  <p>A trade login that reveals a different catalogue: no shelves, a sorted product table, trade prices,
+  freight calculated at checkout.</p>
+  <p class="small"><strong>Commits us to:</strong> everything in Option B, plus resolving &sect;4.1 and
+  &sect;4.2 first &mdash; and if either lands badly, either a wholesale app subscription or Plus. Highest
+  build cost, and it would be built before we have the customers to learn from.</p>
+</div>
+
+<p>Option B is recommended because it is the only one that <strong>defers the expensive and irreversible
+parts while foreclosing nothing</strong>. It answers the build-blocking questions in &sect;1 &mdash; yes to
+a customer class, yes to a second price, no change needed to shelves &mdash; without committing us to
+build a second storefront for customers who do not yet exist.</p>
+
+<h2>12. What must be true before the production build starts</h2>
+<ol>
+  <li><strong>A decision between A, B and C</strong>, or an explicit &ldquo;B-shaped, decide C
+  later&rdquo;.</li>
+  <li><strong>If not A:</strong> confirm the roaster agreement permits wholesale, and settle the
+  channel-control term. This is upstream of everything.</li>
+  <li><strong>If not A:</strong> a customer class exists in the data model, and a wholesale price has a
+  home per SKU and size.</li>
+  <li><strong>If C is on the table at all:</strong> verify &sect;4.1 and &sect;4.2 on the development
+  store. Both are short tests.</li>
+</ol>
+
+<h2>13. Open questions</h2>
+<ol class="q">
+  <li><strong>Markup or margin</strong>, and on inbound landed cost or fully loaded cost?</li>
+  <li><strong>What headline discount</strong> should a trade buyer see, and how much of it is the
+  recovered shipping subsidy rather than surrendered margin?</li>
+  <li><strong>Minimum order</strong> &mdash; is $500 to $750 the right order of magnitude, and is it per
+  order, per quarter, or an annual commitment?</li>
+  <li><strong>Who sells?</strong> Steve, a commission rep, or nobody yet.</li>
+  <li><strong>Does the caf&eacute; buy at the same trade price as a third party?</strong> Related-party
+  pricing between two entities under common control should be defensible, and the caf&eacute;&rsquo;s
+  true profitability is only visible once the transfer price is honest.</li>
+  <li><strong>Is contract packing in or out</strong> as a line of business, and does it wait behind
+  ordinary wholesale?</li>
+  <li><strong>What evidence</strong> would show the volume-for-negotiation strategy worked?</li>
+  <li><strong>Freight</strong> &mdash; parcel only, or do we quote LTL for pallet-scale orders? LTL brings
+  freight class, liftgate and dock questions, and carrier-calculated rates may carry their own plan
+  requirement. Unchecked.</li>
+</ol>
+
+</main>
+
+<div class="flag-rule" style="margin-top:1.4rem;"><span></span><span></span><span></span></div>
+<footer class="small muted" style="display:flex; justify-content:space-between;">
+  <span>Crema Italia, LLC &middot; Lutz, Florida, USA &middot; cremaitalia.com</span>
+  <span>v1.0 &middot; Built to Brand Standards v2.3</span>
+</footer>
+
+</body>
+</html>
