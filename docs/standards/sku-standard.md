@@ -145,9 +145,14 @@ separate pools.
 
 **A coffee SKU exists for every size the roaster will label, which is not the same as every size we
 list.** 100 g is sold only inside collections (Store Operating Standards §1), so `…10` is a real
-SKU that is never a standalone purchasable product. Because SKUs are handed to the roaster for
-label printing, and a label plate costs money, the assignment record should mark which sizes are
-actually to be produced.
+SKU that is never a standalone purchasable product.
+
+**Sizes are opted into, one coffee at a time.** SKUs are handed to a roaster for label printing and
+a label plate costs money, so the assignment record carries a `Label <size>` flag per size and
+**emits a SKU only where that flag is set**. Blank means we are not asking that roaster to produce
+that size. Nothing is lost by leaving one blank: `SS` is a fixed enumeration rather than an
+allocation — only `RRR` and `PPPP` are assigned and frozen — so switching a size on later yields the
+identical string it always would have. A size flag is a **printing instruction, not a commitment**.
 
 ## There is no shelf segment
 
@@ -232,7 +237,7 @@ its availability gate reads the Offerta band rather than the fresh window.
 (`production_build_spec.md` §13.4, §13.9), never typed.
 
 **Until then**, the register of assigned SKUs is
-`Operations\In USA\shopify\Master Data\CremaItaliaSKUMasterBuilder.xlsx` in OneDrive. It is a
+`Operations\In USA\shopify\MasterData\CremaItaliaSKUMasterBuilder.xlsx` in OneDrive. It is a
 living register rather than a document: **it carries no version in its filename**, and it is the
 authority for which codes have been handed out.
 
@@ -242,8 +247,9 @@ Two of its properties are load-bearing and must survive any rebuild of it:
   the next free value; the assigned value is then held as a literal. A code derived from row
   position renumbers every entry below an insertion or a sort, silently re-pointing SKUs that may
   already be printed on a bag.
-- **It emits only what goes on a bag.** No `-OFF`, no shelf, no lot. That is what makes it directly
-  usable as the label-printing handoff to a roaster.
+- **It emits only what goes on a bag, and only the sizes we have asked for.** No `-OFF`, no shelf,
+  no lot, and no SKU for a size whose `Label` flag is blank. That is what makes it directly usable
+  as the label-printing handoff to a roaster: you send the row as it stands.
 
 **CI is not where hand-entry is caught, and should not be expected to be.** A lint over this
 repository can catch a SKU literal written into theme code or documentation outside this standard's
