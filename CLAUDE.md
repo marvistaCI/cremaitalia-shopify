@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.3) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.17) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.18) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > ⚠ **EVERY VALUE IN THE STANDARDS IS PROVISIONAL UNTIL THE SITE GOES PUBLIC (Steve,
@@ -3837,6 +3837,84 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   lesson as POC14's Open Graph tags: a gate proves the render matches its source, never that the page
   looks right. Dropping three forced page breaks in the same pass took it 12 pages → 9.
 
+
+
+- 2026-08-29/30 — **The SKU format becomes its own document, and is deliberately NOT a fourth
+  Standard. Store Operating Standards v1.17 -> v1.18.** Applied from Cowork's approved handoff
+  `Coordination\handoff-sku-standard-2026-08-29.md`; Cowork wrote the `DECISIONS_LOG` entry, so this
+  one does not duplicate it. **The reason it moved is the durable part:** the format was decided
+  2026-08-21 into build-spec §13.9.1, propagated nowhere, and on 2026-08-29 could not be found by the
+  person who decided it. The coordinator's daily drift check could never have caught that, and the
+  sentence is worth keeping — **it detects contradiction *between* documents, and a decision recorded
+  in exactly one document contradicts nothing. Drift detection cannot find absence.**
+  **`docs/standards/sku-standard.md` carries no version, no render and no render-trust row** (Steve's
+  call, option G). "The three Standards" is wired into Collaboration Standard §2, the standards
+  README, `crema-std-publish` (which is version-driven), the trust badge and the CLAUDE.md pointer
+  block; a fourth file with no version cannot pass through that ritual, and a stable format does not
+  need the machinery. Its header says so and asks not to be "fixed" into one. Listed separately in
+  `docs/standards/README.md`, cited **by section title** everywhere.
+  **Five findings were raised against the handoff before writing, and four changed the result.**
+  (1) **`RRR` is the SOURCE, not the owner** — Steve's call after seeing both modelled. The handoff
+  had card and box sharing the collection's `RRR`+`PPPP` so a scanner could find siblings by
+  substituting one character; that shortcut solves a problem the **per-order BOM already solves**,
+  while costing the card printer and box printer their place in the SKU entirely and making `RRR`
+  mean two things by class. Consequence accepted knowingly and written down: **the
+  collection↔card↔box link lives in the BOM and only in the BOM**, and no warehouse procedure may
+  assume otherwise. (2) **An aged collection was priced and unbuildable** — §2.2/§2.3 carry a 3.2x
+  aged factor while §7's gate read the fresh window unconditionally, so an Offerta collection was
+  unpublishable by construction. Resolved: the gate reads the band appropriate to that collection's
+  shelf, and an aged collection is a **deliberately curated new collection**, never an automatic
+  transition — a collection holds no stock and is assembled on order, so it cannot itself age.
+  (3) **Two edits the handoff's own list missed**, both found by reading the consuming text rather
+  than the edit list: §13.9's opening notation asserts `SKU = the coffee` unconditionally, false once
+  five classes exist; and §12.9(0) — **the item that actually goes to a 3PL** — still pointed at
+  "three candidate answers are open." (4) **Edit 5 could not be done as written and half of it can
+  never be done.** There is no lint and **no CI in this repository at all**; §5.5 specifies the check
+  and §12.12(d) is still open on its scope. Worse, a lint over repo text cannot catch a **hand-typed**
+  SKU, because hand-entry happens in the Shopify admin. The rules are written into §5.5 and §12.12(d)
+  so they arrive with the lint when it is built, and both say plainly that nothing is enforced today.
+  **The guard against hand-entry is the generator plus validation at product onboarding, not CI.**
+  **The `-OFF` suffix, and what Shopify actually does.** Class `C` only, never printed on a bag,
+  read as ten characters plus an optional suffix rather than fixed-width fourteen. **It is not what
+  puts a product on the Offerta shelf — a product tag does that**, and conflating the two is easy:
+  the tag is read by the site, the suffix by the warehouse. §13.9.2 is RESOLVED with **option D, one
+  bin two pick conditions**, A-with-a-marked-bin as fallback, per-unit transfer cost quoted before
+  3PL selection; B and C are kept as recorded alternatives because a 3PL's answer has to be read
+  against what we rejected. **The consequence D leaves behind is now written down rather than
+  discovered:** because two prices force two products, the counts sit in two independent Shopify
+  inventory records and Shopify will hold 50 and 5 apart at a single location — but it **holds** them
+  and does not derive, maintain or police them. No lot tracking, so the split is a human judgement
+  made once that nothing re-checks; it will never notice the two pools are the same good in the same
+  bin. **The control is periodic reconciliation of the 3PL's on-hand report against the two pools.**
+  **Steve's SKU master workbook was read and four mechanical defects fixed in place** (snapshot taken
+  first, md5 `1ea909b1446c7fa982664302033997c0`, verified byte-identical before touching anything).
+  The live one: **codes were positional** — `=TEXT(Sequence,"000")` — so inserting "Crema Italia" at
+  the top of the vendor list had renumbered everything and every `CoffeeMaster` row was off by one,
+  attributing Toscana Blend to Crema Italia while the dropdown said Roaster One. Excel's validation
+  only fires on entry, so it never complained. Codes and sequences are now **assigned once and
+  frozen**, with the formula left in empty rows to propose the next value; the four stale rows are
+  repaired; both roaster VLOOKUPs gained `FALSE`; `#REF!` names deleted; `SKUData` extended to reach
+  the `C` row; and every derived column is guarded so 2,000 blank rows stop emitting seven-character
+  strings that look like SKUs. Verified by driving **real Excel** through a full rebuild — zero SKU
+  cells anything other than exactly ten characters or empty. Its home is now named in the standard
+  (`Operations\In USA\shopify\Master Data\`), because a register of every SKU ever assigned with no
+  named home is how the format went missing in the first place.
+  **Two method notes.** The workbook exposed the `EA` collision I had raised in the abstract: it
+  cannot distinguish variants, so **for class `B` one SKU is one sellable variant, not one product**
+  — a moka pot in three cup sizes is three `PPPP` values, and getting it wrong yields several
+  variants sharing a SKU, which Shopify accepts in silence while splitting their stock. And a
+  verification of the delivered PDFs **reported a false pass** — a naive zlib scan claimed the Brand
+  Standards render contained "1.18", which is impossible, because subset-font text is not extractable
+  that way. Re-run through `pdf_gates.pdf_text` it was genuine: Store Operating stamps **Version
+  1.18**, and the Collaboration render carries **"Store Operating Standards v1.18"**, closing the
+  `f9ffcb1` companion-header blind spot that no version-stamp check can see. Both renders gate-passed
+  at exit 0, v1.17 archived with a table row, both delivered to OneDrive and **md5-verified MATCH**.
+  **Open, and not Code's:** `RENDER_TRUST.md` is stale for Store Operating until the next coordinator
+  run; Cowork owes the Brief §6 label line, the Roaster Guide pointer, the roast date coming off
+  `Roaster_Onboarding_Documentation_Plan_v2.md` §5.4, and the v3 3PL questionnaire changes. Steve's
+  workbook wants a "listed sizes" flag — every coffee row emits all four sizes including 100 g, and
+  since the sheet is the label-printing handoff, as it stands it asks a roaster to make a plate for a
+  size that may never be sold.
 
 
 ---

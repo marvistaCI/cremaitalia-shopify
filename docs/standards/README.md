@@ -9,8 +9,18 @@ This folder holds the **canonical source of truth** for how Crema Italia is buil
 | Standard | Owns | Source |
 |---|---|---|
 | **Brand Standards** (v2.3) | how the store **looks & speaks** — color, type, voice, logo | [`brand-standards/`](brand-standards/) |
-| **Store Operating Standards** (v1.17) | how the store **buys & sells** — pricing, shelves, discounts, fulfilment | [`store-operating-standards.md`](store-operating-standards.md) |
+| **Store Operating Standards** (v1.18) | how the store **buys & sells** — pricing, shelves, discounts, fulfilment | [`store-operating-standards.md`](store-operating-standards.md) |
 | **Collaboration Standard** (v1.1) | how **we work** — lanes, source-of-truth model, editing protocol, render-trust | [`collaboration-standard.md`](collaboration-standard.md) |
+
+## Also in this folder, and deliberately not a Standard
+
+| Document | Owns | Source |
+|---|---|---|
+| **SKU Standard** | the shape of a SKU — classes, segments, the Offerta pick suffix | [`sku-standard.md`](sku-standard.md) |
+
+It sits here because it is normative and because it is consumed by the Standards above, but it is
+**not a fourth Standard**: no version number, no render, no OneDrive delivery, no render-trust row.
+Cite it **by section title**. Its own header says why, and asks not to be "fixed" into one.
 
 ## The rules that keep these honest
 
@@ -31,7 +41,7 @@ This folder holds the **canonical source of truth** for how Crema Italia is buil
 The Markdown Standards render to branded, version-stamped PDFs with:
 
 ```
-py docs/standards/render.py store-operating-standards.md "Store_Operating_Standards_v1.17.pdf"
+py docs/standards/render.py store-operating-standards.md "Store_Operating_Standards_v1.18.pdf"
 py docs/standards/render.py collaboration-standard.md   "Collaboration_Standard_v1.1.pdf"
 ```
 

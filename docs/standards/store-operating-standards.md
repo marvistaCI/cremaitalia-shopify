@@ -1,6 +1,6 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.17 · 2026-08-24**
+**Version 1.18 · 2026-08-29**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.3 (look & voice) · Collaboration Standard v1.1 (how we work).
 
@@ -30,6 +30,32 @@
 > version changelog below carries what moved between revisions; the body states only what is true.
 >
 > Tracked as §12.13, which cannot close before launch.
+
+> **v1.18 (2026-08-29)** records the SKU decisions Steve locked that day. **No rule changed for any
+> existing product and nothing is repriced.** The SKU format is promoted out of a subsection of the
+> build spec into `docs/standards/sku-standard.md` - a normative repo document, deliberately **not**
+> a fourth Standard: no version, no render, no badge, cited by section title. It moved because it
+> had lived in exactly one document since 2026-08-21 and could not be found by the person who
+> decided it; **the coordinator detects contradiction between documents, and a decision recorded in
+> one document contradicts nothing.**
+>
+> **§7 gains three things.** The BOM is stated as five classes of line - the collection, N coffees,
+> one card, one box - with **lot control, roast-date capture and the freshness windows applying to
+> coffee alone**, which is what a receiving procedure needs. The BOM is **transmitted per order**;
+> the 3PL is not asked to hold our recipe. And a **pre-enable gate** is added: a collection is not
+> enabled until its coffees, card and box are all physically at the 3PL - the component gate is
+> continuous and automatic, this one is a person, once.
+>
+> **One latent contradiction closed in the same pass.** §2.2 and §2.3 price an aged collection, and
+> nothing could produce one: the availability gate read the fresh window unconditionally, so an
+> Offerta collection was unpublishable by construction. §7 now reads the band appropriate to the
+> collection's shelf, and states that an aged collection is a **deliberately curated new
+> collection**, never an automatic transition - which makes that factor live rather than vestigial.
+>
+> **§12.9(0) is sharpened from three open candidates to one chosen answer** (one bin, two pick
+> conditions; marked-bin fallback; per-unit transfer cost quoted before selection), and **§5.5's
+> lint gains two SKU rules** - while saying plainly that the lint still does not exist, and that it
+> could never catch a SKU hand-typed into the Shopify admin.
 
 > **v1.17 (2026-08-24)** corrects a claim v1.16 introduced hours earlier, and replaces it with the
 > arithmetic that should have been run first. v1.16's §12.3 said outbound shipping to the customer
@@ -545,6 +571,20 @@ windows may be **shortened, never extended** (§5.4). A save that increases eith
    regions: the §5.4 declaration table and the version-history block. Fail the build with the
    offending line. **This is the check that would have caught the 60-versus-150 split on the day it
    was written.**
+
+   **The same check carries two SKU rules** (added 2026-08-29; SKU Standard, *Where SKUs are
+   assigned*). A string matching the SKU shape is a **shelf-encoded or malformed SKU** if it is not
+   exactly ten `A-Z0-9` characters, optionally followed by `-OFF`; and a **hard-coded SKU literal**
+   if it appears in theme code or documentation outside the SKU Standard's own examples, since a
+   SKU in a template is a fixture handle by another name (`docs/production_build_spec.md` §11, §12).
+   **What this check cannot do is catch a hand-typed SKU**, because hand-entry happens in the
+   Shopify admin and not in this repository. Do not let its presence imply otherwise: the guard
+   against hand-entry is the generator plus validation at product onboarding
+   (`docs/production_build_spec.md` §15.2).
+
+   **The check itself is specified and NOT BUILT.** There is no lint and no CI in this repository
+   today. Recording the rules here is what makes them arrive with it when it is written; it is not
+   a claim that anything is being enforced.
 2. **Resolve-and-assert on read.** Every consumer reads `revision` and `effective_from` alongside the
    values.
 
@@ -711,17 +751,51 @@ question and is the one below.
 
 ## 7. Collections / bundles — the BOM model
 
-A collection (and any future bundle) is a **Bill-of-Materials SKU**: box + N component coffee SKUs +
-printed tasting card.
+A collection (and any future bundle) is a **Bill-of-Materials SKU**, and every line of it is a real
+stocked SKU in its own right:
+
+| Line | Class | Count | Lot controlled? |
+|---|---|---|---|
+| The collection itself | `S` | 1 | No — it holds no stock and is assembled on order |
+| Component coffees | `C` | N | **Yes** |
+| Printed card | `I` | 1 | No |
+| Presentation box | `K` | 1 | No |
+
+Classes are defined in the SKU Standard, *The type class*. **Lot control, roast-date capture and the
+freshness windows apply to class `C` only** — which is what a receiving procedure needs in order to
+know which lines require date capture at goods-in.
+
+**The BOM is transmitted per order, not stored by the 3PL.** Each order emits its own pick-pack
+list naming all five kinds of line. We are not asking a fulfilment partner to hold and version our
+recipe, and we must not build anything that assumes they have. It also means the card-to-collection
+relationship travels with the order: the SKUs themselves share no visible pattern (SKU Standard,
+*The source segment*), so the BOM is the only place that link exists.
 
 - **Browse facets are DERIVED from components, never hand-entered.** A collection's Region / Roast / Flavor /
   Caffeine values are the **union** of its components (Option A: positive to a filter when **any**
   component matches, per axis; AND across axes). Modelled in the POC via `component_handles` +
   `productFacets()`.
 - **Availability is gated by components:** offered only while **all** components are in stock and
-  within freshness; auto-pauses and returns automatically as stock rotates.
+  within the freshness band **appropriate to that collection's shelf**; auto-pauses and returns
+  automatically as stock rotates. For an ordinary collection that band is the fresh window; for an
+  Offerta collection (below) it is the Offerta band. Reading the fresh window unconditionally would
+  make an Offerta collection unpublishable by construction, with no visible reason why.
+- **An aged collection is a NEW collection, deliberately curated — never an automatic transition.**
+  A collection holds no stock and is assembled on order, so it cannot itself age; what ages are its
+  components, and the gate above simply pauses it. Selling aged stock as a collection is therefore
+  a decision to build one, with its own product code, priced on the aged factor in §2.2. This is
+  what makes that factor live rather than vestigial, and it is a route for aged stock that is
+  neither a single-bag markdown nor donation. It takes **no SKU suffix** — see the SKU Standard,
+  *Collections, cards and boxes*.
+- **Pre-enable gate: a collection is not enabled in Shopify until its coffees, its card and its box
+  are all physically present at the 3PL.** The component gate above is continuous and automatic;
+  this one is a single check at launch, and it is the one a person performs. Stock that has been
+  ordered is not stock that has arrived, and a collection that goes live without its box ships as a
+  bag in a mailer.
 - **On-demand 3PL fulfilment:** on order, 3PL pulls components FIFO, assembles box + bags + card,
-  QC's all roast dates within `{freshness_window_days}`, ships in 1–2 business days.
+  QC's all roast dates against the band appropriate to that collection's shelf — the same band the
+  availability gate reads, never `{freshness_window_days}` unconditionally — and ships in 1–2
+  business days.
 - **Substitution matrix** (admin-defined per collection): if a component is within 7 days of its transition
   date or out of stock after order, 3PL may substitute a defined alternate from the same roaster;
   customer is told ("Same quality, same roaster, new terroir").
@@ -1085,11 +1159,18 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
 9. **3PL selection — segregation, packing slip, and inserts.** No 3PL is selected. Three questions are
    **qualifying**, not preferences, and all should be asked before commercial terms.
 
-   **(0) How would you segregate an Offerta lot from fresh stock of the same SKU?** Added 2026-08-21
-   and **larger than the two below.** Because a SKU carries no shelf segment (`docs/production_build_spec.md`
-   §13.9.1), an Offerta split creates a second Shopify product drawing on the same physical SKU in the
-   same bin - and FIFO would hand a full-price buyer the aged bag. Three candidate answers are open in
-   §13.9.2 of that document, and the 3PL's capability decides which of them are even available.
+   **(0) Can you pick from two age bands within one location, or would you require a bin transfer?**
+   Added 2026-08-21, **larger than the two below**, and **sharpened 2026-08-29 now that we have
+   chosen an answer rather than three.** Because a SKU carries no shelf segment (SKU Standard,
+   *There is no shelf segment*), an Offerta split creates a second Shopify product drawing on the
+   same physical stock in the same bin, and FIFO would otherwise hand a full-price buyer the aged
+   bag. Our preferred handling is **one bin, two pick conditions**, with the `-OFF` suffix on the
+   pick line selecting the age band against the lot's roast date (SKU Standard, *The Offerta pick
+   suffix*; alternatives recorded at `docs/production_build_spec.md` §13.9.2). **This is a
+   qualifying question, not a preference** - some WMSs express an age-band allocation rule inside
+   one location and some do not. If a candidate requires a physical transfer instead, **the
+   per-unit transfer cost must be quoted before selection**, and the fallback is a marked bin,
+   never per-bag stickering: the suffix is never printed on physical goods.
 
    (a) *Do you print
    our packing slip, or insert your own paperwork?* A 3PL that inserts its own pick list or invoice
@@ -1124,6 +1205,11 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    **(d) What exactly does the no-bare-literal lint cover?** §5.5 specifies this source and the theme
    templates. Whether it also covers `docs/production_build_spec.md`, the legal policy sources and
    the OneDrive brief is open - each is a place a freshness number has already been written by hand.
+   **Widened 2026-08-29:** §5.5 now also specifies two SKU rules for the same check, which makes
+   the scope question sharper rather than looser - a SKU literal is far more likely to be written
+   into a theme template than a freshness number is, and the check has to reach wherever that
+   happens. **Note also that the lint does not exist yet**, so this decides the shape of something
+   still to be written, not a change to something running.
 
 13. **Pre-launch validation of every value in this Standard - the gate that cannot close early.**
    Opened 2026-08-24, and it is the reason for the callout at the top of this document. **After the
@@ -1278,5 +1364,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.17 · 2026-08-24 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.18 · 2026-08-29 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*

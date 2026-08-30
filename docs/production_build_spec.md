@@ -1414,6 +1414,13 @@ never models the case that happens in month one: a new lot arrives while the pre
 sellable. Across all 17 fixture products, **no coffee appears on two shelves** — so shelf looked like
 a property of a coffee, and it is not.
 
+**Scope, added 2026-08-30: everything in §13.9 is about class `C`, coffee.** The notation below and
+the lot model that follows it describe the one class that is lot-controlled and freshness-governed.
+The SKU Standard (*The type class*) carries five classes, and `B`, `S`, `I` and `K` have no lot, no
+roast date and no shelf. Read `SKU` here as *a coffee*, not as *any SKU* — an earlier version of
+this section stated it unconditionally, which was true when coffee and Bottega were the only
+classes and stopped being true when collections, cards and boxes got their own.
+
 **Shelf, roast date, cost and freshness are properties of a LOT.** Roaster, origin, process, roast
 level, tasting notes and brewing are properties of the COFFEE. Steve's notation:
 
@@ -1554,43 +1561,46 @@ metaobject**. No specification is duplicated; it is referenced. And **FIFO is th
 Roccia ships the oldest fresh lot, Offerta the oldest aged lot. Archive these products rather than
 deleting them, so order history and the recall record survive.
 
-#### 13.9.1 The SKU format (Steve, 2026-08-21)
+#### 13.9.1 The SKU format — see the SKU Standard
 
-**`TRRRPPPPSS`** - ten characters, each `A-Z0-9`.
+**The format, the type classes, the segment rules, the `-OFF` suffix and the governance clause now
+live in `docs/standards/sku-standard.md`.** Cite it **by section title**, never by version — it
+deliberately carries no version number, for the reason its own header gives.
 
-| Segment | Len | Meaning | Values |
-|---|---|---|---|
-| `T` | 1 | Type | `C` coffee, `B` Bottega |
-| `RRR` | 3 | Roaster | links to the roaster metaobject |
-| `PPPP` | 4 | Product | links to the coffee metaobject |
-| `SS` | 2 | Size | `10` 100g, `25` 250g, `50` 500g, `1K` 1kg, `EA` each (Bottega) |
+This subsection previously held the only copy of the format anywhere in the business. It was
+written 2026-08-21, propagated nowhere, and on 2026-08-29 could not be found by the person who
+decided it. That is why it moved: the coordinator detects contradiction *between* documents, and a
+decision recorded in exactly one document contradicts nothing. **Drift detection cannot find
+absence.**
 
-Capacity is not a constraint: 46,656 roasters and 1.6 million products per segment.
+**What the builder needs from it, and where to read it:**
 
-**It maps onto Shopify's grain correctly.** Shopify puts SKU on the **variant**, and the size segment
-is exactly what makes this variant-level. The four sizes match the Roaster Guide's standard sizes.
+| Question | Section |
+|---|---|
+| What the string looks like | *The format* |
+| Which classes exist, and which one is lot-controlled | *The type class* |
+| What `RRR` resolves to | *The source segment* |
+| Why there is no shelf character | *There is no shelf segment* |
+| How Offerta is expressed, and what Shopify does with it | *The Offerta pick suffix* |
+| Where codes are assigned before Shopify owns them | *Where SKUs are assigned* |
 
-**But understand what it is: a label, not a key.** Shopify does **not** parse SKUs - the field is
-plain text, never decomposed, never used to resolve a relationship. Coffee links to roaster, and
-roaster to region, through **metaobject references** (§13.4), not through the SKU string.
+**Three build consequences that belong here rather than there:**
 
-So the SKU encodes the same facts a second time, which is the two-homes problem this spec keeps
-removing. **Resolution: the SKU is GENERATED from the metaobject references and never typed by
-hand.** Then it cannot disagree with them. It earns its place for the thing metafields cannot do:
+- **The SKU is generated at product creation from the metaobject references** (§13.4), and written
+  to `variant.sku`. It is never an input field in any tool we build.
+- **Shelf is a tag, not a SKU segment** — which is what makes the Offerta transition a tag change
+  and a second product rather than a re-label. See the mapping above and onboarding step 8.
+- **Nothing may parse it.** Any code that slices a SKU to recover a roaster, a size or a shelf is a
+  defect, however convenient: those facts are reachable through references that cannot go stale.
 
-> **It travels.** The roaster, the freight forwarder, the 3PL, a packing slip, a scanner, a bag label -
-> all of them see the SKU. None of them can see a metafield.
+#### 13.9.2 One SKU, two products, one bin — RESOLVED 2026-08-29
 
-**There is deliberately NO shelf segment**, and that is load-bearing. Shelf changes when a lot ages
-into Offerta; type, roaster, product and size do not. A SKU that encoded shelf would have to be
-**physically relabelled** on every bag when stock moved shelves. It does not, so the printed label
-stays true for the life of the bag. Do not "improve" this by adding a shelf character.
-
-**OPEN:** is `PPPP` scoped **per roaster** or **globally unique**? Per-roaster is the natural reading -
-each roaster numbers their own coffees, and `RRR+PPPP` still identifies the coffee uniquely - but it
-decides who assigns product codes, so it needs settling.
-
-#### 13.9.2 The consequence nobody has solved: one SKU, two products, one bin
+**Resolution (Steve, 2026-08-29): the Offerta product's SKU is the base ten characters plus
+`-OFF`, and the preferred physical handling is option D below — one bin, two pick conditions.**
+The fallback is A with a **marked bin**, never per-bag stickering, and **the per-unit transfer cost
+must be quoted before a 3PL is selected**. Normative text is in `docs/standards/sku-standard.md`,
+*The Offerta pick suffix*; the problem statement and the rejected alternatives are kept below
+because they are what the 3PL conversation is actually about.
 
 Because the SKU carries no shelf, and because an Offerta split creates a **second Shopify product**
 for the aged units (§13.9), production reaches this state:
@@ -1602,22 +1612,41 @@ warehouse - and FIFO says *pick the oldest*. So **a full-price Roccia buyer is h
 which is precisely the coffee that was moved to Offerta to avoid selling at full price. FIFO and a
 split inventory are in direct conflict unless the aged units are physically segregated.
 
-**Three candidate resolutions, OPEN (Steve, 2026-08-21) - decide before choosing a 3PL, because it is
-a qualifying question larger than the two already in Standard §12.9:**
+**Four candidates. D is chosen; A is the fallback; B and C are recorded as considered and not
+taken.** They stay here because a 3PL's answer to *"how would you do this?"* has to be read against
+what we already rejected and why.
 
 - **A · Segregate with a distinct identifier.** The Offerta product takes a suffixed SKU; the 3PL
   applies a sticker or moves units to a marked bin on instruction. Costs a physical touch per
-  transfer, and briefly makes the bag's printed SKU incomplete.
-- **B · Segregate by location only.** Same SKU, different bin, two locations tracked in the 3PL's
-  WMS. Depends entirely on their system - a genuine qualifying question.
-- **C · Never overlap.** Move a SKU to Offerta only when *all* remaining stock is aged. One pool, no
-  segregation, no conflict.
+  transfer. **The fallback**, and only in its marked-bin form — the sticker form is out, because
+  the suffix is never printed on physical goods.
+- **B · Segregate by location only.** Same SKU, different bin, two locations in the 3PL's WMS.
+  **Not taken, and C3 is the reason it cannot be taken alone:** Shopify tracks inventory per
+  *inventory item* per location, and two prices force two products, so B never removes the need for
+  a second product. It is a physical arrangement, not a resolution.
+- **C · Never overlap.** Move a SKU to Offerta only when *all* remaining stock is aged. One pool,
+  no segregation, no conflict — but it forfeits the aged units' head start, since nothing may be
+  split off early. **Not taken**, though see the window note below: it is now the common case by
+  accident, which is worth knowing because it means D is exercised rarely.
+- **D · One bin, two pick conditions (CHOSEN).** The stock is not moved and not stickered. The
+  `-OFF` suffix on the pick line selects which age band the picker draws from **within the same
+  location**, evaluated against the lot's roast date at the moment of pick. Preserves the printed
+  label perfectly and costs no physical touch. **Whether a given WMS can express an age-band
+  allocation rule inside one location is a qualifying question, not an assumption.**
 
-**The 2026-08-21 window change may have made C achievable.** With replenishment on a 6-to-10-week
-cadence, new stock arrives when the previous lot is roughly 42-70 days old. Against the old 60-day
-window that lot was already at the edge and overlap was routine; against 90 days it has another 20-48
-days to sell through before it is Offerta-eligible at all. The hardest case got rarer without anyone
-designing for it.
+**The 2026-08-21 window change may have made C the common case anyway.** With replenishment on a
+6-to-10-week cadence, new stock arrives when the previous lot is roughly 42-70 days old. Against the
+old 60-day window that lot was already at the edge and overlap was routine; against 90 days it has
+another 20-48 days to sell through before it is Offerta-eligible at all. The hardest case got rarer
+without anyone designing for it — which lowers the stakes on D, without removing the need for it.
+
+**The consequence D leaves behind, and it should be designed for rather than discovered.** Under D
+the two Shopify pools are separated by nothing physical. The split between them is a human
+judgement about age made once, at the moment of the Offerta decision, and **nothing re-checks it** —
+Shopify has no lot tracking, will never notice the two pools are the same good in the same bin, and
+will never detect a pick from the wrong band. It is the same desync §13.9 warns about when stock
+moves off-book. **The control is a periodic reconciliation of the 3PL's on-hand report against the
+two pools**, and it is worth running whichever option a 3PL ends up supporting.
 
 #### Onboarding order in Shopify
 
