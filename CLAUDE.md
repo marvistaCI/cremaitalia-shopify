@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.3) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.18) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.19) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > ⚠ **EVERY VALUE IN THE STANDARDS IS PROVISIONAL UNTIL THE SITE GOES PUBLIC (Steve,
@@ -3915,6 +3915,58 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   workbook wants a "listed sizes" flag — every coffee row emits all four sizes including 100 g, and
   since the sheet is the label-printing handoff, as it stands it asks a roaster to make a plate for a
   size that may never be sold.
+
+
+- 2026-08-30 — **Standard §12.12(a) closed by building both candidates and reading them, rather than
+  reasoning: the freshness declaration is a METAOBJECT. Store Operating Standards v1.18 -> v1.19.**
+  Type `freshness_policy`, one record on handle `current`, four **required typed** fields. **No rule
+  moved, no window moved, nothing repriced** - this decides storage only.
+  **All three candidate shapes worked in Liquid**, so the decision turned on how each fails. The
+  deciding finding: **a shop metafield with no definition is invisible in the admin.** Liquid read
+  all three values perfectly while `metafieldDefinitions(ownerType: SHOP, namespace: "crema_italia")`
+  returned **empty** - the values existed, worked, and no person could see or edit them. Since §5.4
+  moves this off theme settings *precisely so a non-developer can maintain it*, a store of record
+  nobody can open fails the requirement it exists to satisfy. Separate typed metafields lose
+  atomicity - `revision` can be saved without the values it describes, the silent-provenance failure
+  §5.5's resolve-and-assert gate was written to prevent - and a JSON metafield is atomic but untyped,
+  so `"ninety"` saves cleanly. **What the metaobject gives up is structural singularity**, since one
+  shop can only ever hold one metafield per namespace and key; the count is readable
+  (`shop.metaobjects.freshness_policy.values | size`), so the consumer **asserts exactly one record
+  and fails loudly**. A visible failure beats a silent one. Verified end to end at a live URL: the
+  §5.4 display rule rendered **01-JUN-2026** on 2026-08-30, today minus 90, in `DD-MMM-YYYY`.
+  **Three platform findings from the same run, all recorded in build spec §13.10.** (1) **`storefront:
+  NONE` still reads in Liquid**, so the onboarding order's step 1 - *"enable Storefront access or
+  Liquid cannot read them"* - **is wrong**; that setting governs the Storefront GraphQL API, and the
+  real cause of an empty render will be the draft trap. (2) **An app needs
+  `write_metaobject_definitions`, and the failure lies about why**: the CLI store connector returned
+  `NOT_AUTHORIZED - "This type is reserved for use by another application"` for a brand-new, never-used
+  type name, while the same mutation from an app holding the scope succeeded immediately. **A scope
+  error wearing a naming error's clothes** - the same shape as B1's branding `ACCESS_DENIED`.
+  (3) **`metaobjectDefinitions` is app-scoped, so an empty list is not proof of an empty store.**
+  **And that third one caught me mid-session.** Asked whether the structural POC was worth running, I
+  reported that the Round 2 structural work had evaporated and said it was *"confirmed two ways"* - a
+  definitions list and a by-type lookup. **Both ran from the same app identity, so they were one
+  sample, not two.** Re-querying from the validation app showed a definition the connector could not
+  see. The conclusion happened to survive - `roaster` and `lot` really are gone, now confirmed from a
+  second identity - but the reasoning was wrong when I gave it, and this is the third time in this
+  project that varying the *query* was mistaken for varying the *test*. **Vary the identity, not just
+  the wording.**
+  **Recommendation given and taken: do NOT run the structural POC yet.** It was scoped in full, then
+  argued against, on evidence found while scoping - the dev store had just lost eight-day-old
+  structural work, so building more of it months before it is needed means building something that
+  will likely evaporate again; the two genuinely risky reads (metaobject through Liquid, lot list
+  resolving) were already proven in C2/C3; and fixture data agrees with whatever we assumed, which is
+  the mechanism behind both fixture-accidents-as-design defects Review B caught by *reading*. The
+  trigger is the first signed roaster plus real SKUs, at which point the structural POC and the real
+  build are the same activity and are paid for once. The scope was deliberately **not** written into
+  `docs/` - an unread task brief is the rot that took out `POC7_kickoff.md`.
+  **Dev store state:** the `freshness_policy` definition and its single record are left standing
+  deliberately, being the decided shape; the rival shop metafields were deleted and the four-file
+  probe theme removed, so nothing remains that could be mistaken for a second store of record. Both
+  touched sources re-rendered (Collaboration's companion header again moved without its own version),
+  gates at exit 0, v1.18 archived with a table row, both delivered to OneDrive and **md5-verified**,
+  with the delivered Collaboration render confirmed by extraction to read "Store Operating Standards
+  v1.19".
 
 
 ---

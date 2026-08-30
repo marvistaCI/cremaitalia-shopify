@@ -1683,6 +1683,85 @@ second home that has to be kept in step with the tag. One template that branches
 and it is what the POC already does. This deliberately overrides an older note in `CLAUDE.md` §10
 that assumed per-shelf templates, written before any of this was understood.
 
+### 13.10 The freshness declaration — a metaobject (closes Standard §12.12(a), 2026-08-30)
+
+Standard §5.4 moves the freshness windows off theme settings, because `settings_data.json` does not
+survive a theme swap and this store spins up preview themes routinely. §12.12(a) left *where they
+go* open and called it Code's. **Both candidates were built on the development store and read from
+Liquid rather than argued about.**
+
+```
+metaobject definition   freshness_policy        access: { storefront: NONE }
+  freshness_window_days  number_integer  required
+  offerta_fresh_days     number_integer  required
+  revision               number_integer  required
+  effective_from         date            required
+one record, handle "current"
+```
+
+**All three shapes worked**, which is why the decision turned on failure modes rather than on
+resolution:
+
+| Shape | Read in Liquid | Verdict |
+|---|---|---|
+| Metaobject, one record | `shop.metaobjects.freshness_policy.current.freshness_window_days` | **Chosen** |
+| Shop metafield, `json` | `shop.metafields.crema_italia.freshness_policy.value.freshness_window_days` | Atomic but untyped |
+| Shop metafields, separate typed | `shop.metafields.crema_italia.freshness_window_days.value` | **Not atomic** |
+
+**The deciding finding: a shop metafield with no definition is invisible in the admin.** Liquid read
+all three values perfectly while `metafieldDefinitions(ownerType: SHOP, namespace: "crema_italia")`
+returned **empty** — so the values existed, worked, and could not be seen or edited by a person. A
+store of record nobody can open fails the requirement that moved this off theme settings in the
+first place. A definition would expose it, but a JSON blob in a textarea is a worse editing surface
+than four labelled typed fields, and separate typed metafields lose atomicity: `revision` can be
+saved without the values it describes, which is exactly the silent-provenance failure §5.5's
+resolve-and-assert gate exists to prevent.
+
+**What the metaobject gives up.** It is not structurally singular — nothing prevents a second
+record, where one shop can only ever have one metafield per namespace and key. **The count is
+readable, so the consumer asserts it:**
+
+```liquid
+{%- assign policy_count = shop.metaobjects.freshness_policy.values | size -%}
+{%- if policy_count != 1 -%}{%- comment -%} fail loudly {%- endcomment -%}{%- endif -%}
+{%- assign policy = shop.metaobjects.freshness_policy.current -%}
+```
+
+A visible failure beats a silent one, which is the trade this project takes every time.
+
+**The §5.4 display rule renders from it correctly**, verified end to end at a live URL:
+
+```liquid
+{%- assign secs = policy.freshness_window_days | times: 86400 -%}
+{%- assign floor = "now" | date: "%s" | minus: secs -%}
+Roasted on or after {{ floor | date: "%d-%b-%Y" | upcase }}
+```
+
+rendered `01-JUN-2026` on 2026-08-30, i.e. today minus 90, in `DD-MMM-YYYY` as §5.4 requires.
+
+#### Three platform findings from the same run
+
+- **`storefront: NONE` still reads in Liquid.** Re-confirmed, and it means the onboarding order's
+  step 1 above — *"Enable Storefront access on each: definitions are private by default and Liquid
+  cannot read them otherwise"* — **is wrong**. That setting governs the Storefront GraphQL API. Keep
+  it for headless surfaces; do not blame it when a Liquid template renders nothing, because the real
+  cause will be the draft trap (§13.4.2).
+- **An app needs `write_metaobject_definitions` to create a merchant-owned definition, and the
+  failure lies about why.** The Shopify CLI store connector returned
+  `NOT_AUTHORIZED — "This type is reserved for use by another application"` for a brand-new,
+  never-used type name; the same mutation from an app holding the scope succeeded immediately. **A
+  scope error wearing a naming error's clothes** — the same shape as B1's branding `ACCESS_DENIED`,
+  which was also a missing scope rather than the plan gate it resembled.
+- **`metaobjectDefinitions` is app-scoped, so an empty list is not proof of an empty store.** The
+  connector reported zero definitions; the validation app reported one it owned. Two queries from
+  one identity are not two samples. Vary the identity.
+
+#### What is left on the development store
+
+The `freshness_policy` definition and its single record, deliberately — they are the decided shape.
+The rival shop metafields were deleted and the four-file probe theme removed, so nothing remains
+that could be mistaken for a second store of record.
+
 ## 14. Two surfaces the spec had never covered (Review B, 2026-08-20)
 
 Every POC surface was checked against this document. Eighteen of twenty were covered somewhere.

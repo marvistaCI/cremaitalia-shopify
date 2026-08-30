@@ -1,6 +1,6 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.18 · 2026-08-29**
+**Version 1.19 · 2026-08-30**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.3 (look & voice) · Collaboration Standard v1.1 (how we work).
 
@@ -30,6 +30,17 @@
 > version changelog below carries what moved between revisions; the body states only what is true.
 >
 > Tracked as §12.13, which cannot close before launch.
+
+> **v1.19 (2026-08-30)** closes **§12.12(a)** and changes nothing else. **No rule moved, no window
+> moved, nothing is repriced.** The freshness declaration is held as a **metaobject** - type
+> `freshness_policy`, one record on handle `current`, four required typed fields - rather than as a
+> shop metafield. Both candidates were built on the development store and read from Liquid rather
+> than reasoned about, and all three shapes worked, so the decision turned on how each fails: **a
+> shop metafield with no definition is invisible in the admin**, which defeats the point of moving
+> this off theme settings, and separate typed metafields are not atomic, so `revision` can be saved
+> without the values it describes. The metaobject is not structurally singular, so the consumer
+> **asserts exactly one record and fails loudly**. Build detail, and three platform findings from
+> the same run, in `docs/production_build_spec.md` §13.10.
 
 > **v1.18 (2026-08-29)** records the SKU decisions Steve locked that day. **No rule changed for any
 > existing product and nothing is repriced.** The SKU format is promoted out of a subsection of the
@@ -1190,9 +1201,24 @@ the approval governance (§2.4) is **not a native Shopify feature**. Chosen path
    settled in §5.5; these are implementation choices, and they are **build-gating** because getting
    them wrong means a rewrite rather than an edit.
 
-   **(a) Metaobject or shop metafield?** A singleton policy record could be either. The metaobject is
-   proposed for the typed fields and the Admin editing surface; a shop metafield is simpler. Code's
-   call.
+   **(a)** ~~**Metaobject or shop metafield?**~~ **RESOLVED 2026-08-30 — a metaobject**, type
+   `freshness_policy`, one record on handle `current`, four **required typed** fields
+   (`freshness_window_days`, `offerta_fresh_days`, `revision`, `effective_from`). Both candidates
+   were built on the development store and read from Liquid rather than reasoned about; **all three
+   shapes worked**, so the decision turned on what happens when they are wrong rather than on
+   whether they resolve.
+   **Two things settled it.** A shop metafield with **no definition is invisible in the admin** —
+   verified, `metafieldDefinitions(ownerType: SHOP, namespace: "crema_italia")` returned empty while
+   Liquid read the values perfectly. Since §5.4 moves this off theme settings precisely so a
+   non-developer can maintain it, a store of record nobody can see fails the requirement it exists
+   to satisfy. And separate typed metafields are **not atomic**: `revision` can be saved without the
+   values it describes, which is the silent-provenance failure §5.5 gate 2 exists to prevent. A JSON
+   metafield is atomic but untyped, so `"ninety"` saves cleanly.
+   **What the metaobject gives up, and how it is covered.** It is not *structurally* singular the
+   way a shop metafield is — nothing stops a second record. But the count is readable in Liquid
+   (`shop.metaobjects.freshness_policy.values | size`), so **the consumer asserts exactly one record
+   and fails loudly otherwise**. That is a visible failure rather than a silent one, which is the
+   trade this project takes every time. Build detail in `docs/production_build_spec.md` §13.10.
 
    **(b) If a per-SKU freshness override is ever built, it must read this declaration as its
    default** rather than introducing a second boundary. **That is precisely how `days_to_offerta`
@@ -1364,5 +1390,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.18 · 2026-08-29 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.19 · 2026-08-30 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
