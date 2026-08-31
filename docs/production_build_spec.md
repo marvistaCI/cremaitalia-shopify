@@ -4,10 +4,18 @@ Durable home for decisions about the **real production storefront** (as opposed 
 POC). Created 2026-07-09. These are agreements that should shape the production rebuild
 but are NOT POC changes — the POC is a mock and can only document them.
 
-Read alongside: the three **Standards** (`docs/standards/` — Brand, Store Operating **v1.3**,
-Collaboration — the canonical rules), `docs/POC_drift_from_standards.md` (where the POC knowingly lags
-the Standards — must not be missed), `CLAUDE.md` (§9 log, §10 "NEXT (production build)"),
-`00_PROJECT_BRIEF.md` (OneDrive, single source of truth), `docs/POC5_change_list.md` (POC backlog).
+Read alongside: the **Standards** (`docs/standards/` — start at its `README.md`, which names the
+current version of each and is kept current; **never write a version number here**),
+`docs/POC_drift_from_standards.md` (where the POC knowingly lags the Standards — must not be
+missed), `CLAUDE.md` (§9 log and §10, which names the current POC batch), and `00_PROJECT_BRIEF.md`
+(OneDrive).
+
+> **This header carried `Store Operating v1.3` and a pointer to `docs/POC5_change_list.md` until
+> 2026-08-31**, six versions and twenty-three batches out of date. Review B's finding B1 removed
+> exactly those two literals from the build prompt below on 2026-08-20 — and left the identical
+> pair three lines above it, because the fix was applied to the section under review rather than to
+> the defect. Same shape as the POC17 Bottega bug, where an edit reached one branch of two. **Point
+> at what is kept current; do not name versions or batches here.**
 
 ---
 
@@ -1482,7 +1490,7 @@ write-offs must be recorded as such rather than silently adjusted.
 #### Display: a computed floor (SUPERSEDES the range, Steve 2026-08-21)
 
 **This section previously specified a roast-date RANGE across lots in stock. That is superseded.**
-Standard §5.4 v1.12 is authoritative; the rule is now:
+Standard §5.4 is authoritative; the rule is now:
 
 > Roasted on or after 23-MAY-2026
 
