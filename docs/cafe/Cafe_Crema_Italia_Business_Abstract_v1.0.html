@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cafe Crema Italia - Business Abstract</title>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="../standards/brand-standards/Crema Italia Brand CSS.css">
+<style>
+@page { size: Letter; margin: 10mm 12mm 8mm 12mm; }
+
+body { background:#fff; color:var(--ci-coffee); font-family:var(--ci-font-body);
+       font-size:8.1pt; line-height:1.21; }
+main.ci-page { max-width:none; padding:0; }
+
+/* The brand stylesheet caps p and ul/ol at --ci-measure, the 72ch reading
+   measure from Brand Standards 3.4. That is right for web long-form and wrong
+   for a dense one-page abstract on Letter: at small type the cap narrows the
+   text column to ~70% of the page, so REDUCING the font size fits LESS on the
+   page, not more. Costed a page here before it was spotted. Print overrides it;
+   the table was already immune, which is what made the mismatch visible. */
+p, ul, ol, li { max-width:none; }
+
+h1 { font-family:var(--ci-font-display); font-weight:400; font-size:18pt;
+     line-height:1.1; color:var(--ci-coffee); margin:0 0 .2rem; }
+h2 { font-family:var(--ci-font-body); font-weight:600; font-size:9.6pt;
+     color:var(--ci-crema); margin:.42rem 0 .18rem;
+     break-after:avoid; page-break-after:avoid; }
+p  { margin:0 0 .38rem; }
+ul { margin:0 0 .4rem; padding-left:.95rem; }
+li { margin-bottom:.16rem; }
+strong { font-weight:600; }
+.lede { font-size:9pt; color:var(--ci-ink-soft); line-height:1.35; margin-bottom:.4rem; }
+
+.eyebrow { font-family:var(--ci-font-body); font-size:7pt; font-weight:600;
+           letter-spacing:.14em; text-transform:uppercase; color:var(--ci-mute); }
+
+/* Hard-stop gradient, not flex children: WeasyPrint collapses empty flex items
+   to zero width and does it silently, which no render gate catches. */
+.flag-rule { height:2px; margin:.45rem 0 .6rem;
+  background:linear-gradient(to right,
+    #0E7A3A 0%, #0E7A3A 33.333%, #D9D2C2 33.333%, #D9D2C2 66.666%,
+    #C8342B 66.666%, #C8342B 100%); }
+
+table.ci-table { width:100%; border-collapse:collapse; margin:.2rem 0 .4rem;
+                 font-size:7.7pt; }
+table.ci-table th { background:#F7F3EA; color:var(--ci-coffee); font-weight:600;
+                    text-align:left; padding:.22rem .35rem;
+                    border:0.5px solid var(--ci-hairline); }
+table.ci-table td { padding:.22rem .35rem; border:0.5px solid var(--ci-hairline);
+                    vertical-align:top; }
+td.n { text-align:right; font-variant-numeric:tabular-nums; }
+tr.hi td { background:#FDFBF6; }
+
+.callout { border:0.6px solid var(--ci-hairline); border-left:2.5px solid var(--ci-crema);
+           background:#FBF8F1; padding:.4rem .6rem; margin:.4rem 0 .5rem; font-size:8.4pt; }
+.callout p:last-child { margin-bottom:0; }
+.callout .lbl { display:block; font-size:7pt; font-weight:600; letter-spacing:.13em;
+                text-transform:uppercase; color:var(--ci-mute); margin-bottom:.16rem; }
+
+.cols { column-count:2; column-gap:1.1rem; }
+.cols ul { margin:0; }
+.cols li { break-inside:avoid; page-break-inside:avoid; }
+.muted { color:var(--ci-mute); }
+.small { font-size:8pt; }
+</style>
+</head>
+<body>
+<main class="ci-page">
+
+<span class="eyebrow">Business Abstract &middot; Sister Company &middot; Confidential</span>
+<div class="flag-rule"></div>
+
+<h1>Cafe Crema Italia</h1>
+<p class="lede">An authentic Italian bar (<em>caff&egrave;</em>) in Dunedin, Florida, pouring
+Crema Italia coffee, selling locally sourced baked goods, and turning to light beer and wine in
+the early evening. Roughly 7am to 8pm, one lease and one staff base across three dayparts.
+Managed and co-owned by Anastasia Galperin. <strong>Nothing here is decided</strong> - this puts
+the concept, its modelled economics and its open ends in one place.</p>
+
+<p>Crema Italia, LLC converts to a <strong>Delaware C-Corp at investment close</strong> - already
+committed in Investor Deck v1, not a hypothetical. The proposal is that the parent holds shares in a
+<strong>second C-Corp</strong> operating the caf&eacute;, alongside Anastasia Galperin as co-owner and
+operator, buying coffee under an ordinary commercial agreement and licensing the name.</p>
+
+<h2>Why it may be worth doing</h2>
+<div class="cols">
+<ul>
+  <li><strong>The most visible use of the mark.</strong> A physical room where the brand is experienced
+  rather than described, and the strongest available answer to a storefront that cannot yet
+  show photography of anything - and a second demand curve on the same landed inventory.</li>
+  <li><strong>The Italian-bar format is throughput-bound, not seat-bound.</strong> Stand at the counter,
+  order, leave. The single most important economic feature of the concept: revenue is not
+  capped by square footage the way a seated caf&eacute;'s is, and dayparting spreads one rent and one
+  team across morning espresso, midday food and an evening beer and wine trade.</li>
+</ul>
+</div>
+
+<h2>Modelled economics</h2>
+<p class="small muted">From <em>CCIB_MonteCarlo.xlsx</em> (v2), 1,000 trials per footprint. Common
+assumptions: rent $26/sq&nbsp;ft/yr NNN, COGS 27-30%, labour $15/hr plus 20% burden, 30 days/month.</p>
+
+<table class="ci-table">
+  <tr><th>Scenario</th><th>Footprint</th><th class="n">Mean profit</th><th class="n">Downside (10th pct)</th>
+      <th class="n">P(profit&nbsp;&gt;&nbsp;0)</th><th class="n">P(&gt;&nbsp;$40k)</th><th class="n">Break-even covers/day</th></tr>
+  <tr><td><strong>Small</strong> <span class="muted">counter-only</span></td><td>900 sq ft, 20 seats</td>
+      <td class="n">-$12,300</td><td class="n">-$37,700</td><td class="n">26%</td><td class="n">1%</td><td class="n">82</td></tr>
+  <tr class="hi"><td><strong>Target</strong> <span class="muted">current plan</span></td><td>1,200 sq ft, 28 seats</td>
+      <td class="n">+$19,700</td><td class="n">-$22,100</td><td class="n">72%</td><td class="n">25%</td><td class="n">104</td></tr>
+  <tr><td><strong>Large</strong> <span class="muted">expanded seating</span></td><td>1,800 sq ft, 49 seats</td>
+      <td class="n">+$76,900</td><td class="n">+$1,600</td><td class="n">90%</td><td class="n">73%</td><td class="n">142</td></tr>
+</table>
+
+<p><strong>The model's clearest signal is that bigger wins</strong>, on the downside as well as the
+upside: Large is the only scenario whose 10th percentile is still profitable, because counter
+throughput scales with staff rather than seats while rent and labour spread over more volume. Small is
+not viable as modelled, clearing break-even in roughly one year in four. <strong>But the comparison
+flatters Large</strong>: build-out capital is unmodelled and scales with square footage.</p>
+
+<h2>What the model does not yet reflect</h2>
+<div class="cols">
+<ul>
+  <li><strong>The hours are wrong.</strong> Labour is built on a <strong>7am-3pm</strong> day
+  (56 hrs/week). A 7am-8pm concept is about <strong>91 hrs/week</strong>, a 63% increase against
+  the largest controllable fixed cost. Every profit figure above describes a shorter business
+  than the one proposed.</li>
+  <li><strong>Beer and wine are absent</strong> - no revenue, no COGS, no licence cost, no
+  incremental insurance. This is the daypart that justifies the longer day, so it is the gap
+  that matters most alongside the hours.</li>
+  <li><strong>Build-out and leasehold improvement</strong> are excluded by design, as are
+  financing costs and seasonality.</li>
+  <li><strong>An internal contradiction.</strong> The Target column is 1,200 sq ft, but the
+  model's own note describes the planned footprint as <strong>~700-800 sq ft</strong>. One of the
+  two is wrong, and it moves rent, seats and labour together.</li>
+  <li><strong>The COGS tab is empty</strong>, so the 27-30% assumption is asserted rather than
+  built up from a coffee, pastry and alcohol mix.</li>
+  <li><strong>Transfer pricing.</strong> Related-party sales between two entities under common
+  control must be defensible at arm's length, and the caf&eacute;'s true profitability is only
+  visible once that price is honest.</li>
+</ul>
+</div>
+
+<h2>Open questions</h2>
+<div class="cols">
+<ul>
+  <li><strong>Does the caf&eacute; conflict with what investors were told?</strong> Investor Deck v1
+  lists "a caf&eacute; chain" among the things Crema Italia is <em>not</em>. One caf&eacute; is not a
+  chain, but incoming shareholders would hold 12% of a parent whose capital is partly exposed to a
+  restaurant venture. This is a disclosure question, not a positioning one.</li>
+  <li><strong>Location has moved.</strong> The earlier written record placed the caf&eacute; in
+  <strong>Tampa</strong>; the model and the current concept say <strong>Dunedin</strong>. Dunedin is
+  taken as current here.</li>
+  <li><strong>Do the roaster agreements permit on-premise pouring and resale?</strong> No roaster
+  has been asked, and it belongs in the agreement rather than being discovered afterwards. It is
+  the same upstream question that gates the wholesale channel.</li>
+  <li><strong>Name licence.</strong> Crema Italia&trade; is unregistered, and the caf&eacute; would
+  be the mark's most visible use. Licensing an unregistered mark to a separate entity carries a
+  trademark trap already identified in the wholesale brief.</li>
+</ul>
+</div>
+
+<p class="small" style="border-left:2.5px solid var(--ci-crema); padding-left:.5rem; margin-top:.5rem;">
+<strong>Every number here is provisional.</strong> The model's own read-me says there is no reliable
+published statistic for the dine-in versus walk-in split at small independent caf&eacute;s, so its
+inputs use defensible mechanisms rather than observed data. Each figure is a planning placeholder
+awaiting real quotes, a real lease and real POS history, and no capital requirement has been costed
+at all. Start with the operating day, which is knowably wrong today.</p>
+
+</main>
+
+<div class="flag-rule" style="margin-top:.5rem;"></div>
+<footer class="small muted" style="display:flex; justify-content:space-between;">
+  <span>Prepared 02-SEP-2026 &middot; Crema Italia, LLC &middot; Lutz, Florida, USA</span>
+  <span>v1.0 &middot; Built to Brand Standards v2.3</span>
+</footer>
+
+</body>
+</html>

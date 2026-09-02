@@ -1,0 +1,22 @@
+/* ============================================================
+   Crema Italia - local font embedding for PDF rendering.
+   Display = Marcellus (stand-in for the logo font Montecatini Pro).
+   Body = Inter. Files are the single in-repo copies under
+   docs/standards/brand-standards/assets/fonts/ - deliberately NOT
+   duplicated here, so there is one home for the binaries.
+
+   NOTE: url() in CSS resolves relative to THIS stylesheet, not to the
+   HTML that links it. The paths below are therefore ../standards/...
+   ============================================================ */
+
+@font-face { font-family:"Marcellus"; font-style:normal; font-weight:400;
+  src:url("../standards/brand-standards/assets/fonts/Marcellus-Regular.ttf") format("truetype"); }
+
+@font-face { font-family:"Inter"; font-style:normal; font-weight:400;
+  src:url("../standards/brand-standards/assets/fonts/Inter-Regular.ttf") format("truetype"); }
+@font-face { font-family:"Inter"; font-style:normal; font-weight:500;
+  src:url("../standards/brand-standards/assets/fonts/Inter-Medium.ttf") format("truetype"); }
+@font-face { font-family:"Inter"; font-style:normal; font-weight:600;
+  src:url("../standards/brand-standards/assets/fonts/Inter-SemiBold.ttf") format("truetype"); }
+@font-face { font-family:"Inter"; font-style:italic; font-weight:400;
+  src:url("../standards/brand-standards/assets/fonts/Inter-Italic.ttf") format("truetype"); }
