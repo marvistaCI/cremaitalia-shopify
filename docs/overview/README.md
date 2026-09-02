@@ -1,5 +1,20 @@
 # Business summary - a living document
 
+## Lane: this document is CODE's, not Cowork's (Steve, 02-SEP-2026)
+
+Deliberately against the usual split. By kind it is a business document, which would
+normally sit in Cowork's OneDrive lane. It stays with Code because **its content is
+generated from the POC storefront**: the screenshots are captured from a deployed
+preview theme, which needs the Shopify CLI and a scripted browser, and Cowork has
+neither. A document whose evidence only one agent can produce is owned by that agent.
+
+Practical consequence: **Cowork cannot update this file.** Asking it to reword a
+paragraph either fails or, worse, produces a divergent copy in OneDrive that no longer
+matches its own screenshots. Route edits to Code, per the standing "Cowork proposes,
+Code applies" rule in `CLAUDE.md`.
+
+## Source and render
+
 `Crema_Italia_Business_Summary_v1.0.html` is the **source**. The `.pdf` beside it is a
 **render**. Edit the HTML and re-render; never edit the PDF, and never rebuild the PDF
 from scratch (see the `crema-italia-pdf-builder` skill for why that rule exists).
