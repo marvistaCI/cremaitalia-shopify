@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>An Italian Bar for Dunedin - Concept Abstract</title>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="../standards/brand-standards/Crema Italia Brand CSS.css">
+<style>
+@page {
+  size: Letter; margin: 16mm 16mm 13mm 16mm;
+  @bottom-left  { content: "Concept Abstract - Confidential";
+                  font-family:"Inter",sans-serif; font-size:7.6pt; color:#8C7E6A; }
+  @bottom-right { content: counter(page) " / " counter(pages);
+                  font-family:"Inter",sans-serif; font-size:7.6pt; color:#8C7E6A; }
+}
+@page :first { @bottom-left { content:""; } @bottom-right { content:""; } }
+
+body { background:#fff; color:var(--ci-coffee); font-family:var(--ci-font-body);
+       font-size:9.7pt; line-height:1.36; }
+main.ci-page { max-width:none; padding:0; }
+
+/* The brand stylesheet caps p/ul at --ci-measure, the 72ch web reading measure.
+   On Letter that leaves a third of the page empty and, worse, means reducing
+   the type size fits LESS rather than more. Print sets its own measure. */
+p, ul, ol, li { max-width:none; }
+
+h1 { font-family:var(--ci-font-display); font-weight:400; font-size:25pt;
+     line-height:1.08; color:var(--ci-coffee); margin:0 0 .15rem; }
+h2 { font-family:var(--ci-font-body); font-weight:600; font-size:10.6pt;
+     color:var(--ci-crema); margin:.7rem 0 .26rem;
+     break-after:avoid; page-break-after:avoid; }
+p  { margin:0 0 .5rem; }
+ul { margin:0 0 .55rem; padding-left:1rem; }
+li { margin-bottom:.24rem; }
+strong { font-weight:600; }
+.lede { font-size:11pt; color:var(--ci-ink-soft); line-height:1.38; margin-bottom:.45rem; }
+.sub { font-family:var(--ci-font-display); font-size:12pt; color:var(--ci-crema-text, #94693A);
+       margin:0 0 .5rem; }
+
+.eyebrow { font-family:var(--ci-font-body); font-size:7.2pt; font-weight:600;
+           letter-spacing:.14em; text-transform:uppercase; color:var(--ci-mute); }
+
+/* Hard-stop gradient, not flex children: WeasyPrint collapses empty flex items
+   to zero width, silently, and no render gate catches it. */
+.flag-rule { height:2px; margin:.5rem 0 .7rem;
+  background:linear-gradient(to right,
+    #0E7A3A 0%, #0E7A3A 33.333%, #D9D2C2 33.333%, #D9D2C2 66.666%,
+    #C8342B 66.666%, #C8342B 100%); }
+
+/* Inset. Floated so the copy wraps around it rather than being interrupted by
+   a full-width band - the image is atmosphere supporting the argument, not a
+   plate in its own right. */
+figure.inset { float:right; width:47%; margin:.15rem 0 .5rem .9rem; }
+figure.inset img { width:100%; display:block; border:0.5px solid var(--ci-hairline); }
+figure.inset figcaption { font-size:7.6pt; color:var(--ci-mute); margin-top:.25rem;
+                          line-height:1.3; font-style:normal; }
+
+.callout { border-left:2.5px solid var(--ci-crema); background:#FBF8F1;
+           padding:.5rem .7rem; margin:.5rem 0 .6rem; font-size:9pt;
+           break-inside:avoid; page-break-inside:avoid; }
+.callout p:last-child { margin-bottom:0; }
+.muted { color:var(--ci-mute); }
+.small { font-size:8.6pt; }
+.clear { clear:both; }
+</style>
+</head>
+<body>
+<main class="ci-page">
+
+<span class="eyebrow">Concept Abstract &middot; Confidential &middot; For Discussion</span>
+<div class="flag-rule"></div>
+
+<h1>An Italian bar for Dunedin</h1>
+<p class="sub">Un vero bar italiano</p>
+<p class="lede">A genuine Italian <em>caff&egrave;</em> in Dunedin, Florida - Italian bar culture done
+properly rather than diluted into an American coffee shop. Espresso is the common denominator, the
+stand-up counter matters as much as the seated room, and the day ends the way an Italian day ends,
+with a glass of something at the bar. <span class="muted">The name is still open; the concept is
+not.</span></p>
+
+<h2>Espresso is the common denominator</h2>
+<figure class="inset">
+  <img src="assets/cafe-concept-room.jpg" alt="Concept rendering of the cafe interior">
+  <figcaption><strong>Concept rendering, not a photograph of an existing space.</strong> The counter
+  at the centre, the pastry case beside it, two-tops in ceramic and marble. The name on the tile is a
+  working placeholder.</figcaption>
+</figure>
+<p>In Italy the bar is a civic institution rather than a coffee retailer. It opens before work and
+closes after the evening <em>passeggiata</em>, and across that whole day one thing does not change: someone is
+making espresso at the counter. Everything else - the <em>cornetto</em> in the morning, the <em>tramezzino</em> at
+midday, the glass of wine at six - orbits that single constant.</p>
+<p>That is what lets one small room work three different ways without becoming three different
+businesses. The machine, the counter and the person behind it are the fixed point. The offer around
+them changes by the hour.</p>
+
+<h2>The banco and the tavolino</h2>
+<p><strong>The stand-up bar is not a queue for the seats. It is the venue.</strong> Most coffee in
+Italy is drunk standing at the <em>banco</em>: ordered, made, drunk and paid for in a few minutes,
+often without a word wasted. It is not a lesser experience than sitting down - for an Italian it is
+the normal one, and it is the detail American imitations almost always miss.</p>
+<p>So the room is planned around two service modes of equal standing, sharing one machine and one
+barista:</p>
+<ul>
+  <li><strong>Al banco</strong> - a real stand-up counter with a proper foot rail and elbow room, for
+  the guest who wants an espresso the way it is taken in Italy. Fast, unhurried in manner but brief in
+  fact, and the highest-turnover surface in the room.</li>
+  <li><strong>Al tavolino</strong> - small two-top tables with Italian motifs, real ceramic cups and
+  saucers, for the guest who wants to sit with a cappuccino and a pastry. Slower, warmer, and the
+  reason someone brings a friend.</li>
+</ul>
+<p>Italian bars have long priced these two differently, and the distinction is honest rather than
+sharp: sitting down buys service and a table. Whether we carry that across is an open question, and
+one we would value a view on.</p>
+
+<h2 class="clear">The room</h2>
+<p>Italian tile. Curated photography and posters that celebrate the roaster partners by name, so the
+walls carry provenance rather than decoration. Ceramic, not paper, for anyone drinking in. A visible
+pastry case. A small footprint kept deliberately simple, because complexity in a room this size is
+paid for twice.</p>
+<p><strong>Food is sourced, not produced.</strong> <em>Cornetti, tramezzini, biscotti</em>, from local bakers.
+No kitchen, no line cooks, no hood. It keeps the build, the licence and the daily operation as light
+as they can be, and it lets the coffee remain the thing the place is judged on.</p>
+
+<h2>The day</h2>
+<ul>
+  <li><strong>Morning is the strongest part of the concept.</strong> This is the daypart Italian bar
+  culture is actually built around, and the one the format serves best - espresso, cornetto, standing,
+  gone. It is where the room earns its character and its regulars.</li>
+  <li><strong>Midday</strong> stays light: tramezzini and a coffee, not a lunch service.</li>
+  <li><strong>Early evening is the <em>aperitivo</em></strong>, and it is the planned close of the day rather
+  than an afterthought. Beer and wine only, no spirits and no full liquor licence - the Italian
+  evening at a bar is a glass of white and something small, not a cocktail programme. It extends the
+  same room, the same staff and the same lease into the hours a coffee-only concept leaves on the
+  table, and it is authentic to the format rather than bolted onto it.</li>
+</ul>
+
+<h2>What it deliberately is not</h2>
+<p><strong>Not a coworking caf&eacute;.</strong> No laptop culture, no expectation of long stays, no
+power strips under every table. That is a different business with different economics and a different
+room, and choosing against it early is what protects the turnover the format depends on.</p>
+<p>Nor is it a marketing expense in disguise. It is intended to stand on its own as a profitable
+independent business, and it is being planned that way.</p>
+
+<h2>Who leads it</h2>
+<p>The caf&eacute; will be led by <strong>Anastasia Galperin</strong> as General Manager and principal.
+Russian by birth, she lived in Italy for several years before settling in Florida, so the culture the
+room is built to represent is one she has actually lived rather than studied. She is unusually good
+with people, and the expectation is that her presence becomes part of what the place is known for.</p>
+<p>She would come in as an equity partner contributing operational leadership and sweat equity, and the
+intention is to structure her as <strong>majority owner</strong>. That recognises what she brings, and
+it also positions the business to be certified as woman-owned, which opens a category of small-business
+programmes, grants and community lending that would otherwise be closed to it. Terms will be settled in
+a separate agreement.</p>
+
+<h2>Relationship to Crema Italia</h2>
+<p>Crema Italia is an importer, not a roaster - a curator of a small, named group of top-tier Italian
+roasters brought to the American market under its own name as a statement of provenance. The caf&eacute;
+would be a <strong>separate and independent business</strong>, buying coffee from Crema Italia on
+favourable wholesale terms as a flagship account, and carrying its branding and roaster storytelling
+throughout the space. Crema Italia would hold a minority interest.</p>
+<p>The independence is deliberate and load-bearing: the caf&eacute; can grow, borrow and negotiate on its
+own standing, and if the relationship ever changed it would simply source coffee elsewhere and carry on.</p>
+<p><strong>It also earns twice.</strong> In opening hours it is a living reference account, where real
+customers meet the coffee and can be pointed to cremaitalia.com to continue at home. Outside them the
+room becomes a photographic setting and tasting space for the website's own storytelling - a genuine
+Italian interior being considerably cheaper to use than to build twice.</p>
+
+<h2>Where your view would be worth most</h2>
+<ul>
+  <li><strong>Will Americans stand?</strong> The banco is the heart of the concept and the part with
+  the least local precedent. Have you seen a stand-up counter work outside Italy, and what made it work?</li>
+  <li><strong>Sourced food in a small room</strong> - right call, or does no kitchen cost more in
+  ticket than it saves in build and labour?</li>
+  <li><strong>The aperitivo turn.</strong> Practically, what does adding beer and wine do to staffing,
+  insurance and the character of the room in the last hours of the day?</li>
+  <li><strong>How much room to give the counter</strong> against seats, in a footprint that is not yet
+  fixed.</li>
+  <li><strong>What kills a caf&eacute; in year one</strong> that someone planning one does not see coming.</li>
+</ul>
+
+<div class="callout">
+  <p><strong>Status.</strong> Concept stage. Footprint, staffing, wholesale terms and the operating
+  and financial model are all in development and deliberately absent here; a separate ownership and
+  equity agreement will follow. Nothing in this document is committed, including the name.</p>
+</div>
+
+</main>
+
+<div class="flag-rule" style="margin-top:.6rem;"></div>
+<footer class="small muted" style="display:flex; justify-content:space-between;">
+  <span>Prepared 02-SEP-2026 &middot; Dunedin, Florida</span>
+  <span>v2.0 &middot; In association with Crema Italia, LLC</span>
+</footer>
+
+</body>
+</html>
