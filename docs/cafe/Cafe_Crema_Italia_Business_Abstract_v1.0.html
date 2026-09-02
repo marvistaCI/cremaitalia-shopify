@@ -9,7 +9,7 @@
 @page { size: Letter; margin: 10mm 12mm 8mm 12mm; }
 
 body { background:#fff; color:var(--ci-coffee); font-family:var(--ci-font-body);
-       font-size:8.1pt; line-height:1.21; }
+       font-size:8.1pt; line-height:1.19; }
 main.ci-page { max-width:none; padding:0; }
 
 /* The brand stylesheet caps p and ul/ol at --ci-measure, the 72ch reading
@@ -95,44 +95,49 @@ operator, buying coffee under an ordinary commercial agreement and licensing the
 </ul>
 </div>
 
-<h2>Modelled economics</h2>
-<p class="small muted">From <em>CCIB_MonteCarlo.xlsx</em> (v2), 1,000 trials per footprint. Common
-assumptions: rent $26/sq&nbsp;ft/yr NNN, COGS 27-30%, labour $15/hr plus 20% burden, 30 days/month.</p>
+<h2>Modelled economics - the day-only concept</h2>
+<p class="small muted">From <em>CCIB_MonteCarlo.xlsx</em> (v2), 1,000 trials per footprint. The model
+predates the evening trade and assumes a <strong>7am-3pm</strong> day, so all three scenarios below
+are coffee and food only. Rent $26/sq&nbsp;ft/yr NNN, COGS 27-30%, labour $15/hr plus 20% burden.</p>
 
 <table class="ci-table">
   <tr><th>Scenario</th><th>Footprint</th><th class="n">Mean profit</th><th class="n">Downside (10th pct)</th>
       <th class="n">P(profit&nbsp;&gt;&nbsp;0)</th><th class="n">P(&gt;&nbsp;$40k)</th><th class="n">Break-even covers/day</th></tr>
   <tr><td><strong>Small</strong> <span class="muted">counter-only</span></td><td>900 sq ft, 20 seats</td>
       <td class="n">-$12,300</td><td class="n">-$37,700</td><td class="n">26%</td><td class="n">1%</td><td class="n">82</td></tr>
-  <tr class="hi"><td><strong>Target</strong> <span class="muted">current plan</span></td><td>1,200 sq ft, 28 seats</td>
+  <tr class="hi"><td><strong>Target</strong> <span class="muted">mid-range</span></td><td>1,200 sq ft, 28 seats</td>
       <td class="n">+$19,700</td><td class="n">-$22,100</td><td class="n">72%</td><td class="n">25%</td><td class="n">104</td></tr>
   <tr><td><strong>Large</strong> <span class="muted">expanded seating</span></td><td>1,800 sq ft, 49 seats</td>
       <td class="n">+$76,900</td><td class="n">+$1,600</td><td class="n">90%</td><td class="n">73%</td><td class="n">142</td></tr>
 </table>
 
-<p><strong>The model's clearest signal is that bigger wins</strong>, on the downside as well as the
-upside: Large is the only scenario whose 10th percentile is still profitable, because counter
-throughput scales with staff rather than seats while rent and labour spread over more volume. Small is
-not viable as modelled, clearing break-even in roughly one year in four. <strong>But the comparison
-flatters Large</strong>: build-out capital is unmodelled and scales with square footage.</p>
+<p><strong>The day-only business is marginal at the sizes under consideration.</strong> Target returns
+a mean of $19,700, clears the $40,000 threshold in only one year in four, and carries a -$22,100
+downside. The model's own remedy is <em>size</em>: Large is the only scenario whose 10th percentile
+stays profitable, because counter throughput scales with staff rather than seats. But size is the
+only growth lever the model contains, and it flatters Large - build-out capital is unmodelled and
+scales with square footage.</p>
 
-<h2>What the model does not yet reflect</h2>
+<h2>The profitability case is the part with no numbers behind it</h2>
+<p>Extending to 8pm and adding an early-evening beer and wine trade is <strong>new, deliberate, and
+considered necessary for profitability</strong>. It is the answer to the marginal day-only economics
+above, not an oversight in the model - the model simply predates it. It is also <strong>entirely uncosted</strong>:
+no revenue, no COGS, no licence, no incremental insurance, and no labour for the extra hours, a
+7am-8pm day being roughly <strong>91 hrs/week against the model's 56</strong>. So <strong>the case
+for the caf&eacute; now rests on the one daypart that has never been modelled.</strong> Sizing it
+comes before a lease, because the evening trade also determines footprint and fit-out.</p>
+
+<h2>Other gaps and unsettled inputs</h2>
 <div class="cols">
 <ul>
-  <li><strong>The hours are wrong.</strong> Labour is built on a <strong>7am-3pm</strong> day
-  (56 hrs/week). A 7am-8pm concept is about <strong>91 hrs/week</strong>, a 63% increase against
-  the largest controllable fixed cost. Every profit figure above describes a shorter business
-  than the one proposed.</li>
-  <li><strong>Beer and wine are absent</strong> - no revenue, no COGS, no licence cost, no
-  incremental insurance. This is the daypart that justifies the longer day, so it is the gap
-  that matters most alongside the hours.</li>
-  <li><strong>Build-out and leasehold improvement</strong> are excluded by design, as are
-  financing costs and seasonality.</li>
-  <li><strong>An internal contradiction.</strong> The Target column is 1,200 sq ft, but the
-  model's own note describes the planned footprint as <strong>~700-800 sq ft</strong>. One of the
-  two is wrong, and it moves rent, seats and labour together.</li>
-  <li><strong>The COGS tab is empty</strong>, so the 27-30% assumption is asserted rather than
-  built up from a coffee, pastry and alcohol mix.</li>
+  <li><strong>Footprint is not settled.</strong> <strong>800-1,200 sq ft</strong> is a hypothetical
+  range rather than a plan; the model's Target column sits at 1,200 while its own note says ~700-800.
+  Footprint moves rent, seats and labour together, so it should follow the evening-trade sizing
+  rather than precede it.</li>
+  <li><strong>Build-out and leasehold improvement</strong> are excluded by design, as are financing
+  costs and seasonality. No capital requirement has been costed.</li>
+  <li><strong>The COGS tab is empty</strong>, so 27-30% is asserted rather than built up from a
+  coffee, pastry and alcohol mix - and alcohol carries a different margin from either.</li>
   <li><strong>Transfer pricing.</strong> Related-party sales between two entities under common
   control must be defensible at arm's length, and the caf&eacute;'s true profitability is only
   visible once that price is honest.</li>
@@ -163,11 +168,12 @@ flatters Large</strong>: build-out capital is unmodelled and scales with square 
 published statistic for the dine-in versus walk-in split at small independent caf&eacute;s, so its
 inputs use defensible mechanisms rather than observed data. Each figure is a planning placeholder
 awaiting real quotes, a real lease and real POS history, and no capital requirement has been costed
-at all. Start with the operating day, which is knowably wrong today.</p>
+at all. Start with the evening trade: it is the smallest piece of modelling left and the one the
+answer turns on.</p>
 
 </main>
 
-<div class="flag-rule" style="margin-top:.5rem;"></div>
+<div class="flag-rule" style="margin-top:.25rem; margin-bottom:.3rem;"></div>
 <footer class="small muted" style="display:flex; justify-content:space-between;">
   <span>Prepared 02-SEP-2026 &middot; Crema Italia, LLC &middot; Lutz, Florida, USA</span>
   <span>v1.0 &middot; Built to Brand Standards v2.3</span>
