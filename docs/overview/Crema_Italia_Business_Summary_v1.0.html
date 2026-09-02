@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Crema Italia - Business Summary</title>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="../standards/brand-standards/Crema Italia Brand CSS.css">
+<style>
+@page {
+  size: Letter;
+  margin: 20mm 18mm 18mm 18mm;
+  @bottom-left  { content: "Crema Italia, LLC - Business Summary v1.0 - Confidential";
+                  font-family: "Inter", sans-serif; font-size: 8pt; color: #8C7E6A; }
+  @bottom-right { content: counter(page) " / " counter(pages);
+                  font-family: "Inter", sans-serif; font-size: 8pt; color: #8C7E6A; }
+}
+@page :first { @bottom-left { content: ""; } @bottom-right { content: ""; } }
+
+body { background:#fff; color:var(--ci-coffee); font-family:var(--ci-font-body);
+       font-size:10.2pt; line-height:1.5; }
+main.ci-page { max-width:none; padding:0; }
+
+h1 { font-family:var(--ci-font-display); font-weight:400; font-size:27pt;
+     line-height:1.15; color:var(--ci-coffee); margin:0 0 .35rem; }
+h2 { font-family:var(--ci-font-body); font-weight:600; font-size:12.5pt;
+     color:var(--ci-crema); margin:1.5rem 0 .45rem;
+     break-after:avoid; page-break-after:avoid; }
+h3 { font-family:var(--ci-font-body); font-weight:600; font-size:10.4pt;
+     color:var(--ci-coffee); margin:1rem 0 .25rem;
+     break-after:avoid; page-break-after:avoid; }
+p  { margin:0 0 .6rem; }
+ul, ol { margin:0 0 .7rem; padding-left:1.15rem; }
+li { margin-bottom:.28rem; }
+strong { font-weight:600; }
+.lede { font-size:11.4pt; color:var(--ci-ink-soft); line-height:1.45; }
+
+.eyebrow { font-family:var(--ci-font-body); font-size:7.6pt; font-weight:600;
+           letter-spacing:.14em; text-transform:uppercase; color:var(--ci-mute); }
+
+/* Tricolore rule. Painted with a hard-stop gradient, NOT with flex children:
+   WeasyPrint collapses empty flex items to zero width, so the flex version of
+   this rule renders as nothing at all - and it renders as nothing SILENTLY,
+   which no render gate can catch. Verified by looking at the page, 25-AUG-2026. */
+.flag-rule { height:2px; margin:.7rem 0 1.1rem;
+  background:linear-gradient(to right,
+    #0E7A3A 0%, #0E7A3A 33.333%,
+    #D9D2C2 33.333%, #D9D2C2 66.666%,
+    #C8342B 66.666%, #C8342B 100%); }
+
+table.ci-table { width:100%; border-collapse:collapse; margin:.4rem 0 1rem;
+                 font-size:9.1pt; }
+table.ci-table th { background:#F7F3EA; color:var(--ci-coffee); font-weight:600;
+                    text-align:left; padding:.34rem .45rem;
+                    border:0.5px solid var(--ci-hairline); }
+table.ci-table td { padding:.34rem .45rem; border:0.5px solid var(--ci-hairline);
+                    vertical-align:top; }
+table.ci-table tr { break-inside:avoid; page-break-inside:avoid; }
+
+.callout { border:0.6px solid var(--ci-hairline); border-left:2.5px solid var(--ci-crema);
+           background:#FBF8F1; padding:.6rem .8rem; margin:.7rem 0 1rem;
+           font-size:9.5pt; break-inside:avoid; page-break-inside:avoid; }
+.callout p:last-child { margin-bottom:0; }
+.callout .lbl { display:block; font-size:7.6pt; font-weight:600; letter-spacing:.13em;
+                text-transform:uppercase; color:var(--ci-mute); margin-bottom:.25rem; }
+
+/* Screenshot plate. The caption is not decoration: every shot is of a working
+   prototype carrying SAMPLE catalogue data, and the caption is what stops a
+   reader taking the roaster names and prices on screen as commitments. */
+/* Two-up, and inline-block rather than flex ON PURPOSE: WeasyPrint's flex
+   handling is the same one that silently collapses the tricolore rule above,
+   so a layout that must not fail quietly does not use it. Full-width shots ran
+   the document to 7 pages with one page two-thirds empty. */
+.shots { margin:.6rem 0 .4rem; font-size:0; }
+figure.shot { display:inline-block; vertical-align:top; width:48.5%; margin:0 0 .8rem;
+              break-inside:avoid; page-break-inside:avoid; }
+figure.shot:nth-of-type(odd) { margin-right:2.6%; }
+figure.shot img { width:100%; display:block; border:0.5px solid var(--ci-hairline); }
+figure.shot figcaption { font-size:8pt; color:var(--ci-mute); margin-top:.28rem;
+                         line-height:1.32; }
+
+.muted { color:var(--ci-mute); }
+.small { font-size:9pt; }
+.pb { break-before:page; page-break-before:always; }
+.cover-foot { margin-top:1.1rem; font-size:9pt; color:var(--ci-mute); }
+.twocol { display:flex; gap:.9rem; }
+.twocol > * { flex:1 1 0; min-width:0; }
+</style>
+</head>
+<body>
+<main class="ci-page">
+
+<header>
+  <img src="../standards/brand-standards/assets/ci-cover-logo.png" alt="Crema Italia"
+       style="height:64px; display:block; margin-bottom:1.1rem;">
+  <span class="eyebrow">Business Summary &middot; Confidential</span>
+</header>
+<div class="flag-rule"></div>
+
+<h1>Crema Italia</h1>
+<p class="lede">A Florida importer of whole-bean coffee from a small, named group of artisan
+Italian roasters, sold direct to American customers exactly as the roaster sealed it. We do
+not roast, grind, blend or re-bag. The business is pre-launch: the brand, the operating model
+and a complete working storefront are built; the first roaster contracts and the first real
+inventory are not.</p>
+
+<p class="cover-foot">Prepared 02-SEP-2026 &middot; Crema Italia, LLC, Lutz, Florida, USA &middot;
+cremaitalia.com</p>
+
+<h2>1. The proposition</h2>
+<p>Americans can already buy Italian coffee. What they cannot easily buy is Italian coffee that
+is still <em>fresh</em>, and that has not been altered on its way here. Both of those are the
+whole business:</p>
+<ul>
+  <li><strong>Freshness.</strong> The large Italian brands sit on a shelf for up to a year.
+  We air-freight, so coffee reaches a customer in weeks rather than months. Coffee that ages
+  past our window comes off sale entirely and is donated rather than discounted indefinitely.</li>
+  <li><strong>Unaltered.</strong> The coffee ships in the roaster's own sealed valve bag, under
+  the roaster's own name. We are a channel, not a house brand.</li>
+  <li><strong>Named and small.</strong> A short list of roasters we choose, not an aggregated
+  marketplace. The restraint is the positioning.</li>
+  <li><strong>Whole bean only.</strong> This deliberately narrows the audience to people who
+  grind at home, which is the customer for whom freshness is worth paying for.</li>
+</ul>
+
+<h2>2. How it earns</h2>
+<p>The catalogue is organised as four "shelves", each with a different commercial job. A fifth,
+<em>Bottega</em>, carries equipment such as grinders and is never discounted.</p>
+
+<table class="ci-table">
+  <tr><th style="width:15%">Shelf</th><th style="width:23%">What it is</th><th>Its job</th></tr>
+  <tr><td><strong>Roccia</strong><br><span class="muted">The Rock</span></td>
+      <td>Subscription and larger bag formats, on a 4, 6 or 8 week cadence.</td>
+      <td>The recurring-revenue core. Free shipping and a subscriber discount. Fully
+      self-service: pause, skip, swap or cancel, no minimum, no cancel fee.</td></tr>
+  <tr><td><strong>Sorpresa</strong><br><span class="muted">The Surprise</span></td>
+      <td>Curated small-format discovery collections, assembled to order.</td>
+      <td>Customer acquisition and gifting. The intended path into a Roccia subscription.</td></tr>
+  <tr><td><strong>Selezione</strong><br><span class="muted">The Selection</span></td>
+      <td>Premium, seasonal and micro-lot offerings.</td>
+      <td>Margin and scarcity. Subscribers get early access.</td></tr>
+  <tr><td><strong>Offerta</strong><br><span class="muted">The Offer</span></td>
+      <td>Ageing lots, marked down and sold as-is.</td>
+      <td>Recovers value from stock approaching the freshness limit, without ever
+      misrepresenting its age.</td></tr>
+</table>
+
+<p>Layered on top: a <strong>Founding Member</strong> tier, capped at 222 subscribers and never
+reopened, carrying a permanently better rate. It is a durable, account-level status rather than
+a promotion, and it is designed to be worth more as an honour than as a discount.</p>
+
+<div class="callout">
+  <span class="lbl">One standing caveat, and it applies to every number in this document</span>
+  <p>We are pre-launch and nobody has yet transacted with us. Every figure - prices, markups,
+  discounts, thresholds, freshness windows - is a working placeholder, good enough to build and
+  reason against and not good enough to charge money against. One deliberate pricing pass happens
+  after the storefront is finished and before it goes public. Until then, changing a number costs
+  only the edit.</p>
+</div>
+
+<h2>3. The operating chain</h2>
+<p>Roaster in Italy seals whole beans in valve bags, on our order. An Italian freight forwarder
+consolidates and air-freights to Florida. Stock is received into a US fulfilment facility and
+shipped to the customer. Crema Italia acts as the <strong>US Agent for FDA food-facility
+registration</strong> on behalf of its roaster partners, which is a real service to a small
+Italian roaster and part of what makes us worth dealing with.</p>
+
+<h3>Team</h3>
+<ul>
+  <li><strong>Steve Roberts</strong> - Founder</li>
+  <li><strong>Lucia Cal&ograve;</strong> - Operations Manager, Italy. Owns the roaster
+  relationships and the Italian-language documents of record.</li>
+  <li><strong>Asia Chirdo</strong> - Board Advisor, Italy</li>
+  <li><strong>Lauren Roberts</strong> - Operations Manager, US</li>
+  <li>Plus an Italian freight-forwarding partner.</li>
+</ul>
+
+<h2>4. What is built today</h2>
+<p>Rather more than a deck. The following exist and work:</p>
+<ul>
+  <li><strong>A complete, clickable storefront</strong> on Shopify, custom-built rather than
+  bought as a theme. Twenty-eight iterations to date, each one reviewed and deployed. It covers
+  the home and founder story, all four shelves, a filterable catalogue, a tasting quiz, roaster
+  profiles, product pages, cart and discount logic, subscription management and account,
+  a regional map of Italian roasting traditions, and the customer promise.</li>
+  <li><strong>A finished brand identity</strong> - logo by a commissioned artist, palette,
+  typography, and a versioned written Brand Standard the storefront is audited against.</li>
+  <li><strong>Three governing written standards</strong> - brand, store operating rules
+  (pricing, shelves, discounts, freshness, fulfilment), and a collaboration standard. These
+  are versioned documents, not notes, and the storefront is checked against them.</li>
+  <li><strong>Published legal policies</strong> - shipping, returns, terms, privacy - live on
+  the domain now.</li>
+  <li><strong>Platform risk retired by testing, not by reading.</strong> On a separate test
+  store we have run real orders through the subscription engine, the discount engine, product
+  bundling, customer accounts and the product data model. Several assumptions turned out to be
+  wrong, and we found that out for the price of a test order rather than mid-build.</li>
+  <li><strong>A live holding page</strong> at cremaitalia.com collecting pre-launch signups.</li>
+</ul>
+
+<div class="shots">
+<figure class="shot">
+  <img src="assets/01-home.png" alt="Crema Italia storefront home page">
+  <figcaption>The storefront home page. The claim leads: a small named group of roasters, whole
+  bean, unaltered, flown in.</figcaption>
+</figure>
+
+<figure class="shot">
+  <img src="assets/02-shop.png" alt="Catalogue page with shelf and region filters">
+  <figcaption>The catalogue. Filterable by shelf, by Italian region, and by taste profile. Greyed
+  regions are ones we have not reached yet and are shown honestly rather than hidden.
+  <strong>Product tiles, names and prices here are sample data.</strong></figcaption>
+</figure>
+
+<figure class="shot">
+  <img src="assets/03-roccia.png" alt="Roccia subscription shelf">
+  <figcaption>Roccia, the subscription shelf and the recurring-revenue core, including the
+  Founding Member tier.</figcaption>
+</figure>
+
+<figure class="shot">
+  <img src="assets/04-roasters.png" alt="Roasters index page">
+  <figcaption>The roaster index. <strong>The roasters shown are placeholder entries used to build
+  and test the page. No roaster has yet signed with Crema Italia</strong>, and nothing here should
+  be read as an existing relationship.</figcaption>
+</figure>
+</div>
+
+<h2>5. What is not built, and what gates a launch</h2>
+<p>Being straight about this is more useful than a status board that is all green:</p>
+<ul>
+  <li><strong>No signed roaster, and no real catalogue.</strong> This is the schedule driver, not
+  the software. The entire product data model was designed against invented data, and invented
+  data agrees with whatever you assumed. The first signed roaster and two or three real products
+  are what turn the prototype into a build.</li>
+  <li><strong>No photography.</strong> The product imagery on screen is a placeholder pattern.
+  This is the single largest remaining gap in how the site presents, and most of it cannot be
+  shot until there is real coffee in real bags.</li>
+  <li><strong>No third-party logistics provider selected.</strong> Three qualifying questions have
+  to be answered before commercial terms, one of which decides whether a provider can fulfil the
+  Sorpresa shelf at all.</li>
+  <li><strong>Pricing not yet validated against real landed cost.</strong> The markup model exists
+  and has never been run against an actual invoice, freight bill and duty. It gets tested against
+  the first real products, before any pricing is displayed publicly.</li>
+  <li><strong>Launch sequencing.</strong> The storefront is deliberately frozen at its current
+  iteration until real products exist, so that work is not done twice.</li>
+</ul>
+
+<h2>6. Where I would value your view</h2>
+<ul>
+  <li><strong>Roaster acquisition.</strong> Everything downstream waits on the first signature.
+  What would you do differently to get from a warm conversation to a signed agreement faster?</li>
+  <li><strong>Sequencing.</strong> Launch narrow with one roaster and a handful of products, or
+  hold until the shelf looks full? The first gets us real customer data sooner; the second makes
+  a better first impression.</li>
+  <li><strong>The subscription bet.</strong> The whole model assumes discovery converts into a
+  recurring subscription. Is the Sorpresa-to-Roccia path the right funnel, or is it one step too
+  many?</li>
+  <li><strong>What a small importer is worth.</strong> Where does this go in three years, and what
+  is the version of it that is worth building rather than the version that is merely nice?</li>
+</ul>
+
+</main>
+
+<div class="flag-rule" style="margin-top:1.4rem;"></div>
+<footer class="small muted" style="display:flex; justify-content:space-between;">
+  <span>Crema Italia, LLC &middot; Lutz, Florida, USA &middot; cremaitalia.com</span>
+  <span>v1.0 &middot; Built to Brand Standards v2.3</span>
+</footer>
+
+</body>
+</html>
