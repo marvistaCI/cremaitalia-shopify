@@ -4939,9 +4939,10 @@ every line here as unproven until a screenshot says otherwise. The dev store
   no placeholder copy left (only the company/founder photos are real; team/partner photos are
   still placeholders).
 - [ ] **ALL photography is DEFERRED (Steve, 2026-08-20) — tracked in
-  `docs/photography-todo.md`, which is now the single list.** Team/partner headshots (Lauren,
-  Partner 1), roaster portraits + brand logos, and every product tile / PDP gallery slide are
-  still text or CSS placeholders. The three landing-page slots DO carry images, but they are
+  `docs/photography-todo.md`, which is now the single list.** **Lauren Roberts' headshot landed in
+  POC29 (2026-09-03), so the outstanding team item is Partner 1 alone** — blocked on a signed partner
+  agreement, not on us. Roaster portraits + brand logos and every product tile / PDP gallery slide
+  are still text or CSS placeholders. The three landing-page slots DO carry images, but they are
   `ci-temp-*` stand-ins and **two of them cannot ship** for recorded reasons (a US café;
   third-party trademarks). Most of the rest is gated on the roasters signing, not on us.
 - [ ] Deferred: no-waste copy rewrite on the Promise page (pending 3PL-city research).

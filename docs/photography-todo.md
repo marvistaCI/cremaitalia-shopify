@@ -67,17 +67,29 @@ roaster's name as text (`portrait_cls` + `label` in the catalog). Real assets ne
 
 Also gated on the roasters signing.
 
-## 4. Team and partner headshots — two of four missing
+## 4. Team and partner headshots — one of four missing
 
 | Person | Role | Photo |
 |---|---|---|
 | Lucia Calò | Operations Manager - Italy | ✅ `ci-lucia.jpg` |
 | Asia Chirdo | Board Advisor - Italy | ✅ `ci-asia.jpg` |
-| Lauren Roberts | Operations Manager - US | ❌ none — card is inert, bio reads "Bio under construction." |
+| Lauren Roberts | Operations Manager - US | ✅ `ci-lauren.jpg` (POC29, 2026-09-03) — **a retouch, see below** |
 | Partner 1 | Freight Forwarder - Italy | ❌ none — placeholder name too, pending a signed partner agreement |
 
-Blocked on Lauren engaging and on the partner agreement being signed — not on us. Steve's rule
-stands: **no team member or partner ships without full data** (name, role, photo, bio).
+Only **Partner 1** is outstanding now, blocked on a signed partner agreement — not on us. Steve's
+rule stands: **no team member or partner ships without full data** (name, role, photo, bio).
+
+> **`ci-lauren.jpg` is a RETOUCHED photograph and the only one on the site that is.** Steve's source
+> has her holding a **matcha**, which on the About page of an Italian coffee importer reads wrong, so
+> at his direction the drink was recoloured to a cappuccino. Only **hue** moved — saturation and
+> brightness are untouched, so the rosetta, the surface sheen and the rim shadow are the original
+> photograph's, and the change is confined to `(206,389)-(313,423)`, the liquid and the residue on
+> the front lip. Recorded here rather than only in the §9 log because **this is the list someone
+> reads when replacing photography**, and a later reader comparing the asset against the original in
+> `Operations\People\Lauren Roberts\` would otherwise find a difference with no explanation. The
+> retouched full-resolution master is saved beside it as `Lauren Headshot - Cappuccino.jpg`. This is
+> **not** a `ci-temp-*` stand-in: it is Steve's own photograph of his own team member, cleared to
+> ship, and nothing here needs replacing before launch.
 
 ## 5. Already real, no action
 
