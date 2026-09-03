@@ -3968,12 +3968,83 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   with the delivered Collaboration render confirmed by extraction to read "Store Operating Standards
   v1.19".
 
+- 2026-09-03 — **POC29: Lauren Roberts' About record filled in, and the durable half is the scoping
+  answer rather than the change.** Ledger: `docs/POC29_change_list.md`. She had carried
+  `"Bio under construction."` and a lettered placeholder tile since POC12, the batch that set the
+  rule that nobody ships without full data; she was the last team member in that state. Bio written
+  by Cowork into her People folder and **approved by Lauren** before anything was committed.
+  **Steve's question was whether this needed a new POC or just a dataset update, and the answer is
+  the second** — a person is one record in `people[]` in `assets/ci-catalog.json`, so this is
+  editing that record and adding one image. **Two template edits ride along only because the POC is
+  a mock:** the About tiles are hand-written markup and JS-rendered photos resolve filenames through
+  the static `CI_ASSETS` map. Neither exists in production, where this is Steve adding a block in
+  the theme editor with **no deploy at all** — sections + blocks, locked 2026-07-13,
+  `production_build_spec.md` §2. Worth noting because he asked it as *"we will be using shopify
+  tables"*: **tables describes metaobjects, which are the deferred upgrade path there, not the
+  decision** — taken only if a person gets reused across pages (a team member who also authors
+  Journal posts) or the lists grow large. His substance held either way; it is admin-managed data,
+  not code. Seeing it still needs a push, and the draft-theme naming rule makes that a POC29, so it
+  is a new POC in the bookkeeping sense only. Precedent is POC20, a single data-only commit that
+  still got its own theme.
+  **The bio passed the copy rules by being checked, not assumed:** zero em-dashes (§6), zero
+  exclamation marks, none of the banned register, pure ASCII; three paragraphs at 186 words against
+  Lucia's 160. The role stays `Operations Manager - US` because `BIO.md` heads it with a comma while
+  the site convention since POC11 is `Role - Location`, **and the site is what renders**. One thing
+  flagged rather than silently shipped: the third paragraph names her two stepchildren, the baby and
+  her husband, and Lauren approving her own bio does not by itself settle naming three children on a
+  storefront that will be indexed. Raised as a deliberate choice rather than a copy question; Steve
+  confirmed her approval with the names in.
+  **THE PHOTOGRAPH IS A RETOUCH AND SHOULD BE KNOWN AS ONE.** Steve's source has her holding a
+  **matcha**, which on the About page of an Italian coffee importer reads wrong — the same note
+  already recorded against the temporary landing-page band photo. His call was to keep the cup and
+  recolour the drink. **Only hue moved.** Saturation and brightness are untouched, so the rosetta
+  swirl, the surface sheen and the shadow under the rim are all the original photograph's; nothing
+  was painted in. The separation was free because the colours do not overlap — the matcha sat in a
+  tight band at **hue 54-59 degrees**, her skin at **19-30**, the ceramic at **4% saturation** — so a
+  mask keyed on hue band plus a saturation floor isolated the drink from her hand and the cup with
+  **no hand-drawn selection**. Greens map to 30 degrees with a feathered edge. **Verified confined
+  rather than trusted:** diffing against the source shows changes only inside (206,389)-(313,423),
+  the liquid and the residue on the front lip, with the background greenery and the plant by the
+  window untouched. **Recolouring that rim residue is what sells it** — left green it would have
+  given the retouch away, and it is the detail an eye notices without being able to say why. The
+  retouched full-resolution master is saved beside the original as `Lauren Headshot - Cappuccino.jpg`;
+  checked for existence first, nothing in her folder overwritten.
+  **Steve's crop note produced the more interesting fix.** He asked that the top of her head stay in
+  frame and not be blurred, and **two things were working against the crown while only one of them
+  was framing**: the first crop took a **420px** region and stretched it **up** into 440, which can
+  only soften. It now takes **450px** and scales **down**, which roughly doubles the headroom and
+  makes the resample a downscale, plus a light unsharp mask (1.2 / 60% / 3). Individual strands
+  resolve at the crown now. Some softness at the wispy hair edge **is in the original** and no filter
+  honestly removes it, which is worth saying plainly rather than sharpening until it looks artificial.
+  Both containers are `aspect-ratio:1`, so the square asset renders whole and CSS cannot clip her
+  head again. 440x440, 42 KB, metadata stripped, in line with `ci-lucia.jpg` and `ci-asia.jpg`.
+  **Method note, and it is the one this project keeps re-learning:** the matcha, the crop and the
+  crown were all judged **by looking** — the cup at 3x, the crown at 3x — not by measurement. A hue
+  histogram cannot tell you whether a drink reads as coffee, and geometry cannot tell you whether a
+  hairline reads as blur.
+  **DEPLOYED** via the `crema-poc-deploy` skill to a NEW unpublished theme **"Crema Italia POC29
+  Preview" (id `152193794217`)**: `theme list` + `git log origin/main..HEAD` run **first** (no POC29
+  existed, no duplicate names), validation at the documented baseline (**15 offenses / 0 errors / 0
+  new**), then **pull-and-diff proved** the push — both sides **39** files, zero content mismatches,
+  nothing on only one side, exactly one theme of that name. The file count moved **38 -> 39** with the
+  one new asset, and the skill's baseline was updated in the same pass **with the reason recorded**,
+  so a later session does not read the change as a regression. Batch content asserted **on the
+  deployed theme** rather than the repo. POC26, POC27, POC28 and the live theme untouched.
+  **Two coordination facts worth keeping.** Six unpushed commits were present at Step 0 and **none of
+  them were this session's** — they plus an untracked `docs/roaster-negotiation/` are another Code
+  session's work, and `git diff --name-only origin/main..HEAD` confirmed **all of them are `docs/`
+  only**, so nothing rode along into the theme push. The commit was scoped to exactly four files
+  rather than run through a broad `git add`, which is the failure that swept a Standard edit into an
+  unrelated commit on 2026-08-24. **And POC26 (`152030347433`) is now one over the three-newest cap**
+  — computed from live `theme list --json`, not eyeballed — but it was **not deleted**, because the
+  deploy instruction carried no explicit go by name and id. No theme was deleted, so no theme ids went
+  stale and the Step 6.4 sweep had nothing to fix.
 
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC28 (deployed + pull-and-diff proved 2026-08-24) — read this first
+**▶ CURRENT STATE — POC29 (deployed + pull-and-diff proved 2026-09-03) — read this first
 when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
@@ -3998,9 +4069,10 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC28 Preview" | `152051744937` |
+| **Newest POC preview** | "Crema Italia POC29 Preview" | `152193794217` |
+| Prior preview | "Crema Italia POC28 Preview" | `152051744937` |
 | Prior preview | "Crema Italia POC27 Preview" | `152030412969` |
-| Prior preview | "Crema Italia POC26 Preview" | `152030347433` |
+| Over the cap, prune pending Steve's go | "Crema Italia POC26 Preview" | `152030347433` |
 
 > **The live theme is current as of 2026-08-24.** Commit **`2b80122`** (five policy links in the
 > coming-soon footer) was pushed scoped to `150557294761` and **verified on the public page**: all
@@ -4031,7 +4103,35 @@ a real cart, and real customers; none is code.
 > accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
 > gate** on brand identity and product detail rising above 9.
 
-**POC28 is deployed** and is the only POC28 theme - **38 files byte-match the repo**, proved by
+**POC29 is deployed** and is the only POC29 theme - **39 files byte-match the repo**, proved by
+pull-and-diff (both sides 39; zero content mismatches; nothing on only one side; `theme list` and
+`git log origin/main..HEAD` run **first**, no collision, no duplicate names). Validation at the
+documented baseline (**15 offenses / 0 errors / 0 new**). The file count moved 38 -> 39 with the one
+new asset this batch adds, `assets/ci-lauren.jpg`; the `crema-poc-deploy` baseline was updated in
+the same pass so a later session does not read the change as a regression. Batch content asserted
+**on the deployed theme** rather than the repo: Lauren's `photo` reads `ci-lauren.jpg`, her bio is
+three paragraphs / 186 words with no "Bio under construction", `CI_ASSETS` carries the new
+filename, the About tile renders the photo with the lettered placeholder gone, and Partner 1's
+placeholder is correctly still the only one on the page.
+
+**What POC29 is:** Lauren Roberts finally has her real headshot and bio, closing the last
+"Bio under construction." on a team member - POC12 set the rule that nobody ships without full
+data, and she has been a lettered placeholder tile since. Steve confirmed Lauren approved the bio.
+The copy was checked rather than assumed: zero em-dashes, zero exclamation marks, none of the
+banned register, three paragraphs at 186 words against Lucia's 160. **The photograph is a
+deliberate retouch and should be known as one** - the source has her holding a matcha, and Steve
+asked for it recoloured as a cappuccino. Only hue moved (green sat at 54-59 degrees, her skin at
+19-30, the ceramic at 4% saturation, so a hue mask plus a saturation floor separated them with no
+hand-drawn selection); saturation and brightness are untouched, so the rosetta, the surface sheen
+and the rim shadow are all the original photograph's. Verified confined rather than trusted: a diff
+against the source shows changes only inside (206,389)-(313,423). The retouched full-resolution
+master is saved beside the original in her OneDrive People folder. **Two template edits ride along
+only because the POC is a mock** - the About tiles are hand-written markup and JS-rendered photos
+resolve through the `CI_ASSETS` filename map; neither exists in production, where this is a
+theme-editor block (`production_build_spec.md` §2) and no deploy at all. Commit `f354f5e`; ledger
+`docs/POC29_change_list.md`.
+
+**What POC28 was:** it is the only POC28 theme - **38 files byte-match the repo**, proved by
 pull-and-diff (zero content mismatches, nothing on only one side; `theme list` and
 `git log origin/main..HEAD` run **first**, no collision). Validation at the documented baseline
 (**15 offenses / 0 errors / 0 new**). Batch content asserted **on the deployed theme**:
@@ -4230,8 +4330,13 @@ here.** This paragraph used to hardcode them, and it went stale the moment the t
 pruned — twice. Open the preview in a **real browser**; a `curl` of a `preview_theme_id` link is NOT
 a valid check (see §9 2026-07-06). Refresh with `shopify theme push --theme <id from the table>`.
 
-**Only POC26, POC27 and POC28 previews now exist** - at the three-newest cap, enforced as
-`crema-poc-deploy` Step 5. **POC25 (`152030281897`) was deleted 2026-08-24** on Steve's explicit
+**Four POC previews exist right now - POC26, POC27, POC28 and POC29 - which is ONE OVER the
+three-newest cap** (enforced as `crema-poc-deploy` Step 5). **POC26 (`152030347433`) is the single
+prune candidate**, computed from a live `theme list --json` rather than eyeballed, and it is
+**awaiting Steve's explicit go by name and id** - the POC29 deploy instruction did not carry one.
+Its batch is commit `c495ace` on `origin/main`, so nothing is lost by pruning it. No theme was
+deleted during the POC29 deploy, so **no theme ids went stale this round** and the Step 6.4 sweep
+had nothing to fix. Earlier: **POC25 (`152030281897`) was deleted 2026-08-24** on Steve's explicit
 go, its id, name and role re-verified against a live `theme list --json` in the same breath as
 the delete and the delete run **after** the POC28 push was proven; its batch is commit `d01d7e2`
 and it is redeployable. The Step 6.4 sweep found **zero** references to the dead id anywhere in
