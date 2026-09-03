@@ -4035,10 +4035,18 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   session's work, and `git diff --name-only origin/main..HEAD` confirmed **all of them are `docs/`
   only**, so nothing rode along into the theme push. The commit was scoped to exactly four files
   rather than run through a broad `git add`, which is the failure that swept a Standard edit into an
-  unrelated commit on 2026-08-24. **And POC26 (`152030347433`) is now one over the three-newest cap**
-  — computed from live `theme list --json`, not eyeballed — but it was **not deleted**, because the
-  deploy instruction carried no explicit go by name and id. No theme was deleted, so no theme ids went
-  stale and the Step 6.4 sweep had nothing to fix.
+  unrelated commit on 2026-08-24. **And the deploy left POC26 (`152030347433`) one over the
+  three-newest cap** — computed from live `theme list --json`, not eyeballed — and it was deliberately
+  **not** deleted in the same breath, because the deploy instruction carried no explicit go by name and
+  id. **Steve gave that go shortly after and POC26 was deleted 2026-09-03**, its id, name and role
+  re-verified against live output immediately before the delete; survivors confirmed as exactly
+  POC27/POC28/POC29. That deletion is what finally gave the Step 6.4 sweep something to do, and it
+  found the trap this file keeps describing: **two of its four hits were present-tense claims and one
+  of them was in this very §9 entry**, which had said POC26 "is now one over the cap" and "was not
+  deleted". Both were true when written and false an hour later. §9 is narrative and a narrative
+  entry is *supposed* to name a dead id — but "is now" is not narrative, and the fix was to record
+  what happened rather than to leave the sentence or to delete it. **Judge the sentence, not the
+  file**, applies inside §9 too.
 
 ---
 
@@ -4072,7 +4080,6 @@ when resuming.**
 | **Newest POC preview** | "Crema Italia POC29 Preview" | `152193794217` |
 | Prior preview | "Crema Italia POC28 Preview" | `152051744937` |
 | Prior preview | "Crema Italia POC27 Preview" | `152030412969` |
-| Over the cap, prune pending Steve's go | "Crema Italia POC26 Preview" | `152030347433` |
 
 > **The live theme is current as of 2026-08-24.** Commit **`2b80122`** (five policy links in the
 > coming-soon footer) was pushed scoped to `150557294761` and **verified on the public page**: all
@@ -4330,13 +4337,15 @@ here.** This paragraph used to hardcode them, and it went stale the moment the t
 pruned — twice. Open the preview in a **real browser**; a `curl` of a `preview_theme_id` link is NOT
 a valid check (see §9 2026-07-06). Refresh with `shopify theme push --theme <id from the table>`.
 
-**Four POC previews exist right now - POC26, POC27, POC28 and POC29 - which is ONE OVER the
-three-newest cap** (enforced as `crema-poc-deploy` Step 5). **POC26 (`152030347433`) is the single
-prune candidate**, computed from a live `theme list --json` rather than eyeballed, and it is
-**awaiting Steve's explicit go by name and id** - the POC29 deploy instruction did not carry one.
-Its batch is commit `c495ace` on `origin/main`, so nothing is lost by pruning it. No theme was
-deleted during the POC29 deploy, so **no theme ids went stale this round** and the Step 6.4 sweep
-had nothing to fix. Earlier: **POC25 (`152030281897`) was deleted 2026-08-24** on Steve's explicit
+**Only POC27, POC28 and POC29 previews now exist** - at the three-newest cap, enforced as
+`crema-poc-deploy` Step 5. **POC26 (`152030347433`) was deleted 2026-09-03** on Steve's explicit go,
+its id, name and role re-verified against a live `theme list --json` in the same breath as the
+delete and the delete run **after** the POC29 push was proven by pull-and-diff; its batch is commit
+`c495ace` on `origin/main` and it is redeployable. The Step 6.4 sweep found **four** references to
+the dead id and judged each by its sentence: two §9 lines in past tense describing the days it was
+deployed and pruned (narrative, which is *supposed* to name a dead id, left alone) and two
+present-tense claims in this block (the table row and this paragraph, both corrected here).
+Earlier: **POC25 (`152030281897`) was deleted 2026-08-24** on Steve's explicit
 go, its id, name and role re-verified against a live `theme list --json` in the same breath as
 the delete and the delete run **after** the POC28 push was proven; its batch is commit `d01d7e2`
 and it is redeployable. The Step 6.4 sweep found **zero** references to the dead id anywhere in
