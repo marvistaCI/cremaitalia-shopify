@@ -116,6 +116,28 @@ seconds after the stream stops so the settle can be looped as well as the pour. 
   `production_build_spec.md` yet - that belongs with the batch's spec pass when the hero's final
   shape is known.
 
+## 1a. The hero line, settled
+
+Steve, reviewing the item 1 preview, asked whether Italy belonged in the hero line - it had
+gone missing from the first screen, with the logo tagline the only Italy above the fold. Six
+candidates were weighed in one sitting, in this order:
+
+| Candidate | Verdict |
+|---|---|
+| *Italian perfection, just as the roaster sealed it.* | Declined. "Perfection" is a superlative about our own taste, the register Brand Standards §3.1 and CLAUDE.md §6 ban, and a claim with no proof beside it yet (the review's trust gap). "Just as" was already rejected 2026-08-18 for reading temporally. |
+| *Italian heritage / tradition* | Declined. Inherited qualities that belong to the roaster, not to a Florida importer, and the exact words Lavazza and Illy sell on - style words, which POC21 established can be borrowed where a place cannot. |
+| *Italian provenance* | Defensible (the review's own word for the primary buyer) but cold, and "provenance... sealed" nearly says one thing twice. |
+| *Italian craft* / *Italian coffee craft* | Defensible - the Standard's own approved construction - but a noun stack, and it pushed the line to three lines. |
+| *From Italy, exactly as the roaster sealed it.* | Code's proposal. Place plus fact. |
+| **Exactly as the roaster sealed it... in Italy.** | **Steve's, and chosen.** The proven line intact, Italy as a place, and the ellipsis used exactly as the no-em-dash rule prescribes - a sentence trailing into a sequenced next thought. The reveal is the point. |
+
+**Measured after the change:** two lines at 1350 (54px, breaking "Exactly as the roaster / sealed
+it... in Italy.") and two lines at 375 (31.5px, same break); the H1 box reaches the same 49%
+across the frame as before, so the scrim measurement stands - **desktop worst 5.2:1, phone worst
+4.3:1**, re-run rather than assumed. `in&nbsp;Italy` is glued so the closing beat can never orphan.
+The reasoning is also in a comment at the markup site, so the next person to "improve" the line
+sees what was already tried.
+
 ## 1b. The café band retired
 
 Steve, on the item 1 preview: *"drop the cafe band."* With a video hero above it the page ran
