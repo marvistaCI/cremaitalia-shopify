@@ -55,14 +55,12 @@ Each slot keeps its full brief in a `PROD:` comment beside the `<img>` in
 
 | Slot | Asset | Ratio / size | Brief |
 |---|---|---|---|
-| 1 — band under the hero | `ci-temp-lp1.jpg` | 21:9, ~2200x950 (16:9 crop on phones) | An Italian bar counter mid-morning service. Cups on saucers, steam, hands at work. Nobody posing. |
+| ~~1 — band under the hero~~ | ~~`ci-temp-lp1.jpg`~~ | — | **RETIRED in POC30 (2026-09-12, Steve).** With a video hero above it the page ran video, copy, photo; the band was the weakest of the three and its stand-in (a US café) could never ship. Markup and asset deleted. If an Italian bar-counter shot ever exists, it has no slot on the home page now and would need one made. |
 | 2 — founder portrait | `ci-temp-lp2.jpg` | 4:5, ~1000x1250 | Steve at a caffè table in Campiglia or Sarteano. Candid, mid-conversation, not looking at the lens. The story is first-person; a face is what earns that register. |
 | 3 — product | `ci-temp-lp3.jpg` | 3:2, ~1500x1000 | One of OUR roasters' own valve bags, sealed, label facing, close enough to read the roaster's name. Loose beans alongside. |
 
-**Two of the three carry recorded reasons they cannot ship** — these are the blocking ones:
+**Slot 3 carries a recorded reason it cannot ship** (slot 1's US-café reason went with the slot):
 
-- **Slot 1** is a **US specialty café**: English chalkboard menu, dollar prices, matcha on the
-  board. It reads American, which is the opposite of the story that section tells.
 - **Slot 3** shows **third-party trademarks** (Lavazza, plus a US roaster). It puts other
   companies' marks on our landing page, and Lavazza is mass-market — the precise opposite of the
   artisan sourcing the surrounding copy claims.
@@ -139,8 +137,7 @@ Order of value if photography arrives piecemeal:
    needed).
 1. **Slot 3 (product)** — the landing page currently shows no product anywhere, and this is the
    one shot that illustrates the claim it sits beneath.
-2. **Slot 1 (band)** — highest-visibility, and the current stand-in actively misrepresents us.
-3. **Slot 2 (founder)** — the current stand-in is at least genuinely Steve; least wrong of the three.
+2. **Slot 2 (founder)** — the current stand-in is at least genuinely Steve; least wrong of the three.
 4. **Product + roaster assets** — largest volume, but gated on signatures, so it will arrive on the
    roasters' schedule rather than ours.
 

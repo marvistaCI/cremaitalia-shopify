@@ -106,9 +106,8 @@ seconds after the stream stops so the settle can be looped as well as the pour. 
 - The copy hero's text is unchanged. The review's other hero notes (move the freshness
   paragraph and donation below the fold, trim the founder bio, re-pitch away from
   freshness-as-headline) are separate items in its list and are taken in order, not folded in.
-- The 21:9 café band (`ci-temp-lp1.jpg`, photography slot 1) directly under the copy hero is
-  untouched. With a video above it the page now runs video, copy, photo; whether the band still
-  earns its place is a question for Steve's eye on the preview, not a decision made here.
+- The 21:9 café band (`ci-temp-lp1.jpg`, photography slot 1) directly under the copy hero was
+  left in place for Steve's eye on the preview. **He dropped it the same day - see 1b.**
 - No separate portrait cut of the video. One landscape file serves both crops via
   `object-fit: cover`; Trade ships two cuts, and that is the production shape if a phone crop
   ever needs a different composition.
@@ -116,6 +115,19 @@ seconds after the stream stops so the settle can be looped as well as the pour. 
   not a theme asset; the theme-asset route is the POC's mock. Not written into
   `production_build_spec.md` yet - that belongs with the batch's spec pass when the hero's final
   shape is known.
+
+## 1b. The café band retired
+
+Steve, on the item 1 preview: *"drop the cafe band."* With a video hero above it the page ran
+video, copy band, photo; the band was the weakest of the three, and its stand-in (a US specialty
+café with an English chalkboard) had been recorded since POC13 as one that could never ship.
+Removed: the markup and its `PROD:` comment in `templates/index.liquid`, the asset
+`assets/ci-temp-lp1.jpg` (nothing else referenced it), and the three `.photo-band` rules in
+`assets/ci-storefront.css` that had exactly one user. `docs/photography-todo.md` marks slot 1
+retired rather than deleting the row, so a later reader sees that the Italian bar-counter shot
+was a brief once and now has no slot. `production_build_spec.md`'s temp-asset row updated.
+Slots 2 and 3 (founder portrait, product shot) are untouched. Theme file count for the deploy
+skill's baseline: 39 at POC29, +2 hero assets, -1 café band = **40**.
 
 ## Files
 
@@ -128,3 +140,5 @@ seconds after the stream stops so the settle can be looped as well as the pour. 
 | `assets/ci-storefront.js` | `initHeroVideo()` reduced-motion and autoplay guard |
 | `docs/photography-todo.md` | slot 0 (hero) added with the reshoot brief |
 | `.claude/launch.json` | new - preview launcher entry |
+| `assets/ci-temp-lp1.jpg` | **deleted** (1b) |
+| `docs/production_build_spec.md` | temp-asset row updated (1b) |

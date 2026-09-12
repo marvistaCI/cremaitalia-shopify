@@ -225,11 +225,9 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 /* Band: desktop 21:9 crops height off a 1.98 source, so bias DOWN to keep the counter and
    the people and lose ceiling. On phones the box is 16:9, wider than tall relative to the
    source, so it crops width instead and the horizontal centre is what matters. */
-.photo-band.is-filled img{object-position:center 70%}
 /* Portrait: 4:5 box against a 3:4 source crops ~6% of height; bias UP so the face is safe. */
 .photo-portrait.is-filled img{object-position:center 40%}
 /* The wide band sits outside .ci-main so it can run the full content width, like .taste-ribbon */
-.photo-band{width:calc(100% - 3rem);max-width:var(--ci-page-max);margin:0 auto;aspect-ratio:21/9}
 .photo-wide{aspect-ratio:3/2;max-width:72ch;margin-top:1.5rem}
 .photo-portrait{aspect-ratio:4/5}
 /* Story runs text-beside-photo on desktop and stacks on phones. align-items:start keeps the
@@ -238,7 +236,6 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 @media(max-width:860px){
   .story-grid{grid-template-columns:1fr;gap:1.5rem}
   .story-grid .photo-portrait{max-width:320px;margin-left:auto;margin-right:auto;width:100%}
-  .photo-band{aspect-ratio:16/9}
 }
 
 /* ---- POC6 taste-profile ribbon ---- */
@@ -337,8 +334,8 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 /* ---- hero media (POC30, 2026-09-12) ----
    Image-first hero: a muted looping video with ONE line over it, ahead of the copy band.
    Full-bleed, 16:9 on desktop capped so the copy band still peeks above the fold on a short
-   laptop; 4:5 on phones so the cup fills the viewport instead of a letterbox slit (the same
-   reasoning as .photo-band's 21:9 -> 16:9 swap). object-position keeps the cup - which sits
+   laptop; 4:5 on phones so the cup fills the viewport instead of a letterbox slit (a 16:9 band
+   on a 375px phone is ~210px tall - a slit). object-position keeps the cup - which sits
    left of centre in the source crop - inside the phone frame.
    The scrim is Espresso (--ci-coffee, #55331B) fading left to right: cream on bare crema is
    roughly 2:1 and fails AA, and the review's standing caution is exactly this pairing for a
