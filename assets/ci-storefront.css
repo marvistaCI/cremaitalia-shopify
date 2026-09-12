@@ -334,16 +334,51 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 .section-head:first-child{margin-top:0}
 .section-head h2{font-family:var(--ci-font-display);font-weight:400;font-size:2rem;color:var(--ci-coffee)}
 
+/* ---- hero media (POC30, 2026-09-12) ----
+   Image-first hero: a muted looping video with ONE line over it, ahead of the copy band.
+   Full-bleed, 16:9 on desktop capped so the copy band still peeks above the fold on a short
+   laptop; 4:5 on phones so the cup fills the viewport instead of a letterbox slit (the same
+   reasoning as .photo-band's 21:9 -> 16:9 swap). object-position keeps the cup - which sits
+   left of centre in the source crop - inside the phone frame.
+   The scrim is Espresso (--ci-coffee, #55331B) fading left to right: cream on bare crema is
+   roughly 2:1 and fails AA, and the review's standing caution is exactly this pairing for a
+   40-65 buyer. The H1 sits in the darkened left third. Do not lighten the scrim without
+   re-measuring contrast. */
+.hero-media{position:relative;width:100%;aspect-ratio:16/9;max-height:78vh;min-height:320px;overflow:hidden;background:var(--ci-coffee)}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:42% 45%;display:block}
+/* MEASURED 2026-09-12 by sampling the live video frame under the H1's box and compositing the
+   scrim: the first gradient (.72 -> .45 at 38% -> 0 at 68%) averaged 5.9:1 but its WORST pixels,
+   at the headline's right edge (~49% across, where the crema is brightest), fell to 2.5:1 -
+   under the 3:1 large-text floor. The dense zone now runs to the headline's edge and the taper
+   ends past it. Re-measure (worst case, not average) if the H1 copy or the footage changes. */
+.hero-media-scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(85,51,27,.78) 0%,rgba(85,51,27,.66) 50%,rgba(85,51,27,0) 80%)}
+.hero-media-inner{position:absolute;inset:0;display:flex;align-items:center;max-width:var(--ci-page-max);margin:0 auto;padding:1.5rem 1.5rem 2rem}
+/* The one line over the video is the page H1, sized above the brand's H1 step on purpose - it is
+   the only text in the first viewport, so it carries the whole hierarchy alone. max-width in ch
+   keeps it inside the scrimmed left half at every width so it never crosses into the
+   unscrimmed right side where contrast is not guaranteed. */
+.hero-media-inner h1{font-family:var(--ci-font-display);font-weight:400;color:var(--ci-cream);font-size:clamp(1.75rem,4.6vw,3.4rem);line-height:1.08;max-width:12ch;margin:0;text-wrap:balance;text-shadow:0 1px 2px rgba(85,51,27,.35)}
+@media (max-width:640px){
+  .hero-media{aspect-ratio:4/5;max-height:none}
+  .hero-media-scrim{background:linear-gradient(180deg,rgba(85,51,27,.1) 0%,rgba(85,51,27,.1) 40%,rgba(85,51,27,.85) 100%)}
+  .hero-media-inner{align-items:flex-end;padding:1.25rem 1.25rem 1.6rem}
+  .hero-media-inner h1{font-size:clamp(1.6rem,8.4vw,2.4rem);max-width:none}
+}
+/* Reduced motion is handled in ci-storefront.js (initHeroVideo): the video is paused with
+   autoplay removed, so the poster frame - the same crop, still - is what shows. No CSS needed. */
+
 /* ---- hero ---- */
-.hero{background:var(--ci-coffee);color:var(--ci-cream);padding:2.25rem 1.5rem 3rem;text-align:center}
+/* Top padding trimmed now that the logo lockup is gone (POC30) - the band opens straight on the
+   claim, and the video above already carries the first-viewport weight. */
+.hero{background:var(--ci-coffee);color:var(--ci-cream);padding:2.5rem 1.5rem 3rem;text-align:center}
 .hero-inner{max-width:760px;margin:0 auto}
-.hero-logo{display:block;height:300px;width:auto;margin:0 auto 0.5rem;max-width:98%}
-@media(max-width:640px){.hero-logo{height:196px;margin-bottom:0.35rem}}
 /* The payoff line answering the question above it, so it is sized as an H1 (brand scale: H1
    40px), not at the Hero 72px it used to render at. Sized to stay on ONE line at every width -
    the string is 11.2x its font-size in Marcellus, so the clamp max must stay under
    (hero-inner 760px / 11.2) = 67px, and the min under (327px / 11.2) = 29px at 375px. */
-.hero h1{font-family:var(--ci-font-display);font-size:clamp(1.625rem,4vw,2.5rem);font-weight:400;color:var(--ci-cream);line-height:1.15;margin-bottom:0;text-wrap:balance}
+/* .hero-claim is the POC30 demotion of this band's <h1> to a <p> (the page H1 moved onto the
+   video); it shares every rule so nothing rendered changed except the tag. */
+.hero h1,.hero .hero-claim{font-family:var(--ci-font-display);font-size:clamp(1.625rem,4vw,2.5rem);font-weight:400;color:var(--ci-cream);line-height:1.15;margin:0;text-wrap:balance}
 /* PHONE SIZING FOR THE HERO H1 - the line count is a TYPE problem, not a wrap problem.
    The markup forces a break at the sentence boundary, so line 2 is always
    "Exactly as the roaster sealed it." MEASURED (2026-08-19, not estimated): that string
@@ -375,7 +410,7 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
      (1.23:1). A two-line hero previously sat at 13.838x; do not copy that number back.
      VERIFIED one line each at 320 / 360 / 375 / 390 / 428.
      Re-measure if the headline copy changes - these multipliers are specific to these strings. */
-  .hero h1{font-size:clamp(14px, calc(6.55vw - 3.3px), 1.625rem)}
+  .hero h1,.hero .hero-claim{font-size:clamp(14px, calc(6.55vw - 3.3px), 1.625rem)}
 }
 
 .hero .subhead{font-family:var(--ci-font-display);font-size:clamp(1.1rem,2.5vw,1.4rem);color:var(--ci-crema-light);margin:.75rem auto 1rem;max-width:560px}

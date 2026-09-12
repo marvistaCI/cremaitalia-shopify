@@ -1802,6 +1802,21 @@
     };
   }
 
+  // POC30: the home hero is a muted looping video (templates/index.liquid, .hero-media). It is
+  // decorative, so under prefers-reduced-motion it must not move: pause it and drop autoplay so
+  // the poster frame stays and nothing decodes. Also guards the one browser combination where
+  // autoplay is refused (Low Power Mode on iOS): play() rejects, the poster stays, nothing throws.
+  function initHeroVideo() {
+    var v = document.querySelector('.hero-video');
+    if (!v) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduce && reduce.matches) { v.removeAttribute('autoplay'); v.pause(); return; }
+    var p = v.play && v.play();
+    if (p && typeof p.catch === 'function') p.catch(function () { /* poster stays; fine */ });
+  }
+  document.addEventListener('DOMContentLoaded', initHeroVideo);
+  if (document.readyState !== 'loading') initHeroVideo();
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();

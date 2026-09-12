@@ -21,8 +21,36 @@
      confession; model; shelves + contextual Sorpresa CTA; roasters; promise.
      Featured Tour removed from home; quiz is invitation-only (no auto-launch). -->
 <div class="page active" id="page-home">
+  {%- comment -%}
+    POC30 item 1 (2026-09-12): the hero is IMAGE-FIRST. The B2C expert review of POC28 put "a
+    product/sensory image in the first viewport" at the top of its Missing list: the hero was
+    all copy and sold the operating model before creating any desire for the cup. Principle
+    adopted from that review: the hero SEDUCES, the second screen JUSTIFIES. So a muted looping
+    video of a pull landing on crema now comes first with ONE line over it, and the copy hero
+    (claim, freshness mechanism, Benvenuto, quiz CTA) follows as the second band.
+    The 300px knockout logo lockup came out of the hero at the same time - a cup lockup sitting
+    on a photograph of a cup is redundant, the header already carries the logo, and "smaller
+    logo, larger margins" is Brand Standards' own tie-breaker (CLAUDE.md section 12).
+    PROD: photography slot 0 of 3 (hero). TEMPORARY MEDIA - ci-temp-hero.mp4 and
+    ci-temp-hero-poster.jpg are stand-ins cut from Steve's own footage (MOV_3863, 2026-09-01)
+    and every ci-temp-* asset must be replaced before launch; the brief is in
+    docs/photography-todo.md. In production the hero is a video section with the media on
+    Shopify Files (video_tag), not a theme asset.
+    ACCESSIBILITY: muted + playsinline are what let it autoplay on iOS; the poster is the
+    reduced-motion fallback (ci-storefront.js pauses the video when prefers-reduced-motion is
+    set) and the first paint on slow connections. The video is decorative, so it carries no
+    audio track and no captions; the only content is the H1 rendered as text over it.
+    CONTRAST: cream on crema fails AA, so the H1 sits over an Espresso scrim (the palette's own
+    hero tone at partial alpha - not a new colour) that fades to transparent across the frame.
+  {%- endcomment -%}
+  <div class="hero-media">
+    <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="{{ 'ci-temp-hero-poster.jpg' | asset_url }}" aria-hidden="true" tabindex="-1">
+      <source src="{{ 'ci-temp-hero.mp4' | asset_url }}" type="video/mp4">
+    </video>
+    <div class="hero-media-scrim" aria-hidden="true"></div>
+    <div class="hero-media-inner"><h1>Exactly as the roaster sealed&nbsp;it.</h1></div>
+  </div>
   <div class="hero"><div class="hero-inner">
-    <img class="hero-logo" src="{{ 'ci-logo-knockout.png' | asset_url }}" alt="Crema Italia" width="700" height="490">
     {%- comment -%}
       Hero rewritten 2026-08-18. The old hero ASKED a question ("Do you love Espresso, Italy...?
       Or are you simply looking for delicious, fresh coffee beans?") and then answered it with a
@@ -72,7 +100,17 @@
       NOTE: "Freshly roasted" is now the most prominent claim on the site. If transit or the
       six-week arrival cadence slips, this headline is the first thing that becomes untrue.
     {%- endcomment -%}
-    <h1>A small, named group of roasters.<br class="h1-break">Whole bean, roasted in Italy.<br class="h1-break">Exactly as the roaster sealed it.</h1>
+    {%- comment -%}
+      POC30: the third line, "Exactly as the roaster sealed it.", moved up onto the hero video
+      as the page's single H1 - the review called it the best line on the site and it was
+      competing with an operations paragraph. This band keeps the other two beats, demoted
+      from <h1> to a <p> styled identically (.hero-claim shares every .hero h1 rule) so the
+      page has ONE h1. The phone sizing arithmetic in ci-storefront.css was measured against
+      the three-line version; with two lines the binding string is now "Whole bean, roasted in
+      Italy." which is SHORTER than the old binding line, so the existing clamp holds one line
+      each with more slack, not less. Re-measure if either string changes.
+    {%- endcomment -%}
+    <p class="hero-claim">A small, named group of roasters.<br class="h1-break">Whole bean, roasted in Italy.</p>
     <p class="subhead" style="max-width:58ch;margin:.85rem auto .35rem">We fly it in. Most bags sell within 14 to {{ settings.freshness_window_days }} days of roasting, and none after {{ settings.offerta_fresh_days }}. What doesn't sell goes to Feeding Tampa Bay. For people who love to grind their own beans.</p>
     <p class="hero-benvenuto">Benvenuto - welcome&nbsp;in.</p>
     <!-- The quiz is the hero CTA (Steve, 2026-08-06) - it is free, it is the lowest-commitment

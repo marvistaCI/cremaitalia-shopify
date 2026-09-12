@@ -11,6 +11,36 @@ This is the single list. When a shot is delivered, tick it here and delete the c
 
 ---
 
+## 0. The hero video — TEMPORARY STAND-IN, must not ship (POC30, 2026-09-12)
+
+The home hero is image-first as of POC30: a muted, looping, six-second video of an espresso pull
+landing on crema, with one line over it. See `docs/POC30_change_list.md` item 1 for why.
+
+| Slot | Assets | Ratio / size | Brief |
+|---|---|---|---|
+| 0 — hero video | `ci-temp-hero.mp4` + `ci-temp-hero-poster.jpg` | 16:9 landscape source, 1440x810 now; shown 16:9 on desktop and cropped to 4:5 on phones via `object-fit: cover` | See below |
+
+**What the stand-in is.** Cut from Steve's own footage (`MOV_3863`, shot 2026-09-01): a high-angle
+on a ceramic cup filling on the drip tray, warm natural light, seconds 47-53 where the stream
+lands on the crema and the flecks bloom from the impact point. The cup is from a ceramiche in
+**Pienza** and stays in the reshoot. It is `ci-temp-*` because it is a working crop of a
+hand-held take, not because the subject is wrong.
+
+**The reshoot brief:** the same shot. Same light (soft daylight, no overhead lamps on the chrome),
+same roughly 45-degree angle - better than a true top-down because the stream stays visible - the
+same Pienza cup, **on a saucer so the drip-tray grate is out of frame**, and **hold for eight
+seconds after the stream stops** so the settle can be looped as well as the pour. Landscape, 4K if
+the camera has it, so a native 1920-wide crop is possible. Nothing branded anywhere in frame. Two
+takes, cup off-centre left and off-centre right, so the headline can sit on either side.
+
+**Two things the stand-in taught that the reshoot must keep:** the headline needs a dark zone
+(the blurred machine body at upper-left does it now; a saucer shadow would do it), and the crema
+must still be **moving** when the camera is on it - `MOV_3865`, a top-down taken after the pull,
+had flat, uniform crema with a ceiling-light hot-spot and nothing to loop.
+
+**Production note:** in the real store the hero is a video section with the media on Shopify
+**Files** (`video_tag`), not a theme asset. The theme-asset route is the POC mock.
+
 ## 1. The three landing-page slots — TEMPORARY STAND-INS, must not ship
 
 Built in POC13. All three are Steve's own phone photos, re-encoded q82 progressive and stripped of
@@ -104,6 +134,9 @@ handwritten signature, the only handwritten element on the site), the logo set, 
 
 Order of value if photography arrives piecemeal:
 
+0. **Slot 0 (hero video)** — the first thing every visitor sees; the stand-in is honest in subject
+   and only rough in execution, so it is also the cheapest to replace (one reshoot, no roaster
+   needed).
 1. **Slot 3 (product)** — the landing page currently shows no product anywhere, and this is the
    one shot that illustrates the claim it sits beneath.
 2. **Slot 1 (band)** — highest-visibility, and the current stand-in actively misrepresents us.
