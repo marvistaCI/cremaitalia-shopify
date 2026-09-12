@@ -151,6 +151,63 @@ was a brief once and now has no slot. `production_build_spec.md`'s temp-asset ro
 Slots 2 and 3 (founder portrait, product shot) are untouched. Theme file count for the deploy
 skill's baseline: 39 at POC29, +2 hero assets, -1 café band = **40**.
 
+## 2. A one-visual "how it works" - built as three beats, shape under review
+
+**The finding (review, Missing #2):** a one-visual how-it-works, *roaster seals -> we airfreight ->
+you grind*.
+
+**Steve's copy, and the refinements agreed in one sitting.** His draft: *"Our roasters are
+selected for their artisan quality - hard to beat, hard to find. We fly it in - shipping by
+ocean ages the beans. For people who love to grind their own beans."* Three edits, all taken:
+the first sentence went **active** ("We choose", the Standard's own approved verb; "are
+selected" hid the one fact that matters); **"beans" landed twice in a row**, and the second one
+is load-bearing (Steve's 2026-08-18 rule: "grind their own beans", because it is the only
+whole-bean signal up here), so the airfreight line became *"an ocean crossing ages coffee"*;
+and *"hard to beat"* stays as the one hedged near-superlative, because it is the scarcity lever
+the review said should do more work. Earlier drafts' *"peak flavor"* (retired as a claim in
+POC19) and *"robs you of freshness"* (the one combative phrase on a deferential page) were
+already gone from Steve's version.
+
+**Built as three beats** in the copy band under the video hero, replacing the old claim +
+subhead (which said the same three things in prose, plus the freshness arithmetic and the
+donation line the review wanted out of the first screen - both still live where they belong,
+on the product pages and the Promise page; "roasted in Italy" is carried by the hero line
+above). Each beat is a Marcellus lead plus an Inter supporting line:
+
+| Lead | Support |
+|---|---|
+| Chosen for their artisan quality. | Hard to beat, hard to find. |
+| We fly it in. | An ocean crossing ages coffee. |
+| Whole beans, always. | For people who love to grind their own. |
+
+**No numerals, no icons.** A first cut carried 1 / 2 / 3 in gold and Steve rejected it on sight
+("I hate the 1, 2, 3"). Icons would be vector illustration, which Brand Standards §3.5 rules
+out. The beats are divided by cream hairlines at 22% - a rule, not a fill - vertical on desktop
+(three 347px columns in a 1040px measure, wider than the band's usual 760px so they breathe)
+and horizontal on phones (stacked, centred, 327px wide at 375). Reading order carries the
+sequence, as the About page's Three P's already do. Benvenuto and the quiz button stay beneath.
+
+**Measured:** three equal columns at 1350 wide, no horizontal overflow at 1350 or 375, lead at
+23.2px desktop, `.hero-claim` and `.hero .subhead` gone from the DOM. Dead CSS swept with it:
+the `.hero h1` rule and its two blocks of phone-sizing arithmetic (they measured headline
+strings that no longer exist), `.hero .subhead`, and an orphaned comment about the retired
+`<br class="h1-break">`. `theme check` at the documented baseline (15 / 0 / 0 new).
+
+**Shape is Steve's open call.** He asked to see the beats but suspects *"a simple three point
+paragraph may work better"*. If the paragraph wins, the `<ol>` collapses to one `.subhead`
+paragraph with the same words joined by spaced dashes and the `.hiw` rules go. Either way the
+words are settled.
+
+**Deliberately not done yet:** trimming **"Our model"** two screens down, which states the same
+three beats in prose ("We choose a small number of roasters... we air-freight it directly...
+whole bean only, never pre-ground"). Once the shape is chosen, that section should keep only
+what is new there - the Roasters link and the suggest-a-roaster ask - so the model is said
+once. And the production shape of this section is recorded as a proposal, not built: **one
+photograph of a single sealed roaster bag with three short captions anchored to what is on it**
+(the roaster's name on the label, the roast-date stamp, the one-way valve and whole beans) -
+literally a how-it-works in one image, merging this item with photography slot 3. Needs a real
+bag, so it waits on a signed roaster.
+
 ## Files
 
 | File | Change |
@@ -163,4 +220,6 @@ skill's baseline: 39 at POC29, +2 hero assets, -1 café band = **40**.
 | `docs/photography-todo.md` | slot 0 (hero) added with the reshoot brief |
 | `.claude/launch.json` | new - preview launcher entry |
 | `assets/ci-temp-lp1.jpg` | **deleted** (1b) |
+| `templates/index.liquid` | (2) `.hiw` three-beat band replaces the claim + subhead |
+| `assets/ci-storefront.css` | (2) `.hiw` rules; dead `.hero h1` / `.subhead` / `h1-break` rules and comments swept |
 | `docs/production_build_spec.md` | temp-asset row updated (1b) |

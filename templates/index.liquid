@@ -114,17 +114,42 @@
       six-week arrival cadence slips, this headline is the first thing that becomes untrue.
     {%- endcomment -%}
     {%- comment -%}
-      POC30: the third line, "Exactly as the roaster sealed it.", moved up onto the hero video
-      as the page's single H1 - the review called it the best line on the site and it was
-      competing with an operations paragraph. This band keeps the other two beats, demoted
-      from <h1> to a <p> styled identically (.hero-claim shares every .hero h1 rule) so the
-      page has ONE h1. The phone sizing arithmetic in ci-storefront.css was measured against
-      the three-line version; with two lines the binding string is now "Whole bean, roasted in
-      Italy." which is SHORTER than the old binding line, so the existing clamp holds one line
-      each with more slack, not less. Re-measure if either string changes.
+      POC30 item 2 (2026-09-12): the review's Missing #2, a "how it works" (roaster seals -> we
+      airfreight -> you grind), as three beats under the video hero. Steve's copy, refined in
+      one sitting: the first sentence went active ("We choose", the Standard's own approved
+      verb, instead of "Our roasters are selected"); "shipping by ocean robs you of freshness"
+      became "an ocean crossing ages coffee" (a transit fact, not a jab, and it cannot go the
+      way of POC21's "weeks not months"); "beans" was landing twice in a row, so the airfreight
+      line says "coffee" and the whole-bean signal stays where Steve fixed it on 2026-08-18,
+      in "grind their own beans" / "grind their own" under a "Whole beans" lead.
+      It REPLACES the old claim + subhead rather than sitting beside them: they said the same
+      things in prose ("We fly it in", "grind their own beans"), and the review's other hero
+      note was to get the freshness arithmetic (14 to 90 days, none after 150) and the
+      donation line out of the first screen. Both remain where they belong - the freshness
+      gate on every product page, Feeding Tampa Bay on the Promise page. The old claim's
+      "roasted in Italy" is carried by the hero line's "... in Italy." directly above.
+      NO numerals (a first cut carried 1 / 2 / 3 and Steve rejected it on sight) and NO icons
+      (Brand Standards 3.5 rules out vector illustration). Hairlines divide the beats; reading
+      order carries the sequence, as the About page's Three P's already do.
+      Steve is weighing this against a plain three-sentence paragraph; if the paragraph wins,
+      the <ol> collapses to one <p class="subhead"> with the same words joined by spaced dashes.
+      COPY RULES, checked: no em-dashes, no exclamation marks, none of the banned register;
+      "hard to beat" is hedged, not a superlative, and is the review's scarcity lever.
     {%- endcomment -%}
-    <p class="hero-claim">A small, named group of roasters.<br class="h1-break">Whole bean, roasted in Italy.</p>
-    <p class="subhead" style="max-width:58ch;margin:.85rem auto .35rem">We fly it in. Most bags sell within 14 to {{ settings.freshness_window_days }} days of roasting, and none after {{ settings.offerta_fresh_days }}. What doesn't sell goes to Feeding Tampa Bay. For people who love to grind their own beans.</p>
+    <ol class="hiw" aria-label="How it works">
+      <li class="hiw-step">
+        <p class="hiw-lead">Chosen for their artisan quality.</p>
+        <p class="hiw-line">Hard to beat, hard to find.</p>
+      </li>
+      <li class="hiw-step">
+        <p class="hiw-lead">We fly it in.</p>
+        <p class="hiw-line">An ocean crossing ages coffee.</p>
+      </li>
+      <li class="hiw-step">
+        <p class="hiw-lead">Whole beans, always.</p>
+        <p class="hiw-line">For people who love to grind their own.</p>
+      </li>
+    </ol>
     <p class="hero-benvenuto">Benvenuto - welcome&nbsp;in.</p>
     <!-- The quiz is the hero CTA (Steve, 2026-08-06) - it is free, it is the lowest-commitment
          way in, and it is the only onboarding asset that works before real photography exists.

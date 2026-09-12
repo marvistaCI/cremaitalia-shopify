@@ -369,48 +369,32 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
    claim, and the video above already carries the first-viewport weight. */
 .hero{background:var(--ci-coffee);color:var(--ci-cream);padding:2.5rem 1.5rem 3rem;text-align:center}
 .hero-inner{max-width:760px;margin:0 auto}
-/* The payoff line answering the question above it, so it is sized as an H1 (brand scale: H1
-   40px), not at the Hero 72px it used to render at. Sized to stay on ONE line at every width -
-   the string is 11.2x its font-size in Marcellus, so the clamp max must stay under
-   (hero-inner 760px / 11.2) = 67px, and the min under (327px / 11.2) = 29px at 375px. */
-/* .hero-claim is the POC30 demotion of this band's <h1> to a <p> (the page H1 moved onto the
-   video); it shares every rule so nothing rendered changed except the tag. */
-.hero h1,.hero .hero-claim{font-family:var(--ci-font-display);font-size:clamp(1.625rem,4vw,2.5rem);font-weight:400;color:var(--ci-cream);line-height:1.15;margin:0;text-wrap:balance}
-/* PHONE SIZING FOR THE HERO H1 - the line count is a TYPE problem, not a wrap problem.
-   The markup forces a break at the sentence boundary, so line 2 is always
-   "Exactly as the roaster sealed it." MEASURED (2026-08-19, not estimated): that string
-   sets 13.838x its own font-size in Marcellus, and the measure is exactly viewport-48px.
-   So it holds one line while
-       font-size <= (viewport - 48) / 13.838
-   giving 19.7px at 320, 22.5 at 360, 23.6 at 375, 24.7 at 390, 26.4 at 414, 27.5 at 428.
-   calc(7vw - 3.4px) sits under that ceiling at every one of those widths with ~4% slack.
-
-   A FIXED value satisfies the inequality at exactly ONE width, which is how this broke:
-   POC11 verified "one line at every width" on desktop only, and the headline had been
-   setting three lines with a two-word stub on phones ever since.
-
-   The floor is 18px and it matters more than it looks. It was briefly 20px, which at
-   320px OVERRODE the calc's 19.0 - pushing the size above the 19.7 ceiling and wrapping
-   to three lines with "it." alone on the last one, a two-character orphan far worse than
-   the defect being fixed. A clamp floor is a silent override; check it against the
-   narrowest viewport, not just the expression.
-
-   Re-measure if the headline copy changes - 13.838x is specific to this string. */
+/* The how-it-works grid is the one child allowed wider than the 760px band: three columns
+   need ~1040px to breathe. Centred with margin-left:50% + translate so the band's padding
+   still holds outside it; the phone block resets both. */
+.hero-inner .hiw{width:min(1040px,calc(100vw - 3rem));margin-left:50%;transform:translateX(-50%)}
+/* ---- how it works (POC30 item 2, 2026-09-12) ----
+   The band under the video hero is three beats - chosen / we fly it in / whole beans - each a
+   Marcellus lead plus an Inter supporting line. Three columns on desktop divided by cream
+   hairlines; stacked on phones with the hairline turned horizontal. NO numerals (a first cut
+   carried 1 / 2 / 3 in gold and Steve rejected it on sight) and NO icons (Brand Standards 3.5:
+   no vector illustration). Reading order carries the sequence.
+   .hero-inner is 760px, so the grid gets a wider measure of its own so three columns breathe.
+   COLOUR: leads and lines in cream, ~9:1 on Espresso; the supporting line at .85 opacity is
+   still >7:1. Hairlines are cream at 22% - a rule, not a fill.
+   This replaced the .hero h1 / .subhead rules and their phone-sizing arithmetic, which measured
+   headline strings that no longer exist; the page H1 lives in .hero-media-inner above. */
+.hiw{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:0;text-align:left}
+.hiw-step{margin:0;padding:.25rem 1.5rem}
+.hiw-step+.hiw-step{border-left:1px solid rgba(251,248,241,.22)}
+.hiw-lead{font-family:var(--ci-font-display);font-size:clamp(1.15rem,1.9vw,1.45rem);line-height:1.25;color:var(--ci-cream);margin:0 0 .45rem;text-wrap:pretty}
+.hiw-line{font-family:var(--ci-font-body);font-size:1rem;line-height:1.5;color:var(--ci-cream);opacity:.85;margin:0}
 @media (max-width:640px){
-  /* THE ARITHMETIC, re-measured 2026-08-22 for the three-line headline. Available width is
-     viewport - 48px (hero padding). The binding line is "Exactly as the roaster sealed it."
-     at 15.126x its own font-size, so the largest size holding ONE LINE EACH is
-     (100vw - 48px) / 15.126 = 6.611vw - 3.173px. Set just under that for margin.
-     WHY THE HEADLINE CAN BE THIS BIG: line 2 carries "in Italy" as a PLACE, so line 1 does
-     not need the word "Italian" - dropping it took the worst line from 18.159x to 15.126x
-     and bought 18.4px -> 21.6px at 375, which is what keeps the H1 larger than the subhead
-     (1.23:1). A two-line hero previously sat at 13.838x; do not copy that number back.
-     VERIFIED one line each at 320 / 360 / 375 / 390 / 428.
-     Re-measure if the headline copy changes - these multipliers are specific to these strings. */
-  .hero h1,.hero .hero-claim{font-size:clamp(14px, calc(6.55vw - 3.3px), 1.625rem)}
+  .hiw{grid-template-columns:1fr;max-width:34ch;width:auto;margin-left:auto;transform:none;text-align:center}
+  .hiw-step{padding:1.1rem 0}
+  .hiw-step+.hiw-step{border-left:none;border-top:1px solid rgba(251,248,241,.22)}
 }
 
-.hero .subhead{font-family:var(--ci-font-display);font-size:clamp(1.1rem,2.5vw,1.4rem);color:var(--ci-crema-light);margin:.75rem auto 1rem;max-width:560px}
 /* Green-white-red tricolore divider: 3 equal segments, aligned, on dark panels. */
 .hero .tricolore{width:132px;height:4px;margin:0 auto 1.4rem;display:grid;grid-template-columns:1fr 1fr 1fr;overflow:hidden;border-radius:1px;line-height:0}
 .hero .tricolore>*{height:4px}
@@ -933,12 +917,8 @@ strong, b { font-weight: 600; }
 .skip-to-content{position:fixed;left:.75rem;top:-4rem;z-index:200;background:var(--ci-cream);color:var(--ci-coffee);border:1px solid var(--ci-crema);border-radius:var(--ci-radius);font-family:var(--ci-font-body);font-size:.9rem;font-weight:600;padding:.7rem 1.1rem;text-decoration:none;transition:top 160ms}
 .skip-to-content:focus{top:.75rem;outline:2px solid var(--ci-crema-text);outline-offset:2px}
 #ci-content:focus{outline:none}
-/* The hero H1 breaks at its SENTENCE boundary via <br class="h1-break"> in the markup,
-   not via a wrap algorithm. text-wrap:pretty used to sit here to stop balance stranding
-   "Exactly"; measured 2026-08-19, pretty / balance / wrap now produce byte-identical
-   output, because Chrome does not balance across a forced <br> - so the declaration was
-   inert and its stated reason no longer held. Removed rather than left as decoration.
-   The mobile sizing below is what actually controls the line count now. */
+/* (A comment about the old copy-band H1 and its <br class="h1-break"> lived here until POC30;
+   that heading and its break are gone - the page H1 is now .hero-media-inner h1.) */
 
 /* Below 360px the word and the cart no longer both fit; drop the word, keep the cart,
    which is the stronger signal of the two. THE ARITHMETIC, written down so a later
