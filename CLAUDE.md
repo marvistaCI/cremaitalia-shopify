@@ -4048,11 +4048,68 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   what happened rather than to leave the sentence or to delete it. **Judge the sentence, not the
   file**, applies inside §9 too.
 
+- 2026-09-12 — **POC30 deployed: the B2C expert review of POC28, worked in priority order - nine
+  items in one day, and the durable half is what was declined.** Ledger: `docs/POC30_change_list.md`.
+  Steve had an external B2C storefront reviewer assess POC28; its verdict was *move forward, with
+  conditions*, and he asked to work its Missing list top-down, one item at a time, with a design
+  discussion before each build. **(1) The hero is image-first.** Steve's first idea was a montage
+  (roaster behind, a hand on a cappuccino, beans spilling); the latte art and the spilling beans
+  were argued off it, then he pointed at drinktrade.com's looping video hero and asked *what if this
+  were the last seconds of a great pull, crema and all?* Three of his own clips were reviewed frame
+  by frame; a six-second loop cut from `MOV_3863` - a **Pienza cup** filling on the drip tray (Code
+  had called it "American craft pottery" and was corrected) - now runs full-bleed with one line over
+  it, settled after six candidates: **"Exactly as the roaster sealed it... in Italy."** Contrast was
+  measured from the live frame under the headline, not the palette: the first scrim averaged 5.9:1
+  and bottomed at **2.5:1**, and was deepened to a worst case of 5.2:1 desktop / 4.1:1 phone. The
+  cafe band under the hero was retired. **(2) The copy hero became three beats** - Steve's copy,
+  refined (active voice, "an ocean crossing ages coffee" instead of "robs you"); a first cut carried
+  numerals 1/2/3 and Steve rejected it on sight. "Our model" was trimmed to the roaster story - how a
+  roaster is found, *"Sì, we do this together"* - told nowhere else on the site. **(3) The founder
+  story** gained the cupboard contrast and "Just Italy, roasted into a bean"; "No American hype" was
+  declined as the one sentence that pushes the primary buyer away. **(4) Offerta is hidden.** Steve:
+  a visible markdown shelf teaches customers to wait for the markdown. It remains a channel, reached
+  only by an emailed link (`?offer=` in the POC; an unlisted collection with `seo.hidden` in
+  production), excluded from every public render by an `isPublic()` predicate, with a test route.
+  **(5) Shelf labels are English-first** - Subscriptions, Surprise Samplers, Limited and Seasonal -
+  the Italian taught once per surface; "Surprise me" declined because the quiz already uses it, and
+  "Select Roasts" because *select* is the self-praising adjective POC21 declined. With Offerta hidden,
+  "10% off Roccia, Sorpresa, and Selezione" in six places became "10% off every coffee". **(6)
+  Bottega became Accessories** and moved from the top nav into the Shop dropdown and the home grid
+  (2x2 again). **(7) Three interaction findings**, each driven on the live page before the verdict:
+  no "From" on the product page, the **live subscription price** on the toggle (needed because
+  platform test A3 proved the plan's adjustment leaves no discount line on the order), and the
+  ribbon stating **"Showing 4 of 12 coffees"** after the quiz - which was worse than the review said,
+  since three statements on the Shop page said "everything" above a grid showing a third. The 10%
+  and 12% rates were bare literals in the cart math (the POC28 $8.50 breach again) and are settings
+  now. **(8) The add-to-cart confirmation.** The review said the badge incremented silently; it did
+  not - a toast slid up at the foot of the screen and the reviewer never saw it, which was the
+  finding. Steve's brief: *"a visual confirmation for the user, not a gimmick... the toast could turn
+  into a bean, and drop into the bag, which drops into the cart."* Refined to one bean and no bag,
+  then enlarged 50% and bent into a **C** at his request; a first arc put 490 of 862 pixels into
+  the last 120ms and was measured and fixed before he saw it. **(9) The Founding Member offer on the
+  home page**, and this is the one worth keeping: Steve proposed a **timed push panel** so the offer
+  could be gated on the founder count instead of redrawn when the cap fills. The gate was right and
+  the delivery was argued against - on the brand's own 2026-07-10 decision that removed the quiz
+  auto-launch as a gimmick, on the research the review itself cites, and because *"some number of
+  seconds"* has no right answer. He chose the gated band: it renders only while
+  `founding_members_taken` is below the cap, proven both ways on the dev server. **Standards moved
+  v1.19 -> v1.21** across three publishes in the day (Offerta hidden, English-first labels,
+  Accessories), each with both touched renders regenerated, archived and md5-verified to OneDrive;
+  the first of them had been lost when a session ended mid-ritual and was caught at the next
+  session's Step 0. **DEPLOYED** via the `crema-poc-deploy` skill to a NEW unpublished theme
+  **"Crema Italia POC30 Preview" (id `152344002729`)**: `theme list` + `git log origin/main..HEAD`
+  run **first** (no POC30 existed, no duplicates, zero unpushed), validation at the documented
+  baseline (**15 offenses / 0 errors / 0 new**), then **pull-and-diff proved** the push - both sides
+  **40** files (39 -> 40: two hero assets in, the cafe band out; skill baseline updated with the
+  reason), zero mismatches, exactly one theme of that name, batch content asserted on the deployed
+  theme. **POC27 (`152030412969`) is one over the three-newest cap** and was deliberately not
+  deleted in the same breath; it awaits Steve's explicit go by name and id.
+
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC29 (deployed + pull-and-diff proved 2026-09-03) — read this first
+**▶ CURRENT STATE — POC30 (deployed + pull-and-diff proved 2026-09-12) — read this first
 when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
@@ -4077,9 +4134,10 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC29 Preview" | `152193794217` |
+| **Newest POC preview** | "Crema Italia POC30 Preview" | `152344002729` |
+| Prior preview | "Crema Italia POC29 Preview" | `152193794217` |
 | Prior preview | "Crema Italia POC28 Preview" | `152051744937` |
-| Prior preview | "Crema Italia POC27 Preview" | `152030412969` |
+| Prior preview - **one over the three-newest cap, awaiting Steve's explicit go to prune** | "Crema Italia POC27 Preview" | `152030412969` |
 
 > **The live theme is current as of 2026-08-24.** Commit **`2b80122`** (five policy links in the
 > coming-soon footer) was pushed scoped to `150557294761` and **verified on the public page**: all
@@ -4110,7 +4168,34 @@ a real cart, and real customers; none is code.
 > accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
 > gate** on brand identity and product detail rising above 9.
 
-**POC29 is deployed** and is the only POC29 theme - **39 files byte-match the repo**, proved by
+**POC30 is deployed** and is the only POC30 theme - **40 files byte-match the repo**, proved by
+pull-and-diff (both sides 40; zero content mismatches; nothing on only one side; `theme list` and
+`git log origin/main..HEAD` run **first**, no collision, no duplicate names, zero unpushed).
+Validation at the documented baseline (**15 offenses / 0 errors / 0 new**). The file count moved
+39 -> 40: two hero assets added (`ci-temp-hero.mp4`, `ci-temp-hero-poster.jpg`) and the cafe band
+`ci-temp-lp1.jpg` deleted; the `crema-poc-deploy` baseline was updated in the same pass with the
+reason recorded. Batch content asserted **on the deployed theme**: the `.hero-media` block, the
+hero line ending "in Italy", `isPublic()` and `flyBean()` in the JS, the gated `#sec-founding`
+band, "Surprise Samplers" in the header, the 709 KB hero mp4 present, `ci-temp-lp1.jpg` absent.
+
+**What POC30 is:** the B2C expert review of POC28 worked in priority order across nine items, all
+built interactively with Steve and recorded in `docs/POC30_change_list.md`. The home hero is
+**image-first** - a six-second muted loop of an espresso pull landing on crema in a Pienza cup,
+cut from Steve's own footage, with one line over it: **"Exactly as the roaster sealed it... in
+Italy."** The copy hero became three beats (chosen / we fly it in / whole beans), the cafe band
+was retired, "Our model" now tells how a roaster is found, and the founder story was revised.
+**Offerta is hidden** - reached only by an emailed invitation link (`?offer=`), excluded from every
+public grid, with three public coffee shelves. **Shelf labels are English-first** - Subscriptions,
+Surprise Samplers, Limited and Seasonal - with the Italian taught once per surface; **Bottega
+became Accessories** and moved from the top nav into the Shop dropdown and the home grid. Four
+interaction fixes: the exact price on the product page, the **live subscription price** on the
+toggle (base struck through), the ribbon stating **"Showing 4 of 12 coffees"** after the quiz, and
+the add-to-cart confirmation as **one bean flying a C into the cart**. The **Founding Member offer**
+sits on the home page gated on a live count, so it retires itself when the cap fills. Store
+Operating Standards moved **v1.19 -> v1.21** (Offerta hidden, English-first labels, Accessories).
+Commits `230c960`..`eaac43a`.
+
+**What POC29 was:** it is the only POC29 theme - **39 files byte-match the repo**, proved by
 pull-and-diff (both sides 39; zero content mismatches; nothing on only one side; `theme list` and
 `git log origin/main..HEAD` run **first**, no collision, no duplicate names). Validation at the
 documented baseline (**15 offenses / 0 errors / 0 new**). The file count moved 38 -> 39 with the one
@@ -4337,8 +4422,10 @@ here.** This paragraph used to hardcode them, and it went stale the moment the t
 pruned — twice. Open the preview in a **real browser**; a `curl` of a `preview_theme_id` link is NOT
 a valid check (see §9 2026-07-06). Refresh with `shopify theme push --theme <id from the table>`.
 
-**Only POC27, POC28 and POC29 previews now exist** - at the three-newest cap, enforced as
-`crema-poc-deploy` Step 5. **POC26 (`152030347433`) was deleted 2026-09-03** on Steve's explicit go,
+**POC27, POC28, POC29 and POC30 previews exist - four, one over the three-newest cap enforced as
+`crema-poc-deploy` Step 5. POC27 (`152030412969`) is the prune candidate, computed from live
+`theme list --json`, and awaits Steve's explicit go by name and id; it was deliberately not deleted
+in the same breath as the deploy.** Earlier: **only POC27, POC28 and POC29 existed** at the cap. **POC26 (`152030347433`) was deleted 2026-09-03** on Steve's explicit go,
 its id, name and role re-verified against a live `theme list --json` in the same breath as the
 delete and the delete run **after** the POC29 push was proven by pull-and-diff; its batch is commit
 `c495ace` on `origin/main` and it is redeployable. The Step 6.4 sweep found **four** references to

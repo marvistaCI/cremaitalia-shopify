@@ -6,8 +6,9 @@ authoritative statement of what is deployed. This file is the build record.
 **Source of the batch:** the external B2C storefront / UX review of POC28 (Steve's copy:
 `Downloads\B2C_Expert_Review_of_POC_28.html`, captured Sep 2026). Its verdict was *move forward,
 with conditions*; its "Missing (add), priority order" list is being worked top-down, one item at
-a time, on Steve's instruction. Nothing is pushed to a numbered preview theme until Steve says
-the batch is complete.
+a time, on Steve's instruction. Nothing was pushed to a numbered preview theme until Steve said
+the batch was complete (2026-09-12, after item 9). Deployment state, as ever, lives in `CLAUDE.md`
+§10 and nowhere in this file.
 
 **Ground rule carried from the review:** all roasters, products, prices and ratings in the POC are
 fixture data. No item here may draw a conclusion about catalog credibility. The brand look is a
