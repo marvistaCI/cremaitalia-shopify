@@ -198,15 +198,39 @@ paragraph may work better"*. If the paragraph wins, the `<ol>` collapses to one 
 paragraph with the same words joined by spaced dashes and the `.hiw` rules go. Either way the
 words are settled.
 
-**Deliberately not done yet:** trimming **"Our model"** two screens down, which states the same
-three beats in prose ("We choose a small number of roasters... we air-freight it directly...
-whole bean only, never pre-ground"). Once the shape is chosen, that section should keep only
-what is new there - the Roasters link and the suggest-a-roaster ask - so the model is said
-once. And the production shape of this section is recorded as a proposal, not built: **one
+**"Our model" trimmed the same day - see 2b.** The production shape of this section is recorded as a proposal, not built: **one
 photograph of a single sealed roaster bag with three short captions anchored to what is on it**
 (the roaster's name on the label, the roast-date stamp, the one-way valve and whole beans) -
 literally a how-it-works in one image, merging this item with photography slot 3. Needs a real
 bag, so it waits on a signed roaster.
+
+## 2b. "Our model" trimmed, and the roaster story told for the first time
+
+Steve kept the beats ("the segmentation works") and then rewrote "Our model" himself. The
+trim's purpose was to say the model once; his draft added the one thing the page had never
+said - **how a roaster gets found** - and then restated the three beats in its tail. The
+refinement kept all of the new and cut the repeat: ~190 words to ~120.
+
+**Kept, and it is the best new copy in the batch:** sitting in cafés and drinking espresso; when
+a coffee is delicious, asking about the roaster; the same name coming up again; the visit; and
+*"Sì, we do this together."* The review put the entire trust load on roaster storytelling and
+called the roasters the thinnest part of the site; this is the first place the site says how
+the relationship starts. *"Our roasters are not vendors - they are partners"* kept verbatim but
+for the splice. **The roast date on every bag** survived from the old tail: it is the one fact
+the beats do not carry, and the review's "cheap table-stakes trust".
+
+**Cut:** *"We don't alter the roasters' packaging... air-freight them directly into our US
+fulfillment facility, exactly as roasted, bagged and sealed... arrives fresh and ready to
+grind... whole bean only, never pre-ground"* - all of it is the hero line and the three beats
+again. Also the tasting-notes parenthetical (interrupts the story; the notes are on every
+product card), and *"a quality pattern is detected"* (passive, lab register) became *"the same
+name keeps coming up"*. Two comma splices became spaced dashes per the semicolon rule.
+Hyphenation drift in the draft (whole-beans, roast-date, air-freight/airfreight) went with the
+tail.
+
+**Kept from before, unchanged:** the Standard's approved opening sentence (the VOICE comment at
+the site still guards it), the Roasters-page link, the suggest-a-roaster email, and photography
+slot 3 beneath. *"Sì"* carries its accent and an `.ita` span.
 
 ## 3. The founder story, revised (Steve's copy, refined together)
 
@@ -251,5 +275,6 @@ quotation marks are `&ldquo;`/`&rdquo;` entities to match the file's `&rsquo;` c
 | `assets/ci-temp-lp1.jpg` | **deleted** (1b) |
 | `templates/index.liquid` | (2) `.hiw` three-beat band replaces the claim + subhead |
 | `assets/ci-storefront.css` | (2) `.hiw` rules; dead `.hero h1` / `.subhead` / `h1-break` rules and comments swept |
+| `templates/index.liquid` | (2b) "Our model" trimmed and rewritten |
 | `templates/index.liquid` | (3) founder story, two paragraphs |
 | `docs/production_build_spec.md` | temp-asset row updated (1b) |
