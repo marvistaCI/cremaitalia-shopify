@@ -475,12 +475,16 @@ plays uncaused. Under `prefers-reduced-motion` there is no bean and no dip, only
 label. The bottom toast is no longer used for this event and stays for the others.
 
 **Mechanics worth keeping.** The arc is two Web Animations, X on a wrapper and Y on the bean, so
-it is a real arc rather than a straight line. The cart lives in the sticky header, so the target is
-always above the button: Y eases out (fast start, gentle arrival) while X eases in and out, so the
-bean climbs first and curves across into the icon. **A first cut modelled a rise-then-fall and put
-490 of the 862 pixels into the last 120ms**, which read as a snap rather than a toss - measured by
-sampling the bean's position every 120ms, and fixed before anyone saw it; after the fix, 570px in
-the first 300ms and the last 100px eased over the final 300ms. The target is whichever cart icon is
+it is a real curve rather than a straight line. **The path is a C (Steve): the bean swings out to
+the left first, climbs, and comes back into the cart from the side.** X is three keyframes - out to
+a swing at 40%, then across to the target - and Y is one ease-in-out, so the bow sits mid-flight
+and the arrival is soft; the swing scales with the climb and is clamped so it never leaves the left
+edge on a phone. Measured by sampling the bean every 80ms: on desktop it starts at x=945, bows out
+to x=777 at mid-climb and returns to the cart at x=1103; on a 375px phone it bows from x=188 to
+x=20 and returns to x=279, never off screen. The bean is **24x33** (Steve asked for 50% larger than
+the first cut's 16x22) and shrinks to half as it lands. Two earlier cuts are recorded so nobody
+re-derives them: a rise-then-fall that put 490 of 862 pixels into the last 120ms and read as a snap,
+and a straight ease-out toss with a late bend, which was correct but not a C. The target is whichever cart icon is
 actually visible - the desktop header button or the phone quick-action - found by measuring, not by
 breakpoint. **The item is in the cart before any of this runs:** the confirmation is decoration on a
 fact, never the mechanism, so a fast double-press adds two. The buttons now pass `this` so the

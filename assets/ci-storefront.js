@@ -1468,25 +1468,30 @@
     var to = visibleCartTarget();
     if (!fromEl || !to || (REDUCED_MOTION && REDUCED_MOTION.matches) || !document.body.animate) { if (onLand) onLand(to); return; }
     var a = fromEl.getBoundingClientRect(), b = to.getBoundingClientRect();
-    var W = 16, H = 22;
+    var W = 24, H = 33;
     var x0 = a.left + a.width / 2 - W / 2, y0 = a.top + a.height / 2 - H / 2;
     var dx = (b.left + b.width / 2 - W / 2) - x0, dy = (b.top + b.height / 2 - H / 2) - y0;
     var fly = document.createElement('div'); fly.className = 'ci-bean-fly'; fly.setAttribute('aria-hidden', 'true');
     fly.style.left = x0 + 'px'; fly.style.top = y0 + 'px';
     var bean = document.createElement('div'); bean.className = 'ci-bean'; fly.appendChild(bean);
     document.body.appendChild(fly);
-    // An arc is X and Y on different curves. The cart lives in the sticky header, so the target is
-    // always ABOVE the button: the natural motion is an upward toss that slows into the landing -
-    // Y eases OUT (fast start, gentle arrival) while X eases in-and-out, so the bean climbs first
-    // and then curves across into the icon. A first cut modelled a rise-then-fall and put 490 of
-    // 862 pixels into the last 120ms, which read as a snap rather than a toss (measured).
-    var dur = 720;
-    fly.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(' + dx + 'px)' }],
-      { duration: dur, easing: 'cubic-bezier(.55,.05,.65,.95)', fill: 'forwards' });
+    // The path is a C (Steve, 2026-09-12): the bean swings OUT to the left first, climbs, and
+    // comes back into the cart from the side, rather than climbing straight and bending late.
+    // X is three keyframes on the wrapper - out to -swing at 40%, then across to the target -
+    // and Y is one ease-in-out on the bean, so the bow sits mid-flight and the arrival is soft.
+    // The swing scales with the climb and is clamped so it never leaves the left edge on a phone.
+    var swing = Math.min(170, Math.max(80, Math.abs(dy) * 0.22));
+    swing = Math.min(swing, Math.max(24, x0 - 8));
+    var dur = 820;
+    fly.animate([
+      { transform: 'translateX(0)', easing: 'cubic-bezier(.25,.6,.45,1)' },
+      { transform: 'translateX(' + (-swing) + 'px)', offset: 0.4, easing: 'cubic-bezier(.5,0,.35,1)' },
+      { transform: 'translateX(' + dx + 'px)' }
+    ], { duration: dur, fill: 'forwards' });
     var land = bean.animate([
       { transform: 'translateY(0) scale(1)' },
       { transform: 'translateY(' + dy + 'px) scale(.5)', opacity: .95 }
-    ], { duration: dur, easing: 'cubic-bezier(.2,.75,.3,1)', fill: 'forwards' });
+    ], { duration: dur, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
     land.onfinish = function () { if (fly.parentNode) fly.parentNode.removeChild(fly); if (onLand) onLand(to); };
   }
   function bumpCart(to) {
