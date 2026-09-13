@@ -475,14 +475,21 @@ plays uncaused. Under `prefers-reduced-motion` there is no bean and no dip, only
 label. The bottom toast is no longer used for this event and stays for the others.
 
 **Mechanics worth keeping.** The arc is two Web Animations, X on a wrapper and Y on the bean, so
-it is a real arc rather than a straight line; the rise is capped so a short hop on a phone (the
-cart is ~100px away in the POC16 quick-action bar) does not leap off the top. The target is
-whichever cart icon is actually visible - the desktop header button or the phone quick-action -
-found by measuring, not by breakpoint. **The item is in the cart before any of this runs:** the
-confirmation is decoration on a fact, never the mechanism, so a fast double-press adds two. The
-buttons now pass `this` so the confirmation knows where to start; a call with no button falls back
-to the old toast. PROD: same idea after the Cart AJAX add returns; a cart drawer can replace the
-label step later without touching the bean.
+it is a real arc rather than a straight line. The cart lives in the sticky header, so the target is
+always above the button: Y eases out (fast start, gentle arrival) while X eases in and out, so the
+bean climbs first and curves across into the icon. **A first cut modelled a rise-then-fall and put
+490 of the 862 pixels into the last 120ms**, which read as a snap rather than a toss - measured by
+sampling the bean's position every 120ms, and fixed before anyone saw it; after the fix, 570px in
+the first 300ms and the last 100px eased over the final 300ms. The target is whichever cart icon is
+actually visible - the desktop header button or the phone quick-action - found by measuring, not by
+breakpoint. **The item is in the cart before any of this runs:** the confirmation is decoration on a
+fact, never the mechanism, so a fast double-press adds two. The buttons now pass `this` so the
+confirmation knows where to start; a call with no button falls back to the old toast. **Verified on
+both widths:** desktop from the coffee detail button (bean present through 660ms and gone by 900ms,
+icon bumped, badge 1, label swapped and restored at 3s, a press in the window opened the bag, a press
+after it added again); phone from the Bottega detail button to the quick-action cart (y 987 to 9,
+bumped, badge updated, nothing left in the DOM, no overflow). PROD: same idea after the Cart AJAX
+add returns; a cart drawer can replace the label step later without touching the bean.
 
 ## Files
 
