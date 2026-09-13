@@ -104,14 +104,16 @@
     terroir: 'Pipe tobacco, baking spice, toasted grain, dried fig or raisin, walnut, cedar.'
   };
   var SHELF_BADGE = {
-    roccia:    { cls: 'sr', tag: 'Roccia · Subscription', shelfTag: 'Roccia' },
+    // POC30 item 5: badges lead with the English function, the Italian name second - the
+    // same English-first rule as the nav, kept short because a badge is read while scanning.
+    roccia:    { cls: 'sr', tag: 'Subscription · Roccia', shelfTag: 'Subscriptions' },
     // Badges do a different job from the shelf headers: they identify which shelf a tile belongs
     // to while you scan a mixed grid, so the Italian name leads and the gloss stays short. The
     // full "The Surprise · Curated Discovery" form is deliberately NOT used here (Steve,
     // 2026-08-06) - it would swamp the coffee's own name on the tile.
-    sorpresa:  { cls: 'ss', tag: 'Sorpresa · Discovery',   shelfTag: 'Sorpresa' },
-    selezione: { cls: 'sl', tag: 'Selezione · Premium',    shelfTag: 'Selezione' },
-    offerta:   { cls: 'so', tag: 'Offerta · By invitation', shelfTag: 'Offerta' },
+    sorpresa:  { cls: 'ss', tag: 'Sampler · Sorpresa',     shelfTag: 'Surprise Samplers' },
+    selezione: { cls: 'sl', tag: 'Limited · Selezione',    shelfTag: 'Limited and Seasonal' },
+    offerta:   { cls: 'so', tag: 'By invitation · Offerta', shelfTag: 'Offerta' },
     bottega:   { cls: 'sb', tag: 'Bottega',                shelfTag: 'Bottega' }
   };
 
@@ -823,8 +825,8 @@
         // selectable without toggling a purchase option.
         '<div class="sub-toggle"><label class="sub-toggle-hit" for="pd-sub">' +
         '<input type="checkbox" id="pd-sub" onchange="toggleSub(this)" aria-labelledby="pd-sub-label" aria-describedby="pd-sub-renewal"></label>' +
-        '<div class="sub-toggle-text"><h4 id="pd-sub-label"><label for="pd-sub" class="sub-toggle-title">Make this a Roccia subscription</label></h4>' +
-        '<p>10% off every shipment and free shipping, your standing subscriber benefit on Roccia, Sorpresa, and Selezione. Default is a one-time purchase.</p>' +
+        '<div class="sub-toggle-text"><h4 id="pd-sub-label"><label for="pd-sub" class="sub-toggle-title">Make this a subscription</label></h4>' +
+        '<p>10% off every shipment and free shipping, your standing subscriber benefit on every coffee. Default is a one-time purchase.</p>' +
         // The automatic-renewal disclosure, added POC22. The line above is merchandising and is
         // NOT a renewal disclosure: it never says the card is charged again automatically, at what
         // frequency, or at what amount. Federal ROSCA and a growing set of state automatic-renewal
@@ -1377,7 +1379,7 @@
     else { cart.push({ handle: handle, title: p.display_title, shelf: p.shelf, size: s.size, price: s.price, img: p.img, sub: !!isSub, cadence: cadence, qty: 1 }); }
     updateCartCount();
     renderCart();
-    toast(isSub ? 'Added - Roccia subscription, every ' + cadence + ' weeks.' : 'Added to your bag.');
+    toast(isSub ? 'Added - subscription, every ' + cadence + ' weeks.' : 'Added to your bag.');
   };
   window.removeFromCart = function (idx) { cart.splice(idx, 1); updateCartCount(); renderCart(); };
   window.changeQty = function (idx, delta) {
@@ -1434,14 +1436,14 @@
     if (!el) return;
     if (!cart.length) {
       el.innerHTML = '<div class="cart-empty"><p style="font-weight:600;color:var(--ci-espresso)">Your bag is empty.</p>' +
-        '<p style="font-size:.9rem;margin-top:.25rem">Start with a <button onclick="showPage(\'sorpresa\')" style="background:none;border:none;color:var(--ci-crema-text);font-weight:600;cursor:pointer;text-decoration:underline">Sorpresa collection</button> or build a <button onclick="showPage(\'roccia\')" style="background:none;border:none;color:var(--ci-crema-text);font-weight:600;cursor:pointer;text-decoration:underline">Roccia subscription</button>.</p></div>';
+        '<p style="font-size:.9rem;margin-top:.25rem">Start with a <button onclick="showPage(\'sorpresa\')" style="background:none;border:none;color:var(--ci-crema-text);font-weight:600;cursor:pointer;text-decoration:underline">Surprise Sampler</button> or build a <button onclick="showPage(\'roccia\')" style="background:none;border:none;color:var(--ci-crema-text);font-weight:600;cursor:pointer;text-decoration:underline">Roccia subscription</button>.</p></div>';
       return;
     }
     var html = '';
     // sign-in / create-account nudge for guests: surfaces the two discounts as alternatives (you
     // receive the higher), never additive — the no-stacking MAX rule (Store Operating Standards v1.2 §3).
     if (!session.signedIn) {
-      html += '<div class="cart-banner"><span>Create an account or sign in to unlock your discount - a one-time 5% first-purchase offer, or 10% off Roccia, Sorpresa, and Selezione with a subscription. You receive the higher of the two, never both.</span><button onclick="openSignin()">Sign in</button></div>';
+      html += '<div class="cart-banner"><span>Create an account or sign in to unlock your discount - a one-time 5% first-purchase offer, or 10% off every coffee with a subscription. You receive the higher of the two, never both.</span><button onclick="openSignin()">Sign in</button></div>';
     }
     // discount math (line total = unit price × quantity)
     // No stacking (Store Operating Standards v1.2 §3): a customer never receives two discounts at
@@ -1480,7 +1482,7 @@
     // free shipping progress (one-time orders; subscriptions always free)
     var allSub = cart.every(function (it) { return it.sub; });
     var shipNote;
-    if (allSub) { shipNote = 'Free shipping on every Roccia shipment.'; }
+    if (allSub) { shipNote = 'Free shipping on every subscription shipment.'; }
     else if (subtotal >= FREE_SHIP_THRESHOLD) { shipNote = 'You have free shipping.'; }
     else { shipNote = 'Add ' + money(FREE_SHIP_THRESHOLD - subtotal) + ' for free shipping.'; }
     var pct = Math.min(100, Math.round((subtotal / FREE_SHIP_THRESHOLD) * 100));
@@ -1492,7 +1494,7 @@
       html += '<div class="cart-line">' +
         '<div class="cart-line-img card-img ' + imgCls(it.img) + '"' + imgStyle(it.img) + '>' + esc(it.img ? it.img.label.split(' · ')[0] : '') + '</div>' +
         '<div><h4>' + esc(it.title) + '</h4>' +
-        '<div class="rn">' + esc(sizeDual(it.size)) + (it.sub ? '<span class="tag-pill rn-tail">Roccia subscription &middot; every ' + esc(it.cadence) + ' weeks</span>' : '<span class="rn-tail">&middot; One-time</span>') + '</div>' +
+        '<div class="rn">' + esc(sizeDual(it.size)) + (it.sub ? '<span class="tag-pill rn-tail">Subscription &middot; every ' + esc(it.cadence) + ' weeks</span>' : '<span class="rn-tail">&middot; One-time</span>') + '</div>' +
         '<div class="qty-stepper"><button onclick="changeQty(' + i + ',-1)" aria-label="Decrease quantity">&minus;</button>' +
         '<span class="qty-n">' + qty + '</span>' +
         '<button onclick="changeQty(' + i + ',1)" aria-label="Increase quantity">+</button></div>' +
@@ -1564,7 +1566,7 @@
           '<span class="badge-founding">Founding Member · No. 087</span>' +
           ((session.subscriber || session.paused)
             ? '<span class="status-chip sc-active">Active</span>' +
-              '<p class="prose" style="margin-top:.75rem">Your Founding rate of <strong>12%</strong> applies automatically across Roccia, Sorpresa, and Selezione. Bottega is never discounted.</p></div>'
+              '<p class="prose" style="margin-top:.75rem">Your Founding rate of <strong>12%</strong> applies automatically across every coffee. Bottega is never discounted.</p></div>'
             : '<span class="status-chip sc-lapsed">Benefits paused</span>' +
               '<p class="prose" style="margin-top:.75rem">No. 087 is yours for good. Your <strong>12%</strong> is active whenever you hold a subscription - resubscribe to reactivate it. After cancelling, your benefits continue for ' + GRACE_DAYS + ' days.</p></div>') +
         '<div class="acct-card"><h3>Taste profile</h3>' +
@@ -1593,7 +1595,7 @@
           // customer toggle). Subscription reminders live in the Loop slot below.
           '<p class="note">Managed via native Shopify customer accounts + our email platform on the live store - not built in this POC.</p></div>' +
       '</div>' +
-      '<div class="section-head" id="acct-subs"><p class="eyebrow">Roccia subscription</p><h2>Manage your subscription</h2></div>' +
+      '<div class="section-head" id="acct-subs"><p class="eyebrow">Your subscription</p><h2>Manage your subscription</h2></div>' +
       subscriptionBlock() +
       '<div class="loop-slot" style="margin-top:1.25rem"><strong>On the live store, this is Loop\'s hosted portal.</strong> Pause, skip, swap roaster, coffee, or bag size (up to 48 h before lock), change cadence, or cancel, and manage ship-to + payment, plus your subscription reminders and delivery notifications - self-service, no fee. Passwordless login, embedded as a theme app block. ' +
       '<!-- LOOP: replace this slot with the Loop customer-portal app block / link. -->' +
@@ -1603,7 +1605,7 @@
   // Mock subscription-management block (POC). PROD: this whole area is Loop's hosted portal.
   function subscriptionBlock() {
     if (!session.subscriber) {
-      return '<div class="sub-manage"><p class="prose" style="margin:0">You have no active Roccia subscription.</p>' +
+      return '<div class="sub-manage"><p class="prose" style="margin:0">You have no active subscription.</p>' +
         (session.foundingMember ? '<p class="note">Your Founding Member status (No. 087) is yours for good - resubscribe and your <strong>12%</strong> reactivates. Benefits continue for ' + GRACE_DAYS + ' days after cancelling.</p>' : '') +
         '<div class="sub-actions"><button class="btn btn-primary" onclick="mockResubscribe()">Resubscribe</button></div></div>';
     }

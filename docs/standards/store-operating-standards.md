@@ -1,6 +1,6 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.19 · 2026-08-30**
+**Version 1.20 · 2026-09-12**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.3 (look & voice) · Collaboration Standard v1.1 (how we work).
 
@@ -30,6 +30,17 @@
 > version changelog below carries what moved between revisions; the body states only what is true.
 >
 > Tracked as §12.13, which cannot close before launch.
+
+> **v1.20 (2026-09-12)** makes two changes to **§1**, both Steve's and both from the B2C expert review
+> of POC28. **Offerta leaves public view.** It remains a coffee shelf and a channel - coffee leaving the
+> freshness window is offered by email - but the page is reached only by the emailed invitation link:
+> no nav item, no shelf card, no filter pill, no footer link, no search or sitemap presence. A visible
+> markdown shelf teaches customers to wait for the markdown. Three coffee shelves are public.
+> **Shelf labels are English-first.** In navigation and wherever a shelf is named as a function the
+> label is the English word - **Subscriptions**, **Surprise Samplers**, **Limited and Seasonal** - and
+> the Italian name is taught once per surface and kept for editorial copy, data, handles and this
+> Standard. §5's approved FAQ copy and its listing bullet, and §10's exclusions, follow. No price, no
+> window and no discount moved.
 
 > **v1.19 (2026-08-30)** closes **§12.12(a)** and changes nothing else. **No rule moved, no window
 > moved, nothing is repriced.** The freshness declaration is held as a **metaobject** - type
@@ -264,16 +275,28 @@
 
 ## 1. The shelves — canonical definitions
 
-Every product lives on exactly one shelf. The four **coffee** shelves drive navigation, collections,
-and taxonomy; **Bottega** is a separate non-coffee retail section, not a fifth coffee shelf.
+Every product lives on exactly one shelf. **Three coffee shelves are public** and drive navigation,
+collections and taxonomy. **Offerta is a fourth coffee shelf that is hidden** - reached only by an
+emailed invitation link, never from navigation, search or a sitemap (Steve, 2026-09-12: a visible
+markdown shelf teaches customers to wait for the markdown). **Bottega** is a separate non-coffee retail
+section, not a coffee shelf.
 
-| Shelf | English meaning | Commercial role | Key rules |
-|---|---|---|---|
-| **Roccia** | "Rock / staple" | The subscription backbone — everyday coffees sold one-time **and** as Roccia subscriptions | Bag sizes 250g / 500g / 1kg (**no 100g**). The only shelf with subscriptions. |
-| **Sorpresa** | "Surprise" | Discovery **collections** (composite BOM SKUs) | Sorpresa 100g bags exist **only inside collections**, never sold alone. One-time only. |
-| **Selezione** | "Selection" | Premium / seasonal / limited micro-lots | One-time purchase only, never a subscription. Honest scarcity ("low inventory" under 12 units, hard cap). Active Roccia subscribers see new SKUs 48h early (Locksmith, tag `active-roccia`). |
-| **Offerta** | "Offer / deal" | Aged lots moved to an honest markdown as they approach their freshness limit | Not stocked directly — items *transition* here by age (see §6). Uses the `O[size]` markup factors. Guarantee is "as-is, defects only" (see §5). |
-| **Bottega** | "Shop / workshop" | Non-coffee retail: equipment, accessories, Crema Italia merch | Independent ordering experience. No roaster affiliation, no freshness/expiry logic. Never appears on roaster profiles. Never discounted for subscribers/Founding. |
+**Labels are English-first (Steve, 2026-09-12).** In navigation and anywhere a shelf is named as a
+function - nav items, filter pills, page headings, product-card badges, discount and guarantee copy -
+the label is the *Storefront label* below. The Italian name is **taught**, once per surface, as an
+eyebrow or subtitle (`Roccia · The Rock`) or inline in a one-line gloss, and is used freely in
+editorial copy. The Italian names remain the canonical identifiers in data, product handles, the SKU
+register and this Standard. "Select Roasts" was declined for Selezione (*select* as an adjective is
+the self-praising register Brand Standards §3.1 bans, and in a nav it reads as a verb); "Surprise me"
+was declined for Sorpresa because the taste quiz already uses those words for *no roast preference*.
+
+| Shelf | Storefront label | English meaning | Commercial role | Key rules |
+|---|---|---|---|---|
+| **Roccia** | **Subscriptions** | "Rock / staple" | The subscription backbone — everyday coffees sold one-time **and** as Roccia subscriptions | Bag sizes 250g / 500g / 1kg (**no 100g**). The only shelf with subscriptions. |
+| **Sorpresa** | **Surprise Samplers** | "Surprise" | Discovery **collections** (composite BOM SKUs) | Sorpresa 100g bags exist **only inside collections**, never sold alone. One-time only. |
+| **Selezione** | **Limited and Seasonal** | "Selection" | Premium / seasonal / limited micro-lots | One-time purchase only, never a subscription. Honest scarcity ("low inventory" under 12 units, hard cap). Active Roccia subscribers see new SKUs 48h early (Locksmith, tag `active-roccia`). |
+| **Offerta** | *hidden* - the page is headed "By invitation" | "Offer / deal" | Aged lots moved to an honest markdown as they approach their freshness limit, offered by email | **Not public**: no nav item, card, pill, footer link, search or sitemap presence; an unlisted collection whose products carry `seo.hidden` and appear on no public grid, reached by the emailed link only (build spec, Offerta section). Not stocked directly — items *transition* here by age (see §5). Uses the `O[size]` markup factors. Guarantee is "as-is, defects only" (see §5), stated on the invitation page and nowhere public. |
+| **Bottega** | **Bottega** | "Shop / workshop" | Non-coffee retail: equipment, accessories, Crema Italia merch | Independent ordering experience. No roaster affiliation, no freshness/expiry logic. Never appears on roaster profiles. Never discounted for subscribers/Founding. |
 
 ### 1.1 Vocabulary — *collection* is the term, *Tour* is a name
 
@@ -479,8 +502,10 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
 - **Nightly** the system flags lots at/over their transition date. Admin sees a daily digest and
   approves (may auto-approve). On transition: `current_shelf` → Offerta (Shopify Flow), price
   recalculates to the `O[size]` factor, 3PL gets a priority-ship (FIFO) flag.
-- **Offerta listing shows:** original price (struck through) + Offerta price + savings + the *actual*
-  remaining freshness window (e.g. "best within 23 days").
+- **Offerta listing shows:** original price (struck through) + Offerta price, and the computed
+  roast-date band (§5.4). **The listing is reached by invitation only** (§1, v1.20): the page carries no
+  navigation entry, Offerta products appear on no public grid, and the public FAQ no longer names the
+  shelf - coffee leaving the window "comes off our shelves".
 - **Donation threshold:** coffee older than `{offerta_fresh_days}` is removed from sale and donated
   to **Feeding Tampa Bay** (the no-waste pledge). **The value is named, never typed** (§5.5).
 - **Offerta guarantee is modified:** "as-is, defects only" — the standard first-bag satisfaction
@@ -671,11 +696,11 @@ line surfacing on the product page:
 
 > We purchase the same coffee routinely which is why we sometimes quote a roast date range. We always
 > fulfill orders in the order that we receive inventory, or First In First Out (FIFO), in
-> inventory-speak. If a particular lot is out of our immediate freshness window, it is moved to our
-> Offerta shelf and priced accordingly. We do not fulfill subscriptions with products that exceed our
-> freshness promise on the date of shipping to you.
+> inventory-speak. If a particular lot is out of our immediate freshness window, it comes off our
+> shelves. We do not fulfill subscriptions with products that exceed our freshness promise on the
+> date of shipping to you.
 >
-> In rare circumstances where an Offerta lot exceeds our freshness promise entirely, we endeavor to
+> In rare circumstances where a lot exceeds our freshness promise entirely, we endeavor to
 > donate this coffee to worthy recipients. Remember, commercial coffee is typically sold as fresh
 > within a 24-month freshness window.
 >
@@ -970,6 +995,9 @@ damage replacement, the freshness window, and the no-waste pledge (Feeding Tampa
   emails, print, or packaging. The intent of the retired rule survives here: never train a customer to
   go hunting for a code.
 - **No sitewide percentage-off promotional sales.**
+- **No public route to Offerta** (2026-09-12). No nav item, shelf card, filter pill, footer link,
+  sitemap or search entry; the collection and its products carry `seo.hidden`. The only way in is the
+  emailed invitation link (§1). A visible markdown shelf teaches customers to wait for the markdown.
 - **No emoji. No exclamation marks. No "amazing/best/you'll love it" copy.**
 - **No em-dashes in customer-facing copy** (2026-07-13) — see Brand Standards / `CLAUDE.md` §6 for the
   replacement rule.
@@ -1390,5 +1418,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.19 · 2026-08-30 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.20 · 2026-09-12 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*

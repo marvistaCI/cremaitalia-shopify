@@ -72,7 +72,6 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 .nav-item.menu-force-closed .shop-menu{display:none!important}
 .shop-menu a{display:block;padding:.55rem .7rem;border-radius:6px;cursor:pointer;text-decoration:none}
 .shop-menu a:hover{background:var(--ci-cream)}
-.shop-menu .ita{font-family:var(--ci-font-display);font-weight:400;font-size:1.05rem;color:var(--ci-coffee);display:block}
 .shop-menu .lbl{font-family:var(--ci-font-display);font-weight:400;font-size:1.05rem;color:var(--ci-coffee);display:block}
 .shop-div{height:1px;background:var(--ci-hairline);margin:.35rem .3rem}
 .shop-menu .men{font-size:.76rem;color:var(--ci-espresso);display:block;line-height:1.35}
@@ -129,7 +128,7 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
   .shop-menu{display:block;position:static;box-shadow:none;border:none;min-width:0;padding:0;background:transparent}
   .nav-item.menu-force-closed .shop-menu{display:block!important}
   .shop-menu a{min-height:48px;padding:.5rem 1.25rem .5rem 2.1rem;display:flex;flex-direction:column;justify-content:center}
-  .shop-menu .ita,.shop-menu .lbl{font-size:.98rem}
+  .shop-menu .lbl{font-size:.98rem}
   .shop-div{margin:.2rem 1.25rem}
   /* search / cart become full-width labelled rows */
   .icon-btn{width:100%;justify-content:flex-start;gap:.7rem;min-height:48px;padding:.55rem 1.25rem;color:var(--ci-espresso)}
@@ -944,10 +943,14 @@ strong, b { font-weight: 600; }
    Headings stay ROMAN by deliberate exception. Marcellus has no italic face, so the
    Brand Standards v2.0 rebuild already moved the EN/IT cue off display type: "Marcellus
    is roman-only, so the EN/IT cue is now the eyebrow label, not italic display type."
-   .shop-menu .ita is excluded for the same reason - it is set in the display face. */
+   (.shop-menu .ita used to be excluded too, when the Italian shelf name WAS the menu label set
+   in the display face; since POC30 item 5 the labels are English and the Italian sits inline
+   in the Inter gloss, where it is italic like everywhere else.)
+   .shelf-card .ss2 and the shelf-page eyebrow carry the Italian in an uppercase Inter eyebrow;
+   the italic reads fine there and marks the word as Italian, which is the point. */
 .ita { font-style: italic; }
 h1 .ita, h2 .ita, h3 .ita, h4 .ita,
-.hero .subhead .ita, .shop-menu .ita { font-style: normal; }
+.hero .subhead .ita { font-style: normal; }
 
 /* ---------- home shelves: 2x2, not 3 + 1 (item 3, 2026-08-18) ----------
    .card-grid is auto-fill minmax(265px,1fr), which resolves to THREE columns at

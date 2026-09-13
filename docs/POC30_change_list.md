@@ -307,13 +307,76 @@ price and the roast-date band stay - they are the honest facts. The card badge r
 invitation*. Subscriber and Founding discounts are stated as not applying here, which is Standard
 §3 unchanged.
 
-**Upstream, not yet done in this commit:** Store Operating Standards §1 (four coffee shelves),
-§5 (the Offerta listing and transition) and the FAQ text §5 quotes verbatim all describe a public
-shelf. That is a Standard change and goes through `crema-std-publish` as the next step, and it
-belongs in `DECISIONS_LOG.md` (Cowork's lane - flagged to Steve). The Promise page's no-waste pledge
+**Upstream:** Store Operating Standards §1, §5 and §10 were published as **v1.20** together with
+item 5 (the session that built item 4 ended before the publish ran; see item 5). It belongs in
+`DECISIONS_LOG.md` (Cowork's lane - flagged to Steve). The Promise page's no-waste pledge
 sentence, *"We do not discount our way out of waste; we give it away"*, sits oddly beside a
 discounted channel and always did; it is untouched here and is part of the review's freshness-
 lifecycle item, not this one.
+
+## 5. Shelf labels English-first - Subscriptions, Surprise Samplers, Limited and Seasonal
+
+**The finding (review, Resolved discussion points):** the Italian-language "authenticity credit" is
+valid; the defect was four invented names doing navigation work plus a teaching section on the
+landing page. Fix: English-primary in navigation and function labels (lead with function, not a
+translated metaphor like "The Rock"), Italian secondary; Italian kept freely in editorial copy.
+
+**Steve's drafts, and where they landed.** He proposed *Subscriptions (and one-time ordering)*,
+*Surprise me* and *Select Roasts*, each with a description that taught the Italian name in its first
+sentence. Refined together: the parenthetical moved into the description, since a nav item wants one
+word; **"Surprise me" collides with the quiz**, which already uses those words for *no roast
+preference*, so the same two words would mean two different things on one site - his own description
+supplied "sampler", and the compromise is **Surprise Samplers**; **"Select Roasts"** was declined
+because *select* as an adjective is the self-praising register POC21 declined ("a select group") and
+in a nav it reads as a verb, so the shelf's existing gloss became the label, **Limited and Seasonal**.
+The Roccia description went through three drafts on one phrase - "like a rock" sinks like one
+(Steve) - and settled on *your coffee, your size, on a rock-solid cadence*, with the free-shipping
+and 10% hook his draft had dropped restored.
+
+**The rule applied, not just the cards.** The label changed everywhere a shelf is named as a
+function, or the customer learns the Italian mapping anyway: the nav dropdown (`.lbl` English, the
+Italian inline in the gloss with an `.ita` span), the Shop pills, the three shelf pages (eyebrow /
+H1 / sub), the product-card badges (`Subscription · Roccia`, `Sampler · Sorpresa`, `Limited ·
+Selezione`, `By invitation · Offerta` - English first, kept short for scanning), the home CTA and
+callout, the roaster-page note, the subscription toggle, the cart line tail, the toast, the empty-cart
+suggestion, the account page eyebrow and empty state. **The Italian is taught once per surface** - as
+the `.ss2` eyebrow under each home card, the eyebrow over each shelf-page H1, and inline in the nav
+gloss - and never repeated in the description beneath. The **shelf-name tutorial paragraph** above the
+home cards is gone (the review's Superfluous list, item 1); the cards do that job now. Italian in
+editorial copy (a Journal card, a fixture blurb) is untouched, as the review intended.
+
+**The bonus the hide unlocked:** with Offerta invitation-only, the subscriber discount covers every
+public coffee, so *"10% off Roccia, Sorpresa, and Selezione"* in six places (Roccia page callout, FAQ,
+toggle blurb, cart banner, account copy, sign-in note) became **"10% off every coffee"**, and the
+guarantee's *"On Roccia, Sorpresa, and Selezione"* became *"every coffee on our three shelves"*. The
+shelf names drop out of the commercial copy entirely, which is what English-first is for. "Roccia" as
+vocabulary went with it: *Make this a subscription*, *Subscription · every 4 weeks*, *Free shipping on
+every subscription shipment*, *Active subscribers see new Limited and Seasonal coffees 48 hours
+early*.
+
+**Not written into the Sampler card:** a count of bags. A collection is a BOM with N coffees
+(Standard §7); the fixture happens to have three. The Sorpresa page's own body copy still says
+"three" in three places - Steve's reviewed copy, left as it was (POC26 flagged the same and he kept
+it) - so the card does not add a fourth.
+
+**Measured after the rename:** every public page has zero occurrences of "Roccia, Sorpresa, and
+Selezione" and four of "every coffee"; the nav gloss renders its Italian italic; on a 375px phone the
+Shop pills now take **two rows** (All / Subscriptions / Surprise Samplers on the first, Limited and
+Seasonal on the second) with no horizontal overflow - the old four one-word pills fit one row, and
+this is the cost of function labels over names. Acceptable; noted for Steve's eye on device.
+
+**CSS:** the `.shop-menu .ita` display-face rule that styled the Italian *as the label* is deleted,
+its mobile size rule narrowed to `.lbl`, and `.shop-menu .ita` removed from the `font-style:normal`
+exclusion list so the inline Italian in the gloss is italic like everywhere else. `.ita` in the
+uppercase `.ss2` eyebrow is italic on purpose - it marks the word as Italian, which is the point.
+
+**Standard published as v1.20** via `crema-std-publish`, covering item 4 and item 5 together (the
+session that built item 4 ended before its publish ran, and both change §1): §1 gains a *Storefront
+label* column, the English-first rule, and Offerta's hidden status; §5's approved FAQ copy matches
+the theme ("comes off our shelves") and its listing bullet says invitation-only; §10 gains "No public
+route to Offerta". Cross-references swept (standards README, Collaboration companion header, CLAUDE.md
+pointer), both touched sources re-rendered, v1.19 archived, both renders delivered to OneDrive.
+`production_build_spec.md`'s §11 literals row updated to the new toggle string.
 
 ## Files
 
@@ -336,4 +399,13 @@ lifecycle item, not this one.
 | `assets/ci-storefront.js` | (4) `isPublic()`, `initOfferEntry()`, grid/roaster exclusions, copy |
 | `assets/ci-storefront.css` | (4) home shelf grid 2x2 -> row of three |
 | `docs/production_build_spec.md` | (4) Offerta invitation-only mechanism |
+| `templates/index.liquid` | (5) English-first labels: cards, pills, shelf pages, callouts, promise, FAQ; tutorial paragraph removed |
+| `snippets/ci-header.liquid` | (5) dropdown labels English, Italian inline in the gloss |
+| `snippets/ci-signin-modal.liquid` | (5) "every coffee" |
+| `assets/ci-storefront.js` | (5) badges, toggle, toast, cart, account copy |
+| `assets/ci-storefront.css` | (5) `.shop-menu .ita` label rules retired |
+| `docs/standards/store-operating-standards.md` | (4+5) **v1.20** |
+| `docs/standards/README.md`, `collaboration-standard.md`, `CLAUDE.md` | (4+5) v1.20 pointers |
+| `docs/standards/_archive/README.md` | (4+5) v1.19 archive row |
+| `docs/production_build_spec.md` | (5) §11 literals row |
 | `docs/production_build_spec.md` | temp-asset row updated (1b) |

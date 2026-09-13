@@ -1174,7 +1174,7 @@ chrome", and it is the one that rots.
 | String in the theme | Owned by | Where it must come from in production |
 |---|---|---|
 | "Best within 90 days of roast date. For peak flavor, brew within 30 days." | Standard §5 | **DONE 2026-08-21** - both numbers now come from theme settings (`freshness_window_days`, `peak_flavor_days`) via `window.CI_RULES`. |
-| "10% off every shipment and free shipping… on Roccia, Sorpresa, and Selezione" | Standard §3, §6 | **`selling_plan.price_adjustments`** — the same object that actually applies the discount |
+| "10% off every shipment and free shipping… on every coffee" (was "on Roccia, Sorpresa, and Selezione" until POC30 made the labels English-first and Offerta invitation-only) | Standard §3, §6 | **`selling_plan.price_adjustments`** — the same object that actually applies the discount |
 | "Every 4 weeks / 6 weeks / 8 weeks" | Standard §6 | **`selling_plan_group.selling_plans`** — render the pills from the plans themselves |
 | "Printed tasting card included." | Standard §7 | Theme setting, or a per-collection metafield |
 | "Bottega items are never subscriber-discounted…" | Standard §1, §3 | Theme setting |
