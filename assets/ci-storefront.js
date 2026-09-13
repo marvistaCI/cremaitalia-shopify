@@ -761,7 +761,7 @@
         ratingMark(p) +
         '<p class="prose" style="max-width:none">' + esc(p.blurb) + '</p>' +
         '<p class="pd-price">' + money(priceFrom(p)) + '</p>' +
-        '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="addToCart(\'' + p.handle + '\',\'' + esc(p.sizes[0].size) + '\',false,null)">Add to cart</button>' +
+        '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="addToCart(\'' + p.handle + '\',\'' + esc(p.sizes[0].size) + '\',false,null,this)">Add to cart</button>' +
         '<p class="afd" style="border:none">Accessories are never subscriber-discounted and are not part of the three coffee shelves.</p>' +
         '</div></div>';
     }
@@ -876,7 +876,7 @@
       priceHtml +
       reorderLine(p) +
       subBlock +
-      '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="addToCartFromDetail(\'' + p.handle + '\')">Add to cart</button>' +
+      '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="addToCartFromDetail(\'' + p.handle + '\',this)">Add to cart</button>' +
       // GRINDER EXPECTATION (POC15). Every coffee product already said "whole bean only" in
       // its `brewing` copy - but that copy renders in the "About this coffee" block BELOW the
       // buy column, so a buyer could add to cart having never read it. The hero names an
@@ -941,14 +941,14 @@
     for (var i = 0; i < pills.length; i++) pills[i].classList.remove('active');
     el.classList.add('active');
   };
-  window.addToCartFromDetail = function (handle) {
+  window.addToCartFromDetail = function (handle, btn) {
     var sizeEl = document.querySelector('#pd-sizes .pill.active');
     var size = sizeEl ? sizeEl.getAttribute('data-size') : '';
     var subEl = $('pd-sub');
     var isSub = !!(subEl && subEl.checked);
     var cadEl = document.querySelector('#pd-cadence .pill.active');
     var cadence = isSub && cadEl ? cadEl.getAttribute('data-weeks') : null;
-    addToCart(handle, size, isSub, cadence);
+    addToCart(handle, size, isSub, cadence, btn);
   };
 
   // ---------- filtering ----------
@@ -1421,7 +1421,7 @@
   };
 
   // ---------- cart (mock) ----------
-  window.addToCart = function (handle, size, isSub, cadence) {
+  window.addToCart = function (handle, size, isSub, cadence, btn) {
     var p = byHandle[handle];
     if (!p) return;
     var s = (p.sizes || []).filter(function (x) { return x.size === size; })[0] || p.sizes[0];
@@ -1435,8 +1435,85 @@
     else { cart.push({ handle: handle, title: p.display_title, shelf: p.shelf, size: s.size, price: s.price, img: p.img, sub: !!isSub, cadence: cadence, qty: 1 }); }
     updateCartCount();
     renderCart();
-    toast(isSub ? 'Added - subscription, every ' + cadence + ' weeks.' : 'Added to your bag.');
+    // The line is in the cart at this point, whatever happens below: the confirmation is
+    // decoration on a fact, never the mechanism, so a fast double-press adds two.
+    confirmAdded(btn, isSub, cadence);
   };
+
+  // ---------- add-to-cart confirmation: one bean, one arc, one landing (POC30 item 8) ----------
+  // The review said the badge "increments silently". It did not - a toast slid up at the foot of
+  // the screen - but a 281x45 pill in 13.6px type, 268px below the button on a desktop viewport,
+  // is feedback where the eye is not, and the reviewer never saw it. Steve's brief: a visual
+  // confirmation, not a gimmick - the toast turns into a bean and drops into the cart. Refined to
+  // one bean and no bag: the bean IS the product, the arc points at where it went, the dip is the
+  // landing, and the button label offers the next action. Every part carries information; nothing
+  // loops, nothing plays without being caused by the customer.
+  //   1. a bean (CSS, no image) rises from the button on an arc and lands on the header cart icon;
+  //   2. the icon dips and springs back, and the badge shows the new count (renderCart did that);
+  //   3. the button reads "Added · View bag" for three seconds and goes to the bag if pressed.
+  // Under prefers-reduced-motion there is no bean and no dip - only the badge and the label change.
+  // The bottom toast is no longer used for this event; toast() stays for everything else.
+  // PROD: same idea on the real cart - the Cart AJAX add returns, then this runs; a cart drawer can
+  // replace step 3 later without touching 1 and 2.
+  var REDUCED_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  function visibleCartTarget() {
+    var cands = document.querySelectorAll('.header-right .icon-btn[aria-label="Cart"], .hq-cart');
+    for (var i = 0; i < cands.length; i++) {
+      var r = cands[i].getBoundingClientRect();
+      if (r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < window.innerHeight) return cands[i];
+    }
+    return null;
+  }
+  function flyBean(fromEl, onLand) {
+    var to = visibleCartTarget();
+    if (!fromEl || !to || (REDUCED_MOTION && REDUCED_MOTION.matches) || !document.body.animate) { if (onLand) onLand(to); return; }
+    var a = fromEl.getBoundingClientRect(), b = to.getBoundingClientRect();
+    var W = 16, H = 22;
+    var x0 = a.left + a.width / 2 - W / 2, y0 = a.top + a.height / 2 - H / 2;
+    var dx = (b.left + b.width / 2 - W / 2) - x0, dy = (b.top + b.height / 2 - H / 2) - y0;
+    var fly = document.createElement('div'); fly.className = 'ci-bean-fly'; fly.setAttribute('aria-hidden', 'true');
+    fly.style.left = x0 + 'px'; fly.style.top = y0 + 'px';
+    var bean = document.createElement('div'); bean.className = 'ci-bean'; fly.appendChild(bean);
+    document.body.appendChild(fly);
+    // An arc is X and Y on different curves. The cart lives in the sticky header, so the target is
+    // always ABOVE the button: the natural motion is an upward toss that slows into the landing -
+    // Y eases OUT (fast start, gentle arrival) while X eases in-and-out, so the bean climbs first
+    // and then curves across into the icon. A first cut modelled a rise-then-fall and put 490 of
+    // 862 pixels into the last 120ms, which read as a snap rather than a toss (measured).
+    var dur = 720;
+    fly.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(' + dx + 'px)' }],
+      { duration: dur, easing: 'cubic-bezier(.55,.05,.65,.95)', fill: 'forwards' });
+    var land = bean.animate([
+      { transform: 'translateY(0) scale(1)' },
+      { transform: 'translateY(' + dy + 'px) scale(.5)', opacity: .95 }
+    ], { duration: dur, easing: 'cubic-bezier(.2,.75,.3,1)', fill: 'forwards' });
+    land.onfinish = function () { if (fly.parentNode) fly.parentNode.removeChild(fly); if (onLand) onLand(to); };
+  }
+  function bumpCart(to) {
+    if (!to || (REDUCED_MOTION && REDUCED_MOTION.matches)) return;
+    to.classList.remove('ci-cart-bump'); void to.offsetWidth; to.classList.add('ci-cart-bump');
+    setTimeout(function () { to.classList.remove('ci-cart-bump'); }, 500);
+  }
+  function confirmAdded(btn, isSub, cadence) {
+    if (!btn) { toast(isSub ? 'Added - subscription, every ' + cadence + ' weeks.' : 'Added to your bag.'); return; }
+    flyBean(btn, bumpCart);
+    // The label swap. The original onclick is kept on a data attribute and restored after three
+    // seconds, so a press in that window goes to the bag and a press after it adds again.
+    if (!btn.dataset.ciOrigOnclick) {
+      btn.dataset.ciOrigOnclick = btn.getAttribute('onclick') || '';
+      btn.dataset.ciOrigText = btn.textContent;
+    }
+    btn.textContent = 'Added \u00b7 View bag';
+    btn.setAttribute('onclick', "showPage('cart')");
+    btn.classList.add('is-added');
+    clearTimeout(btn.__ciAddedTimer);
+    btn.__ciAddedTimer = setTimeout(function () {
+      btn.textContent = btn.dataset.ciOrigText;
+      btn.setAttribute('onclick', btn.dataset.ciOrigOnclick);
+      btn.classList.remove('is-added');
+      delete btn.dataset.ciOrigOnclick; delete btn.dataset.ciOrigText;
+    }, 3000);
+  }
   window.removeFromCart = function (idx) { cart.splice(idx, 1); updateCartCount(); renderCart(); };
   window.changeQty = function (idx, delta) {
     var it = cart[idx]; if (!it) return;

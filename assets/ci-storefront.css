@@ -83,6 +83,19 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 .sign-in-btn.signed-in{background:var(--ci-coffee);color:var(--ci-cream);border-color:var(--ci-coffee)}
 .cart-count{background:var(--ci-crema);color:var(--ci-cream);font-size:.62rem;font-weight:600;min-width:15px;height:15px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 4px;margin-left:-4px;margin-top:-10px}
 .cart-count.show{display:inline-flex}
+/* ---- add-to-cart confirmation: the bean (POC30 item 8) ----
+   Drawn in CSS so it needs no asset and takes the palette: an Espresso ellipse with the crease in
+   Crema Gold, a touch of inset shadow for roundness. The flight is Web Animations (ci-storefront.js
+   flyBean) - X on the wrapper, Y on the bean - so it is a real arc, not a straight line. The cart
+   icon's dip is the landing. Both are skipped under prefers-reduced-motion (the JS checks; the
+   global rule below also cancels the keyframe). */
+.ci-bean-fly{position:fixed;z-index:1000;pointer-events:none;width:16px;height:22px;will-change:transform}
+.ci-bean{width:16px;height:22px;border-radius:50%;background:var(--ci-coffee);box-shadow:inset -2px -3px 0 rgba(0,0,0,.2);position:relative;will-change:transform}
+.ci-bean::after{content:'';position:absolute;left:50%;top:3px;bottom:3px;width:2px;margin-left:-1px;background:var(--ci-crema);border-radius:2px;transform:rotate(10deg)}
+@keyframes ci-cart-bump{0%{transform:translateY(0)}35%{transform:translateY(3px) scale(.94)}70%{transform:translateY(-2px) scale(1.05)}100%{transform:translateY(0) scale(1)}}
+.ci-cart-bump{animation:ci-cart-bump .45s ease-out}
+/* The button while it reads "Added · View bag": same fill, so it does not shout; the words do it. */
+.btn.is-added{letter-spacing:.01em}
 /* Hamburger + mobile-only row labels are hidden on desktop; the mobile block below reveals them. */
 .hamburger{display:none;background:none;border:none;cursor:pointer;padding:0;width:44px;height:44px;color:var(--ci-coffee);align-items:center;justify-content:center;flex-shrink:0}
 .ham-bars{display:block;width:22px;height:16px;position:relative}

@@ -452,6 +452,38 @@ changing size keeps whichever state is set; after a light-and-fruit quiz the rib
 and the Shop note acknowledges the filter; the toggle measures 44px tall with the ribbon height
 unchanged. `node --check` clean; `theme check` at the documented baseline.
 
+## 8. Add-to-cart confirmation: one bean, one arc, one landing
+
+**The finding (review, Missing #6): "cart badge increments silently; add a drawer/toast."** The
+premise was wrong and the conclusion right, which is why this item exists. Measured before the
+verdict: the badge went 0 to 1, and a toast reading *Added - subscription, every 4 weeks.* faded
+in over 0.3s and held 2.6s - a **281x45 pill in 13.6px type at the bottom edge of the screen,
+268px below the button** on a desktop viewport. The reviewer used the site in a real browser and
+never saw it. Feedback where the eye is not is no feedback.
+
+**Steve's brief, and the refinement.** *"Our standards are opposed to gimmicks, but this is a
+visual confirmation for the user, not a gimmick... the toast could turn into a bean, and drop
+into the bag, which drops into the cart."* Refined together to **one bean and no bag**: the bag was
+a second object and a second landing, doubling the duration, and coffee goes into the cart as
+beans - the bag is packaging. What ships: press Add to cart, a bean (CSS-drawn, Espresso with a
+Crema-gold crease, no asset) rises from the button on an arc and lands on the header cart icon;
+the icon dips and springs back and the badge shows the new count; the button reads **Added · View
+bag** for three seconds and goes to the bag if pressed, then reverts. **Why it passes the
+no-gimmick bar:** every part carries information - the bean is what you bought, the arc points at
+where it went, the dip is the landing, the label is the next action; nothing loops and nothing
+plays uncaused. Under `prefers-reduced-motion` there is no bean and no dip, only the badge and the
+label. The bottom toast is no longer used for this event and stays for the others.
+
+**Mechanics worth keeping.** The arc is two Web Animations, X on a wrapper and Y on the bean, so
+it is a real arc rather than a straight line; the rise is capped so a short hop on a phone (the
+cart is ~100px away in the POC16 quick-action bar) does not leap off the top. The target is
+whichever cart icon is actually visible - the desktop header button or the phone quick-action -
+found by measuring, not by breakpoint. **The item is in the cart before any of this runs:** the
+confirmation is decoration on a fact, never the mechanism, so a fast double-press adds two. The
+buttons now pass `this` so the confirmation knows where to start; a call with no button falls back
+to the old toast. PROD: same idea after the Cart AJAX add returns; a cart drawer can replace the
+label step later without touching the bean.
+
 ## Files
 
 | File | Change |
@@ -491,4 +523,6 @@ unchanged. `node --check` clean; `theme check` at the documented baseline.
 | `layout/theme.liquid` | (7) the two rates published in `CI_RULES` |
 | `assets/ci-storefront.js` | (7) `renderPdPrice()`, no "From" on detail, rate constants, ribbon count, `gridCounts()` |
 | `assets/ci-storefront.css` | (7) `.pd-sub-note`; ribbon controls to 44px |
+| `assets/ci-storefront.js` | (8) `confirmAdded()`, `flyBean()`, `bumpCart()`; buttons pass `this` |
+| `assets/ci-storefront.css` | (8) `.ci-bean`, `.ci-bean-fly`, `.ci-cart-bump` |
 | `docs/production_build_spec.md` | temp-asset row updated (1b) |
