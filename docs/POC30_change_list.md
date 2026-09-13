@@ -208,6 +208,35 @@ photograph of a single sealed roaster bag with three short captions anchored to 
 literally a how-it-works in one image, merging this item with photography slot 3. Needs a real
 bag, so it waits on a signed roaster.
 
+## 3. The founder story, revised (Steve's copy, refined together)
+
+Not a review item by number - the review's only note on this section was "over-long founder
+bio (keep the charm, halve it)" - but Steve reworked it while the hero was fresh. His draft added
+three things and grew the section from 115 to ~140 words; the refinement kept all three and
+paid for most of it: **115 -> 133 words**, measured from the rendered page, not estimated.
+
+**Kept from Steve's draft:** the cupboard contrast - *The "Italian espresso" in my cupboard
+didn't come close* - which is the style-versus-place thesis as a personal beat, no argument
+needed (his "My 'Italian Espresso' stock didn't compare" re-phrased: "stock" read as inventory,
+the scare quotes read as sarcasm); *roasters whose craft is entirely their own* (his "who with
+individual creativity define quality", the same idea in speakable order); and *Just Italy,
+roasted into a bean.*, the best new line, verbatim but for a comma.
+
+**Declined, with reasons:** *"No American hype."* - the primary buyer is an American Italophile
+and the company is in Florida; it is the one sentence on the page that pushes the reader away,
+and "no hype" is itself a claim. The **decaf** was restored - it had been dropped, and it is the
+best specific in the story (even the decaf was that good; the 2026-07-10 note calls this the
+founder/decaf origin story). The **34g yield** and *un caffè double* went - the 17g dose is the
+fluent enthusiast wink POC15 kept metric on purpose, and adding the yield turns a wink into a
+recipe (and the word would be *doppio*). *"I hope you find your coffee beans here"* reverted to
+*"I hope you find it here"*, which carries two meanings, the coffee and the memory. Two
+mechanical fixes: "On trip home from Tuscany" was missing a word, and a parting gift is given on
+leaving, so *As I left Tuscany, a friend handed me a parting gift.*
+
+**Copy rules checked:** no em-dashes, no exclamation marks, none of the banned register; the
+quotation marks are `&ldquo;`/`&rdquo;` entities to match the file's `&rsquo;` convention, and
+*un caffè* keeps its `.ita` span.
+
 ## Files
 
 | File | Change |
@@ -222,4 +251,5 @@ bag, so it waits on a signed roaster.
 | `assets/ci-temp-lp1.jpg` | **deleted** (1b) |
 | `templates/index.liquid` | (2) `.hiw` three-beat band replaces the claim + subhead |
 | `assets/ci-storefront.css` | (2) `.hiw` rules; dead `.hero h1` / `.subhead` / `h1-break` rules and comments swept |
+| `templates/index.liquid` | (3) founder story, two paragraphs |
 | `docs/production_build_spec.md` | temp-asset row updated (1b) |
