@@ -214,6 +214,8 @@
     freshnessWindowDays: {{ fresh_days | json }},
     offertaFreshDays:    {{ offerta_days | json }},
     benefitGraceDays:    {{ settings.benefit_grace_days | default: 60 | json }},
+    subscriberRatePct:   {{ settings.subscriber_rate_pct | default: 10 | json }},
+    founderRatePct:      {{ settings.founder_rate_pct | default: 12 | json }},
     freshFloorLabel:     {{ floor_ts       | date: '%d-%b-%Y' | upcase | json }},
     offertaOldestLabel:  {{ offerta_old_ts | date: '%d-%b-%Y' | upcase | json }},
     offertaNewestLabel:  {{ offerta_new_ts | date: '%d-%b-%Y' | upcase | json }}

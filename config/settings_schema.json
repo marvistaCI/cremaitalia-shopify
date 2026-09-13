@@ -41,6 +41,20 @@
       },
       {
         "type": "number",
+        "id": "subscriber_rate_pct",
+        "label": "Subscriber discount (%)",
+        "info": "Store Operating Standards section 3. The standing benefit on every coffee for a customer holding an active subscription. In production this is the Loop selling plan's price adjustment; the theme reads it here so the product page can show the subscription price before checkout (the plan's adjustment leaves no discount line on the order - build spec section 5.2.2).",
+        "default": 10
+      },
+      {
+        "type": "number",
+        "id": "founder_rate_pct",
+        "label": "Founding Member discount (%)",
+        "info": "Store Operating Standards section 4. The standing benefit for the first founding_member_cap subscribers, for life. Replaces the subscriber rate, never adds to it (section 3, MAX).",
+        "default": 12
+      },
+      {
+        "type": "number",
         "id": "benefit_grace_days",
         "label": "Benefit grace period (days)",
         "info": "Store Operating Standards section 4. How long subscriber and founder benefits continue after cancelling. NOT the freshness window - the two shared the value 60 until 2026-08-21, when freshness moved to 90 and this did not. That divergence is why they are separate settings.",

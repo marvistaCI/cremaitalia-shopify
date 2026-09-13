@@ -409,6 +409,49 @@ surface accessories at the point of need - was already met by the grinder note u
 else moved. Cross-references swept, both renders regenerated with gates at exit 0, v1.20 archived,
 delivered to OneDrive and md5-verified.
 
+## 7. Three interaction fixes from the review's Missing list - and one it got half wrong
+
+Steve asked for the four interaction findings to be surfaced in sequence with a verdict on each.
+**Each was driven on the live page before the verdict**, because this project has caught the
+reviewer overstating before (POC11: three findings inflated). Three confirmed and built here; the
+fourth (add-to-cart feedback) is item 8.
+
+**Exact price on the product page (review Missing #7) - confirmed, one line.** The page opened
+reading *From $38.00 /250 g* with the 250 g pill already selected, and `selectSize()` had always
+dropped the "From" on the first click, which is how the open state and the clicked state came to
+disagree. The detail page never says "From" now; cards keep it, since no size is chosen there.
+
+**Live subscription price (review Missing #5) - confirmed.** Ticking *Make this a subscription*
+revealed the cadence pills and left the price at $38.00 while the copy beside the box promised 10%
+off every shipment. The price line now renders from one function, `renderPdPrice()`, from the
+selected size and the toggle together: the base price struck through (the `.po` style Offerta
+already uses), the subscription price beside it, *with your subscription* after. The rate is the
+standing subscriber rate, or the founder rate for a signed-in Founding Member, because that is what
+the cart will apply. **Why the theme must do this at all:** platform test A3 proved the selling
+plan's adjustment leaves no discount line on the Shopify order, so if the storefront does not show
+the benefit the customer never sees it anywhere. **Fixed in the same pass:** the 10% and 12% were
+bare literals in the cart math - the same build-spec §11 breach as the $8.50 flat rate was in
+POC28 - and are now theme settings (`subscriber_rate_pct`, `founder_rate_pct`), published through
+`CI_RULES`, read by the cart and the product page from named constants. The many "10% off" strings
+in copy are copy, and are not templated here.
+
+**Quiz exit clarity (review Missing #8) - confirmed, and worse than stated.** After the quiz the
+Shop page showed **4 of 12** coffees under the heading *Shop all our Coffee*, the eyebrow *All
+shelves*, and the note *Every coffee we carry.* - three statements saying everything above a grid
+showing a third of it. The only counter-signal was a 12px ribbon sentence and a *Show all* button
+measuring **79x28**, which also failed this project's own 44px target rule (POC7, POC24). Now the
+ribbon states the count from the grid actually on screen - *Showing 4 of 12 coffees that match your
+taste profile.* - and *all 12 coffees are shown* when the filter is off; the Shop note under the
+pills reads *Your best matches, across every shelf.* while the filter is on; and the toggle (and the
+*Save to my account* button beside it) grew to 44px by the POC24 mechanism, min-height plus an equal
+negative margin, so the ribbon does not grow with them.
+
+**Verified by driving:** product page opens at *$38.00 /250 g (8.82 oz)*; toggling subscription
+renders *~~$38.00~~ $34.20 /250 g (8.82 oz) with your subscription*, off again restores it, and
+changing size keeps whichever state is set; after a light-and-fruit quiz the ribbon reads the count
+and the Shop note acknowledges the filter; the toggle measures 44px tall with the ribbon height
+unchanged. `node --check` clean; `theme check` at the documented baseline.
+
 ## Files
 
 | File | Change |
@@ -444,4 +487,8 @@ delivered to OneDrive and md5-verified.
 | `assets/ci-storefront.js` | (6) badge, grinder link, account copy, navKey |
 | `assets/ci-storefront.css` | (6) home grid back to 2x2 |
 | Standard + cross-refs + archive README | (6) **v1.21** |
+| `config/settings_schema.json` | (7) `subscriber_rate_pct`, `founder_rate_pct` |
+| `layout/theme.liquid` | (7) the two rates published in `CI_RULES` |
+| `assets/ci-storefront.js` | (7) `renderPdPrice()`, no "From" on detail, rate constants, ribbon count, `gridCounts()` |
+| `assets/ci-storefront.css` | (7) `.pd-sub-note`; ribbon controls to 44px |
 | `docs/production_build_spec.md` | temp-asset row updated (1b) |

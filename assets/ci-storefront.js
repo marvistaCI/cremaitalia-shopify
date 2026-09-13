@@ -548,6 +548,12 @@
   var FRESHNESS_DAYS  = RULES.freshnessWindowDays || 60;
   var GRACE_DAYS      = RULES.benefitGraceDays    || 60;
   var OFFERTA_DAYS    = RULES.offertaFreshDays    || 150;
+  // POC30 item 7: the subscriber and founder rates were bare literals (0.10 / 0.12) in the cart
+  // math - the same build-spec section 11 breach as the $8.50 flat rate was in POC28. Now theme
+  // settings, published through CI_RULES, read by the cart AND by the product page's live
+  // subscription price. Percent in the setting, fraction here.
+  var SUBSCRIBER_RATE = (RULES.subscriberRatePct || 10) / 100;
+  var FOUNDER_RATE    = (RULES.founderRatePct    || 12) / 100;
   // Computed SERVER-SIDE in layout/theme.liquid - see the comment there for why it is not
   // computed here from the browser clock.
   var FRESH_FLOOR     = RULES.freshFloorLabel     || '';
@@ -805,7 +811,11 @@
 
     var priceHtml = p.shelf === 'offerta' && sizes[0].original
       ? '<p class="pd-price" id="pd-price"><span class="po">' + money(sizes[0].original) + '</span>' + money(sizes[0].price) + '</p>'
-      : '<p class="pd-price" id="pd-price">' + (sizes.length > 1 ? 'From ' : '') + money(sizes[0].price) + ' <span class="cpu">/' + esc(sizeDual(sizes[0].size)) + '</span></p>';
+      // POC30 item 7 (review: "exact price on product page"): no "From" here. The first size pill
+      // is already selected on open, so the price IS the price; "From" belongs on cards, where no
+      // size has been chosen. selectSize() had always dropped it on the first click, which is how
+      // the open state and the clicked state came to disagree.
+      : '<p class="pd-price" id="pd-price">' + money(sizes[0].price) + ' <span class="cpu">/' + esc(sizeDual(sizes[0].size)) + '</span></p>';
 
     // Roccia subscription toggle (binds to selling_plan_groups in production — LOOP)
     var subBlock = '';
@@ -888,18 +898,43 @@
   }
 
   // size / cadence / sub interactions on product detail
+  // POC30 item 7 (review: "live subscription price"): the price line is rendered from ONE place,
+  // from the selected size AND the subscription toggle, so ticking the box shows the number the
+  // copy beside it promises. Base price struck through (the .po style Offerta already uses), the
+  // subscription price beside it, "with your subscription" after. The rate is the standing
+  // subscriber rate - or the founder rate for a signed-in Founding Member, since that is what the
+  // cart will apply (Standard section 3: the higher, never both).
+  // Why the theme must do this at all: platform test A3 proved the selling plan's adjustment leaves
+  // NO discount line on the Shopify order (build spec section 5.2.2), so if the storefront does not
+  // show the benefit, the customer never sees it anywhere.
+  // PROD: the struck base is variant.price and the subscription price is the selling plan's
+  // price_adjustments - render from the plan, never from the rate setting.
+  function renderPdPrice() {
+    var sizeEl = document.querySelector('#pd-sizes .pill.active');
+    var pd = $('pd-price');
+    if (!sizeEl || !pd) return;
+    var base = parseFloat(sizeEl.getAttribute('data-price'));
+    var unit = ' <span class="cpu">/' + esc(sizeDual(sizeEl.getAttribute('data-size'))) + '</span>';
+    var subEl = $('pd-sub');
+    if (subEl && subEl.checked) {
+      var rate = (session.signedIn && session.foundingMember) ? FOUNDER_RATE : SUBSCRIBER_RATE;
+      pd.innerHTML = '<span class="po">' + money(base) + '</span>' + money(base * (1 - rate)) + unit +
+        ' <span class="pd-sub-note">with your subscription</span>';
+    } else {
+      pd.innerHTML = money(base) + unit;
+    }
+  }
   window.selectSize = function (el) {
     var wrap = el.closest('.filter-pills');
     var pills = wrap.querySelectorAll('.pill');
     for (var i = 0; i < pills.length; i++) pills[i].classList.remove('active');
     el.classList.add('active');
-    var price = el.getAttribute('data-price');
-    var pd = $('pd-price');
-    if (pd) pd.innerHTML = money(price) + ' <span class="cpu">/' + esc(sizeDual(el.getAttribute('data-size'))) + '</span>';
+    renderPdPrice();
   };
   window.toggleSub = function (cb) {
     var c = $('pd-cadence');
     if (c) c.classList.toggle('show', cb.checked);
+    renderPdPrice();
   };
   window.selectCadence = function (el) {
     var pills = el.closest('.filter-pills').querySelectorAll('.pill');
@@ -940,7 +975,9 @@
   // keeping a second copy is what stops them drifting again.
   // textContent, NOT innerText - shelf pages are display:none and innerText returns "".
   function shelfNote(val) {
-    if (val === 'all') return 'Every coffee we carry.';
+    // POC30 item 7: while the taste filter is on, "Every coffee we carry." under the pills was a
+    // third statement on the Shop page saying "everything" above a grid showing a third of it.
+    if (val === 'all') return filterOn ? 'Your best matches, across every shelf.' : 'Every coffee we carry.';
     var sub = document.querySelector('#page-' + val + ' .sub');
     return sub ? sub.textContent.trim() : '';
   }
@@ -1017,6 +1054,16 @@
   // and only when a profile exists. renderRibbon() paints its state; updateRibbon()
   // decides whether it shows on the current page.
   var SHOP_PAGES = ['shop', 'roccia', 'sorpresa', 'selezione', 'offerta'];
+  // Visible / total product cards in whichever grid the current page shows. null off-grid.
+  function gridCounts() {
+    var gridId = navCurrent === 'shop' ? 'shop-grid' : (SHOP_PAGES.indexOf(navCurrent) !== -1 ? 'grid-' + navCurrent : null);
+    if (!gridId) return null;
+    var cards = document.querySelectorAll('#' + gridId + ' .product-card');
+    if (!cards.length) return null;
+    var visible = 0;
+    for (var i = 0; i < cards.length; i++) if (cards[i].style.display !== 'none') visible++;
+    return { visible: visible, total: cards.length };
+  }
   function renderRibbon() {
     var r = $('taste-ribbon'); if (!r) return;
     r.classList.toggle('is-active', filterOn);
@@ -1027,9 +1074,17 @@
     // A real <button>, not styled text - same reason the About "Bio" tell is one.
     var edit = '<button type="button" class="tr-edit-link" onclick="openTasteConsole()"'
       + ' aria-label="Edit your taste profile">profile</button>';
+    // POC30 item 7 (review: "quiz exit clarity"): a first-time visitor who has just taken the quiz
+    // lands on a Shop page whose heading says "all our Coffee" above a grid showing four of twelve,
+    // and could take the four for the whole store. The honest signal is the COUNT, read from the
+    // grid actually on screen (Shop, or the shelf page) after the filter has been applied.
+    var counts = gridCounts();
     if (s) s.innerHTML = filterOn
-      ? 'Your taste ' + edit + ' is active - shelves are filtered.'
-      : 'Your ' + edit + ' is not active - all items are shown.';
+      ? (counts ? 'Showing ' + counts.visible + ' of ' + counts.total + ' coffees that match your taste ' + edit + '.'
+                : 'Your taste ' + edit + ' is active - shelves are filtered.')
+      : 'Your ' + edit + ' is not active - all ' + (counts ? counts.total + ' coffees are' : 'items are') + ' shown.';
+    // The Shop note under the shelf pills says the same thing in its own place (shelfNote()).
+    if (navCurrent === 'shop' && activeShelf === 'all') { var sn = $('shelf-note'); if (sn) sn.textContent = shelfNote('all'); }
     if (tb) tb.textContent = filterOn ? 'Show all' : 'Apply profile';
     if (tg) { tg.innerHTML = tasteTagsHtml(activeTaste); tg.classList.toggle('muted', !filterOn); }
     // The account ask, offered only to a signed-out visitor and only once a profile exists.
@@ -1460,7 +1515,7 @@
     var subtotal = cart.reduce(function (s, it) { return s + it.price * (it.qty || 1); }, 0);
     var discount = 0, discountLabel = '';
     if (session.signedIn) {
-      var subRate = session.subscriber ? (session.foundingMember ? 0.12 : 0.10) : 0;
+      var subRate = session.subscriber ? (session.foundingMember ? FOUNDER_RATE : SUBSCRIBER_RATE) : 0;
       var appliedRates = {};
       cart.forEach(function (it) {
         var lineTotal = it.price * (it.qty || 1);
