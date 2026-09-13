@@ -309,6 +309,30 @@
     <div class="callout" style="margin-top:1.75rem"><strong>Your first purchase is our introduction.</strong> You may already know the roaster by reputation and are ready to subscribe. If not, try a Surprise Sampler - we&rsquo;ll introduce you to a roaster you&rsquo;ll fall in love with, and hope that a subscription will soon follow.</div>
     <div class="hero-btns" style="margin-top:1.25rem"><button class="btn btn-primary" onclick="showPage('sorpresa')">Begin with a Surprise Sampler</button></div>
 
+    {%- comment -%}
+      POC30 item 9 (2026-09-12): the Founding Member offer on the home page. The review called it
+      the best launch lever and it lived only on the Subscriptions page, the FAQ and the account.
+      GATED, not static: it renders only while places remain (founding_members_taken below
+      founding_member_cap), so it retires itself the day the 222nd subscriber lands - Steve's
+      objection to a home section was that a filled cap means redrawing the page; a condition on a
+      live count means it never has to be. Steve first proposed a timed push panel for the same
+      reason; declined on the brand's own 2026-07-10 decision (the quiz auto-launch was removed as
+      a gimmick), on the research the review itself cites (timed interstitials rank as the most
+      disliked pattern and Google counts them against mobile pages), and because time on page
+      measures nothing about the reader. The gate is the good half of that idea, kept.
+      COPY: the cap is stated; nothing counts down (POC11 removed "172 of 222 remain" as
+      manufactured urgency). Every number is a setting (build spec section 11), never typed.
+      PROD: same Liquid condition on a live count - founder selling-plan contracts (Loop) or a
+      metaobject counter Flow increments - and the numbers from the same settings. The cap itself
+      is enforced at order time; this gate is advisory, so a race at the boundary is harmless.
+    {%- endcomment -%}
+    {%- if settings.founding_members_taken < settings.founding_member_cap -%}
+    <div class="founding-band" id="sec-founding">
+      <p class="eyebrow">Founding Members</p>
+      <p>The first {{ settings.founding_member_cap }} subscribers receive <strong>{{ settings.founder_rate_pct | default: 12 }}% off every coffee, for life</strong>, instead of {{ settings.subscriber_rate_pct | default: 10 }}%. Founding Membership is limited to {{ settings.founding_member_cap }} and does not reopen. <button class="inline-link" onclick="showPage('roccia')">Start a subscription</button></p>
+    </div>
+    {%- endif -%}
+
     <!-- Promise -->
     <div class="section-head" id="sec-promise"><p class="eyebrow">The Crema Italia Promise</p><h2>We deliver on these promises.</h2></div>
     <ul class="promise-list">
@@ -368,7 +392,7 @@
   </div></div>
   <main class="ci-main">
     <div class="callout">Your subscriber benefit is <strong>10% off every coffee</strong> - on your subscription shipments, and on anything else you order from our three shelves. <strong>Accessories are priced as-is and never discounted.</strong></div>
-    <div class="founding-banner"><strong>Founding Members</strong> - the first {{ settings.founding_member_cap }} subscribers receive 12% instead of 10%. Founding Membership is limited to {{ settings.founding_member_cap }} and does not reopen.</div>
+    <div class="founding-banner"><strong>Founding Members</strong> - the first {{ settings.founding_member_cap }} subscribers receive {{ settings.founder_rate_pct | default: 12 }}% instead of {{ settings.subscriber_rate_pct | default: 10 }}%. Founding Membership is limited to {{ settings.founding_member_cap }} and does not reopen.</div>
     <div class="section-head"><p class="eyebrow">Available now · Toscana</p><h2>Subscription coffees</h2></div>
     <div class="card-grid" id="grid-roccia"></div>
     <div class="afd">Fresh coffee arrives from Italy about every six weeks. If we are short on your coffee when your order comes due, we will tell you before it ships and let you choose: wait for the new arrival, or let us substitute something close from the same shelf. Either way, never at extra cost.</div>

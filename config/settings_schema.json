@@ -41,6 +41,13 @@
       },
       {
         "type": "number",
+        "id": "founding_members_taken",
+        "label": "Founding Member places taken (POC testing aid)",
+        "info": "How many of the founding_member_cap places are filled. The home page's Founding Members band renders only while this is BELOW the cap, so the offer retires itself the day the cap fills - no redraw, no deploy. In the POC this is a number you type to test both sides of the gate. PRODUCTION: this is NOT a setting - it is a live count (founder selling-plan contracts, or a metaobject counter incremented by Flow) read by the same condition.",
+        "default": 0
+      },
+      {
+        "type": "number",
         "id": "subscriber_rate_pct",
         "label": "Subscriber discount (%)",
         "info": "Store Operating Standards section 3. The standing benefit on every coffee for a customer holding an active subscription. In production this is the Loop selling plan's price adjustment; the theme reads it here so the product page can show the subscription price before checkout (the plan's adjustment leaves no discount line on the order - build spec section 5.2.2).",

@@ -636,6 +636,15 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 /* ---- founding-member reverse banner ---- */
 .founding-banner{background:var(--ci-coffee);color:var(--ci-cream);border-radius:var(--ci-radius);padding:.9rem 1.25rem;margin:1.25rem 0;font-size:.9rem;line-height:1.5;border-top:2px solid var(--ci-crema)}
 .founding-banner strong{color:var(--ci-crema-light)}
+/* POC30 item 9: the home Founding Members band. Same Espresso ground and gold rule as the
+   Subscriptions-page banner, sized as a section rather than a note: eyebrow in crema-light
+   (the dark-ground text token, POC23), body in cream, one inline link. Quiet by design - the
+   cap is the fact, the reader draws the conclusion. */
+.founding-band{background:var(--ci-coffee);color:var(--ci-cream);border-radius:var(--ci-radius);border-top:2px solid var(--ci-crema);padding:1.4rem 1.5rem;margin:2.25rem 0 0;max-width:72ch}
+.founding-band .eyebrow{color:var(--ci-crema-light);margin-bottom:.4rem}
+.founding-band p:last-child{margin:0;font-size:1rem;line-height:1.55}
+.founding-band strong{color:var(--ci-crema-light);font-weight:600}
+.founding-band .inline-link{color:var(--ci-crema-light);white-space:nowrap}
 
 /* ---- flavor descriptor (info only, shown under selected flavor) ---- */
 .flavor-desc{display:none;font-size:.8rem;color:var(--ci-espresso);margin-top:.5rem;max-width:46ch}

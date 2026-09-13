@@ -495,6 +495,46 @@ after it added again); phone from the Bottega detail button to the quick-action 
 bumped, badge updated, nothing left in the DOM, no overflow). PROD: same idea after the Cart AJAX
 add returns; a cart drawer can replace the label step later without touching the bean.
 
+## 9. The Founding Member offer on the home page - gated on a live count, not a timer
+
+**The finding (review, Missing #10):** *"Founding Member offer (first 222 subscribers, 12% for
+life) surfaced on home + cart; currently buried in FAQ; it's the best launch lever."* It lived on
+the Subscriptions page, in the FAQ and on the account page - nothing on home.
+
+**Steve's counter-proposal, and what survived of it.** He proposed a **timed push panel** rather
+than a home section, on a real objection: a static section has to be redrawn the day the 222nd
+subscriber lands, whereas a push can be gated on the founder count. **The gate is right and the
+delivery was argued against**, on three grounds: the brand's own 2026-07-10 decision (the quiz
+auto-launch was removed as a gimmick, in Steve's words *"we don't PUSH the quiz as a start-up
+device, which can be irritating"*); the research the review itself cites (timed interstitials rank
+as the most disliked pattern in Nielsen Norman Group's annoyance rankings, cost trust with the
+older affluent buyer in Baymard's work, and count against a page on mobile in Google's ranking);
+and *"some number of seconds"* has no right answer, which is the tell - time on page measures
+nothing about the reader. **Built as the gated band: it renders only while
+`founding_members_taken` is below `founding_member_cap`**, so it retires itself with no redraw and
+no deploy. Same mechanism as the freshness floor - derived from state, true by construction.
+Steve chose this (option 1); the intent-triggered cart notice (option 2) is not built.
+
+**Where and what.** Between the shelves' Surprise Sampler CTA and the Promise: an Espresso band
+with a gold top rule, eyebrow *Founding Members*, one paragraph - *The first 222 subscribers
+receive 12% off every coffee, for life, instead of 10%. Founding Membership is limited to 222 and
+does not reopen.* - and an inline *Start a subscription* link. **Every number is a setting**: the
+cap, the founder rate and the subscriber rate (the last two added in item 7). The cap is stated;
+nothing counts down - POC11 removed "172 of 222 remain" as manufactured urgency and this stays on
+that side of the line. **Fixed in the same pass:** the Subscriptions-page banner had "12% instead
+of 10%" as literals beside a templated cap; it now reads the same two settings.
+
+**The count.** `founding_members_taken` is a new theme setting labelled as a **POC testing aid**:
+type a number to test both sides of the gate. In production it is not a setting - it is a live
+count, founder selling-plan contracts in Loop or a metaobject counter Flow increments, read by the
+same Liquid condition; the cap itself is enforced at order time, so the storefront gate is advisory
+and a race at the boundary is harmless. Recorded at the markup site and in the setting's own info.
+
+**Verified:** the band renders with the default (0 taken) and the numbers resolve from settings;
+setting `founding_members_taken` to the cap in `settings_data.json` removes the band from the
+rendered page with no other change, and restoring it brings the band back. `theme check` at the
+documented baseline.
+
 ## Files
 
 | File | Change |
@@ -536,4 +576,7 @@ add returns; a cart drawer can replace the label step later without touching the
 | `assets/ci-storefront.css` | (7) `.pd-sub-note`; ribbon controls to 44px |
 | `assets/ci-storefront.js` | (8) `confirmAdded()`, `flyBean()`, `bumpCart()`; buttons pass `this` |
 | `assets/ci-storefront.css` | (8) `.ci-bean`, `.ci-bean-fly`, `.ci-cart-bump` |
+| `config/settings_schema.json` | (9) `founding_members_taken` (testing aid) |
+| `templates/index.liquid` | (9) gated Founding Members band on home; Subscriptions banner rates from settings |
+| `assets/ci-storefront.css` | (9) `.founding-band` |
 | `docs/production_build_spec.md` | temp-asset row updated (1b) |
