@@ -1556,6 +1556,25 @@ model above assumes the roaster prints a roast date or lot code on the bag. **Co
 at onboarding**, alongside the other roaster-facing questions. If one does not print it, that is worth
 knowing before the first container, not during a recall.
 
+#### Offerta is invitation-only, not a public shelf (Steve, 2026-09-12 - POC30 item 4)
+
+Offerta is **hidden**. Three coffee shelves are public; Offerta is a channel reached only through an
+email invitation. Why: every piece of research the B2C review drew on says a visible markdown shelf
+teaches customers to wait for the markdown. Offerta remains a last resort to move product and is
+sold as what it also is - the roaster's coffee, the same quality, with less of it left - never as
+"last chance" or "markdown", never with a countdown.
+
+**Production mechanism:** an **unlisted collection**. Not in any menu. The collection **and every
+product in it** carry Shopify's `seo.hidden` metafield (drops them from the sitemap and site search
+and adds `noindex`); the products are excluded from every public collection by tag; the email
+platform carries the collection URL. A signed, expiring link needs a backend and is a later option -
+the price sits on the product itself and no code is involved (Standard §3), so a forwarded link costs
+nothing the recipient could not get by being on the list. **This is the same mechanism a wholesale
+page will use**, plus a customer-tag gate on top. In the POC the entry is `?offer=<anything>` on any
+URL (`initOfferEntry()` in `ci-storefront.js`), and Offerta products are filtered out of every public
+render by `isPublic()`. Back from an Offerta product returns to the page; leaving by navigation drops
+it; nothing is stored.
+
 #### Offerta stops being a markdown you type
 
 Moving a SKU's aged stock to Offerta changes which markup applies, and the price falls out of

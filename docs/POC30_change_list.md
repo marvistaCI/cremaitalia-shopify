@@ -261,6 +261,60 @@ leaving, so *As I left Tuscany, a friend handed me a parting gift.*
 quotation marks are `&ldquo;`/`&rdquo;` entities to match the file's `&rsquo;` convention, and
 *un caffè* keeps its `.ita` span.
 
+## 4. Offerta hidden - three public shelves, one invitation-only channel
+
+**Steve's decision (2026-09-12):** *"All research indicates that providing a page like this may
+encourage consumers to wait for the discount."* Offerta stays as a channel - coffee leaving the
+freshness window is offered by **email** - but it leaves public view entirely. Sold as *"an
+opportunity to get great quality while diminishing supply is the enemy"*, never as the last-ditch
+effort it also is. The same mechanism a wholesale page will use, only presented to high-volume
+customers. The review's Q&A had already recorded Steve's intent to drop the gated lifecycle and
+Offerta from public view; this is that, built.
+
+**The mechanism.** The page block stays; every entry point goes. The only way in is a URL carrying
+`?offer=<anything>` (`initOfferEntry()` in `ci-storefront.js`), which opens the page on load and
+stores nothing - leave by any navigation and it is gone; reload without the parameter and it is
+gone. **Back from an Offerta product returns to the page** (Steve accepted the distinction: leaving
+by navigation drops it, Back within the visit keeps it; otherwise the offer could not be browsed).
+While the page is open a `robots: noindex, nofollow` meta is added - a gesture on a one-URL SPA; the
+production mechanism is an **unlisted collection with `seo.hidden` on the collection and each
+product**, written into `production_build_spec.md` under the Offerta section. **Test route:** any
+preview URL plus `?offer=test`, e.g. `http://127.0.0.1:9292/?offer=test`. The parameter's value is
+not validated; a signed, expiring link is a later option and the reasons are at the markup site.
+
+**Removed from public view:** the Shop dropdown item, the Shop shelf pill, the home shelf card (the
+home grid goes from a 2x2 to a row of three; stacks under 900px), the Promise page's "Offerta is
+different - sold as-is" block (the guarantee is now stated once, on the invitation page - a public
+Promise page must not describe a shelf the public cannot see), and every mention in the FAQ,
+the Shop callout and the account copy. **"Four coffee shelves" became three** in the home section
+head and its intro, the Shop-hero comment and the Bottega product note.
+
+**Excluded from every public render by construction:** a new `isPublic()` predicate beside
+`isCoffee()`, applied to the Shop grid (which the quiz's "Show my matches" filters) and the roaster
+page - which makes the Offerta page's own claim, *"an Offerta coffee never appears on its
+roaster's own page"*, true by code rather than by the fixture happening to have no roaster match.
+Shelf pages render by shelf and never included it. `showPage('offerta')` no longer lights the Shop
+nav item.
+
+**The page's copy, reframed in Steve's terms.** Eyebrow *By invitation*; sub *Great coffee, while
+it lasts.*; body: *This is the coffee we sell on our shelves, from the same roasters, bought the
+same way. It is nearer the end of our freshness window than we usually sell it, and it is priced
+for the time it has left. The quality is the roaster's. The supply is what is running out. You see
+the roast-date band before you buy.* The markdown vocabulary went: "Limited Time and Inventory",
+"last-chance", "priced down honestly", "on sale while inventory lasts". A callout says plainly that
+the page is not in navigation and the email link brings you back. The struck-through original
+price and the roast-date band stay - they are the honest facts. The card badge reads *Offerta · By
+invitation*. Subscriber and Founding discounts are stated as not applying here, which is Standard
+§3 unchanged.
+
+**Upstream, not yet done in this commit:** Store Operating Standards §1 (four coffee shelves),
+§5 (the Offerta listing and transition) and the FAQ text §5 quotes verbatim all describe a public
+shelf. That is a Standard change and goes through `crema-std-publish` as the next step, and it
+belongs in `DECISIONS_LOG.md` (Cowork's lane - flagged to Steve). The Promise page's no-waste pledge
+sentence, *"We do not discount our way out of waste; we give it away"*, sits oddly beside a
+discounted channel and always did; it is untouched here and is part of the review's freshness-
+lifecycle item, not this one.
+
 ## Files
 
 | File | Change |
@@ -277,4 +331,9 @@ quotation marks are `&ldquo;`/`&rdquo;` entities to match the file's `&rsquo;` c
 | `assets/ci-storefront.css` | (2) `.hiw` rules; dead `.hero h1` / `.subhead` / `h1-break` rules and comments swept |
 | `templates/index.liquid` | (2b) "Our model" trimmed and rewritten |
 | `templates/index.liquid` | (3) founder story, two paragraphs |
+| `templates/index.liquid` | (4) Offerta hidden and reframed; three shelves; Promise/FAQ/callout edits |
+| `snippets/ci-header.liquid` | (4) Offerta dropdown item removed |
+| `assets/ci-storefront.js` | (4) `isPublic()`, `initOfferEntry()`, grid/roaster exclusions, copy |
+| `assets/ci-storefront.css` | (4) home shelf grid 2x2 -> row of three |
+| `docs/production_build_spec.md` | (4) Offerta invitation-only mechanism |
 | `docs/production_build_spec.md` | temp-asset row updated (1b) |

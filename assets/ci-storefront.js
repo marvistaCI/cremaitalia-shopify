@@ -111,7 +111,7 @@
     // 2026-08-06) - it would swamp the coffee's own name on the tile.
     sorpresa:  { cls: 'ss', tag: 'Sorpresa · Discovery',   shelfTag: 'Sorpresa' },
     selezione: { cls: 'sl', tag: 'Selezione · Premium',    shelfTag: 'Selezione' },
-    offerta:   { cls: 'so', tag: 'Offerta · Opportunity',  shelfTag: 'Offerta' },
+    offerta:   { cls: 'so', tag: 'Offerta · By invitation', shelfTag: 'Offerta' },
     bottega:   { cls: 'sb', tag: 'Bottega',                shelfTag: 'Bottega' }
   };
 
@@ -264,6 +264,12 @@
   // which is the problem change 1 removed. PROD: Shopify's native `product.type`
   // (Coffee / Equipment / Merch) is the home for this - it needs no custom metafield.
   function isCoffee(p) { return !!p && p.shelf !== 'bottega'; }
+  // POC30 item 4: Offerta is hidden - invitation-only via ?offer= (initOfferEntry). Its products
+  // must never surface on a PUBLIC grid, in quiz matches, in region counts or on a roaster page,
+  // or the hidden page is not hidden. Every public catalogue render goes through this; the
+  // Offerta page's own grid is the one place that does not. PROD: products excluded from every
+  // public collection by tag, and seo.hidden on collection + products (see the OFFERTA block).
+  function isPublic(p) { return !!p && p.shelf !== 'offerta'; }
 
   function priceFrom(p) { return p.sizes && p.sizes.length ? p.sizes[0].price : 0; }
   function sizesLine(p) {
@@ -379,7 +385,7 @@
   function renderAll() {
     if ($('roaster-list')) $('roaster-list').innerHTML = CATALOG.roasters.map(roasterRow).join('');
     if ($('shop-grid')) $('shop-grid').innerHTML = CATALOG.products
-      .filter(isCoffee).map(productCard).join('');   // the Shop grid is the four coffee shelves
+      .filter(function (p) { return isCoffee(p) && isPublic(p); }).map(productCard).join('');   // the Shop grid is the three public coffee shelves
     if ($('grid-roccia')) $('grid-roccia').innerHTML = productsByShelf('roccia').map(productCard).join('');
     if ($('grid-sorpresa')) $('grid-sorpresa').innerHTML = productsByShelf('sorpresa').map(productCard).join('');
     if ($('grid-selezione')) $('grid-selezione').innerHTML = productsByShelf('selezione').map(productCard).join('');
@@ -403,7 +409,8 @@
     var navBtns = document.querySelectorAll('nav button[id^="nav-"]');
     for (var j = 0; j < navBtns.length; j++) navBtns[j].classList.remove('active');
     var navKey = name;
-    if (['roccia', 'sorpresa', 'selezione', 'offerta', 'product', 'cart'].indexOf(name) !== -1) navKey = 'shop';
+    if (['roccia', 'sorpresa', 'selezione', 'product', 'cart'].indexOf(name) !== -1) navKey = 'shop';
+    // 'offerta' deliberately maps to no nav item: it is hidden (POC30 item 4).
     if (name === 'roaster') navKey = 'roasters';
     if (name === 'person') navKey = 'about';
     var nb = $('nav-' + navKey);
@@ -471,7 +478,7 @@
     }
     $('roaster-bio').innerHTML = (r.bio || []).map(function (para) { return '<p>' + esc(para) + '</p>'; }).join('');
     $('roaster-bags-head').textContent = 'Available from ' + r.name.split(' ')[0];
-    // Show this roaster's coffee from all four shelves — including bundle/collection
+    // Show this roaster's coffee from every public shelf — including bundle/collection
     // products that name this roaster via the structured `roasters` array rather
     // than the single `roaster` field. Bottega has no `roaster` field, so it's
     // naturally excluded without a shelf allowlist. See docs/POC_v4_change_list.md
@@ -481,7 +488,7 @@
     // and a roaster-branded tote entered by anyone would have rendered here through the coffee
     // renderer. Review A finding A1.
     var bags = CATALOG.products.filter(function (p) {
-      return isCoffee(p) &&
+      return isCoffee(p) && isPublic(p) &&   // an Offerta coffee never appears on its roaster's page
         (p.roaster === handle || (Array.isArray(p.roasters) && p.roasters.indexOf(handle) !== -1));
     });
     $('roaster-bags').innerHTML = bags.length ? bags.map(productCard).join('') :
@@ -746,7 +753,7 @@
         '<p class="prose" style="max-width:none">' + esc(p.blurb) + '</p>' +
         '<p class="pd-price">' + money(priceFrom(p)) + '</p>' +
         '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="addToCart(\'' + p.handle + '\',\'' + esc(p.sizes[0].size) + '\',false,null)">Add to cart</button>' +
-        '<p class="afd" style="border:none">Bottega items are never subscriber-discounted and are not part of the four coffee shelves.</p>' +
+        '<p class="afd" style="border:none">Bottega items are never subscriber-discounted and are not part of the three coffee shelves.</p>' +
         '</div></div>';
     }
 
@@ -1557,7 +1564,7 @@
           '<span class="badge-founding">Founding Member · No. 087</span>' +
           ((session.subscriber || session.paused)
             ? '<span class="status-chip sc-active">Active</span>' +
-              '<p class="prose" style="margin-top:.75rem">Your Founding rate of <strong>12%</strong> applies automatically across Roccia, Sorpresa, and Selezione. Offerta and Bottega are never discounted.</p></div>'
+              '<p class="prose" style="margin-top:.75rem">Your Founding rate of <strong>12%</strong> applies automatically across Roccia, Sorpresa, and Selezione. Bottega is never discounted.</p></div>'
             : '<span class="status-chip sc-lapsed">Benefits paused</span>' +
               '<p class="prose" style="margin-top:.75rem">No. 087 is yours for good. Your <strong>12%</strong> is active whenever you hold a subscription - resubscribe to reactivate it. After cancelling, your benefits continue for ' + GRACE_DAYS + ' days.</p></div>') +
         '<div class="acct-card"><h3>Taste profile</h3>' +
@@ -1736,7 +1743,25 @@
       renderCart();
       // Catalog-driven grids are built here, so stamp keyboard affordances after them.
       if (window.markKeyboardActivable) window.markKeyboardActivable();
+      initOfferEntry();
     }).catch(function (err) { console.error('Catalog load failed', err); });
+  }
+
+  // POC30 item 4: the ONLY way onto the hidden Offerta page. An email invitation carries a URL
+  // with ?offer=<anything>; on load we open the page and store nothing, so leaving by navigation
+  // drops it and only the link (or knowing the address) brings it back. Back from an Offerta
+  // PRODUCT still returns here via the normal navStack, or the offer could not be browsed.
+  // The parameter's value is not validated - a signed, expiring token needs a backend (PROD note
+  // at the OFFERTA block). While the page is open we also add a robots noindex meta: a gesture
+  // on a one-URL SPA, the real mechanism in production is the seo.hidden metafield.
+  // TESTING: any preview URL + ?offer=test
+  function initOfferEntry() {
+    var q = window.location.search || '';
+    if (!/[?&]offer=/.test(q)) return;
+    var m = document.createElement('meta');
+    m.setAttribute('name', 'robots'); m.setAttribute('content', 'noindex, nofollow');
+    document.head.appendChild(m);
+    showPage('offerta');
   }
 
   // ---------- footer email capture (MOCKED - added 2026-08-18) ----------

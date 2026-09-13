@@ -262,18 +262,25 @@
     </div>
 
     <!-- Quiz offered BEFORE the catalog, not after the Sorpresa CTA (Steve, 2026-08-06). Placed
-         here it reads as help arriving just as four shelves appear; after the CTA it read as a
+         here it reads as help arriving just as the shelves appear; after the CTA it read as a
          fallback for people who had already declined to buy. -->
     <div class="callout" style="margin-top:2rem"><strong>Find a roast to love.</strong> Take our <button class="inline-link" onclick="openQuiz()">three-question quiz</button> and we will show you the coffees that match your taste.</div>
 
     <!-- Shelves -->
-    <div class="section-head" id="sec-shelves"><p class="eyebrow">How the catalog is organized</p><h2>The four coffee shelves.</h2></div>
-    <p class="prose" style="max-width:72ch">One shelf for subscriptions and larger formats (<span class="ita">Roccia</span>), one for discovery and gifting (<span class="ita">Sorpresa</span>), one for rare or seasonal roasts (<span class="ita">Selezione</span>), and one for last-chance lots at an honest markdown (<span class="ita">Offerta</span>).</p>
+    <div class="section-head" id="sec-shelves"><p class="eyebrow">How the catalog is organized</p><h2>The three coffee shelves.</h2></div>
+    {%- comment -%}
+      POC30 item 4 (2026-09-12, Steve): four shelves became THREE in public. Offerta still exists
+      as a channel - coffee that leaves the freshness window is offered by EMAIL, and the email
+      link is the only way onto its page (see the OFFERTA block below and initOfferEntry() in
+      ci-storefront.js). It has no card here, no pill on Shop, no nav item, no footer link, and
+      its products are excluded from every public grid. Why: a visible markdown shelf teaches
+      customers to wait for the markdown. Same mechanism a wholesale page will use.
+    {%- endcomment -%}
+    <p class="prose" style="max-width:72ch">One shelf for subscriptions and larger formats (<span class="ita">Roccia</span>), one for discovery and gifting (<span class="ita">Sorpresa</span>), and one for rare or seasonal roasts (<span class="ita">Selezione</span>).</p>
     <div class="card-grid">
       <div class="shelf-card" onclick="showPage('roccia')"><h3>Roccia</h3><div class="ss2">The Rock · Subscription (and one-time ordering)</div><p>Your preferred coffee, size, and cadence. Subscribe for free shipping and a 10% discount.</p></div>
       <div class="shelf-card" onclick="showPage('sorpresa')"><h3>Sorpresa</h3><div class="ss2">The Surprise · Curated Discovery</div><p>Our curated collections of roasted delights. On-demand 100 g (3.53 oz) collections - the best way to find your favorite roast subscription.</p></div>
       <div class="shelf-card" onclick="showPage('selezione')"><h3>Selezione</h3><div class="ss2">The Selection · Premium &amp; Seasonal</div><p>Roasters' premium and seasonal offerings. Micro-lots and limited imports. When a product sells out, it may not return - once it's gone, it's gone.</p></div>
-      <div class="shelf-card" onclick="showPage('offerta')"><h3>Offerta</h3><div class="ss2">The Offer · Limited Time and Inventory</div><p>Limited-time offers, on sale while inventory lasts. Good coffee approaching its freshness window, priced honestly. Sold as-is.</p></div>
     </div>
     <div class="callout" style="margin-top:1.75rem"><strong>Your first purchase is our introduction.</strong> You may already know the roaster by reputation and are ready to subscribe. If not, try Sorpresa - we&rsquo;ll introduce you to a roaster you&rsquo;ll fall in love with, and hope that a Roccia subscription will soon follow.</div>
     <div class="hero-btns" style="margin-top:1.25rem"><button class="btn btn-primary" onclick="showPage('sorpresa')">Begin with a Sorpresa collection</button></div>
@@ -282,7 +289,7 @@
     <div class="section-head" id="sec-promise"><p class="eyebrow">The Crema Italia Promise</p><h2>We deliver on these promises.</h2></div>
     <ul class="promise-list">
       <li><div class="pn">1</div><div class="pt"><h3>Curated with love, never aggregated.</h3><p>A small group of Italian roasters - carefully chosen, not collected.</p></div></li>
-      <li><div class="pn">2</div><div class="pt"><h3>Love your first bag, or we send a different one - free.</h3><p>On Roccia, Sorpresa, and Selezione. Offerta is sold as-is (see <button class="inline-link" onclick="showPage('promise')">the Promise page</button>).</p></div></li>
+      <li><div class="pn">2</div><div class="pt"><h3>Love your first bag, or we send a different one - free.</h3><p>On Roccia, Sorpresa, and Selezione (see <button class="inline-link" onclick="showPage('promise')">the Promise page</button>).</p></div></li>
       <li><div class="pn">3</div><div class="pt"><h3>Cancel your subscription anytime in a couple of clicks.</h3><p>Pause, skip, swap, or cancel - all self-service, no minimum, no cancel fee.</p></div></li>
     </ul>
   </main>
@@ -298,7 +305,7 @@
     <h1>Shop all our Coffee</h1>
     <div class="hero-filters">
       <!-- The shelf note to the right of the pills names what the current selection means, so
-           the four Italian shelf names teach themselves as you browse. Text is READ FROM the
+           the three Italian shelf names teach themselves as you browse. Text is READ FROM the
            matching shelf page's own .sub at selection time (shelfNote() in ci-storefront.js),
            so there is exactly one description per shelf and nothing to keep in sync. It used
            to be a parallel SHELF_NOTE table and it had already drifted. Edit the shelf page. -->
@@ -307,7 +314,6 @@
         <span class="pill" onclick="filterShelf(this,'roccia')">Roccia</span>
         <span class="pill" onclick="filterShelf(this,'sorpresa')">Sorpresa</span>
         <span class="pill" onclick="filterShelf(this,'selezione')">Selezione</span>
-        <span class="pill" onclick="filterShelf(this,'offerta')">Offerta</span>
         <span class="shelf-note" id="shelf-note">Every coffee we carry.</span>
       </div></div>
       <div class="filter-group filter-region">
@@ -337,7 +343,7 @@
     <div class="cn"><strong>Self-service, always.</strong> Pause anytime, skip anytime, swap roaster or bag up to 48 hours before the order locks, cancel anytime. No minimum commitment. No cancel fee.</div>
   </div></div>
   <main class="ci-main">
-    <div class="callout">Your subscriber benefit is <strong>10% off Roccia, Sorpresa, and Selezione</strong> - on your subscription shipments, and on anything else you order from those three shelves. <strong>Offerta and Bottega are priced as-is and are never discounted.</strong></div>
+    <div class="callout">Your subscriber benefit is <strong>10% off Roccia, Sorpresa, and Selezione</strong> - on your subscription shipments, and on anything else you order from those three shelves. <strong>Bottega is priced as-is and is never discounted.</strong></div>
     <div class="founding-banner"><strong>Founding Members</strong> - the first {{ settings.founding_member_cap }} subscribers receive 12% instead of 10%. Founding Membership is limited to {{ settings.founding_member_cap }} and does not reopen.</div>
     <div class="section-head"><p class="eyebrow">Available now · Toscana</p><h2>Roccia coffees</h2></div>
     <div class="card-grid" id="grid-roccia"></div>
@@ -383,20 +389,38 @@
   </main>
 </div>
 
-<!-- ============================== OFFERTA ============================== -->
+<!-- ============================== OFFERTA (HIDDEN - invitation only) ============================== -->
+{%- comment -%}
+  POC30 item 4 (2026-09-12, Steve): Offerta is HIDDEN. Nothing on the site links here. The only
+  way in is a URL carrying an invitation parameter - ?offer=<anything> - which initOfferEntry()
+  in ci-storefront.js reads on load. Leave by any navigation and there is no way back except the
+  link that brought you (Back from an Offerta PRODUCT does return here, or the offer could not be
+  browsed - Steve accepted that distinction). Nothing is stored in the browser.
+  TESTING: append ?offer=test to any preview URL, e.g. http://127.0.0.1:9292/?offer=test
+  WHY: all research says a visible markdown shelf teaches customers to wait for the markdown.
+  Offerta is a last resort to move product, sold as what it also is - the roaster's coffee,
+  the same quality, with less of it left. Not "last chance", not "markdown", no countdown.
+  PROD: an UNLISTED collection. Not in any menu; the collection AND each product in it carry
+  Shopify's seo.hidden metafield (drops them from the sitemap and site search, adds noindex);
+  products excluded from every public collection by tag; the email (Klaviyo, when chosen)
+  carries the collection URL. A signed, expiring link needs a backend and is a later option -
+  the price sits on the product itself, no code is involved (Standard section 3), so a
+  forwarded link costs nothing a recipient could not get by being on the list.
+  Same mechanism a wholesale page would use, plus a customer-tag gate.
+{%- endcomment -%}
 <div class="page" id="page-offerta">
   <div class="dark-hero"><div class="dark-hero-inner">
     <button class="back-btn" style="color:var(--ci-crema-light)" onclick="goBack()">&larr; Back</button>
-    <p class="eyebrow" style="color:var(--ci-crema-light)">The Offer · Limited Time and Inventory</p>
+    <p class="eyebrow" style="color:var(--ci-crema-light)">By invitation</p>
     <h1>Offerta</h1>
-    <p class="sub">Limited-time offers, on sale while inventory lasts.</p>
-    <p>Coffee that is aging and is still well inside its freshness window, priced down honestly. You see the original price, the new price, and exactly how many days of freshness are left. No fake urgency, no countdown timers.</p>
-    <div class="cn"><strong>Sold as-is.</strong> Offerta coffee carries a narrower guarantee than the rest of the site: we will replace a bag that is genuinely defective, but not one you simply wish were fresher. You will see the freshness window before you buy. Any coffee that passes that window comes off sale entirely and goes to Feeding Tampa Bay.</div>
+    <p class="sub">Great coffee, while it lasts.</p>
+    <p>This is the coffee we sell on our shelves, from the same roasters, bought the same way. It is nearer the end of our freshness window than we usually sell it, and it is priced for the time it has left. The quality is the roaster&rsquo;s. The supply is what is running out. You see the roast-date band before you buy.</p>
+    <div class="cn"><strong>Sold as-is.</strong> Offerta coffee carries a narrower guarantee than the rest of the site: we will replace a bag that is genuinely defective, but not one you simply wish were fresher. Any coffee that passes our freshness window comes off sale entirely and goes to Feeding Tampa Bay.</div>
   </div></div>
   <main class="ci-main">
-    <div class="callout">At launch, Offerta is usually empty. Coffee only arrives here as it ages. The example below shows how an Offerta listing reads.</div>
+    <div class="callout">This page is not in our navigation - it is reached by invitation only. If you leave it, the link in your email brings you back.</div>
     <div class="card-grid" id="grid-offerta"></div>
-    <div class="afd">Offerta prices are set one coffee at a time, not by a blanket percentage off. Offerta coffee never appears on its roaster's own page; their storefront stays at full price.</div>
+    <div class="afd">Offerta prices are set one coffee at a time, not by a blanket percentage off. An Offerta coffee never appears on its roaster&rsquo;s own page, and subscriber and Founding Member discounts do not apply here.</div>
   </main>
 </div>
 
@@ -708,14 +732,18 @@
   <main class="ci-main">
     <ul class="promise-list">
       <li><div class="pn">1</div><div class="pt"><h3>Curated with love, never aggregated.</h3><p>A small group of Italian roasters - carefully chosen, not collected.</p></div></li>
-      <li><div class="pn">2</div><div class="pt"><h3>Love your first bag, or we send a different one - free.</h3><p>Applies to Roccia, Sorpresa, and Selezione. Offerta is sold as-is.</p></div></li>
+      <li><div class="pn">2</div><div class="pt"><h3>Love your first bag, or we send a different one - free.</h3><p>Applies to Roccia, Sorpresa, and Selezione.</p></div></li>
       <li><div class="pn">3</div><div class="pt"><h3>Cancel your subscription anytime in a couple of clicks.</h3><p>Pause, skip, swap, or cancel - all self-service, no minimum, no cancel fee.</p></div></li>
     </ul>
     <div class="prose" style="max-width:72ch">
       <h3>First-bag satisfaction guarantee</h3>
       <p>On Roccia, Sorpresa, and Selezione, if your first bag is not right for you, we will send a different one - free. We would rather help you find your coffee than win an argument.</p>
-      <h3>Offerta is different - sold as-is</h3>
-      <p>Offerta lots are good coffee approaching the edge of their freshness window, priced down honestly. They carry a narrower guarantee: we will replace a bag that is genuinely defective, but not one you simply wish were fresher. You will see the freshness window before you buy.</p>
+      {%- comment -%}
+        The "Offerta is different - sold as-is" guarantee used to be stated here as well as on
+        the Offerta page (POC18 A6 named it as the one real duplicate on the site). With
+        Offerta hidden (POC30 item 4) it is stated ONCE, on the page the invitation opens - a
+        public Promise page must not describe a shelf the public cannot see.
+      {%- endcomment -%}
       <h3>Damage replacement</h3>
       <p>If a bag arrives damaged, tell us and we will replace it.</p>
       <h3>Freshness window</h3>
@@ -737,10 +765,10 @@
       <h3>How fresh is the coffee, and which bag do I get?</h3>
       <p>We purchase the same coffee routinely which is why we sometimes quote a roast date range. We
       always fulfill orders in the order that we receive inventory, or First In First Out (FIFO), in
-      inventory-speak. If a particular lot is out of our immediate freshness window, it is moved to our
-      Offerta shelf and priced accordingly. We do not fulfill subscriptions with products that exceed
-      our freshness promise on the date of shipping to you.</p>
-      <p>In rare circumstances where an Offerta lot exceeds our freshness promise entirely, we endeavor
+      inventory-speak. If a particular lot is out of our immediate freshness window, it comes off our
+      shelves. We do not fulfill subscriptions with products that exceed our freshness promise on the
+      date of shipping to you.</p>
+      <p>In rare circumstances where a lot exceeds our freshness promise entirely, we endeavor
       to donate this coffee to worthy recipients. Remember, commercial coffee is typically sold as fresh
       within a 24-month freshness window.</p>
       <p>Please note that any order of more than one bag may span lots, but the freshness of spanned lots
@@ -748,7 +776,7 @@
       <h3>Do you roast the coffee?</h3>
       <p>No. We import and curate; the roasters roast. We never roast, blend, or repackage.</p>
       <h3>How do subscriber discounts work?</h3>
-      <p>An active Roccia subscription gives 10% off Roccia, Sorpresa, and Selezione (Founding Members - the first {{ settings.founding_member_cap }} subscribers at launch - receive 12% for life). Offerta and Bottega are never discounted. Discounts never stack: you always receive the single highest one you qualify for. A one-time first-purchase 5% applies only when it is your best rate, so a subscriber's first order still gets their 10%, or a Founding Member's 12%, whichever is higher, never both added together.</p>
+      <p>An active Roccia subscription gives 10% off Roccia, Sorpresa, and Selezione (Founding Members - the first {{ settings.founding_member_cap }} subscribers at launch - receive 12% for life). Bottega is never discounted. Discounts never stack: you always receive the single highest one you qualify for. A one-time first-purchase 5% applies only when it is your best rate, so a subscriber's first order still gets their 10%, or a Founding Member's 12%, whichever is higher, never both added together.</p>
       <h3>What goes in the discount code field at checkout?</h3>
       <p>Nothing. We do not issue promo/discount codes, to anyone, ever. No launch codes, no newsletter codes, no influencer codes. Any discount you have earned is calculated for you when you log in and check out.</p>
       <h3>How does gifting work?</h3>
