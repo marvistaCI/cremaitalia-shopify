@@ -1,6 +1,9 @@
 {%- comment -%}
   ci-header.liquid — sticky storefront header.
-  Nav: Shop (dropdown: All Shelves · Subscriptions · Surprise Samplers · Limited and Seasonal) · Bottega · Roasters · Journal · About
+  Nav: Shop (dropdown: All Shelves · Subscriptions · Surprise Samplers · Limited and Seasonal · Accessories) · Roasters · Journal · About
+  Bottega left the top nav for the Shop dropdown in POC30 item 6 (the review: no co-equal top-nav
+  billing for a section with no stock yet); it sits below a second separator because it is not a
+  coffee shelf.
   Labels are English-first (POC30 item 5); the Italian name is taught inline in each item's gloss.
   Offerta is deliberately NOT here (POC30 item 4): hidden, invitation-only, see templates/index.liquid.
   Right: cart · sign-in. SPA navigation handled by ci-storefront.js (showPage).
@@ -44,9 +47,10 @@
             <a role="menuitem" tabindex="0" onclick="showPage('roccia');closeShopMenu()"><span class="lbl">Subscriptions</span><span class="men"><span class="ita">Roccia</span>, the Rock: your coffee, your size, on a rock-solid cadence.</span></a>
             <a role="menuitem" tabindex="0" onclick="showPage('sorpresa');closeShopMenu()"><span class="lbl">Surprise Samplers</span><span class="men"><span class="ita">Sorpresa</span>, the Surprise: curated tasting collections - discover a favorite, or gift a friend.</span></a>
             <a role="menuitem" tabindex="0" onclick="showPage('selezione');closeShopMenu()"><span class="lbl">Limited and Seasonal</span><span class="men"><span class="ita">Selezione</span>, the Selection: roasters' premium and seasonal offerings.</span></a>
+            <div class="shop-div" role="separator"></div>
+            <a role="menuitem" tabindex="0" onclick="showPage('bottega');closeShopMenu()"><span class="lbl">Accessories</span><span class="men"><span class="ita">Bottega</span>, the accessory shop: grinders, espresso machines, moka pots, and more espresso tools, plus our own merchandise.</span></a>
           </div>
         </div>
-        <button onclick="showPage('bottega')" id="nav-bottega">Bottega</button>
         <button onclick="showPage('roasters')" id="nav-roasters">Roasters</button>
         <button onclick="showPage('journal')" id="nav-journal">Journal</button>
         <button onclick="showPage('about')" id="nav-about">About</button>

@@ -267,7 +267,7 @@
     <div class="callout" style="margin-top:2rem"><strong>Find a roast to love.</strong> Take our <button class="inline-link" onclick="openQuiz()">three-question quiz</button> and we will show you the coffees that match your taste.</div>
 
     <!-- Shelves -->
-    <div class="section-head" id="sec-shelves"><p class="eyebrow">How the catalog is organized</p><h2>The three coffee shelves.</h2></div>
+    <div class="section-head" id="sec-shelves"><p class="eyebrow">How the catalog is organized</p><h2>Three coffee shelves, plus accessories.</h2></div>
     {%- comment -%}
       POC30 item 4 (2026-09-12, Steve): four shelves became THREE in public. Offerta still exists
       as a channel - coffee that leaves the freshness window is offered by EMAIL, and the email
@@ -294,6 +294,17 @@
       <div class="shelf-card" onclick="showPage('roccia')"><h3>Subscriptions</h3><div class="ss2"><span class="ita">Roccia</span> · The Rock</div><p>Your coffee, your size, on a rock-solid cadence. Subscribe for free shipping and 10% off, or order just once.</p></div>
       <div class="shelf-card" onclick="showPage('sorpresa')"><h3>Surprise Samplers</h3><div class="ss2"><span class="ita">Sorpresa</span> · The Surprise</div><p>Our curated roast samplers. 100 g (3.53 oz) bags assembled into a tasting collection - the best way to discover your favorite roast, or gift a friend.</p></div>
       <div class="shelf-card" onclick="showPage('selezione')"><h3>Limited and Seasonal</h3><div class="ss2"><span class="ita">Selezione</span> · The Selection</div><p>Roasters' premium and seasonal offerings. Micro-lots and limited imports. When a product sells out, it may not return.</p></div>
+      {%- comment -%}
+        POC30 item 6 (2026-09-12, Steve): Bottega joins the home grid and the Shop dropdown and
+        leaves the top nav. The review withdrew "fold under Shop" but kept the objection to
+        co-equal top-nav billing for a section with no stock; this answers it. It is NOT a coffee
+        shelf - the heading says so, the Shop "All shelves" grid stays coffee-only, and every
+        "three coffee shelves" / "every coffee" statement stays true. Steve's copy; "Accessories"
+        chosen over "Equipment and Merchandise" (reads tiresomely) and "Merchandise" alone (reads
+        as t-shirts, and every product page sends a grinder-seeker here). The gloss names the
+        grinders so that reader opens it.
+      {%- endcomment -%}
+      <div class="shelf-card" onclick="showPage('bottega')"><h3>Accessories</h3><div class="ss2"><span class="ita">Bottega</span> · The Accessory Shop</div><p>Grinders, espresso machines, moka pots, and more espresso tools, plus our own merchandise. Sold and shipped separately from coffee.</p></div>
     </div>
     <div class="callout" style="margin-top:1.75rem"><strong>Your first purchase is our introduction.</strong> You may already know the roaster by reputation and are ready to subscribe. If not, try a Surprise Sampler - we&rsquo;ll introduce you to a roaster you&rsquo;ll fall in love with, and hope that a subscription will soon follow.</div>
     <div class="hero-btns" style="margin-top:1.25rem"><button class="btn btn-primary" onclick="showPage('sorpresa')">Begin with a Surprise Sampler</button></div>
@@ -356,7 +367,7 @@
     <div class="cn"><strong>Self-service, always.</strong> Pause anytime, skip anytime, swap roaster or bag up to 48 hours before the order locks, cancel anytime. No minimum commitment. No cancel fee.</div>
   </div></div>
   <main class="ci-main">
-    <div class="callout">Your subscriber benefit is <strong>10% off every coffee</strong> - on your subscription shipments, and on anything else you order from our three shelves. <strong>Bottega is priced as-is and is never discounted.</strong></div>
+    <div class="callout">Your subscriber benefit is <strong>10% off every coffee</strong> - on your subscription shipments, and on anything else you order from our three shelves. <strong>Accessories are priced as-is and never discounted.</strong></div>
     <div class="founding-banner"><strong>Founding Members</strong> - the first {{ settings.founding_member_cap }} subscribers receive 12% instead of 10%. Founding Membership is limited to {{ settings.founding_member_cap }} and does not reopen.</div>
     <div class="section-head"><p class="eyebrow">Available now · Toscana</p><h2>Subscription coffees</h2></div>
     <div class="card-grid" id="grid-roccia"></div>
@@ -490,14 +501,14 @@
 <!-- ============================== BOTTEGA ============================== -->
 <div class="page" id="page-bottega">
   <div class="dark-hero bottega-hero"><div class="dark-hero-inner">
-    <p class="eyebrow" style="color:var(--ci-crema-light)">The shop apart</p>
-    <h1>La Bottega</h1>
-    <p class="sub">Coffee-related items and Crema Italia merch.</p>
+    <p class="eyebrow" style="color:var(--ci-crema-light)"><span class="ita">Bottega</span> · The Accessory Shop</p>
+    <h1>Accessories</h1>
+    <p class="sub">Grinders, espresso machines, moka pots, and more espresso tools, plus our own merchandise.</p>
     <p>Equipment, accessories, and branded merchandise - a separate retail section with its own ordering experience. No freshness tracking, no roaster affiliation, no shelf rules. Just the things that make the coffee better.</p>
   </div></div>
   <main class="ci-main">
     <div class="card-grid" id="grid-bottega"></div>
-    <div class="afd">Bottega items are priced separately from coffee and are not subscriber-discounted. Bottega purchases are shipped separately from coffee shipments, often directly from the source.</div>
+    <div class="afd">Accessories are priced separately from coffee and are not subscriber-discounted. They ship separately from coffee shipments, often directly from the source.</div>
   </main>
 </div>
 
@@ -774,7 +785,7 @@
     <div class="section-head" style="margin-top:0"><p class="eyebrow">Questions</p><h2>FAQ</h2></div>
     <div class="prose" style="max-width:72ch">
       <h3>Do you sell ground coffee?</h3>
-      <p>No. Everything is whole bean, because that is what our roasters seal in valve bags at origin. Grind fresh just before you brew. If you do not have a grinder, search for a burr grinder in our <button class="inline-link" onclick="showPage('bottega')">Bottega</button>.</p>
+      <p>No. Everything is whole bean, because that is what our roasters seal in valve bags at origin. Grind fresh just before you brew. If you do not have a grinder, search for a burr grinder in <button class="inline-link" onclick="showPage('bottega')">Accessories</button>.</p>
       <h3>How fresh is the coffee, and which bag do I get?</h3>
       <p>We purchase the same coffee routinely which is why we sometimes quote a roast date range. We
       always fulfill orders in the order that we receive inventory, or First In First Out (FIFO), in
@@ -789,7 +800,7 @@
       <h3>Do you roast the coffee?</h3>
       <p>No. We import and curate; the roasters roast. We never roast, blend, or repackage.</p>
       <h3>How do subscriber discounts work?</h3>
-      <p>An active subscription gives 10% off every coffee (Founding Members - the first {{ settings.founding_member_cap }} subscribers at launch - receive 12% for life). Bottega is never discounted. Discounts never stack: you always receive the single highest one you qualify for. A one-time first-purchase 5% applies only when it is your best rate, so a subscriber's first order still gets their 10%, or a Founding Member's 12%, whichever is higher, never both added together.</p>
+      <p>An active subscription gives 10% off every coffee (Founding Members - the first {{ settings.founding_member_cap }} subscribers at launch - receive 12% for life). Accessories are never discounted. Discounts never stack: you always receive the single highest one you qualify for. A one-time first-purchase 5% applies only when it is your best rate, so a subscriber's first order still gets their 10%, or a Founding Member's 12%, whichever is higher, never both added together.</p>
       <h3>What goes in the discount code field at checkout?</h3>
       <p>Nothing. We do not issue promo/discount codes, to anyone, ever. No launch codes, no newsletter codes, no influencer codes. Any discount you have earned is calculated for you when you log in and check out.</p>
       <h3>How does gifting work?</h3>

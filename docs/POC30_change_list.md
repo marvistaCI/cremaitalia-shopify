@@ -378,6 +378,37 @@ route to Offerta". Cross-references swept (standards README, Collaboration compa
 pointer), both touched sources re-rendered, v1.19 archived, both renders delivered to OneDrive.
 `production_build_spec.md`'s §11 literals row updated to the new toggle string.
 
+## 6. Bottega becomes "Accessories" and leaves the top nav
+
+**The finding (review, Resolved discussion points):** Bottega's separate buying section is justified
+(own cart and shipping logic, no subscriber discount, ships separately), and "fold under Shop" was
+withdrawn - but *"don't give it co-equal top-nav billing until it's stocked"*. Steve's answer: move
+it into the Shop dropdown and the home shelves grid, and take it off the top bar. **Four cards
+again, three of them coffee**, and the heading says so: *Three coffee shelves, plus accessories.*
+
+**The label.** "Merchandise" (Steve's first draft) reads as t-shirts and mugs, and every product page
+sends a grinder-seeker here; "Equipment and Merchandise" (Code's counter) *"reads tiresomely"*
+(Steve). **Accessories** - the review's own word for the section - with a gloss that names the
+grinders so that reader opens it. Steve's copy: *Grinders, espresso machines, moka pots, and more
+espresso tools, plus our own merchandise.* Two edits flagged rather than silent: his draft's "and
+more espresso tools and merchandise" carried a double "and", and his eyebrow *"Bottega - the
+accessory shop"* took the shape the other three use, *Bottega · The Accessory Shop*. His first
+gloss, *"Italian heritage coffee-related merchandize"*, was declined before he rewrote it: heritage
+is the borrowed style word declined for the shelf labels, and it can be plainly false of a grinder.
+
+**What moved:** the top-nav button is gone and a dropdown item sits below a second separator (it is
+not a coffee shelf); the Bottega page is headed *Accessories* with the Italian eyebrow; the home grid
+is a 2x2 again (POC14's fix for four cards); the product-card badge reads *Accessory · Bottega*; the
+grinder pointers under Add to cart and in the FAQ say *Accessories*; "Bottega is never discounted"
+became "Accessories are never discounted" in the three places it is stated; and `showPage('bottega')`
+now lights the Shop nav item. **Unchanged on purpose:** the Shop "All shelves" grid stays coffee-only
+(`isCoffee`), because Bottega has its own card type and cart logic, and the review's other note -
+surface accessories at the point of need - was already met by the grinder note under Add to cart.
+
+**Standard v1.21:** §1's Bottega row takes the label and the placement; the changelog says nothing
+else moved. Cross-references swept, both renders regenerated with gates at exit 0, v1.20 archived,
+delivered to OneDrive and md5-verified.
+
 ## Files
 
 | File | Change |
@@ -408,4 +439,9 @@ pointer), both touched sources re-rendered, v1.19 archived, both renders deliver
 | `docs/standards/README.md`, `collaboration-standard.md`, `CLAUDE.md` | (4+5) v1.20 pointers |
 | `docs/standards/_archive/README.md` | (4+5) v1.19 archive row |
 | `docs/production_build_spec.md` | (5) §11 literals row |
+| `snippets/ci-header.liquid` | (6) Bottega out of the top nav, into the dropdown |
+| `templates/index.liquid` | (6) Accessories card, heading, Bottega page, copy |
+| `assets/ci-storefront.js` | (6) badge, grinder link, account copy, navKey |
+| `assets/ci-storefront.css` | (6) home grid back to 2x2 |
+| Standard + cross-refs + archive README | (6) **v1.21** |
 | `docs/production_build_spec.md` | temp-asset row updated (1b) |

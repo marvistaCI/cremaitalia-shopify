@@ -966,8 +966,10 @@ h1 .ita, h2 .ita, h3 .ita, h4 .ita,
 /* POC30 item 4: three public shelves, so the home grid is a row of three (it was a 2x2 for four;
    with three cards a 2x2 leaves one orphan - the POC14 defect in a new coat). Stacks under 900px
    because three 265px-minimum cards do not fit a tablet portrait width. */
-#page-home .card-grid{grid-template-columns:repeat(3,1fr)}
-@media (max-width:900px){#page-home .card-grid{grid-template-columns:1fr}}
+/* POC30 item 6: Bottega rejoined the home grid, so four cards again - back to the 2x2 POC14
+   settled on for four (three-in-a-row plus an orphan was that batch's defect). */
+#page-home .card-grid{grid-template-columns:repeat(2,1fr)}
+@media (max-width:640px){#page-home .card-grid{grid-template-columns:1fr}}
 
 /* ---------- rating mark + review detail (POC17) ----------
    Store Operating Standards 13.5 / 13.5.1 govern placement. The mark appears on the detail view of

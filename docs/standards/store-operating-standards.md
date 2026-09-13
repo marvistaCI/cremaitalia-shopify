@@ -1,6 +1,6 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.20 · 2026-09-12**
+**Version 1.21 · 2026-09-12**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.3 (look & voice) · Collaboration Standard v1.1 (how we work).
 
@@ -30,6 +30,13 @@
 > version changelog below carries what moved between revisions; the body states only what is true.
 >
 > Tracked as §12.13, which cannot close before launch.
+
+> **v1.21 (2026-09-12)** changes one label and one placement in **§1**, both Steve's. **Bottega's
+> storefront label is "Accessories"** (gloss: *Bottega, the accessory shop*), and it lives in the
+> **Shop dropdown and the home shelves grid, not the top navigation** - the B2C review's objection
+> was co-equal top-nav billing for a section with no stock. It remains a separate non-coffee retail
+> section: never subscriber-discounted, shipped separately, absent from the coffee-only "All shelves"
+> grid, and every "three coffee shelves" statement stays true. Nothing else moved.
 
 > **v1.20 (2026-09-12)** makes two changes to **§1**, both Steve's and both from the B2C expert review
 > of POC28. **Offerta leaves public view.** It remains a coffee shelf and a channel - coffee leaving the
@@ -296,7 +303,7 @@ was declined for Sorpresa because the taste quiz already uses those words for *n
 | **Sorpresa** | **Surprise Samplers** | "Surprise" | Discovery **collections** (composite BOM SKUs) | Sorpresa 100g bags exist **only inside collections**, never sold alone. One-time only. |
 | **Selezione** | **Limited and Seasonal** | "Selection" | Premium / seasonal / limited micro-lots | One-time purchase only, never a subscription. Honest scarcity ("low inventory" under 12 units, hard cap). Active Roccia subscribers see new SKUs 48h early (Locksmith, tag `active-roccia`). |
 | **Offerta** | *hidden* - the page is headed "By invitation" | "Offer / deal" | Aged lots moved to an honest markdown as they approach their freshness limit, offered by email | **Not public**: no nav item, card, pill, footer link, search or sitemap presence; an unlisted collection whose products carry `seo.hidden` and appear on no public grid, reached by the emailed link only (build spec, Offerta section). Not stocked directly — items *transition* here by age (see §5). Uses the `O[size]` markup factors. Guarantee is "as-is, defects only" (see §5), stated on the invitation page and nowhere public. |
-| **Bottega** | **Bottega** | "Shop / workshop" | Non-coffee retail: equipment, accessories, Crema Italia merch | Independent ordering experience. No roaster affiliation, no freshness/expiry logic. Never appears on roaster profiles. Never discounted for subscribers/Founding. |
+| **Bottega** | **Accessories** | "Shop / workshop" | Non-coffee retail: grinders, espresso machines, moka pots, espresso tools, Crema Italia merch. Reached from the Shop dropdown and the home grid, not the top nav (v1.21) | Independent ordering experience. No roaster affiliation, no freshness/expiry logic. Never appears on roaster profiles. Never discounted for subscribers/Founding. |
 
 ### 1.1 Vocabulary — *collection* is the term, *Tour* is a name
 
@@ -1418,5 +1425,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.20 · 2026-09-12 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.21 · 2026-09-12 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*

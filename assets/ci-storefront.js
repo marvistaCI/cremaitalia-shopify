@@ -114,7 +114,7 @@
     sorpresa:  { cls: 'ss', tag: 'Sampler · Sorpresa',     shelfTag: 'Surprise Samplers' },
     selezione: { cls: 'sl', tag: 'Limited · Selezione',    shelfTag: 'Limited and Seasonal' },
     offerta:   { cls: 'so', tag: 'By invitation · Offerta', shelfTag: 'Offerta' },
-    bottega:   { cls: 'sb', tag: 'Bottega',                shelfTag: 'Bottega' }
+    bottega:   { cls: 'sb', tag: 'Accessory · Bottega',    shelfTag: 'Accessories' }
   };
 
   // Quiz-outcome persona matrix — single source of truth for result-screen naming.
@@ -370,7 +370,7 @@
   function bottegaCard(p) {
     return '<div class="card product-card" data-shelf="bottega" onclick="openProduct(\'' + p.handle + '\')">' +
       '<div class="card-img b">' + esc(p.img ? p.img.label : p.title) + '</div>' +
-      '<div class="card-body"><span class="cs sb">Bottega</span><h3>' + esc(p.display_title) + '</h3><p>' + esc(p.blurb) + '</p></div>' +
+      '<div class="card-body"><span class="cs sb">Accessory · Bottega</span><h3>' + esc(p.display_title) + '</h3><p>' + esc(p.blurb) + '</p></div>' +
       '<div class="card-footer"><span class="cp">' + money(priceFrom(p)) + '</span><span class="csz">' + esc(p.category || '') + '</span></div>' +
       '</div>';
   }
@@ -411,7 +411,8 @@
     var navBtns = document.querySelectorAll('nav button[id^="nav-"]');
     for (var j = 0; j < navBtns.length; j++) navBtns[j].classList.remove('active');
     var navKey = name;
-    if (['roccia', 'sorpresa', 'selezione', 'product', 'cart'].indexOf(name) !== -1) navKey = 'shop';
+    // 'bottega' lights Shop since POC30 item 6 moved it into the Shop dropdown.
+    if (['roccia', 'sorpresa', 'selezione', 'bottega', 'product', 'cart'].indexOf(name) !== -1) navKey = 'shop';
     // 'offerta' deliberately maps to no nav item: it is hidden (POC30 item 4).
     if (name === 'roaster') navKey = 'roasters';
     if (name === 'person') navKey = 'about';
@@ -743,7 +744,7 @@
     // Bottega: simple detail.
     if (p.shelf === 'bottega') {
       return '<div class="pd-grid">' + img + '<div>' +
-        '<span class="cs sb">Bottega</span>' +
+        '<span class="cs sb">Accessory · Bottega</span>' +
         '<h1 class="pd-title">' + esc(p.display_title) + '</h1>' +
         // Bottega is its own rating context (Steve, 2026-08-20). The reason a global average is
         // suspect on coffee - one palate's best is another's meh - does not apply to equipment: a
@@ -755,7 +756,7 @@
         '<p class="prose" style="max-width:none">' + esc(p.blurb) + '</p>' +
         '<p class="pd-price">' + money(priceFrom(p)) + '</p>' +
         '<button class="btn btn-primary" style="width:100%;margin-top:1rem" onclick="addToCart(\'' + p.handle + '\',\'' + esc(p.sizes[0].size) + '\',false,null)">Add to cart</button>' +
-        '<p class="afd" style="border:none">Bottega items are never subscriber-discounted and are not part of the three coffee shelves.</p>' +
+        '<p class="afd" style="border:none">Accessories are never subscriber-discounted and are not part of the three coffee shelves.</p>' +
         '</div></div>';
     }
 
@@ -882,7 +883,7 @@
       // mean inventing a second layer of fixture data to prop up the first. Opening the
       // shelf is honest at any catalog size.
       '<p class="afd" style="border:none;margin-top:.75rem"><strong>Whole beans only.</strong> We recommend using your beans within 30 days of receiving them, and grinding them just before each brew. ' +
-      'Need a grinder? <button class="inline-link" onclick="showPage(\'bottega\')">Search for one in our Bottega</button>.</p>' +
+      'Need a grinder? <button class="inline-link" onclick="showPage(\'bottega\')">Search for one in Accessories</button>.</p>' +
       '</div></div>' + about;
   }
 
@@ -1566,7 +1567,7 @@
           '<span class="badge-founding">Founding Member · No. 087</span>' +
           ((session.subscriber || session.paused)
             ? '<span class="status-chip sc-active">Active</span>' +
-              '<p class="prose" style="margin-top:.75rem">Your Founding rate of <strong>12%</strong> applies automatically across every coffee. Bottega is never discounted.</p></div>'
+              '<p class="prose" style="margin-top:.75rem">Your Founding rate of <strong>12%</strong> applies automatically across every coffee. Accessories are never discounted.</p></div>'
             : '<span class="status-chip sc-lapsed">Benefits paused</span>' +
               '<p class="prose" style="margin-top:.75rem">No. 087 is yours for good. Your <strong>12%</strong> is active whenever you hold a subscription - resubscribe to reactivate it. After cancelling, your benefits continue for ' + GRACE_DAYS + ' days.</p></div>') +
         '<div class="acct-card"><h3>Taste profile</h3>' +
