@@ -158,6 +158,11 @@ this number here whenever the theme's file set legitimately
 changes; it was left saying 39 through POC15 and POC16 and was corrected during the POC17 deploy). Also re-run `shopify theme list` and confirm there is now
 **exactly one** theme with that name.
 
+**Compare after normalising line endings (POC31, 2026-09-14).** This checkout runs `autocrlf=true`,
+so `config/settings_data.json` sits on disk with CRLF while Shopify serves it back with LF; a
+byte-level md5 diff reports it as a content mismatch when the content is identical. Normalise
+`\r\n` to `\n` on both sides before comparing, and treat a mismatch that survives that as real.
+
 Note `--path` must point at a directory that **already exists**; the CLI errors out rather than
 creating it.
 

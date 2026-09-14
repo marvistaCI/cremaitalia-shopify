@@ -4155,15 +4155,25 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   Steve's *last-chance alert* - ask at sign-up whether a customer wants to hear just before a coffee is
   donated - which answers the Offerta invitation mechanism's open question (who gets the email) with
   consent rather than our guess. Validation at the documented baseline throughout (**15 offenses /
-  0 errors / 0 new**). Commits `67966f0`..this one. **Not pushed to a preview theme; Steve has not
-  yet called the batch complete.** When he does, `crema-poc-deploy` prunes POC28 under the
-  three-newest cap, on his explicit go by name and id.
+  0 errors / 0 new**). Commits `67966f0`..this one. **Steve called the batch complete the same afternoon and it was DEPLOYED** via the
+  `crema-poc-deploy` skill to a NEW unpublished theme **"Crema Italia POC31 Preview" (id
+  `152372117673`)**: `theme list` + `git log origin/main..HEAD` run **first** (no POC31, no duplicates,
+  thirteen unpushed commits all this batch), validation at the documented baseline, then
+  **pull-and-diff proved** the push - both sides 40 files, nothing on only one side, 39 byte-identical
+  and `config/settings_data.json` identical once line endings are normalised (the repo checkout is
+  CRLF under autocrlf, Shopify serves LF - a method note now in the skill's Step 4, since a byte-level
+  diff reports it as a mismatch), and the batch content asserted on the deployed files. **POC28
+  (`152051744937`) pruned** under the three-newest cap on Steve's go - his instruction named the
+  oldest instance, the split was computed from live JSON, and the theme was re-verified by name, id
+  and role in the same breath as the delete; its batch is commit `c91ee87` and is redeployable.
+  Survivors confirmed as exactly POC29/POC30/POC31. The Step 6.4 sweep found the dead id in one §9
+  line (past tense, left) and the §10 table row (corrected).
 
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC30 (deployed + pull-and-diff proved 2026-09-12) — read this first
+**▶ CURRENT STATE — POC31 (deployed + pull-and-diff proved 2026-09-14) — read this first
 when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
@@ -4188,9 +4198,9 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC30 Preview" | `152344002729` |
+| **Newest POC preview** | "Crema Italia POC31 Preview" | `152372117673` |
+| Prior preview | "Crema Italia POC30 Preview" | `152344002729` |
 | Prior preview | "Crema Italia POC29 Preview" | `152193794217` |
-| Prior preview | "Crema Italia POC28 Preview" | `152051744937` |
 
 > **The live theme is current as of 2026-08-24.** Commit **`2b80122`** (five policy links in the
 > coming-soon footer) was pushed scoped to `150557294761` and **verified on the public page**: all
@@ -4221,7 +4231,39 @@ a real cart, and real customers; none is code.
 > accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
 > gate** on brand identity and product detail rising above 9.
 
-**POC30 is deployed** and is the only POC30 theme - **40 files byte-match the repo**, proved by
+**POC31 is deployed** and is the only POC31 theme - **40 files match the repo**, proved by
+pull-and-diff (both sides 40; nothing on only one side; 39 byte-identical and the fortieth,
+`config/settings_data.json`, identical after normalising line endings - the repo checkout carries
+CRLF from autocrlf and Shopify serves LF; the deploy skill's Step 4 now says to compare that way).
+`theme list` and `git log origin/main..HEAD` run **first**: no POC31 existed, no duplicate names,
+thirteen unpushed commits all belonging to this batch. Validation at the documented baseline (**15
+offenses / 0 errors / 0 new**). Batch content asserted **on the deployed theme**: "A confession.",
+"uniquely their own", the temperature-controlled warehouse, the FDA sentence absent from About and
+present as a FAQ entry, "Slow boats age the beans.", the ribbon's Espresso ground with its solid
+fallback, `roastFloorLabel()` in the JS with no window sentence anywhere, exactly one "How fresh is
+the coffee?" entry with no FIFO, no charity named in copy, and the Promise page stating the selling
+gate. Commits `67966f0`..`5794658` plus this record.
+
+**What POC31 is:** the reviewer's second look at deployed POC30 and Steve's own copy list, worked
+one item at a time with a design discussion before each build, recorded in
+`docs/POC31_change_list.md`. It opened with the reviewer **withdrawing their own number-one
+finding** - add-to-cart feedback is implemented three ways, and their screenshot could not see
+motion - now logged as a strength. **Copy:** "A confession.", *uniquely* their own, the
+temperature-controlled warehouse, the FDA U.S. Agent fact moved from About into one FAQ entry, and
+**"Slow boats age the beans."** under the hero (a plane crosses the ocean too; only a ship owns the
+weeks). **Contrast:** the reported 1.88:1 on "Save to my account" was a checker artifact, with a
+smaller real failure under it; the taste ribbon's gradient now ends at Espresso and carries a solid
+fallback, 5.6:1 at its lightest point. **Freshness, the batch's centre:** the green strip on every
+card and product page reads **"Roasted on or after DD-MMM-YYYY"**, that coffee's oldest on-shelf
+roast date, so nine fixtures show nine dates; a collection shows the oldest of its components; the
+policy floor is only the fallback; the window sentence is gone from both surfaces and stated once in
+the FAQ beside the 12-to-24-month comparison. **Store Operating Standards v1.21 -> v1.22 -> v1.23**
+record the display reversal, the FAQ entry written, no charity named anywhere on the storefront (the
+3PL's city decides it; Journal posts will name donations as made), and FIFO no longer explained to
+the customer. The Promise page states the selling gate rather than consumption advice and no longer
+denies the discount channel Offerta is. Deferred: the placeholder-ratings real-proof plan.
+
+**What POC30 was:** it is the only POC30 theme - **40 files byte-match the repo**, proved by
 pull-and-diff (both sides 40; zero content mismatches; nothing on only one side; `theme list` and
 `git log origin/main..HEAD` run **first**, no collision, no duplicate names, zero unpushed).
 Validation at the documented baseline (**15 offenses / 0 errors / 0 new**). The file count moved
@@ -4230,12 +4272,6 @@ Validation at the documented baseline (**15 offenses / 0 errors / 0 new**). The 
 reason recorded. Batch content asserted **on the deployed theme**: the `.hero-media` block, the
 hero line ending "in Italy", `isPublic()` and `flyBean()` in the JS, the gated `#sec-founding`
 band, "Surprise Samplers" in the header, the 709 KB hero mp4 present, `ci-temp-lp1.jpg` absent.
-
-> ⚠ **The repo is AHEAD of this theme (2026-09-14).** POC31 is built and committed (`67966f0`
-> onward: copy, the ribbon ground, the per-coffee freshness strip, the FAQ pass, Standards v1.22 and
-> v1.23) and is **NOT deployed** - Steve has not yet called the batch complete. This theme still
-> renders POC30's card badge, window sentence and FAQ. Retire this callout with the POC31 deploy;
-> the deploy prunes POC28 under the three-newest cap on Steve's explicit go.
 
 **What POC30 is:** the B2C expert review of POC28 worked in priority order across nine items, all
 built interactively with Steve and recorded in `docs/POC30_change_list.md`. The home hero is
@@ -4481,8 +4517,14 @@ here.** This paragraph used to hardcode them, and it went stale the moment the t
 pruned — twice. Open the preview in a **real browser**; a `curl` of a `preview_theme_id` link is NOT
 a valid check (see §9 2026-07-06). Refresh with `shopify theme push --theme <id from the table>`.
 
-**Only POC28, POC29 and POC30 previews now exist** - at the three-newest cap, enforced as
-`crema-poc-deploy` Step 5. **POC27 (`152030412969`) was deleted 2026-09-12** on Steve's explicit go,
+**Only POC29, POC30 and POC31 previews now exist** - at the three-newest cap, enforced as
+`crema-poc-deploy` Step 5. **POC28 (`152051744937`) was deleted 2026-09-14** on Steve's explicit go
+(his deploy instruction named the oldest instance; the keep/prune split was computed from a live
+`theme list --json`, and POC28 was re-verified by name, id and role immediately before the delete,
+which ran **after** the POC31 push was proven by pull-and-diff); its batch is commit `c91ee87` on
+`origin/main` and it is redeployable. The Step 6.4 sweep found the dead id in one §9 line describing
+the day it shipped (narrative, left alone) and in this block's table row (corrected). Earlier:
+**POC27 (`152030412969`) was deleted 2026-09-12** on Steve's explicit go,
 its id, name and role re-verified against a live `theme list --json` in the same breath as the
 delete and the delete run **after** the POC30 push was proven by pull-and-diff; its batch is commit
 `e9dd8bb` on `origin/main` and it is redeployable. The Step 6.4 sweep found the dead id in §9
