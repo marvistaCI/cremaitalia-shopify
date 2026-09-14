@@ -308,7 +308,7 @@
     // not the place for a third number on the same subject.
     if (p.shelf === 'offerta') return '<div class="freshness fw">Sold as-is</div>';
     if (p.shelf === 'selezione' && p.low_inventory) return '<div class="freshness fw">Low inventory · ' + p.low_inventory + ' left</div>';
-    return '<div class="freshness">Best within ' + FRESHNESS_DAYS + ' days of roast</div>';
+    return '<div class="freshness">Roasted on or after ' + esc(roastFloorLabel(p)) + '</div>';
   }
   function rnLine(p) {
     if (!p.roaster) return esc(p.roaster_label || 'Crema Italia curated selection');
@@ -545,7 +545,6 @@
   // settings.founding_member_cap directly. A JS constant for it would be declared and never used -
   // the exact orphan class Review A catalogued. Add it when JS actually needs it, not for symmetry.
   var RULES = window.CI_RULES || {};
-  var FRESHNESS_DAYS  = RULES.freshnessWindowDays || 60;
   var GRACE_DAYS      = RULES.benefitGraceDays    || 60;
   var OFFERTA_DAYS    = RULES.offertaFreshDays    || 150;
   // POC30 item 7: the subscriber and founder rates were bare literals (0.10 / 0.12) in the cart
@@ -567,6 +566,36 @@
     var p = String(iso || '').split('-');
     if (p.length !== 3) return iso || '';
     return p[2] + '-' + (MONTHS_ABBR[(+p[1]) - 1] || p[1]) + '-' + p[0];
+  }
+
+  // POC31 (Steve, 2026-09-14): ONE freshness statement per surface, and it varies per coffee.
+  // The green strip on the card and on the detail view reads "Roasted on or after <date>", where
+  // the date is the OLDEST roast date still on the shelf for this coffee - under FIFO (Standard
+  // 5.4) the bag the buyer gets is never older than it. A policy floor that reads identically on
+  // every card is a rule, and rules belong in the FAQ; a date that differs card to card is
+  // evidence that we know how old our coffee is. "These beans are within our best-freshness
+  // window of N days" went with it: the window is stated once, in the FAQ (bookmarked, not built).
+  // The policy floor (today minus the window, computed in Liquid, Standard 5.4) is the FALLBACK
+  // when no lot date is known. It is still true by construction, so a missing lot record widens
+  // the claim rather than falsifying it.
+  // PROD: p.roast_date is the fixture stand-in for the oldest ACTIVE lot's roast_date on the
+  // product (crema_italia.lots, build spec 13.9), which the 3PL receiving report populates. The
+  // date is exactly as true as that record and the pick discipline behind it - a lot recorded as
+  // empty while bags remain in the bin would show a younger date than the bag that ships. The
+  // reconciliation control in the SKU standard is what keeps this honest, not the theme.
+  // A collection holds no stock and is boxed on order from its components (build spec 7), so its
+  // floor is the OLDEST of its components' floors - the same union-over-components rule that
+  // productFacets() applies to its filters. The card keeps its own note ("Boxed for you when you
+  // order"); this label is for the detail view.
+  function roastFloorLabel(p) {
+    if (p.roast_date) return fmtDate(p.roast_date);
+    var comps = (p.component_handles || []).map(function (h) { return byHandle[h]; })
+      .filter(function (c) { return c && c.roast_date; });
+    if (comps.length) {
+      var oldest = comps.reduce(function (m, c) { return c.roast_date < m ? c.roast_date : m; }, comps[0].roast_date);
+      return fmtDate(oldest);
+    }
+    return FRESH_FLOOR;
   }
 
   // ---------- rating mark (POC17) ----------
@@ -773,15 +802,15 @@
 
     var meta = '';
     if (p.origin) meta += '<p class="prose" style="max-width:none">Origin: ' + esc(p.origin) + (p.process ? ' · ' + esc(p.process) + ' process' : '') + (p.roast_level ? ' · ' + esc(p.roast_level) + ' roast.' : '') + '</p>';
-    // FRESHNESS DISPLAY (Standard 5.4, Steve 2026-08-21). We no longer show a roast date and a best-by
-    // date. best_by is roast_date plus the window, so showing both stated one fact twice and pointed the
-    // reader at a deadline rather than at freshness.
+    // FRESHNESS DISPLAY. We do not show a best-by date: it is roast_date plus the window, so showing
+    // both stated one fact twice and pointed the reader at a deadline rather than at freshness.
     //
-    // Main shelves show a computed FLOOR, not a fact about this bag: "nothing we ship you is older than
-    // this". It is a guarantee derived from policy, true by construction because Standard 5 takes
-    // past-window coffee off sale entirely - so it needs NO lot data and cannot be made to lie by a
-    // missed lot entry. That robustness is the whole point; an actual date would depend on someone
-    // having entered a lot record on time.
+    // Main shelves (POC31, Steve 2026-09-14): the green strip reads "Roasted on or after <date>",
+    // the oldest roast date still on the shelf for THIS coffee - see roastFloorLabel() for the
+    // reasoning, the fallback to the policy floor, and the production seam. From 2026-08-21 to
+    // POC30 this surface showed the policy floor as a plain line PLUS a strip stating the window;
+    // both were identical on every coffee, so they were rules, not facts, and they are now one
+    // strip that varies.
     //
     // Offerta is the exception and shows its ACTUAL roast date, because an Offerta product IS one
     // split-off lot and knows its own date - and because showing the same floor on both shelves would
@@ -794,8 +823,8 @@
       if (OFFERTA_OLDEST && OFFERTA_NEWEST) meta += '<p style="font-size:.9rem;color:var(--ci-espresso);margin:.5rem 0"><strong>Roasted between</strong> ' + esc(OFFERTA_OLDEST) + ' <strong>and</strong> ' + esc(OFFERTA_NEWEST) + '</p>';
       meta += '<div class="freshness fw" style="margin:.5rem 0">Best if used soon after purchase - sold as-is</div>';
     } else {
-      if (FRESH_FLOOR) meta += '<p style="font-size:.9rem;color:var(--ci-espresso);margin:.5rem 0"><strong>Roasted on or after</strong> ' + esc(FRESH_FLOOR) + '</p>';
-      meta += '<div class="freshness" style="margin:.5rem 0">These beans are within our best-freshness window of ' + FRESHNESS_DAYS + ' days.</div>';
+      var floor = roastFloorLabel(p);
+      if (floor) meta += '<div class="freshness" style="margin:.5rem 0">Roasted on or after ' + esc(floor) + '</div>';
     }
 
     var components = p.components ? '<p class="prose" style="max-width:none;margin-top:.5rem"><strong>In the box:</strong> ' + p.components.map(esc).join(' · ') + '. Printed tasting card included.</p>' : '';
