@@ -1487,39 +1487,45 @@ Same principle as everywhere else in this spec: derive, do not store. **It break
 off-book** — shrinkage, damage, or a pick out of FIFO order desynchronises the arithmetic, so
 write-offs must be recorded as such rather than silently adjusted.
 
-#### Display: a computed floor (SUPERSEDES the range, Steve 2026-08-21)
+#### Display: the oldest on-shelf roast date, per coffee (SUPERSEDES the computed floor, Steve 2026-09-14)
 
-**This section previously specified a roast-date RANGE across lots in stock. That is superseded.**
-Standard §5.4 is authoritative; the rule is now:
+**This section has carried two earlier rules: a roast-date RANGE across lots (superseded 2026-08-21) and
+a computed policy FLOOR (Standard v1.12 to v1.21, superseded by v1.22).** Standard §5 *What the customer
+sees* is authoritative; the rule is now:
 
-> Roasted on or after 23-MAY-2026
+> Roasted on or after 03-SEP-2026
 
-**today minus `settings.freshness_window_days`, computed server-side.** It is a guarantee derived from
-policy - *nothing we ship you is older than this* - not a report of what is in the bin.
+**the roast date of the oldest lot with sellable stock for that product**, computed server-side from the
+lot records (§13.9), in the same green strip on the product card and on the product page, with no second
+freshness line on either. A collection's floor is the oldest of its components' floors. The policy floor,
+**today minus `freshness_window_days`**, remains as the **fallback** when no lot date is known, and the
+Liquid for it (§13.10) still stands.
 
-**Why it replaced the range, and this matters for the build:**
+**What the build needs that the floor did not:**
 
-- **It has no dependency on lot data.** A range needed the FIFO derivation to be correct AND the lot
-  records to have been entered on time. This needs neither. A missed receipt cannot make it lie.
-- **The range's fresh end was unreachable anyway.** Under FIFO a single-bag buyer always gets the
-  oldest lot, so the upper bound was systematically optimistic.
+- **Lot records populated on receipt.** The 3PL receiving report writes roast date and quantity into the
+  lot metaobject (§13.9); the oldest lot with quantity above zero supplies the date. This is now a
+  customer-facing dependency, not an operations-only one.
+- **Reconciliation.** The date is exactly as true as the lot record and the pick discipline behind it. A
+  lot recorded as empty while bags remain shows a younger date than the bag that ships. The periodic
+  reconciliation of the 3PL on-hand report against the lot records (SKU standard; Standard §12.9) is the
+  control.
+- **Compute it in Liquid, never in the browser.** Unchanged. A client clock can be wrong, and the fallback
+  floor must come from the store's clock. CDN caching can only serve a date a day or two old, which
+  errs in the customer's favour.
 
-**Compute it in Liquid, never in the browser.** A client clock can be wrong, and the store's timezone
-is the correct one. CDN caching can only serve a floor a day or two old, which states a *wider* window
-than we guarantee - true, and erring in the customer's favour.
+**Offerta shows a computed band, not a date** (Standard v1.13): an Offerta product can hold more than one
+lot on a slow-moving SKU, so a single date was only mostly honest.
 
-**Offerta is the exception and shows its ACTUAL roast date**, because an Offerta product is one
-split-off lot and knows its own date, and because showing the same floor on both shelves would make
-them look identically fresh - hiding the very thing that justifies the markdown.
-
-**`DD-MMM-YYYY` wherever a date is shown to anyone** (Standard §5.4). `03/07/2026` is 3 July to an
+**`DD-MMM-YYYY` wherever a date is shown to anyone** (Standard §5). `03/07/2026` is 3 July to an
 Italian roaster and 7 March to a U.S. warehouse.
 
 **Drop `best_by` as a displayed field.** It is `roast_date + freshness_window_days` - showing both
 displays one fact twice and aims the reader at a deadline rather than at freshness.
 
-**FIFO is explained in the FAQ, not on the product page.** With a computed floor there is nothing on
-the product page that needs explaining.
+**FIFO is explained in the FAQ, not on the product page** - and so is the window itself, beside the
+12-to-24-month comparison that gives it meaning (FAQ entry decided in POC31, not yet written). The POC
+renders this rule from the fixture `roast_date` as a stand-in for the lot record; see `roastFloorLabel()`.
 
 **The FIFO derivation is still needed** - just not for display. It drives the Offerta transition
 (§14.2) and tells operations which lot is oldest.
@@ -1764,7 +1770,9 @@ A visible failure beats a silent one, which is the trade this project takes ever
 Roasted on or after {{ floor | date: "%d-%b-%Y" | upcase }}
 ```
 
-rendered `01-JUN-2026` on 2026-08-30, i.e. today minus 90, in `DD-MMM-YYYY` as §5.4 requires.
+rendered `01-JUN-2026` on 2026-08-30, i.e. today minus 90, in `DD-MMM-YYYY` as §5.4 requires. Since
+Standard v1.22 this floor is the **fallback** for a product with no lot date; the displayed date is
+normally the oldest lot's roast date (§13.9, and the display rule above).
 
 #### Three platform findings from the same run
 

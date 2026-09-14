@@ -1,6 +1,6 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.21 · 2026-09-12**
+**Version 1.22 · 2026-09-14**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.3 (look & voice) · Collaboration Standard v1.1 (how we work).
 
@@ -30,6 +30,17 @@
 > version changelog below carries what moved between revisions; the body states only what is true.
 >
 > Tracked as §12.13, which cannot close before launch.
+
+> **v1.22 (2026-09-14)** changes the **main-shelf freshness display** in **§5**, Steve's call after
+> the B2C reviewer's reply on POC30. The product card and the product page now carry **one** freshness
+> strip, *"Roasted on or after DD-MMM-YYYY"*, where the date is the **oldest roast date still on the
+> shelf for that coffee** - so it differs card to card - and a collection shows the oldest of its
+> components. The window sentence (*"These beans are within our best-freshness window of N days"*)
+> leaves both surfaces; the window is stated once, in the FAQ, beside the 12-to-24-month comparison
+> that gives it meaning (entry decided, not yet written). The v1.12 computed policy floor survives
+> only as the **fallback** when no lot date is known. The trade accepted knowingly: the date is
+> exactly as true as the lot record, which makes the 3PL receiving report and the reconciliation
+> control customer-facing. No window moved, nothing repriced.
 
 > **v1.21 (2026-09-12)** changes one label and one placement in **§1**, both Steve's. **Bottega's
 > storefront label is "Accessories"** (gloss: *Bottega, the accessory shop*), and it lives in the
@@ -475,10 +486,13 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
 
 ## 5. Freshness & the Offerta transition
 
-- **Freshness statement, main shelves (revised v1.13):** "These beans are within our best-freshness
-  window of `{freshness_window_days}` days." The number is **resolved from the declaration, never
-  typed** (§5.4, §5.5, build spec §11). Never "best by" alone. **Offerta has its own statement** - see §5.4.
-  The peak-flavour clause was removed from this sentence, and **`peak_flavor_days` was retired as a
+- **Freshness statement, main shelves (revised v1.22):** "Roasted on or after `DD-MMM-YYYY`" - the
+  oldest roast date still on the shelf for that coffee, one strip on the card and on the product page,
+  and nothing else (the full rule is under *What the customer sees* below). The window is **not**
+  stated on either surface; it is stated once in the FAQ, **resolved from the declaration, never
+  typed** (§5.4, §5.5, build spec §11). Never "best by" alone. **Offerta has its own statement** - see
+  below. From v1.13 to v1.21 the statement was "These beans are within our best-freshness window of
+  `{freshness_window_days}` days." The peak-flavour clause was removed from that sentence, and **`peak_flavor_days` was retired as a
   setting entirely** (v1.14). The confusion was never the number: *"brew within 30 days"* sat inches
   from Offerta's *"Best within 27 days"*, and the two measured from different things. Steve's
   diagnosis: the other three windows are **gates we enforce and control**, whereas this one is
@@ -497,8 +511,8 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
   One statement doing three jobs - the purchase expectation, the freshness advice, and the route to
   a grinder - instead of two sentences saying overlapping things a few lines apart. Note the 30 days
   counts **from receiving**, not from roast, which is what removes the ambiguity.
-  **It is NOT paired with an actual roast date on the main shelves** - v1.12 replaced that with a computed floor, *"Roasted on or after DD-MMM-YYYY"*; only
-  Offerta shows a real date (§5.4).
+  It sits beside the freshness strip, *"Roasted on or after DD-MMM-YYYY"* (v1.22, *What the customer
+  sees* below); Offerta shows a computed band instead (v1.13).
 - **`days_to_offerta` is RETIRED (v1.12).** It carried its own default of 45, which is the same fact as
   the freshness window stated a second time - and by 2026-08-21 the two had diverged, 45 against 90.
   Coffee moves to Offerta when it leaves the freshness window, so **`freshness_window_days` is the only
@@ -639,25 +653,42 @@ windows may be **shortened, never extended** (§5.4). A save that increases eith
 **A subscription is never filled with coffee that exceeds the freshness promise on its ship date.**
 That is the trigger for §6.1.
 
-**What the customer sees (revised v1.12, Steve, 2026-08-21).** An earlier draft showed a roast date
-**range** across lots in stock. That is replaced by something simpler and stronger.
+**What the customer sees (revised v1.22, Steve, 2026-09-14).** One freshness statement per surface,
+and it varies per coffee. An earlier draft showed a roast-date **range** across lots; v1.12 replaced it
+with a computed policy floor; v1.22 replaces the floor with a fact about the bag.
 
-**Main shelves show a computed floor, not a fact about the bag:**
+**Main shelves show the oldest roast date still on the shelf for that coffee:**
 
-> Roasted on or after 23-MAY-2026
+> Roasted on or after 03-SEP-2026
 
-where the date is **today minus `freshness_window_days`**, computed server-side. It is a **guarantee
-derived from policy** - *nothing we ship you is older than this* - and it is true by construction,
-because coffee past the window is off sale entirely (§5).
+where the date is the **roast date of the oldest lot with sellable stock** for that product, computed
+server-side from the lot records (build spec §13.9). Under FIFO (§5.4) the bag the buyer receives is
+never older than it, so the statement is a floor on the bag in hand, not a range. It renders in the
+same green strip on the product card and on the product page, and there is no second freshness line
+on either surface. **A collection** (§7) holds no stock and is boxed on order, so its floor is the
+**oldest of its components' floors** - the same union-over-components rule its filters use; its card
+keeps its own note (*"Boxed for you when you order"*).
 
-**Three reasons it beats showing actual dates:**
+**The policy floor is the fallback, never the display.** Where no lot date is known for a product, the
+strip shows **today minus `freshness_window_days`** - the v1.12 rule, still true by construction
+because coffee past the window is off sale entirely (§5). A missing lot record therefore widens the
+claim rather than falsifying it.
 
-1. **It cannot go stale or lie.** It has no dependency on lot data being entered, entered on time, or
-   entered correctly. An actual roast date would show the *previous* lot's date on coffee already
-   shipping if a receipt were recorded late.
-2. **A range's fresh end is unreachable.** Under FIFO a single-bag buyer always receives the oldest
-   lot, so the upper bound of a range is systematically optimistic.
-3. **It is comprehensible.** One date, one meaning, no arithmetic asked of the reader.
+**Why this replaces the v1.12 computed floor.** The floor was a guarantee derived from policy, and it
+read identically on every card. A statement that is the same everywhere is a rule, and rules belong in
+the FAQ; a date that differs card to card is evidence that we know how old our coffee is - the honesty
+proof the B2C review asked the badge to carry. Of v1.12's three reasons for preferring the floor, one
+still binds and is **accepted knowingly: the date is exactly as true as the lot record and the pick
+discipline behind it.** A lot recorded as empty while bags remain in the bin would show a younger date
+than the bag that ships. The control is the 3PL receiving report populating the lot record on receipt,
+and the periodic reconciliation of the 3PL's on-hand report against the lot records (SKU standard;
+§12.9). The second reason - a range's fresh end is unreachable under FIFO - does not apply, because
+only the oldest lot's date is shown. The third - one date, one meaning, no arithmetic - is unchanged.
+
+**The window itself is stated once, in the FAQ**, beside the comparison that gives it meaning: most
+coffee is sold on a 12-to-24-month shelf life; ours leaves the shelf at `{freshness_window_days}` days
+from roast, the window in which it tastes as the roaster intended. Neither the card nor the product
+page states the window. (FAQ entry: decided in POC31, not yet written.)
 
 **The best-by date is not displayed.** It is the roast date plus the window, so showing both states
 one fact twice and aims the reader at a deadline rather than at freshness.
@@ -695,11 +726,10 @@ remaining-days figure would be a third number on the same subject.
 partner. `03/07/2026` is 3 July to an Italian roaster and 7 March to a U.S. warehouse; that ambiguity
 would break FIFO picking and mislead a customer, and it will otherwise happen.
 
-**FIFO itself is explained in the FAQ, not on the product page.** With a computed floor there is
-nothing on the product page that needs explaining.
+**FIFO itself is explained in the FAQ, not on the product page.** The strip states the oldest date and
+nothing else; why the oldest ships first is the FAQ's job.
 
-**Approved customer copy (Steve, 2026-08-20).** Belongs in the FAQ, with the roast range and the FIFO
-line surfacing on the product page:
+**Approved customer copy (Steve, 2026-08-20).** Belongs in the FAQ:
 
 > We purchase the same coffee routinely which is why we sometimes quote a roast date range. We always
 > fulfill orders in the order that we receive inventory, or First In First Out (FIFO), in
@@ -1425,5 +1455,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.21 · 2026-09-12 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.22 · 2026-09-14 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
