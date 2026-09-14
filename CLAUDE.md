@@ -4107,6 +4107,58 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   id, name and role re-verified against live output immediately before the delete, survivors
   confirmed as exactly POC28/POC29/POC30. Its batch is commit `e9dd8bb` and is redeployable.
 
+- 2026-09-13/14 — **POC31 built and committed, NOT deployed: the reviewer's second look at POC30,
+  Steve's own copy list, and a freshness display that finally varies per coffee.** Ledger:
+  `docs/POC31_change_list.md`. **The batch opened with a retraction that is worth more than most
+  findings:** the same reviewer who assessed POC28 re-inspected the deployed POC30 at frame level and
+  withdrew their own number-one open item - add-to-cart feedback *is* implemented, three signals at
+  once (button state, the bean flying a C, the toast), and their earlier finding came from a
+  post-animation screenshot plus static `innerText`, which cannot see a second of motion. Logged as a
+  strength in `docs/scoring-history.md` so the next pass does not re-inherit it; the scoring series'
+  own lesson, that the claims which survive are the ones nobody measured, cut the other way this time.
+  **Copy (Steve):** "A confession."; *uniquely* their own; the *temperature-controlled* warehouse; the
+  FDA U.S. Agent sentence out of About and into one FAQ entry, because the consumer does not care and
+  the regulator does; and **"Slow boats age the beans."** for the second beat under the hero - Steve's
+  daughter pointed out that a plane crosses the ocean too, so *"an ocean crossing ages coffee"* never
+  said why flying matters; only a ship owns the weeks. **Contrast (item 4): the reviewer's 1.88:1 on
+  "Save to my account" was a checker artifact** - the ribbon paints a gradient image with no
+  background color, so a computed-style checker fell through to the cream page - **with a smaller,
+  real failure underneath it:** measured on the live ribbon, gold on the gradient's soft-brown end was
+  3.95:1 and 4.35:1 at the link's corner at 1280, under the 4.5 bar. The gradient now ends at Espresso,
+  the flat ground of the hero band beneath it (5.6:1 at the lightest point), with a solid fallback
+  color so checkers read the real ground. Measured, then looked at. **Freshness (item 5), and Steve's
+  reframing beat both the reviewer's prescription and mine.** The reviewer's reply conceded the card
+  badge as a real differentiator against 12-to-24-month competitors, provided the comparison is stated
+  somewhere the buyer sees it and freshness never headlines the hero or the price. Steve: *"we state
+  the same thing on all coffee cards. I'm not sure that actually helps. It's more of an FAQ
+  statement."* A badge that reads identically everywhere is a rule; a date that differs card to card
+  is evidence. The green strip on the card and the product page now reads **"Roasted on or after
+  DD-MMM-YYYY"**, the oldest roast date still on the shelf for that coffee - nine fixtures, nine dates -
+  a collection showing the oldest of its components (caught by driving its page after the first cut),
+  the policy floor kept as the fallback, the window sentence gone from both surfaces. His *"available
+  through [date + 90]"* second half was argued off as the retired best-by date wearing a new name.
+  **This reversed the v1.12 rule with its three recorded reasons, so Store Operating Standards
+  v1.21 -> v1.22 was published before the push, per the POC19 precedent** - and the trade is written
+  down: the date is exactly as true as the 3PL's lot record and the pick discipline behind it, which
+  makes the reconciliation control customer-facing. **FAQ (item 6), reviewed together one entry at a
+  time:** the duplicated freshness question merged into one entry carrying the window and the
+  comparison; FIFO dropped on Steve's call; two entries rewritten in his words with copy-rule tweaks
+  recorded; *"curate"* kept after checking it does literal work on six other surfaces. **Three
+  consequences fixed in the same pass:** no charity is named anywhere on the storefront (*Feeding
+  Tampa Bay* only holds if the 3PL is in Tampa, undecided; donations get a Journal post when made); the
+  Promise page no longer says *"we do not discount our way out of waste"*, which Offerta contradicted;
+  and its freshness window states the selling gate rather than the consumption advice POC19 retired.
+  **v1.22 -> v1.23** the same afternoon to record those three, with the approved 2026-08-20 FIFO copy
+  removed rather than kept as history (nobody transacted under it). Both publishes: both touched
+  renders at exit 0, archived, delivered, md5-verified, the Collaboration render confirmed by extracted
+  text. **Deferred (Steve):** the placeholder-ratings real-proof plan. **Follow-on worth keeping:**
+  Steve's *last-chance alert* - ask at sign-up whether a customer wants to hear just before a coffee is
+  donated - which answers the Offerta invitation mechanism's open question (who gets the email) with
+  consent rather than our guess. Validation at the documented baseline throughout (**15 offenses /
+  0 errors / 0 new**). Commits `67966f0`..this one. **Not pushed to a preview theme; Steve has not
+  yet called the batch complete.** When he does, `crema-poc-deploy` prunes POC28 under the
+  three-newest cap, on his explicit go by name and id.
+
 ---
 
 ## 10. Open questions / TODO
@@ -4178,6 +4230,12 @@ Validation at the documented baseline (**15 offenses / 0 errors / 0 new**). The 
 reason recorded. Batch content asserted **on the deployed theme**: the `.hero-media` block, the
 hero line ending "in Italy", `isPublic()` and `flyBean()` in the JS, the gated `#sec-founding`
 band, "Surprise Samplers" in the header, the 709 KB hero mp4 present, `ci-temp-lp1.jpg` absent.
+
+> ⚠ **The repo is AHEAD of this theme (2026-09-14).** POC31 is built and committed (`67966f0`
+> onward: copy, the ribbon ground, the per-coffee freshness strip, the FAQ pass, Standards v1.22 and
+> v1.23) and is **NOT deployed** - Steve has not yet called the batch complete. This theme still
+> renders POC30's card badge, window sentence and FAQ. Retire this callout with the POC31 deploy;
+> the deploy prunes POC28 under the three-newest cap on Steve's explicit go.
 
 **What POC30 is:** the B2C expert review of POC28 worked in priority order across nine items, all
 built interactively with Steve and recorded in `docs/POC30_change_list.md`. The home hero is

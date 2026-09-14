@@ -221,6 +221,18 @@ overflow and did not.
 | F3 | P24 | **Open** — 76 simulated buttons; a durability risk, not a defect a user meets |
 | F4 | P24 | **Open** — privacy is still Shopify's automated policy |
 
+**A strength recorded from outside the series (2026-09-13), so no future pass re-inherits the
+withdrawn finding.** The external B2C reviewer had listed add-to-cart feedback as the number-one open
+interaction gap on POC30 ("badge increments silently"). On frame-level inspection they withdrew it: on
+click, **three signals fire at once** - the button state change, an animated bean flying a C from the
+button to the cart icon and cleaning itself up on arrival, and the toast - and the badge increments to
+the correct count on arrival. Their finding came from a post-animation screenshot plus static
+`innerText`, which cannot capture a second of motion. **Three feedback signals against the typical
+one, and the bean is a distinctive brand touch.** Worth noting for the method: this series' standing
+lesson is that unmeasured claims survive; here a measured claim was *wrong* because the instrument
+could not see motion. A conversion-mechanics pass that reads the DOM after the fact will make the same
+mistake - watch the frames, or read `flyBean()` and `confirmAdded()` in `ci-storefront.js`.
+
 **And the one that predated all of them is CLOSED.** The **legal pages** — privacy, terms, refund,
 shipping — were launch-gating since July and named in every pass. Steve published them on
 **2026-08-22**, verified live by fetching the URLs, and POC22 linked all four from the footer. It
