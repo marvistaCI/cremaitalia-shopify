@@ -251,7 +251,15 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 }
 
 /* ---- POC6 taste-profile ribbon ---- */
-.taste-ribbon{display:none;width:calc(100% - 3rem);max-width:var(--ci-page-max);margin:1.25rem auto;background:linear-gradient(135deg,#2a1208,#6B4A38);color:var(--ci-cream);border-radius:var(--ci-radius);overflow:hidden}
+/* Ground, POC31 (2026-09-14): the gradient ends at Espresso (--ci-coffee), not the soft brown
+   #6B4A38 it used to. Measured on the live ribbon at 1280: the gold "Save to my account" link
+   sits at the light right end, and gold on #6B4A38 is 3.95:1, 4.35:1 at the link's bottom-right
+   corner - under the 4.5:1 AA bar for 12.8px text. On Espresso it is 5.6:1, and the ribbon now
+   matches the flat Espresso .dark-hero directly above it instead of reading lighter at the edge.
+   The solid background-color is a fallback with no visual effect where the gradient paints: a
+   computed-style contrast checker sees only background-color, and with none set it fell through
+   to the cream page and reported 1.88:1 - the artifact behind the POC30 review's finding. */
+.taste-ribbon{display:none;width:calc(100% - 3rem);max-width:var(--ci-page-max);margin:1.25rem auto;background-color:#2a1208;background-image:linear-gradient(135deg,#2a1208,var(--ci-coffee));color:var(--ci-cream);border-radius:var(--ci-radius);overflow:hidden}
 .taste-ribbon.ribbon-visible{display:block}
 .tr-tags.muted{opacity:.5}
 .taste-ribbon-inner{max-width:var(--ci-page-max);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem 1.5rem;flex-wrap:wrap;padding:.7rem 1.25rem;min-height:2.6rem}
