@@ -15,7 +15,7 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > *what changed, when*. On any decision: update the Standard **and** log it. See
 > `docs/standards/README.md`.
 > - **Brand Standards** (v2.3) — look & voice: `docs/standards/brand-standards/`
-> - **Store Operating Standards** (v1.22) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
+> - **Store Operating Standards** (v1.23) — pricing/shelves/discounts/fulfilment: `docs/standards/store-operating-standards.md`
 > - **Collaboration Standard** (v1.1) — lanes, source/render model, editing protocol, render-trust: `docs/standards/collaboration-standard.md`
 >
 > ⚠ **EVERY VALUE IN THE STANDARDS IS PROVISIONAL UNTIL THE SITE GOES PUBLIC (Steve,

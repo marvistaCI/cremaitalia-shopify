@@ -1523,9 +1523,11 @@ Italian roaster and 7 March to a U.S. warehouse.
 **Drop `best_by` as a displayed field.** It is `roast_date + freshness_window_days` - showing both
 displays one fact twice and aims the reader at a deadline rather than at freshness.
 
-**FIFO is explained in the FAQ, not on the product page** - and so is the window itself, beside the
-12-to-24-month comparison that gives it meaning (FAQ entry decided in POC31, not yet written). The POC
-renders this rule from the fixture `roast_date` as a stand-in for the lot record; see `roastFloorLabel()`.
+**FIFO is not explained to the customer** (Standard v1.23); the strip's "oldest bag we hold" carries the
+consequence. **The window is stated once, in the FAQ**, beside the 12-to-24-month comparison that gives
+it meaning (entry written in POC31). No charity is named on the storefront until there is one to name
+(Standard §5, v1.23). The POC renders this rule from the fixture `roast_date` as a stand-in for the lot
+record; see `roastFloorLabel()`.
 
 **The FIFO derivation is still needed** - just not for display. It drives the Offerta transition
 (§14.2) and tells operations which lot is oldest.

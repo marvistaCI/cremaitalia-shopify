@@ -1,6 +1,6 @@
 # Crema Italia — Store Operating Standards
 
-**Version 1.22 · 2026-09-14**
+**Version 1.23 · 2026-09-14**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
 **Companion standards:** Brand Standards v2.3 (look & voice) · Collaboration Standard v1.1 (how we work).
 
@@ -30,6 +30,20 @@
 > version changelog below carries what moved between revisions; the body states only what is true.
 >
 > Tracked as §12.13, which cannot close before launch.
+
+> **v1.23 (2026-09-14)** records three copy decisions from the POC31 FAQ review, all Steve's, none
+> of which moves a window, a price or a discount. **(1) The FAQ freshness entry is written** (v1.22
+> said "not yet written"): one entry carries the roast date on every bag, the oldest-bag date on every
+> shelf, the market's 12-to-24-month "Best by" framing, the window as a token, and the no-waste
+> pledge. **(2) No charity is named on the storefront or in this Standard.** The donation recipient
+> depends on where the 3PL sits, which is undecided, so "Feeding Tampa Bay" leaves §5, §9, the
+> Promise page, the FAQ and the Offerta note; donations are named in the Journal as they are made.
+> **(3) FIFO is no longer explained to the customer.** The approved 2026-08-20 FAQ copy is
+> withdrawn and removed here rather than kept as history (nobody transacted under it - the
+> provisional-values rule); the strip's "oldest bag we hold" carries the consequence, and the
+> mechanism is ours. The Promise page's freshness window now states the selling gate rather than
+> consumption advice, and its no-waste pledge no longer says "we do not discount our way out of
+> waste", which Offerta contradicted.
 
 > **v1.22 (2026-09-14)** changes the **main-shelf freshness display** in **§5**, Steve's call after
 > the B2C reviewer's reply on POC30. The product card and the product page now carry **one** freshness
@@ -528,7 +542,9 @@ not a recurring sale. **No Italian-holiday discounting** — holidays are Journa
   navigation entry, Offerta products appear on no public grid, and the public FAQ no longer names the
   shelf - coffee leaving the window "comes off our shelves".
 - **Donation threshold:** coffee older than `{offerta_fresh_days}` is removed from sale and donated
-  to **Feeding Tampa Bay** (the no-waste pledge). **The value is named, never typed** (§5.5).
+  to charity (the no-waste pledge). **The recipient is not named** in this Standard or on the
+  storefront (v1.23): it depends on where the 3PL sits, which is undecided, and donations are named
+  in the Journal as they are made. **The value is named, never typed** (§5.5).
 - **Offerta guarantee is modified:** "as-is, defects only" — the standard first-bag satisfaction
   guarantee (§9) does not apply to already-discounted aged lots.
 
@@ -688,7 +704,7 @@ only the oldest lot's date is shown. The third - one date, one meaning, no arith
 **The window itself is stated once, in the FAQ**, beside the comparison that gives it meaning: most
 coffee is sold on a 12-to-24-month shelf life; ours leaves the shelf at `{freshness_window_days}` days
 from roast, the window in which it tastes as the roaster intended. Neither the card nor the product
-page states the window. (FAQ entry: decided in POC31, not yet written.)
+page states the window. (FAQ entry written in POC31; the wording is in the theme, not restated here.)
 
 **The best-by date is not displayed.** It is the roast date plus the window, so showing both states
 one fact twice and aims the reader at a deadline rather than at freshness.
@@ -726,25 +742,12 @@ remaining-days figure would be a third number on the same subject.
 partner. `03/07/2026` is 3 July to an Italian roaster and 7 March to a U.S. warehouse; that ambiguity
 would break FIFO picking and mislead a customer, and it will otherwise happen.
 
-**FIFO itself is explained in the FAQ, not on the product page.** The strip states the oldest date and
-nothing else; why the oldest ships first is the FAQ's job.
+**FIFO is not explained to the customer (Steve, 2026-09-14).** The strip's *"oldest bag we hold"*
+carries the only consequence a buyer needs - the bag received is never older than the date shown -
+and the mechanism behind it is ours. The FIFO paragraph approved on 2026-08-20 stood in the FAQ until
+POC31 and is withdrawn; it is not kept here as history, because nobody transacted under it.
 
-**Approved customer copy (Steve, 2026-08-20).** Belongs in the FAQ:
-
-> We purchase the same coffee routinely which is why we sometimes quote a roast date range. We always
-> fulfill orders in the order that we receive inventory, or First In First Out (FIFO), in
-> inventory-speak. If a particular lot is out of our immediate freshness window, it comes off our
-> shelves. We do not fulfill subscriptions with products that exceed our freshness promise on the
-> date of shipping to you.
->
-> In rare circumstances where a lot exceeds our freshness promise entirely, we endeavor to
-> donate this coffee to worthy recipients. Remember, commercial coffee is typically sold as fresh
-> within a 24-month freshness window.
->
-> Please note that any order of more than one bag may span lots, but the freshness of spanned lots is
-> always in the favor of the customer. We want you to enjoy fresh coffee.
-
-**Substantiation for the 24-month claim.** It is an objective claim about the market and needs a
+**Substantiation for the 12-to-24-month claim.** It is an objective claim about the market and needs a
 reasonable basis held on file - not a footnote on the page, which would read defensive and off-register.
 The basis is in OneDrive `CremaItalia LLC\Brand and Marketing\Market Research\`, principally
 *Deep-dive competitive pricing research Aug 2026*, which records "dated roast/best-before windows
@@ -1009,7 +1012,7 @@ Three lines, in this exact order, on a single editorial page linked from the foo
 3. Cancel your subscription anytime in a couple of clicks.
 
 Below: first-bag satisfaction guarantee (standard shelves; Offerta is "as-is, defects only" per §5),
-damage replacement, the freshness window, and the no-waste pledge (Feeding Tampa Bay donations).
+damage replacement, the freshness window, and the no-waste pledge (charitable donations, recipient unnamed - §5).
 
 > The **exact customer-facing wording lives in the POC/theme** (the source of truth for *copy*);
 > reproduce it from there and honor the no-em-dash rule (§10).
@@ -1455,5 +1458,5 @@ placeholder image ships in the real build.
 
 ---
 
-*Store Operating Standards v1.22 · 2026-09-14 · Source of truth: `docs/standards/store-operating-standards.md`.*
+*Store Operating Standards v1.23 · 2026-09-14 · Source of truth: `docs/standards/store-operating-standards.md`.*
 *Renders (PDF for humans / Cowork) are read-only snapshots stamped with this version — edit the source, not the render.*
