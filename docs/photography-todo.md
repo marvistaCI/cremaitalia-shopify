@@ -78,6 +78,14 @@ loop. Two things from that attempt change the brief below:
   cast on the glaze and a lamp hot-spot on the inner rim, both named in the brief above and both
   present anyway.
 
+**Every hero loop is archived in OneDrive `Brand and Marketing\Video_Assets\`** as
+`Crema_Italia_HeroLoop_<NNN>_<SourceClip>.mp4` plus its `_poster.jpg`, with a `README.txt`
+manifest (cut window, cup, crop, why it is a placeholder, the git commit that shipped it). The
+repo carries only the loop in use; earlier ones survive in git history, which is not a shelf.
+Sequence numbers are assigned once and never reused (Steve, 2026-09-15): 001 is the POC30 cut
+from `MOV_3863`, 002 is the POC32 cut from `MOV_3891`. Add a block to the manifest whenever a
+loop is added.
+
 **Production note:** in the real store the hero is a video section with the media on Shopify
 **Files** (`video_tag`), not a theme asset. The theme-asset route is the POC mock.
 

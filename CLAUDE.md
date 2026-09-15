@@ -4192,12 +4192,40 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   frame, outside the dense zone. **A floor is a floor; the only text in the first viewport wants
   a margin above it, not a pass.** Steve chose the take knowing the old one had better crema
   texture: *"the crema doesn't bother me... I've seen a lot of shots exactly like this."*
+  Commit `a49c8e6`. **DEPLOYED** via the `crema-poc-deploy` skill to a NEW unpublished theme
+  **"Crema Italia POC32 Preview" (id `152388894889`)**: `theme list` + `git log
+  origin/main..HEAD` run **first** (no POC32, no duplicates), validation at the documented
+  baseline (**15 offenses / 0 errors / 0 new**), then **pull-and-diff proved** the push - both
+  sides 40 files, zero mismatches after normalising line endings, batch content asserted on the
+  deployed files. **POC29 (`152193794217`) pruned** on Steve's explicit go under the three-newest
+  cap, the split computed from live JSON and the theme re-verified by name, id and role in the
+  same command as the delete; its batch is commit `f354f5e` and is redeployable. Survivors
+  confirmed as exactly POC30/POC31/POC32.
+
+- 2026-09-15 — **Hero loops become a marketing resource with a home and a naming convention.**
+  Steve: keep the old loop as well as the new one, with copies of whatever the repo keeps in
+  the marketing image assets, and what naming convention. **The repo is not a shelf** - it
+  carries only the loop in use, and the POC30 cut survived only in git history the moment POC32
+  replaced it, which is exactly the "register with no named home" shape that lost the SKU format
+  on 2026-08-29. New OneDrive folder **`Brand and Marketing\Video_Assets\`** (sibling of
+  `Photo_Assets`, created this session), holding both loops and both posters, each copy
+  **md5-verified** against its source (the old one recovered from `a49c8e6~1`), and a
+  `README.txt` manifest. **Convention: `Crema_Italia_HeroLoop_<NNN>_<SourceClip>.mp4`** plus
+  `_poster.jpg` - Steve's `HeroLoop001` stem, given the brand prefix the Logo Assets Web files
+  already use and the source camera file so a filename alone states provenance. Two rules folded
+  in from earlier lessons: **sequence numbers are assigned once and never reused or renumbered**
+  (the SKU workbook's positional-code defect), and anything that would make the filename
+  unwieldy - cut window, cup, crop, why it is a placeholder, the commit that shipped it - lives in
+  the manifest, one block per loop. 001 is the POC30 cut from `MOV_3863`, 002 the POC32 cut from
+  `MOV_3891`. Both are placeholders; the README says so in capitals and names the shot Steve is
+  hunting for: a wide, low cup with distinct Italian markings, Pienza-like in proportion.
+  `docs/photography-todo.md` slot 0 points at the folder.
 
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC31 (deployed + pull-and-diff proved 2026-09-14) — read this first
+**▶ CURRENT STATE — POC32 (deployed + pull-and-diff proved 2026-09-15) — read this first
 when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
@@ -4219,17 +4247,12 @@ when resuming.**
 > theme. `git log origin/main..HEAD` had already come back empty that same session — the
 > contradiction was visible and went unread.
 
-> ⚠ **DRIFT (2026-09-15): the repo is one batch ahead of the newest preview.** POC32 (the hero
-> video replaced from `MOV_3891`, scrim re-tuned, `docs/POC32_change_list.md`) is committed and
-> NOT deployed; it awaits Steve's go, then the `crema-poc-deploy` ritual. Delete this callout in
-> the same pass that deploys it.
-
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC31 Preview" | `152372117673` |
+| **Newest POC preview** | "Crema Italia POC32 Preview" | `152388894889` |
+| Prior preview | "Crema Italia POC31 Preview" | `152372117673` |
 | Prior preview | "Crema Italia POC30 Preview" | `152344002729` |
-| Prior preview | "Crema Italia POC29 Preview" | `152193794217` |
 
 > **The live theme is current as of 2026-08-24.** Commit **`2b80122`** (five policy links in the
 > coming-soon footer) was pushed scoped to `150557294761` and **verified on the public page**: all
@@ -4260,7 +4283,25 @@ a real cart, and real customers; none is code.
 > accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
 > gate** on brand identity and product detail rising above 9.
 
-**POC31 is deployed** and is the only POC31 theme - **40 files match the repo**, proved by
+**POC32 is deployed** and is the only POC32 theme - **40 files match the repo**, proved by
+pull-and-diff on 2026-09-15 (both sides 40; nothing on only one side; zero mismatches after
+normalising line endings). `theme list` and `git log origin/main..HEAD` run **first**: no POC32
+existed, no duplicate names, four unpushed commits all from this session. Validation at the
+documented baseline (**15 offenses / 0 errors / 0 new**). Batch content asserted **on the
+deployed files**: the hero mp4 at exactly 411,497 bytes, the desktop scrim at `270deg`, the phone
+scrim's 35%/70% stops, no comparison switch left in the CSS, JS or markup, and the provenance
+comment naming `MOV_3891`.
+
+**What POC32 is:** the hero video replaced from Steve's 2026-09-15 reshoot (`MOV_3891`, the
+fourth take of the day), with the desktop scrim mirrored to the right where the new footage's
+dark zone is and the phone scrim deepened after it measured **3.32:1** under the new frame -
+passing the large-text floor on paper and unreadable in practice; now worst **7.1:1**. The crop
+excludes the machine's pressure gauge, whose dial reads a third-party trademark at full
+resolution. Still `ci-temp-*`: the cup is propped at the rear (a workaround for a tall, narrow
+cup, to retire when a wide low one exists), the bubble ring is that tilt's remnant, the light is
+tungsten. Ledger: `docs/POC32_change_list.md`; brief: `docs/photography-todo.md` slot 0.
+
+**What POC31 was:** the only POC31 theme - **40 files match the repo**, proved by
 pull-and-diff (both sides 40; nothing on only one side; 39 byte-identical and the fortieth,
 `config/settings_data.json`, identical after normalising line endings - the repo checkout carries
 CRLF from autocrlf and Shopify serves LF; the deploy skill's Step 4 now says to compare that way).
@@ -4546,8 +4587,12 @@ here.** This paragraph used to hardcode them, and it went stale the moment the t
 pruned — twice. Open the preview in a **real browser**; a `curl` of a `preview_theme_id` link is NOT
 a valid check (see §9 2026-07-06). Refresh with `shopify theme push --theme <id from the table>`.
 
-**Only POC29, POC30 and POC31 previews now exist** - at the three-newest cap, enforced as
-`crema-poc-deploy` Step 5. **POC28 (`152051744937`) was deleted 2026-09-14** on Steve's explicit go
+**Only POC30, POC31 and POC32 previews now exist** - at the three-newest cap, enforced as
+`crema-poc-deploy` Step 5. **POC29 (`152193794217`) was deleted 2026-09-15** on Steve's explicit go
+(his deploy instruction named it; the keep/prune split was computed from a live `theme list
+--json`, and POC29 was re-verified by name, id and role in the same command as the delete, which
+ran **after** the POC32 push was proven by pull-and-diff); its batch is commit `f354f5e` on
+`origin/main` and it is redeployable. Earlier: **POC28 (`152051744937`) was deleted 2026-09-14** on Steve's explicit go
 (his deploy instruction named the oldest instance; the keep/prune split was computed from a live
 `theme list --json`, and POC28 was re-verified by name, id and role immediately before the delete,
 which ran **after** the POC31 push was proven by pull-and-diff); its batch is commit `c91ee87` on
