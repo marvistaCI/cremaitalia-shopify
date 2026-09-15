@@ -57,8 +57,13 @@ loop. Two things from that attempt change the brief below:
   top of frame (the spoon in 3882 proves that reads fine), and in exchange the crema surface is at
   its largest, the bloom sits dead centre, and the black counter beside the cup is a text zone that
   needs almost no scrim. Take both angles if time allows.
-- The blue-and-white cup reads Italian at a glance where the Pienza cup did not; Steve to say
-  where it is from before it is leaned on. Daylight, not the overhead lamp: 3881 carried a tungsten
+- **The cup's shape matters more than its pattern (Steve, 2026-09-15, after `MOV_3883`).** The
+  blue-and-white cup is tall and narrow, so from 45 degrees the coffee surface is a thin ellipse
+  and the stream runs down the inner wall; three takes in it never showed crema the way the wide,
+  shallow Pienza cup did in one. Next cup: a wide, low bowl, the classic tazzina proportion. The
+  camera is not the limit - 1080p at 21 Mb/s is sharp and the crop is native; 4K buys nothing
+  here. The blue-and-white cup reads Italian at a glance where the Pienza cup did not; Steve to
+  say where it is from before it is leaned on. Daylight, not the overhead lamp: 3881 carried a tungsten
   cast on the glaze and a lamp hot-spot on the inner rim, both named in the brief above and both
   present anyway.
 
