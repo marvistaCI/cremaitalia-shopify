@@ -38,6 +38,30 @@ takes, cup off-centre left and off-centre right, so the headline can sit on eith
 must still be **moving** when the camera is on it - `MOV_3865`, a top-down taken after the pull,
 had flat, uniform crema with a ceiling-light hot-spot and nothing to loop.
 
+**First reshoot, 2026-09-15 (`MOV_3881`, `MOV_3882`) - reviewed, cut, compared on the page,
+and NOT adopted (Steve: reshoot again).** `MOV_3881` got the setup right and the pull wrong:
+tripod-steady, sharp, on a saucer, 45 degrees, a 14-second hold after the stream, nothing branded.
+But the stream was a single thin thread over a 31-second pour and the crema it left was flat tan
+with coarse rim bubbles - no flecking, no bloom at the impact point. A six-second loop was cut
+(35.5-41.5s, dissolve seam, white balance half-corrected) and put beside the current hero at
+desktop and phone width: a nicer cup holding a weaker coffee, and on a phone the coffee became a
+strip under the header with the headline over the saucer pattern. `MOV_3882` (true top-down, spoon
+stir) confirmed the MOV_3865 lesson a second time: a stirred or settled cup is a still, not a
+loop. Two things from that attempt change the brief below:
+
+- **The pull is the shot.** Everything else in the brief is now proven achievable; the one thing
+  that failed is the coffee. Use a full-bodied stream (double spout or bottomless basket) so the
+  crema flecks, and let the stream run long enough to cut ten steady seconds from.
+- **Consider shooting it top-down, like `MOV_3882`, rather than at 45 degrees.** The brief chose 45
+  degrees so the stream stays visible; from above the stream is a vertical line entering from the
+  top of frame (the spoon in 3882 proves that reads fine), and in exchange the crema surface is at
+  its largest, the bloom sits dead centre, and the black counter beside the cup is a text zone that
+  needs almost no scrim. Take both angles if time allows.
+- The blue-and-white cup reads Italian at a glance where the Pienza cup did not; Steve to say
+  where it is from before it is leaned on. Daylight, not the overhead lamp: 3881 carried a tungsten
+  cast on the glaze and a lamp hot-spot on the inner rim, both named in the brief above and both
+  present anyway.
+
 **Production note:** in the real store the hero is a video section with the media on Shopify
 **Files** (`video_tag`), not a theme asset. The theme-asset route is the POC mock.
 
