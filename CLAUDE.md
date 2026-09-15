@@ -4169,6 +4169,30 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   Survivors confirmed as exactly POC29/POC30/POC31. The Step 6.4 sweep found the dead id in one §9
   line (past tense, left) and the §10 table row (corrected).
 
+- 2026-09-15 — **POC32: the hero video replaced from Steve's reshoot, and a scrim that passed
+  its floor and was still unreadable.** Ledger: `docs/POC32_change_list.md`. Four clips were
+  reviewed frame by frame across the day; the first was cut and compared on the page and lost
+  (*a nicer cup holding a weaker coffee*), the fourth won. **Two things the day settled, both
+  Steve's, and both recorded in `docs/photography-todo.md` slot 0 so the next take starts from
+  them:** straight down is **impossible on this machine** - the group head hangs from the
+  machine's own "porch ceiling" over the drip tray, so the angle is fixed at roughly 45 degrees
+  by the hardware, and Code had proposed top-down before checking; and **the cup's shape matters
+  more than its pattern** - the tall narrow cup hides its surface behind its own front wall, and
+  Steve's fix was to **prop the cup at the rear**, which works for a precise reason (it lowers the
+  front rim relative to the liquid; it does not change the surface's foreshortening) and costs a
+  visibly sloping saucer. A workaround for the wrong vessel, to retire when a wide low cup exists.
+  **The crop is dictated by a trademark:** the machine's pressure gauge reads "LA MARZOCCO" at
+  full resolution, so the loop starts 340px in from the source's left edge to exclude it - the
+  Lavazza problem from slot 3, one slot over. The desktop scrim mirrored to the right, where this
+  footage's dark zone is. **The phone finding is the one worth keeping:** POC30's phone scrim
+  measured **3.32:1** under the new footage, passing the 3:1 large-text floor on paper, and Steve
+  could not read the first letter of either line. Four profiles were scored against the same
+  live frame by the POC30 worst-pixel method; the adopted one lifts the worst pixel to **7.1:1**
+  and was chosen over two darker ones because it leaves the coffee, in the top third of the phone
+  frame, outside the dense zone. **A floor is a floor; the only text in the first viewport wants
+  a margin above it, not a pass.** Steve chose the take knowing the old one had better crema
+  texture: *"the crema doesn't bother me... I've seen a lot of shots exactly like this."*
+
 ---
 
 ## 10. Open questions / TODO
@@ -4194,6 +4218,11 @@ when resuming.**
 > line in `docs/POC9_change_list.md` was trusted over a live check, producing a duplicate Shopify
 > theme. `git log origin/main..HEAD` had already come back empty that same session — the
 > contradiction was visible and went unread.
+
+> ⚠ **DRIFT (2026-09-15): the repo is one batch ahead of the newest preview.** POC32 (the hero
+> video replaced from `MOV_3891`, scrim re-tuned, `docs/POC32_change_list.md`) is committed and
+> NOT deployed; it awaits Steve's go, then the `crema-poc-deploy` ritual. Delete this callout in
+> the same pass that deploys it.
 
 | What | Theme | Id |
 |---|---|---|

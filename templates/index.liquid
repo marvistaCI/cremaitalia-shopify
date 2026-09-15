@@ -32,10 +32,12 @@
     on a photograph of a cup is redundant, the header already carries the logo, and "smaller
     logo, larger margins" is Brand Standards' own tie-breaker (CLAUDE.md section 12).
     PROD: photography slot 0 of 3 (hero). TEMPORARY MEDIA - ci-temp-hero.mp4 and
-    ci-temp-hero-poster.jpg are stand-ins cut from Steve's own footage (MOV_3863, 2026-09-01)
-    and every ci-temp-* asset must be replaced before launch; the brief is in
-    docs/photography-todo.md. In production the hero is a video section with the media on
-    Shopify Files (video_tag), not a theme asset.
+    ci-temp-hero-poster.jpg are stand-ins cut from Steve's own footage (MOV_3891, 2026-09-15,
+    replacing the MOV_3863 take from POC30) and every ci-temp-* asset must be replaced before
+    launch; the brief, and the three reasons this take is still a stand-in (a propped cup, a
+    trademark cropped out of the left edge, tungsten light), are in docs/photography-todo.md.
+    In production the hero is a video section with the media on Shopify Files (video_tag), not
+    a theme asset.
     ACCESSIBILITY: muted + playsinline are what let it autoplay on iOS; the poster is the
     reduced-motion fallback (ci-storefront.js pauses the video when prefers-reduced-motion is
     set) and the first paint on slow connections. The video is decorative, so it carries no

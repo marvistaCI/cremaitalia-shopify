@@ -366,22 +366,32 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
    40-65 buyer. The H1 sits in the darkened left third. Do not lighten the scrim without
    re-measuring contrast. */
 .hero-media{position:relative;width:100%;aspect-ratio:16/9;max-height:78vh;min-height:320px;overflow:hidden;background:var(--ci-coffee)}
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:42% 45%;display:block}
-/* MEASURED 2026-09-12 by sampling the live video frame under the H1's box and compositing the
-   scrim: the first gradient (.72 -> .45 at 38% -> 0 at 68%) averaged 5.9:1 but its WORST pixels,
-   at the headline's right edge (~49% across, where the crema is brightest), fell to 2.5:1 -
-   under the 3:1 large-text floor. The dense zone now runs to the headline's edge and the taper
-   ends past it. Re-measure (worst case, not average) if the H1 copy or the footage changes. */
-.hero-media-scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(85,51,27,.78) 0%,rgba(85,51,27,.66) 50%,rgba(85,51,27,0) 80%)}
-.hero-media-inner{position:absolute;inset:0;display:flex;align-items:center;max-width:var(--ci-page-max);margin:0 auto;padding:1.5rem 1.5rem 2rem}
+/* POC32 (2026-09-15): the footage changed (MOV_3891 - see photography-todo.md slot 0) and its dark
+   zone is the black counter on the RIGHT, so the scrim and the headline mirrored: dense on the
+   right, tapering left over the cup. object-position keeps the cup, left of centre in the crop,
+   inside the phone frame. */
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:40% 45%;display:block}
+/* MEASURED 2026-09-15 by sampling the live video frame under the H1's box and compositing the
+   scrim (the POC30 method: worst case, not average): desktop worst 3.95:1 / average 8.1:1 at 54px
+   (large text, floor 3:1), the worst pixels at the headline's left edge where it crosses the cup
+   body. POC30's lesson stands: re-measure if the H1 copy or the footage changes. */
+.hero-media-scrim{position:absolute;inset:0;background:linear-gradient(270deg,rgba(85,51,27,.78) 0%,rgba(85,51,27,.66) 50%,rgba(85,51,27,0) 80%)}
+.hero-media-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;max-width:var(--ci-page-max);margin:0 auto;padding:1.5rem 1.5rem 2rem}
 /* The one line over the video is the page H1, sized above the brand's H1 step on purpose - it is
    the only text in the first viewport, so it carries the whole hierarchy alone. max-width in ch
-   keeps it inside the scrimmed left half at every width so it never crosses into the
-   unscrimmed right side where contrast is not guaranteed. */
-.hero-media-inner h1{font-family:var(--ci-font-display);font-weight:400;color:var(--ci-cream);font-size:clamp(1.75rem,4.6vw,3.4rem);line-height:1.08;max-width:12ch;margin:0;text-wrap:balance;text-shadow:0 1px 2px rgba(85,51,27,.35)}
+   keeps it inside the scrimmed right half at every width so it never crosses into the
+   unscrimmed left side where contrast is not guaranteed. */
+.hero-media-inner h1{font-family:var(--ci-font-display);font-weight:400;color:var(--ci-cream);font-size:clamp(1.75rem,4.6vw,3.4rem);line-height:1.08;max-width:12ch;margin:0;text-align:right;text-wrap:balance;text-shadow:0 1px 2px rgba(85,51,27,.35)}
 @media (max-width:640px){
   .hero-media{aspect-ratio:4/5;max-height:none}
-  .hero-media-scrim{background:linear-gradient(180deg,rgba(85,51,27,.1) 0%,rgba(85,51,27,.1) 40%,rgba(85,51,27,.85) 100%)}
+  /* MEASURED 2026-09-15 at 375px: the POC30 phone scrim (.1 to 40%, .85 at 100%) was tuned for
+     footage whose foot was the dark drip tray. With MOV_3891 the foot of the 4:5 crop is white
+     saucer and the headline's line-starts landed on it: worst 3.32:1 at 31.5px, passing the
+     large-text floor on paper and unreadable in practice (Steve could not read the E of Exactly
+     or the s of sealed). Four profiles were scored against the same frame; this one lifts the
+     worst pixel to 7.1:1 (average 8.2:1) with the least darkening of the coffee, which sits in
+     the top third and stays outside the dense zone. */
+  .hero-media-scrim{background:linear-gradient(180deg,rgba(85,51,27,.1) 0%,rgba(85,51,27,.1) 35%,rgba(85,51,27,.85) 70%,rgba(85,51,27,.9) 100%)}
   .hero-media-inner{align-items:flex-end;padding:1.25rem 1.25rem 1.6rem}
   .hero-media-inner h1{font-size:clamp(1.6rem,8.4vw,2.4rem);max-width:none}
 }

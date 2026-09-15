@@ -20,11 +20,20 @@ landing on crema, with one line over it. See `docs/POC30_change_list.md` item 1 
 |---|---|---|---|
 | 0 — hero video | `ci-temp-hero.mp4` + `ci-temp-hero-poster.jpg` | 16:9 landscape source, 1440x810 now; shown 16:9 on desktop and cropped to 4:5 on phones via `object-fit: cover` | See below |
 
-**What the stand-in is.** Cut from Steve's own footage (`MOV_3863`, shot 2026-09-01): a high-angle
-on a ceramic cup filling on the drip tray, warm natural light, seconds 47-53 where the stream
-lands on the crema and the flecks bloom from the impact point. The cup is from a ceramiche in
-**Pienza** and stays in the reshoot. It is `ci-temp-*` because it is a working crop of a
-hand-held take, not because the subject is wrong.
+**What the stand-in is (replaced in POC32, 2026-09-15).** Cut from Steve's own footage
+(`MOV_3891`, shot 2026-09-15, the fourth take of the day): a tripod 45-degree shot of the
+blue-and-white cup on its saucer filling under the group head, seconds 37.5-43.5, a full stream
+landing on a visibly moving surface, with a 1.5s dissolve seam. **Three things keep it `ci-temp-*`
+rather than final:** (1) the cup is **propped at the rear** so its front rim drops and the surface
+shows from 45 degrees - the saucer visibly slopes and the coffee sits level inside a tilted rim, a
+staging trick to retire once a wide, low cup exists; (2) the coarse bubble ring at the rim is a
+remnant of that tilt; (3) the crop starts 340px in from the left edge **because the machine's
+pressure gauge reads "LA MARZOCCO" at full resolution** - a third-party trademark, the same class
+of problem as the Lavazza bag in slot 3 - so the framing is dictated by what had to be excluded,
+not by composition. Tungsten light, half-corrected in the cut. The previous stand-in (`MOV_3863`,
+2026-09-01, the Pienza cup on the drip tray, hand-held) had better crema texture and Steve chose
+this one over it with eyes open: *"the crema doesn't bother me... I've seen a lot of shots exactly
+like this."*
 
 **The reshoot brief:** the same shot. Same light (soft daylight, no overhead lamps on the chrome),
 same roughly 45-degree angle - better than a true top-down because the stream stays visible - the
