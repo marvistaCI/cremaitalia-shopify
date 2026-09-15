@@ -52,11 +52,13 @@ loop. Two things from that attempt change the brief below:
 - **The pull is the shot.** Everything else in the brief is now proven achievable; the one thing
   that failed is the coffee. Use a full-bodied stream (double spout or bottomless basket) so the
   crema flecks, and let the stream run long enough to cut ten steady seconds from.
-- **Consider shooting it top-down, like `MOV_3882`, rather than at 45 degrees.** The brief chose 45
-  degrees so the stream stays visible; from above the stream is a vertical line entering from the
-  top of frame (the spoon in 3882 proves that reads fine), and in exchange the crema surface is at
-  its largest, the bloom sits dead centre, and the black counter beside the cup is a text zone that
-  needs almost no scrim. Take both angles if time allows.
+- **Straight down is impossible on this machine, and was proposed here before that was checked
+  (Steve, 2026-09-15).** The group head hangs from the machine's own "porch ceiling" over the
+  drip tray, so no camera or mirror gets a vertical line of sight onto a cup while it is being
+  filled. `MOV_3882` was top-down only because the cup had been moved out onto the open counter
+  after the pull, which is exactly why it had no stream. The angle is therefore fixed at roughly
+  45 degrees by the hardware, and the two levers that remain are the ones below: the cup's
+  proportion and the stream.
 - **The cup's shape matters more than its pattern (Steve, 2026-09-15, after `MOV_3883`).** The
   blue-and-white cup is tall and narrow, so from 45 degrees the coffee surface is a thin ellipse
   and the stream runs down the inner wall; three takes in it never showed crema the way the wide,
