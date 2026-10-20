@@ -104,7 +104,7 @@ Each slot keeps its full brief in a `PROD:` comment beside the `<img>` in
 | Slot | Asset | Ratio / size | Brief |
 |---|---|---|---|
 | ~~1 — band under the hero~~ | ~~`ci-temp-lp1.jpg`~~ | — | **RETIRED in POC30 (2026-09-12, Steve).** With a video hero above it the page ran video, copy, photo; the band was the weakest of the three and its stand-in (a US café) could never ship. Markup and asset deleted. If an Italian bar-counter shot ever exists, it has no slot on the home page now and would need one made. |
-| 2 — founder portrait | `ci-temp-lp2.jpg` | 4:5, ~1000x1250 | Steve at a caffè table in Campiglia or Sarteano. Candid, mid-conversation, not looking at the lens. The story is first-person; a face is what earns that register. |
+| ~~2 — founder portrait~~ | ~~`ci-temp-lp2.jpg`~~ → `ci-founder-caffe.jpg` | 4:5, 960x1200 | **DELIVERED in POC33 (2026-10-20).** Steve at an Italian bar counter, cup in hand, machine and barista behind him, candid, not looking at the lens - the brief, met. His own photograph; source `Operations\People\Steve Roberts\Standing in caffe.jpeg` (1600x1200, the largest copy that exists - the phone original was not recovered), cut from the right edge, exposure +8%, no saturation change, then **retouched by Steve**: levelled by a degree or so and the sunglasses hanging from his collar removed with an AI fill (`Standing in caffe_sunglasses_removed.jpg`, 900x1131, trimmed to 900x1125). Face softening was discussed and declined - at ~100 px across on the page it buys nothing and risks the processed look Brand Standards §3.5 rules out. The cap carries a car maker's badge; judged incidental and left as shot (Steve, 2026-10-20) - it is a cap he bought and wore, not a product claim. **Not** a `ci-temp-*` stand-in. |
 | 3 — product | `ci-temp-lp3.jpg` | 3:2, ~1500x1000 | One of OUR roasters' own valve bags, sealed, label facing, close enough to read the roaster's name. Loose beans alongside. |
 
 **Slot 3 carries a recorded reason it cannot ship** (slot 1's US-café reason went with the slot):
@@ -185,7 +185,7 @@ Order of value if photography arrives piecemeal:
    needed).
 1. **Slot 3 (product)** — the landing page currently shows no product anywhere, and this is the
    one shot that illustrates the claim it sits beneath.
-2. **Slot 2 (founder)** — the current stand-in is at least genuinely Steve; least wrong of the three.
+2. ~~**Slot 2 (founder)**~~ — delivered in POC33 (2026-10-20); see the table above.
 4. **Product + roaster assets** — largest volume, but gated on signatures, so it will arrive on the
    roasters' schedule rather than ours.
 
