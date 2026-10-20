@@ -1397,7 +1397,7 @@ derivation.
 | `poc_rating` | Fixture ratings. Production reads the standard `reviews.*` data (§6.1). Standard §13.7 forbids fabricated ratings on the live store |
 | `img.cls` / `img.label` / `img.style` | CSS gradient placeholders standing in for photography |
 | `roaster.portrait_cls` / `portrait_style` | The same, for roaster logos |
-| `ci-temp-hero.mp4` + `ci-temp-hero-poster.jpg`, `ci-temp-lp3.jpg` | Temporary hero video and the landing-page product photo, which cannot ship for a recorded reason (`docs/photography-todo.md`). `ci-temp-lp1.jpg` was retired in POC30; `ci-temp-lp2.jpg` was replaced by the real founder portrait `ci-founder-caffe.jpg` in POC33. |
+| `ci-temp-hero.mp4` + `ci-temp-hero-poster.jpg` | Temporary hero video (`docs/photography-todo.md` slot 0). `ci-temp-lp1.jpg` was retired in POC30; `ci-temp-lp2.jpg` and `ci-temp-lp3.jpg` were replaced in POC33 by `ci-founder-caffe.jpg` and `ci-roaster-visit.jpg` - the latter is real but **consent-gated** before it can go public (see the ledger). |
 | `rebaseCatalogDates()` | Shifts fixture dates on load so the demo never ages out. Real dates come from the metafields |
 | `_meta.*` | Mock-dataset provenance notes |
 
