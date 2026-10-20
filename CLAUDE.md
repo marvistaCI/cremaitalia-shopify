@@ -4221,6 +4221,25 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   hunting for: a wide, low cup with distinct Italian markings, Pienza-like in proportion.
   `docs/photography-todo.md` slot 0 points at the folder.
 
+- 2026-10-20 — **Coming-soon page: opening date moved to "early 2027" and pushed live (Steve).**
+  The one string `Opening late Summer/Fall 2026.` became `Opening early 2027.` in all eight places
+  it lived: the visible subheading on `templates/password.liquid` and on
+  `live-theme/templates/index.liquid`, and the meta description, Open Graph description and
+  Twitter description in `layout/password.liquid` and `live-theme/layout/theme.liquid`. Both theme
+  worlds changed together so the public homepage and the password page cannot disagree on the
+  date. Commit `317fa22`, pushed to GitHub. **Deployed to the live theme (`150557294761`)** with
+  the two scoped pushes the 2026-07-24 copy fix established (`--path live-theme --only` for the
+  homepage pair, plain `--only` for the password pair, both `--allow-live`), after `shopify theme
+  list` + `git log origin/main..HEAD` were run first and matched §10 exactly. **Proved two ways:**
+  the four files were pulled back from the live theme and each matches the repo after normalising
+  line endings; and a cookie-less `curl` of cremaitalia.com returned HTTP 200 with **four**
+  occurrences of "early 2027" (subheading + three meta tags) and **zero** of the old string. The
+  classifier did not block either live push this time. Two tooling notes: the Shopify CLI demanded
+  a fresh browser login at the start of the session (Steve completed it), and it then
+  **self-upgraded 4.8.0 → 4.9.4** inside the `theme list` call, which is why that command took
+  minutes rather than seconds; wait for the upgrade to finish before pushing. POC30/31/32 previews
+  untouched.
+
 ---
 
 ## 10. Open questions / TODO
@@ -4254,10 +4273,14 @@ when resuming.**
 | Prior preview | "Crema Italia POC31 Preview" | `152372117673` |
 | Prior preview | "Crema Italia POC30 Preview" | `152344002729` |
 
-> **The live theme is current as of 2026-08-24.** Commit **`2b80122`** (five policy links in the
-> coming-soon footer) was pushed scoped to `150557294761` and **verified on the public page**: all
-> five `/policies/` hrefs present where there was one, and **all five destinations return HTTP 200**
-> - a link pointing at a 404 renders the same as no link at all (the POC14 Open Graph lesson).
+> **The live theme is current as of 2026-10-20.** Commit **`317fa22`** (opening date → "early
+> 2027" in the subheading and the three meta descriptions) was pushed scoped to `150557294761` in
+> the four coming-soon files and **verified on the public page**: a cookie-less fetch returned HTTP
+> 200 with four occurrences of "early 2027" and zero of the old "Summer/Fall 2026"; the four files
+> pulled back from the theme match the repo. Before that, commit **`2b80122`** (five policy links
+> in the coming-soon footer, 2026-08-24) was verified the same way, all five `/policies/`
+> destinations returning HTTP 200 - a link pointing at a 404 renders the same as no link at all
+> (the POC14 Open Graph lesson).
 
 **Scorecard: 8.3/10 as of 2026-08-22 (POC24)** — the deployed storefront has been scored six times
 against one rubric: 5.4 (POC13 audit) → 6.9 (POC15) → 7.4 (POC16) → 7.9 (POC17) → 7.9 (POC20) →
