@@ -4291,8 +4291,16 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   code**: the CLI had self-upgraded 4.8.0 → 4.9.4 three days earlier, and the untouched POC32
   commit extracted with `git archive` reports the same 9 under it. That extraction is now written
   into the skill as the method for the next time the number moves without a commit to explain it.
-  **POC30 (`152344002729`) is one over the three-newest cap** and was deliberately not pruned in
-  the same breath, the deploy instruction carrying no go by name and id.
+  **POC30 (`152344002729`) was one over the three-newest cap** and was deliberately not pruned in
+  the same breath, the deploy instruction carrying no go by name and id. **Steve gave that go
+  shortly after and POC30 was deleted the same day**, its name, id and role asserted against a
+  live `theme list --json` in the same command as the delete; survivors confirmed as exactly
+  POC31/POC32/POC33. Its batch is `230c960`..`eaac43a` on GitHub and is redeployable. The Step 6.4
+  sweep found the dead id in four places and judged each by its sentence: the 2026-09-12 entry
+  naming the day it shipped (narrative, left), and three present-tense claims - the §10 table row,
+  the §10 prune paragraph, and **this entry's own "is one over the cap"**, all corrected. The
+  POC29 entry recorded exactly the same trap in itself on 2026-09-03; it evidently recurs every
+  time a deploy and its prune land in separate turns, which is the normal case.
 
 ---
 
@@ -4326,7 +4334,6 @@ when resuming.**
 | **Newest POC preview** | "Crema Italia POC33 Preview" | `185329090729` |
 | Prior preview | "Crema Italia POC32 Preview" | `152388894889` |
 | Prior preview | "Crema Italia POC31 Preview" | `152372117673` |
-| Prior preview — **one over the cap, prune awaiting Steve's go** | "Crema Italia POC30 Preview" | `152344002729` |
 
 > **The live theme is current as of 2026-10-20.** Commit **`317fa22`** (opening date → "early
 > 2027" in the subheading and the three meta descriptions) was pushed scoped to `150557294761` in
@@ -4691,11 +4698,13 @@ here.** This paragraph used to hardcode them, and it went stale the moment the t
 pruned — twice. Open the preview in a **real browser**; a `curl` of a `preview_theme_id` link is NOT
 a valid check (see §9 2026-07-06). Refresh with `shopify theme push --theme <id from the table>`.
 
-**POC30, POC31, POC32 and POC33 previews exist as of 2026-10-23 - one over the three-newest cap.**
-The POC33 deploy instruction carried no explicit go to delete, so **POC30 (`152344002729`) was
-deliberately not pruned in the same breath**; the keep/prune split was computed from a live
-`theme list --json` (keep 33/32/31, prune 30) and it awaits Steve's go by name and id. Its batch is
-commits `230c960`..`eaac43a` on `origin/main` and is redeployable. Earlier: **POC29 (`152193794217`) was deleted 2026-09-15** on Steve's explicit go
+**Only POC31, POC32 and POC33 previews now exist** - at the three-newest cap, enforced as
+`crema-poc-deploy` Step 5. **POC30 (`152344002729`) was deleted 2026-10-23** on Steve's explicit
+go by name and id, given after the POC33 deploy was proven; the keep/prune split was computed from
+a live `theme list --json`, and the theme's name, id and role were asserted against live output in
+the same command as the delete. Its batch is commits `230c960`..`eaac43a` on `origin/main` and is
+redeployable. The Step 6.4 sweep found the dead id in one §9 line describing the day it shipped
+(narrative, left) and in three present-tense claims, all corrected. Earlier: **POC29 (`152193794217`) was deleted 2026-09-15** on Steve's explicit go
 (his deploy instruction named it; the keep/prune split was computed from a live `theme list
 --json`, and POC29 was re-verified by name, id and role in the same command as the delete, which
 ran **after** the POC32 push was proven by pull-and-diff); its batch is commit `f354f5e` on
