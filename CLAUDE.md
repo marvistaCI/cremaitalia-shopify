@@ -4240,11 +4240,65 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   minutes rather than seconds; wait for the upgrade to finish before pushing. POC30/31/32 previews
   untouched.
 
+- 2026-10-23 — **POC33 deployed: two real photographs on the landing page, and the durable lesson
+  is which questions turned out to be legal and which were not.** Ledger:
+  `docs/POC33_change_list.md`. Built 2026-10-20 across two commits (`2da58fb`, `cb679e0`) and
+  deployed today. **Slot 2, the founder portrait**, replaces a stand-in that was a street café
+  reading French, with a beer in the foreground and a glass of wine in hand, under copy about
+  pulling a shot of espresso. The new one is Steve at an Italian bar counter, cup in hand, machine
+  and barista behind him, candid and not looking at the lens - the brief almost word for word.
+  **Three decisions along the way.** (1) I flagged the car-maker's badge on his cap as a trademark
+  problem of the Lavazza-bag class, and **Steve was right to push back**: trademark law restricts
+  uses that imply sponsorship or confuse source, and a founder wearing a cap he bought is
+  incidental. The Lavazza bag was never a legal problem either; it was a brand problem - a
+  mass-market competitor's product under artisan-sourcing copy. The two had been lumped together
+  and should not have been. Left as shot. (2) Steve had used AI to soften his face and remove the
+  sunglasses hanging from his collar, and asked whether to repeat it. **Sunglasses yes, softening
+  no**: at roughly 100 px across on the page the display softens for free, and what AI smoothing
+  adds at full resolution is the one thing that could make a real snapshot read as processed - the
+  opposite of what Brand Standards §3.5 and the first-person register ask for. He redid the edit
+  with only the sunglasses removed, and it is recorded as a retouch in the ledger the way Lauren's
+  cup is. (3) The crop was taken from the **unedited** 1600x1200 file rather than his colour-graded
+  version: 30% more pixels across the band, and his grade had pushed skin toward pink; exposure
+  lifted 8% instead, no saturation change. **Neither file is the phone original** - both photos
+  arrived through a messaging app, which resizes on send - and that was explained to Steve with
+  the ways to get the full file (AirDrop, send-as-document, a shared link). For this slot it does
+  not matter: it renders at 300-320 px wide.
+  **Slot 3, under Our model**, replaces the Lavazza bag with Steve in a roasting room, talking with
+  the roaster and a fellow visitor, tasting cup in hand, hopper and ducting overhead. It is the
+  sentence it sits under - *"when the same name keeps coming up, we go and visit"* - and the brand
+  standard's own imagery list says roasting drums and hands at work. **Steve asked for the bag's
+  name to be blurred; it was not needed**, because the slot is 3:2 landscape and the only usable
+  band from a portrait frame ends above the bag entirely. **The real question in the photo was the
+  roaster's face, not the bag**: she has not agreed to import, and her on our page before she signs
+  costs the negotiation more than it earns, quite apart from Italian portrait right. The visitor at
+  the left turned out not to be Lucia, as I had assumed, but a private individual - so the same
+  consent applies, and Steve has her contact. **The side-by-side decided the crop**: with the
+  visitor cut out, the roaster looks out of frame at nobody, because the person she is answering
+  has been removed; with her in, the three gazes resolve into a conversation. Full band shipped;
+  the visitor-out cut is held outside the theme as the fallback. **The image is consent-gated** in
+  three places - the template comment, the photography ledger and the build spec asset table - and
+  cannot go public until the roaster has signed and agreed and the visitor has agreed. **The
+  product shot the slot was briefed for is still owed**: one of our roasters' sealed bags, label
+  readable, loose beans; it was gated on a roaster signing and still is, and now wants a slot of
+  its own by the shelves rather than displacing this. The hero video is the last `ci-temp-*` asset
+  on the site.
+  **DEPLOYED** via the `crema-poc-deploy` skill to a NEW unpublished theme **"Crema Italia POC33
+  Preview" (id `185329090729`)**: `theme list` + `git log origin/main..HEAD` run **first** (no
+  POC33, no duplicates, zero unpushed), then **pull-and-diff proved** the push - both sides 40
+  files, zero mismatches after normalising line endings, batch content asserted on the deployed
+  files. **The `theme check` baseline moved 15 → 9 and was proven to be the checker, not the
+  code**: the CLI had self-upgraded 4.8.0 → 4.9.4 three days earlier, and the untouched POC32
+  commit extracted with `git archive` reports the same 9 under it. That extraction is now written
+  into the skill as the method for the next time the number moves without a commit to explain it.
+  **POC30 (`152344002729`) is one over the three-newest cap** and was deliberately not pruned in
+  the same breath, the deploy instruction carrying no go by name and id.
+
 ---
 
 ## 10. Open questions / TODO
 
-**▶ CURRENT STATE — POC32 (deployed + pull-and-diff proved 2026-09-15) — read this first
+**▶ CURRENT STATE — POC33 (deployed + pull-and-diff proved 2026-10-23) — read this first
 when resuming.**
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
@@ -4269,9 +4323,10 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC32 Preview" | `152388894889` |
+| **Newest POC preview** | "Crema Italia POC33 Preview" | `185329090729` |
+| Prior preview | "Crema Italia POC32 Preview" | `152388894889` |
 | Prior preview | "Crema Italia POC31 Preview" | `152372117673` |
-| Prior preview | "Crema Italia POC30 Preview" | `152344002729` |
+| Prior preview — **one over the cap, prune awaiting Steve's go** | "Crema Italia POC30 Preview" | `152344002729` |
 
 > **The live theme is current as of 2026-10-20.** Commit **`317fa22`** (opening date → "early
 > 2027" in the subheading and the three meta descriptions) was pushed scoped to `150557294761` in
@@ -4306,7 +4361,33 @@ a real cart, and real customers; none is code.
 > accessible name. Neither is a regression; neither has been fixed. **Real photography is still the
 > gate** on brand identity and product detail rising above 9.
 
-**POC32 is deployed** and is the only POC32 theme - **40 files match the repo**, proved by
+**POC33 is deployed** and is the only POC33 theme - **40 files match the repo**, proved by
+pull-and-diff on 2026-10-23 (both sides 40; nothing on only one side; zero mismatches after
+normalising line endings). `theme list` and `git log origin/main..HEAD` run **first**: no POC33
+existed, no duplicate names, zero unpushed commits. Validation at the documented baseline, which
+**moved 15 → 9 offenses for a proven reason**: the Shopify CLI self-upgraded 4.8.0 → 4.9.4 on
+2026-10-20, and the same check against the untouched POC32 commit also reports 9, so the batch
+adds **0 new**. Batch content asserted **on the deployed files**: `ci-founder-caffe.jpg` and
+`ci-roaster-visit.jpg` present and referenced, `ci-temp-lp2.jpg` and `ci-temp-lp3.jpg` absent, the
+consent-gate comment in the deployed `index.liquid`, and the hero video the only `ci-temp-*` asset
+left on the theme. Commits `2da58fb` and `cb679e0`.
+
+**What POC33 is:** two real photographs replace two stand-ins on the landing page, both Steve's own,
+no template or CSS logic changed. **Slot 2, the founder portrait:** Steve at an Italian bar
+counter, cup in hand, machine and barista behind him - the brief the slot carried since POC13. 4:5
+from the right edge of his 1600x1200 photo, exposure +8%, no saturation change; Steve levelled it
+and removed the sunglasses from his collar with an AI fill (recorded as a retouch in the
+photography ledger); face softening was declined; the car-maker's badge on his cap was judged
+incidental and left. **Slot 3, under Our model:** Steve in a roasting room with the roaster and a
+fellow visitor, tasting cup in hand, hopper overhead - it illustrates "we go and visit" directly.
+The 3:2 band ends above the roaster's branded bag, so nothing names the roastery and no blur was
+needed. **CONSENT-GATED: it may not go public until the roaster has signed and agreed to appear and
+the visitor has agreed**; Steve holds both contacts; the visitor-out fallback is held outside the
+theme because in it the roaster looks out of frame at nobody. The product shot slot 3 was briefed
+for is still owed and wants its own slot by the shelves once a roaster signs. Ledger:
+`docs/POC33_change_list.md` and `docs/photography-todo.md`.
+
+**What POC32 was:** the only POC32 theme - **40 files match the repo**, proved by
 pull-and-diff on 2026-09-15 (both sides 40; nothing on only one side; zero mismatches after
 normalising line endings). `theme list` and `git log origin/main..HEAD` run **first**: no POC32
 existed, no duplicate names, four unpushed commits all from this session. Validation at the
@@ -4315,7 +4396,7 @@ deployed files**: the hero mp4 at exactly 411,497 bytes, the desktop scrim at `2
 scrim's 35%/70% stops, no comparison switch left in the CSS, JS or markup, and the provenance
 comment naming `MOV_3891`.
 
-**What POC32 is:** the hero video replaced from Steve's 2026-09-15 reshoot (`MOV_3891`, the
+**What POC32 was:** the hero video replaced from Steve's 2026-09-15 reshoot (`MOV_3891`, the
 fourth take of the day), with the desktop scrim mirrored to the right where the new footage's
 dark zone is and the phone scrim deepened after it measured **3.32:1** under the new frame -
 passing the large-text floor on paper and unreadable in practice; now worst **7.1:1**. The crop
@@ -4610,8 +4691,11 @@ here.** This paragraph used to hardcode them, and it went stale the moment the t
 pruned — twice. Open the preview in a **real browser**; a `curl` of a `preview_theme_id` link is NOT
 a valid check (see §9 2026-07-06). Refresh with `shopify theme push --theme <id from the table>`.
 
-**Only POC30, POC31 and POC32 previews now exist** - at the three-newest cap, enforced as
-`crema-poc-deploy` Step 5. **POC29 (`152193794217`) was deleted 2026-09-15** on Steve's explicit go
+**POC30, POC31, POC32 and POC33 previews exist as of 2026-10-23 - one over the three-newest cap.**
+The POC33 deploy instruction carried no explicit go to delete, so **POC30 (`152344002729`) was
+deliberately not pruned in the same breath**; the keep/prune split was computed from a live
+`theme list --json` (keep 33/32/31, prune 30) and it awaits Steve's go by name and id. Its batch is
+commits `230c960`..`eaac43a` on `origin/main` and is redeployable. Earlier: **POC29 (`152193794217`) was deleted 2026-09-15** on Steve's explicit go
 (his deploy instruction named it; the keep/prune split was computed from a live `theme list
 --json`, and POC29 was re-verified by name, id and role in the same command as the delete, which
 ran **after** the POC32 push was proven by pull-and-diff); its batch is commit `f354f5e` on
@@ -5229,9 +5313,11 @@ every line here as unproven until a screenshot says otherwise. The dev store
   `docs/photography-todo.md`, which is now the single list.** **Lauren Roberts' headshot landed in
   POC29 (2026-09-03), so the outstanding team item is Partner 1 alone** — blocked on a signed partner
   agreement, not on us. Roaster portraits + brand logos and every product tile / PDP gallery slide
-  are still text or CSS placeholders. The three landing-page slots DO carry images, but they are
-  `ci-temp-*` stand-ins and **two of them cannot ship** for recorded reasons (a US café;
-  third-party trademarks). Most of the rest is gated on the roasters signing, not on us.
+  are still text or CSS placeholders. **The two landing-page photo slots are REAL as of POC33
+  (2026-10-23)** - the founder at an Italian bar counter, and the roaster visit, the latter
+  **consent-gated** (roaster + visitor) before it can go public; only the hero video is still a
+  `ci-temp-*` stand-in. The product shot (one of our roasters' sealed bags) is still owed and
+  gated on a roaster signing. Most of the rest is gated on the roasters signing, not on us.
 - [ ] Deferred: no-waste copy rewrite on the Promise page (pending 3PL-city research).
 - [ ] Optional: `git tag poc3` to mark the POC3 milestone (still not done — consider
   before this POC4 batch is committed on top).

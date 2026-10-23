@@ -78,16 +78,21 @@ node -e "JSON.parse(require('fs').readFileSync('assets/ci-catalog.json','utf8'))
 shopify theme check
 ```
 
-**Baseline:** `theme check` currently reports **15 offenses / 0 errors / 15 warnings**. **0 new
-offenses** is the pass condition — not "0 errors." If the baseline has legitimately moved, update
-this number here in the same pass.
+**Baseline:** `theme check` currently reports **9 offenses / 0 errors / 9 warnings**, all of them
+`RemoteAsset` on the Google Fonts links. **0 new offenses** is the pass condition — not "0 errors."
+If the baseline has legitimately moved, update this number here in the same pass.
 
-*Baseline history, because the number moving is normally a red flag and this time was not:* it was
-**17 offenses / 2 errors** from POC10 through POC14. The 2 errors were `ImgWidthAndHeight` on the
-hero logo and the founder signature. POC15 (2026-08-18) added the missing `width`/`height`
-attributes to both while cutting image weight, which cleared them legitimately. Anything that moves
-this number should be explainable in one sentence like that one; if it is not, treat it as a
-regression rather than a new baseline.
+*Baseline history, because the number moving is normally a red flag and so far never has been:* it
+was **17 offenses / 2 errors** from POC10 through POC14. The 2 errors were `ImgWidthAndHeight` on
+the hero logo and the founder signature. POC15 (2026-08-18) added the missing `width`/`height`
+attributes to both while cutting image weight, which cleared them legitimately, giving **15 / 0**
+through POC32. At the POC33 deploy (2026-10-23) it read **9 / 0**: the Shopify CLI had
+self-upgraded 4.8.0 → 4.9.4 on 2026-10-20, and the same check run against the untouched POC32
+commit (`a49c8e6`, extracted with `git archive`) also reported 9 — so the six that vanished were
+the checker's, not the code's. **That extraction is the method:** when the number moves and no
+commit explains it, run the check against the previous deploy's commit under the current CLI
+before accepting a new baseline. Anything that moves this number should be explainable in one
+sentence like these; if it is not, treat it as a regression rather than a new baseline.
 
 ## Step 3 — Push
 
