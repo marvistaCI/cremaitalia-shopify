@@ -1,5 +1,6 @@
 /* ============================================================
    Crema Italia — Brand stylesheet
+   v1.3 · November 17, 2026  (Crema Light nudged to #E9AB6E, per Brand Standards v2.3 §3.4)
    v1.2 · July 1, 2026  (artist rebrand: revised palette + type)
    Drop-in for any HTML page. Pair with Google Fonts:
      Marcellus (400) — web stand-in for logo font Montecatini Pro
@@ -7,7 +8,7 @@
 
    PALETTE NOTE (2026-07-01): --ci-coffee and --ci-crema updated to the
    finalized artist palette (Espresso Brown #55331B, Crema Gold #B88348).
-   --ci-espresso (#6B4A38), --ci-crema-light (#E8A86A) and --ci-crema-hover
+   --ci-espresso (#6B4A38), --ci-crema-light (#E9AB6E) and --ci-crema-hover
    (#9C6E3C) are interim harmonizations, not artist-specified — re-derive
    when the Brand Standards PDF is regenerated.
 
@@ -25,7 +26,7 @@
   --ci-espresso:     #6B4A38;
   --ci-crema:        #B88348;
   --ci-crema-hover:  #9C6E3C;
-  --ci-crema-light:  #E8A86A;
+  --ci-crema-light:  #E9AB6E;
 
   /* Italian flag accents — rules only, never fills */
   --ci-green:        #0E7A3A;

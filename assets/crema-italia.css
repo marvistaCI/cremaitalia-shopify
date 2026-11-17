@@ -14,7 +14,7 @@
   --ci-coffee:          #55331B;   /* body text */
   --ci-crema:           #B88348;   /* accent, H2, links, buttons */
   --ci-crema-hover:     #9C6E3C;   /* button hover */
-  --ci-crema-light:     #E8A86A;   /* light accent */
+  --ci-crema-light:     #E9AB6E;   /* light accent; nudged from #E8A86A for AA on brown, Brand Standards v2.3 section 3.4 */
   --ci-green:           #0E7A3A;   /* tricolore green */
   --ci-red:             #C8342B;   /* tricolore red / error */
   --ci-mute:            #8C7E6A;   /* secondary text */

@@ -2,7 +2,7 @@
 
 **Version 1.23 · 2026-09-14**
 **Source of truth:** this file (`docs/standards/store-operating-standards.md`) in the theme repo.
-**Companion standards:** Brand Standards v2.3 (look & voice) · Collaboration Standard v1.1 (how we work).
+**Companion standards:** Brand Standards v2.4 (look & voice) · Collaboration Standard v1.1 (how we work).
 
 > ## EVERY VALUE IN THIS STANDARD IS PROVISIONAL UNTIL THE SITE GOES PUBLIC (Steve, 2026-08-24)
 >
