@@ -4324,7 +4324,10 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   bag, card, cart line, the hero, or anything that ships in the box. **Gating questions for
   Steve:** whose membership it is (individual vs the LLC), the renewal date and dues, and whether
   the coming-soon page gets it now (recommended yes - it is collecting strangers' emails with no
-  other credential on the page).
+  other credential on the page). **The first was answered the same day: it is Steve's individual
+  membership, to be converted to a business membership in 2027 once the company generates revenue,
+  and nothing further is done until then** - the company-footer placement waits for the business
+  membership, which lands in the same year as the first artwork swap.
 
 - 2026-11-17 — **Brand Standards v2.3 → v2.4: one hex reconciled, and the coordinator earned its
   keep.** Session opened after a 25-day gap with a reconnect check: GitHub and the Shopify CLI both

@@ -1,6 +1,6 @@
 # SCA Membership Mark - how it applies to the website
 
-**Status: NOTE ONLY, nothing built (Steve, 2026-11-17).** Steve added the Specialty Coffee
+**Status: NOTE ONLY, nothing built, and nothing further until 2027 (Steve, 2026-11-17).** Steve added the Specialty Coffee
 Association membership kit to OneDrive at
 `Brand and Marketing\Memberships and Associations\` - the 2026 usage guidelines (PDF) and the
 mark itself (`SCA-Member2026.png`, 736 x 1000, indexed-colour PNG). This file records what the
@@ -111,10 +111,12 @@ rules (whole mark, no recolour, year-stamped, clear space) with them.
 
 ## 4. Questions for Steve before anything is built
 
-1. **Whose membership is it?** The SCA issues the mark to an individual *or* a business. If the
-   membership is in Steve's name rather than Crema Italia, LLC's, displaying it as the company's
-   credential on cremaitalia.com is at least arguable. Confirm the class before it goes on the
-   company footer.
+1. **Whose membership is it? ANSWERED (Steve, 2026-11-17): it is Steve's individual membership.**
+   He intends to convert it to a business membership in 2027, once the company generates revenue.
+   Consequence for this note: the mark is a credential of the founder, not yet of Crema Italia,
+   LLC, so displaying it as the company's credential in the company footer waits for the 2027
+   business membership. That conversion lands in the same year as the first artwork swap (the
+   2027 mark), so both happen in one pass. Nothing further is to be done until then.
 2. **Renewal date and dues.** Neither is recorded anywhere; the Systems Inventory now carries the
    membership with blank cost cells (a blank is a question, never zero-by-assumption). The
    renewal date is also the date the 2027 artwork has to be swapped in.
