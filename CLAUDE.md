@@ -4360,6 +4360,54 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   via the protocol-relative `//cremaitalia.com/cdn/...` href the homepage emits) serves
   `--ci-crema-light: #E9AB6E` with zero occurrences of the old hex.
 
+- 2026-11-17 — **The operating model shifts to bulk import, the POC is to be branched, and the live
+  coming-soon page stops claiming "never repackaged by us" (Steve).** Steve asked for the Roaster
+  Invitation Letter v2 (`Operations\In Italy\Crema_Italia_Roaster_Invitation_Letter_v2_us.html`,
+  2026-10-28; the English v1 and v2 are word-for-word identical) to be read against the POC. **The
+  letter commits to a different model from the one every POC since POC3 was built on:** roasters ship
+  sealed valved **bulk bags of 2.5 to 20 kg**, marked with lot and roast date; a forwarder collects
+  within days of roasting; the coffee flies; and **Crema Italia opens and repacks it in Florida** into
+  its own valved bags of 100 g, 250 g, 500 g and 1 kg, printing the roaster's label from their artwork
+  under a label licence, with the roast date and lot carried from the bulk bag and an FDA block reading
+  "Imported and repacked by Crema Italia". 100 g becomes an ordinary consumer size; orders start small
+  and frequent rather than on a 6-to-10-week pallet cadence. **That falsifies the POC's central
+  promise** - "Exactly as the roaster sealed it... in Italy" in the hero and meta description, the
+  first of the three beats, "never interfere... nothing re-roasted, re-ground, or re-bagged" on About,
+  "in the roaster's own sealed bags" on the Promise page, "We never roast, blend, or repackage" in the
+  FAQ, the grind guide's rationale, all five roaster blurbs and one product description in the
+  fixture, and Store Operating §10's whole-bean rationale and cadence exclusion, §1's 100 g rules, and
+  the SKU standard's label-flag semantics. **The structural finding:** the Standard has no
+  supply-chain or packaging section at all - the sealed model lived in §10's exclusions, the Roaster
+  Guide and storefront copy, which is why it could never be versioned and why its reversal shows up as
+  scattered contradictions. Most of the POC's twenty surfaces are untouched; the breakage is copy plus
+  the size model, and two things improve (a lot becomes a bulk bag whose roast date we record ourselves;
+  wholesale becomes trivial). **Steve's call: freeze POC33 as a point of return**, since the sealed
+  model may come back, and build the bulk model as a new line named `POC_Bulk_v1` onward. The
+  platform recommended and not yet executed: `git tag poc33-sealed`, branch `poc-bulk` with `main`
+  frozen (so a merge back is a fast-forward and a revert is abandoning the branch), rename the POC33
+  theme out of the prune pattern, Standards work on the branch **before** any copy (v1.24 with a new
+  supply-chain section, decisions on 100 g standalone, how "repacked" is said, the freshness window
+  under repack, whole bean as our choice, cadence, who repacks and the food-facility consequence),
+  then `POC_Bulk_v1` as copy-and-promise surfaces only. **One thing could not wait for the branch:
+  the live coming-soon page**, which read "never re-roasted, ground, or repackaged by us" while the
+  letter offers roasters a demonstration of the store. Steve wrote the replacement: *"We import the
+  roasted beans just as the roaster roasted them. We never add, blend, or alter the roast in any
+  manner."* followed by a repacking sentence he corrected twice - **"shortly after they land", not
+  "the day they land"**, because customs clearance and the last-mile carrier are not ours to promise,
+  and the bag carries **the roaster's name, the specific coffee, and the roast date**. "Origin-true"
+  dropped as the sealed-model word. The H1 and three meta tags ("brought over whole") were kept
+  deliberately: whole bean is true under either model, so they survive a return to the sealed one.
+  Commit `881327a`; both templates changed together so the password page and the public homepage
+  cannot disagree. **Pushed to the live theme** with `theme list` run first and the two scoped pushes
+  the 2026-07-24 fix established (`--path live-theme --only templates/index.liquid` and `--only
+  templates/password.liquid`, both `--allow-live`); the classifier did not block either. **Proved two
+  ways:** the pulled-back theme holds 13 files with both templates identical to the repo after
+  normalising line endings, and a cookie-less fetch of cremaitalia.com returns HTTP 200 carrying all
+  four new phrases and zero occurrences of "repackaged by us", "origin-true" or "the day they land".
+  **Method note:** the verification script crashed mid-report on printing U+2011 to a cp1252 console -
+  a display failure, not a check failure, re-run with `-X utf8`; the same class as every encoding trap
+  this log already carries.
+
 ---
 
 ## 10. Open questions / TODO
@@ -4393,7 +4441,13 @@ when resuming.**
 | Prior preview | "Crema Italia POC32 Preview" | `152388894889` |
 | Prior preview | "Crema Italia POC31 Preview" | `152372117673` |
 
-> **The live theme is current as of 2026-11-17.** Commit **`25b245a`** (Crema Light token
+> **The live theme is current as of 2026-11-17.** Commit **`881327a`** (coming-soon copy: the
+> sealed-model clause "never re-roasted, ground, or repackaged by us" replaced with Steve's unaltered-roast
+> and repacking sentences, in `templates/password.liquid` and `live-theme/templates/index.liquid`) was
+> pushed scoped to `150557294761` with the two established `--only ... --allow-live` pushes and
+> **verified on the public page**: a cookie-less fetch returned HTTP 200 carrying the new sentences and
+> zero occurrences of the old clause; both files pulled back identical to the repo; 13 files on the
+> theme. Earlier the same day, commit **`25b245a`** (Crema Light token
 > `#E8A86A` → `#E9AB6E` in `assets/crema-italia.css`, Brand Standards v2.4) was pushed scoped to
 > `150557294761` with `--only assets/crema-italia.css --allow-live` and **verified on the public
 > page**: the stylesheet the homepage links serves the new token and none of the old; the pulled-back
