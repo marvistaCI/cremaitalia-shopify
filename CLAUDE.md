@@ -4302,6 +4302,30 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   POC29 entry recorded exactly the same trap in itself on 2026-09-03; it evidently recurs every
   time a deploy and its prune land in separate turns, which is the normal case.
 
+- 2026-11-17 - **SCA Membership Mark filed; a note on applying it, and a to-do - nothing built
+  (Steve: "make note only").** Steve added `Brand and Marketing\Memberships and Associations\`
+  to OneDrive with the Specialty Coffee Association's 2026 usage guidelines and the mark
+  (`SCA-Member2026.png`). The note is `docs/sca-membership-mark.md`; the to-do is a row on the
+  Decisions sheet (via `build_inventory.py`, regenerated and verified against a pre-edit copy:
+  Systems 39 -> 40, Decisions 63 -> 64, Cost Summary's SUM ranges extended by the one row,
+  Legend and Data Flows byte-identical), plus a Systems row for
+  the membership itself with **blank cost cells**, because neither dues nor renewal date is
+  recorded anywhere. **Three things about the mark shape the strategy.** It is a **collective
+  membership mark, not a certification** - it says we belong, nothing about the coffee, so copy
+  near it must never say certified, approved or specialty grade. It is **year-stamped** (MEMBER
+  2026) and the guidelines require the current version, so placing it creates an annual artwork
+  swap at renewal and a same-day take-down if membership lapses - hence one stable asset
+  (`assets/ci-sca-member.png`, alt text without the year) so the swap is a file replacement. And
+  it is **grey and yellow and may not be recoloured or cropped**, which makes it the one palette
+  exception on the site: small, on cream, in the footer, and Brand Standards section 2 wants a
+  third-party-mark line (v2.4, copy-only) in the same batch - the Standard has none today.
+  **Placement:** the shared coming-soon footer `snippets/ci-footer.liquid` (one edit covers the
+  password page, the public homepage and the 404) and the storefront footer; never on a product,
+  bag, card, cart line, the hero, or anything that ships in the box. **Gating questions for
+  Steve:** whose membership it is (individual vs the LLC), the renewal date and dues, and whether
+  the coming-soon page gets it now (recommended yes - it is collecting strangers' emails with no
+  other credential on the page).
+
 ---
 
 ## 10. Open questions / TODO
