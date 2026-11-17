@@ -4349,10 +4349,13 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   before touching content; the flag belongs on scripts that read untrusted files, not on repo
   scripts. And a text check for "What changed in v2.4" reported MISSING against a PDF that contained
   it, because the eyebrow renders `text-transform: uppercase` - the same case-sensitivity trap
-  logged on 2026-08-06, re-encountered rather than remembered. **The coming-soon CSS change is
-  committed but NOT pushed to the live theme** - that is a `--allow-live` write and waits for Steve's
-  go; until then the public page renders the pre-nudge token, which is a 0.05 contrast miss, not a
-  visible defect.
+  logged on 2026-08-06, re-encountered rather than remembered. **The coming-soon CSS change went to the live
+  theme the same session on Steve's go** - `shopify theme list` and `git log origin/main..HEAD` run
+  first, then a scoped `--only assets/crema-italia.css --allow-live` push, which the classifier did not
+  block. Proved two ways: the theme pulled back holds all 13 files with the stylesheet identical to
+  the repo after normalising line endings, and a cookie-less fetch of the public stylesheet (HTTP 200,
+  via the protocol-relative `//cremaitalia.com/cdn/...` href the homepage emits) serves
+  `--ci-crema-light: #E9AB6E` with zero occurrences of the old hex.
 
 ---
 
@@ -4387,8 +4390,12 @@ when resuming.**
 | Prior preview | "Crema Italia POC32 Preview" | `152388894889` |
 | Prior preview | "Crema Italia POC31 Preview" | `152372117673` |
 
-> **The live theme is current as of 2026-10-20.** Commit **`317fa22`** (opening date → "early
-> 2027" in the subheading and the three meta descriptions) was pushed scoped to `150557294761` in
+> **The live theme is current as of 2026-11-17.** Commit **`25b245a`** (Crema Light token
+> `#E8A86A` → `#E9AB6E` in `assets/crema-italia.css`, Brand Standards v2.4) was pushed scoped to
+> `150557294761` with `--only assets/crema-italia.css --allow-live` and **verified on the public
+> page**: the stylesheet the homepage links serves the new token and none of the old; the pulled-back
+> theme holds 13 files with the file identical to the repo. Before that, commit **`317fa22`**
+> (opening date → "early 2027" in the subheading and the three meta descriptions) was pushed scoped to `150557294761` in
 > the four coming-soon files and **verified on the public page**: a cookie-less fetch returned HTTP
 > 200 with four occurrences of "early 2027" and zero of the old "Summer/Fall 2026"; the four files
 > pulled back from the theme match the repo. Before that, commit **`2b80122`** (five policy links
