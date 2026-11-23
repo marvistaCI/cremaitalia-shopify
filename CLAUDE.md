@@ -4415,6 +4415,15 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 **▶ CURRENT STATE — POC33 (deployed + pull-and-diff proved 2026-10-23) — read this first
 when resuming.**
 
+> **▶ MAIN IS FROZEN HERE (Steve, 2026-11-23) — tag `poc33-sealed`.** This commit is the last on
+> `main` for the sealed-bag model: POC33 is the point of return should the business revert to "just
+> as the roaster sealed it". **All work on the bulk-import model happens on branch `poc-bulk`**,
+> whose themes are named `Crema Italia POC_Bulk_v<N> Preview` and whose state block lives in that
+> branch's copy of this file. Do not commit to `main` while the branch is live; if the bulk model
+> wins, `main` fast-forwards to the branch; if the sealed model returns, the branch is abandoned and
+> this commit is still current. The POC33 preview theme is renamed `Crema Italia POC33 Sealed
+> Reference` so the deploy skill's prune can never select it. Reasoning: §9 2026-11-17 (bulk model).
+
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
 > `docs/POC*_change_list.md` banners, and any "NEXT: deploy…" line are **historical narrative** —
 > they describe a past moment and their "not yet deployed / not yet pushed" claims **expire the
