@@ -94,17 +94,20 @@ here, but record the *rules themselves* in the Standard they belong to, and poin
 > pushed in-place into the theme still named "Crema Italia POC3 Preview"
 > (id `151277174953`), it should have been renamed to "Crema Italia POC4 Preview"
 > at that time. `shopify theme rename --theme <id> --name "Crema Italia POCx
-> Preview"` does this without touching any files. Do this at the same time the
+> Preview"` (or `POC_Bulk_vx Preview` on the bulk line) does this without touching any files. Do this at the same time the
 > batch is pushed, not later — a stale name is what made Steve think POC4 was
 > missing entirely (see 2026-07-05 entry in §9). Same id, new name each time the
 > POC version it holds changes.
 >
 > **Keep at most THREE POC preview themes (Steve, 2026-08-06).** Pruning is a step in the
 > `crema-poc-deploy` skill (Step 5), run right after a deploy is proven and before the
-> stale-id sweep. Candidates are only themes named exactly `Crema Italia POC<N> Preview`
+> stale-id sweep. Candidates are only themes named exactly `Crema Italia POC<N> Preview` (the
+> sealed line) or `Crema Italia POC_Bulk_v<N> Preview` (the bulk line, since 2026-11-23)
 > **and** with role `unpublished` — that pair of tests protects the live theme, `Horizon`,
 > the throwaway `Development (...)` theme, and any hand-named backup by construction rather
-> than by blocklist. Keep the three highest POC numbers, delete the rest **on Steve's
+> than by blocklist. **The cap is three per line.** `Crema Italia POC33 Sealed Reference` matches
+> neither pattern and is the frozen point of return - never a candidate. Keep the three highest
+> numbers of each line, delete the rest **on Steve's
 > explicit go, listed by name and id**: deletion is irreversible and the auto-mode
 > permission classifier does *not* block theme deletes (2026-07-25). Duplicate names halt
 > the prune rather than being absorbed. Nothing is lost by pruning — each POC batch is a
@@ -342,7 +345,8 @@ lowercase-with-hyphens for CSS classes (`.hero-section__title`), camelCase for J
 - **Never** apply the (R) symbol to the logo — Crema Italia is not federally registered yet
 - **Never** push directly to the live store without committing to git first
 - **Never** push or deploy to Shopify — any theme, live or preview — without FIRST running
-  `shopify theme list` and `git log origin/main..HEAD`, and never state what is deployed from
+  `shopify theme list` and `git log @{upstream}..HEAD` (`origin/main` on `main`, `origin/poc-bulk` on
+  the bulk branch), and never state what is deployed from
   a document. **Live output beats every document, including this file**; when they disagree the
   document is stale and gets corrected in the same pass. (2026-07-24: a week-old "not yet
   deployed" line in a change list was trusted over a live check — which had already contradicted
@@ -4408,6 +4412,27 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   a display failure, not a check failure, re-run with `-X utf8`; the same class as every encoding trap
   this log already carries.
 
+- 2026-11-23 — **Step 0 of the bulk platform executed: `main` frozen at tag `poc33-sealed`, branch
+  `poc-bulk` opened, the POC33 theme renamed out of the prune pattern, and the deploy skill taught two
+  lines.** Live check first: tree clean, in sync with GitHub, the store exactly as on 2026-11-17. The
+  freeze is recorded **on `main` itself** as its last commit (`8284008`), so anyone checking out `main`
+  reads why it stopped moving; the annotated tag `poc33-sealed` sits on that commit and is on GitHub.
+  `poc-bulk` was cut from it and pushed with tracking, so `git log @{upstream}..HEAD` reports unpushed
+  work correctly on either branch. **Theme `185329090729` is now "Crema Italia POC33 Sealed Reference"**
+  - verified by re-listing - which protects it from the prune **by construction**: it matches neither
+  naming pattern, so no selection bug can reach it, the same principle that already protects the live
+  theme and Horizon. **Skill and callouts updated on the branch:** `crema-poc-deploy` Step 0 explains
+  the two lines and uses `@{upstream}` rather than a hard-coded `origin/main`; Step 3 carries both push
+  commands; Step 5's selection rule has both patterns with the cap **three per line**, pruned
+  independently; Step 6 and the Done checklist name both change-list conventions. The §6 "Never" rule,
+  the §10 mandatory check, the draft-theme naming callout and the three-themes callout say the same.
+  §10 gained a **bulk-line state block** above the frozen sealed-line block. **Deliberately not done:**
+  POC31 (`152372117673`) and POC32 (`152388894889`) are superseded by the Sealed Reference and
+  redeployable from `a49c8e6` and `5794658`, but deleting them needs Steve's explicit go by name and
+  id, which "do step 0" did not carry; they are listed in the new block as prune-pending. No Standard
+  moved and no storefront copy changed. **The coordinator will now read the branch**, since it reads the
+  checkout's working tree; its RENDER_TRUST md5 comparisons are unaffected because no render moved.
+
 ---
 
 ## 10. Open questions / TODO
@@ -4424,6 +4449,24 @@ when resuming.**
 > this commit is still current. The POC33 preview theme is renamed `Crema Italia POC33 Sealed
 > Reference` so the deploy skill's prune can never select it. Reasoning: §9 2026-11-17 (bulk model).
 
+**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — no POC_Bulk theme deployed yet.**
+
+| What | Theme | Id |
+|---|---|---|
+| **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
+| **Frozen point of return (sealed line)** | "Crema Italia POC33 Sealed Reference" | `185329090729` |
+| Sealed line, superseded, prune pending Steve's go | "Crema Italia POC32 Preview" | `152388894889` |
+| Sealed line, superseded, prune pending Steve's go | "Crema Italia POC31 Preview" | `152372117673` |
+| **Newest bulk preview** | none yet | - |
+
+> Themes on this line are named `Crema Italia POC_Bulk_v<N> Preview`, change lists are
+> `docs/POC_Bulk_v<N>_change_list.md`, the cap is three per line, and the upstream for the unpushed
+> check is `origin/poc-bulk`. The sealed-line table below this block describes POC33 as it was frozen
+> and is kept as the reference for what the bulk line departs from. **Order of work on this line:**
+> Store Operating Standards v1.24 (a supply-chain and packaging section, and the 100 g, repack wording,
+> freshness-under-repack, whole-bean rationale, cadence and who-repacks decisions) **before** any
+> storefront copy; then `POC_Bulk_v1` as copy-and-promise surfaces only; then the lot and label model.
+
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
 > `docs/POC*_change_list.md` banners, and any "NEXT: deploy…" line are **historical narrative** —
 > they describe a past moment and their "not yet deployed / not yet pushed" claims **expire the
@@ -4432,7 +4475,8 @@ when resuming.**
 > **MANDATORY — verify before acting, do not trust this block either.** It is accurate as of the
 > date stamped above and can be stale the moment anyone deploys. At the start of any session that
 > will push, deploy, or make a claim about what is deployed, run BOTH:
-> `shopify theme list` and `git log origin/main..HEAD --oneline`.
+> `shopify theme list` and `git log @{upstream}..HEAD --oneline` (and `git branch --show-current`, since the
+> two POC lines have separate state blocks).
 > Live output wins over every document, including this one; correct the document in the same pass.
 > This is also §6's ninth "Never", and for a full POC batch deploy the **`crema-poc-deploy`** skill
 > encodes the whole ritual with this as step 0.

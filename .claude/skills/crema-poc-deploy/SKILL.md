@@ -37,8 +37,17 @@ shopify theme list
 ```
 
 ```bash
-git log origin/main..HEAD --oneline
+git log @{upstream}..HEAD --oneline
 ```
+
+> **Two POC lines exist since 2026-11-23 (Steve).** `main` is **frozen** at tag `poc33-sealed`, the
+> sealed-bag model's point of return; its upstream is `origin/main` and **nothing deploys from it while
+> it is frozen**. The bulk-import model lives on branch **`poc-bulk`** (upstream `origin/poc-bulk`),
+> whose themes are named `Crema Italia POC_Bulk_v<N> Preview` and whose change lists are
+> `docs/POC_Bulk_v<N>_change_list.md`. `@{upstream}` resolves to the right remote branch on either;
+> confirm which branch you are on with `git branch --show-current` before reading the §10 block, which
+> is branch-specific. If the bulk model wins, `main` fast-forwards to the branch and the two lines
+> collapse back to one; if the sealed model returns, the branch is abandoned.
 
 Then answer these in writing before proceeding:
 
@@ -99,7 +108,10 @@ sentence like these; if it is not, treat it as a regression rather than a new ba
 **New POC number** (the normal case — Step 0 confirmed no collision):
 
 ```bash
+# sealed line (main, frozen - do not deploy while frozen):
 shopify theme push --unpublished --theme "Crema Italia POC<N> Preview" --json
+# bulk line (branch poc-bulk):
+shopify theme push --unpublished --theme "Crema Italia POC_Bulk_v<N> Preview" --json
 ```
 
 **Refreshing an existing preview:**
@@ -182,7 +194,7 @@ is the only valid visual check.
 weight — the store reached 11 themes before the 2026-08-06 cleanup, and Shopify caps a store at
 20. A pruned POC is not lost work: every batch is a commit, so it can be redeployed from git if
 it is ever wanted back. That is only true if the batch is actually on GitHub, which Step 0
-already confirmed (`git log origin/main..HEAD` empty).
+already confirmed (`git log @{upstream}..HEAD` empty).
 
 Run this **after** Step 4 has proven the new push, so the theme you just deployed is one of the
 three you keep. Run it **before** Step 6, because pruning is what creates the stale theme ids
@@ -190,14 +202,21 @@ that Step 6.4 sweeps for.
 
 **Selection rule — by construction, not by blocklist.** A theme is a prune candidate only if
 **both** hold:
-- its name matches exactly `^Crema Italia POC(\d+) Preview$`, and
+- its name matches exactly `^Crema Italia POC(\d+) Preview$` (the sealed line) **or**
+  `^Crema Italia POC_Bulk_v(\d+) Preview$` (the bulk line), and
 - its `role` is `unpublished`.
+
+**The cap is three PER LINE**, and the two lines are pruned independently: sort each line's candidates
+by its own number descending and keep the first three of each. `Crema Italia POC33 Sealed Reference`
+(id `185329090729`, renamed 2026-11-23) matches **neither** pattern and is therefore protected by
+construction - it is the frozen point of return and must never be a candidate. Do not "fix" its name
+back to the `Preview` form.
 
 Everything else is protected without needing to be named: the live theme, `Horizon`, the
 throwaway `Development (...)` theme, and any hand-named theme like a backup. The `role` test is
 what protects against the catastrophic case — a *published* theme that happens to match the
-naming pattern is never a candidate. Sort the candidates by POC number descending, keep the
-first three, prune the rest.
+naming pattern is never a candidate. Sort each line's candidates by its number descending, keep the
+first three of each line, prune the rest.
 
 ```bash
 shopify theme list --json
@@ -219,7 +238,7 @@ Compute the KEEP/PRUNE split from that JSON (parse it — do not eyeball the ids
 shopify theme delete --theme <id> --force
 ```
 
-Then re-run `shopify theme list` and confirm the survivors are exactly the three expected.
+Then re-run `shopify theme list` and confirm the survivors are exactly the ones expected (at most three per line, plus the Sealed Reference).
 
 ## Step 6 — Record it, in the one authoritative place
 
@@ -228,7 +247,7 @@ Then re-run `shopify theme list` and confirm the survivors are exactly the three
    "What POC<N> is" paragraph. Remove any row that no longer exists.
 2. **`CLAUDE.md` §9** — a dated entry: what shipped, what was verified and how, the commit, the
    theme id. This is narrative; state lives in §10.
-3. **`docs/POC<N>_change_list.md`** — the build record. **Do not write deployment-state claims
+3. **`docs/POC<N>_change_list.md`** (sealed line) or **`docs/POC_Bulk_v<N>_change_list.md`** (bulk line) — the build record. **Do not write deployment-state claims
    here.** Point at §10 instead. Stale banners in these files caused the 2026-07-24 duplicate.
 4. **Sweep the repo for theme ids that just went stale.** Creating a theme is safe; **deleting
    one silently breaks anything still pointing at it** — so this is where Step 5's prune gets
@@ -270,10 +289,10 @@ specific things worth checking on-device for this batch.
 
 ## Done means
 
-- [ ] `theme list` + `git log origin/main..HEAD` run **before** the push, and no name collision
+- [ ] `theme list` + `git log @{upstream}..HEAD` run **before** the push (on the right branch), and no name collision
 - [ ] Batch committed; validation clean against the documented baseline
 - [ ] Pushed; **pull-and-diff proves** all files match; exactly one theme of that name
-- [ ] Pruned to the three newest POC previews, on Steve's explicit go, by name+id
+- [ ] Pruned to the three newest previews **of that line**, on Steve's explicit go, by name+id; the Sealed Reference untouched
 - [ ] §10 CURRENT STATE updated and accurate; §9 logged; change list carries no state claims
 - [ ] Repo swept for theme ids broken by any theme **deletion** this round (executable files and
       present-tense claims fixed; historical narrative left alone)
