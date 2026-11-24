@@ -4429,7 +4429,9 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   §10 gained a **bulk-line state block** above the frozen sealed-line block. **Deliberately not done:**
   POC31 (`152372117673`) and POC32 (`152388894889`) are superseded by the Sealed Reference and
   redeployable from `a49c8e6` and `5794658`, but deleting them needs Steve's explicit go by name and
-  id, which "do step 0" did not carry; they are listed in the new block as prune-pending. No Standard
+  id, which "do step 0" did not carry. [Both deleted 2026-11-24 on Steve's explicit go, after the
+  POC_Bulk_v1 deploy was proven; name, id and role asserted against live JSON in the same run as the
+  delete.] No Standard
   moved and no storefront copy changed. **The coordinator will now read the branch**, since it reads the
   checkout's working tree; its RENDER_TRUST md5 comparisons are unaffected because no render moved.
 
@@ -4506,8 +4508,6 @@ when resuming.**
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
 | **Frozen point of return (sealed line)** | "Crema Italia POC33 Sealed Reference" | `185329090729` |
-| Sealed line, superseded, prune pending Steve's go | "Crema Italia POC32 Preview" | `152388894889` |
-| Sealed line, superseded, prune pending Steve's go | "Crema Italia POC31 Preview" | `152372117673` |
 | **Newest bulk preview** | "Crema Italia POC_Bulk_v1 Preview" | `185989595305` |
 
 > Themes on this line are named `Crema Italia POC_Bulk_v<N> Preview`, change lists are
@@ -4553,9 +4553,7 @@ when resuming.**
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
-| **Newest POC preview** | "Crema Italia POC33 Preview" | `185329090729` |
-| Prior preview | "Crema Italia POC32 Preview" | `152388894889` |
-| Prior preview | "Crema Italia POC31 Preview" | `152372117673` |
+| **Sealed line, frozen point of return** | "Crema Italia POC33 Sealed Reference" (renamed from POC33 Preview 2026-11-23) | `185329090729` |
 
 > **The live theme is current as of 2026-11-17.** Commit **`881327a`** (coming-soon copy: the
 > sealed-model clause "never re-roasted, ground, or repackaged by us" replaced with Steve's unaltered-roast
@@ -4930,8 +4928,15 @@ here.** This paragraph used to hardcode them, and it went stale the moment the t
 pruned — twice. Open the preview in a **real browser**; a `curl` of a `preview_theme_id` link is NOT
 a valid check (see §9 2026-07-06). Refresh with `shopify theme push --theme <id from the table>`.
 
-**Only POC31, POC32 and POC33 previews now exist** - at the three-newest cap, enforced as
-`crema-poc-deploy` Step 5. **POC30 (`152344002729`) was deleted 2026-10-23** on Steve's explicit
+**The sealed line holds only the POC33 Sealed Reference (2026-11-24).** **POC31 (`152372117673`)
+and POC32 (`152388894889`) were deleted 2026-11-24** on Steve's explicit go by name and id, given
+after the POC_Bulk_v1 deploy was proven; both were asserted by name, id and role against a live
+`theme list --json` in the same run as the delete, and no duplicate names existed. Their batches
+are commits `5794658` (POC31) and `a49c8e6` (POC32) on `origin/main` and are redeployable. The
+Step 6.4 sweep found seven references: two §9 lines naming the day each shipped (narrative, left),
+and five present-tense claims (both state tables, the 2026-11-23 entry's prune-pending sentence,
+and this paragraph), all corrected. Earlier: at the three-newest cap, enforced as
+`crema-poc-deploy` Step 5, **POC30 (`152344002729`) was deleted 2026-10-23** on Steve's explicit
 go by name and id, given after the POC33 deploy was proven; the keep/prune split was computed from
 a live `theme list --json`, and the theme's name, id and role were asserted against live output in
 the same command as the delete. Its batch is commits `230c960`..`eaac43a` on `origin/main` and is
