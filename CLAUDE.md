@@ -4581,7 +4581,9 @@ when resuming.**
 > hero reads **"Exactly as roasted in Italy."** and the meta description, Our model, About, the
 > Promise page, the "Do you roast" FAQ answer, a new "What is on the bag?" entry and the Brewing
 > teaser no longer claim we ship the bag the roaster filled - every sentence derived from the
-> coming-soon paragraph Steve pushed live on 2026-11-17. Commit `358e62d`. Proved by pull-and-diff:
+> coming-soon paragraph Steve pushed live on 2026-11-17. Commit `358e62d`; **refreshed in place the
+> same day** with Steve's two beat edits ("Our roasters are chosen for their artisan quality.",
+> "Freshness matters; slow boats age the beans."), re-proved by pull-and-diff. Proved by pull-and-diff:
 > both sides 40 files, zero mismatches after normalising line endings, exactly one theme of that
 > name, every rewritten sentence asserted on the pulled files. `theme check` 9 / 0 / 0 new. **The
 > bulk line holds v2 and v3** - v1 (`185989595305`) was pruned 2026-11-24 on Steve's explicit go by
