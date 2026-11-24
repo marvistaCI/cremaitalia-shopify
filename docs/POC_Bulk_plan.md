@@ -1,109 +1,81 @@
-# The bulk line - planned changes, in order
+# The bulk line - what gets built into the POC, in order
 
-Consolidated 2026-11-24 from the §10 "order of work" paragraph and the 2026-11-17 log entry, which
-between them held the whole plan but in two places. **This is the review list for the bulk line.**
-State (what is deployed) stays in `CLAUDE.md` §10; this file is the backlog and is kept current by
-striking items as they ship, naming the batch that shipped them.
+Rewritten 2026-11-24 after Steve's review: **theme work only.** Standards decisions, roaster
+communications, the Italian descriptor list, label printing, 3PL questions and the wholesale document
+are operations and live elsewhere (the Decisions sheet, the Standards, build spec §15). This file is
+the build backlog for branch `poc-bulk`; state (what is deployed) stays in `CLAUDE.md` §10. Strike
+items as they ship, naming the batch.
 
-Two kinds of item live here and land in two places. **Bulk-model work** happens on branch `poc-bulk`
-and ships as `POC_Bulk_v<N>`. **Model-neutral work** (wanted whether the sealed or the bulk model
-wins) lands on `main` first and is merged forward, per the amended freeze rule in §10. Each item says
-which it is.
+**One dependency, stated once rather than per item:** the replacement wording for every sentence in
+section A comes from Store Operating Standards v1.24 (the supply-chain section and its decisions on
+100 g, how "repacked" is said, freshness under repack, whole bean as our choice, and cadence). Those
+are Steve's decisions, not build items, and A is not written until they are published. The
+coming-soon page already carries his wording for the core claim and is the seed.
 
-## A. Standards before copy - Store Operating Standards v1.24 (bulk model)
+Every line below was found by grep on 2026-11-24, not remembered. Line numbers are as of commit
+`de00823` and will drift; the quoted text is the anchor.
 
-Nothing in B or C is built until these are decided and published, because every one of them changes
-what the storefront may promise. The 2026-11-17 finding was that the sealed model had no section of
-its own in the Standard - it lived in §10's exclusions, the Roaster Guide and storefront copy - which
-is why its reversal shows up as scattered contradictions rather than one edit.
+## A. POC_Bulk_v2 - every place the storefront claims we ship the bag the roaster filled
 
-1. **A supply-chain and packaging section.** Roasters ship sealed valved bulk bags of 2.5 to 20 kg,
-   marked with lot and roast date; a forwarder collects within days of roasting; the coffee flies;
-   Crema Italia opens and repacks it in Florida into its own valved bags of 100 g, 250 g, 500 g and
-   1 kg, printing the roaster's label from their artwork under a label licence, carrying the roast
-   date and lot from the bulk bag, with an FDA block reading "Imported and repacked by Crema Italia".
-2. **100 g as an ordinary consumer size.** Today §1 says 100 g exists only inside collections, the
-   §2.2 matrix prices it only as a collection component, and §12.6 voids the old referral reward for
-   lack of a standalone 100 g SKU. All three move.
-3. **How "repacked" is said to the customer.** The coming-soon page already carries Steve's wording
-   (unaltered roast; repacked shortly after landing; the bag names roaster, coffee and roast date).
-   The Standard should carry the rule those sentences follow so the storefront copy in B has one
-   source.
-4. **The freshness window under repack.** Whether the 90 / 150-day clock runs from the roaster's
-   roast date (it should - the bag carries it) and what the §5.4 "Roasted on or after" floor means
-   when we, not the roaster, record the date.
-5. **Whole bean as our choice.** §10's whole-bean rationale rested on "the roaster's sealed bag".
-   Under repack it is a decision we make and must say so.
-6. **Cadence.** Orders become small and frequent rather than a 6-to-10-week pallet; §10's "no
-   roast-day shipping-cadence claims" and §12.2's price-tool cadence both assume pallets.
-7. **Who repacks, and the food-facility consequence.** Our own premises or the 3PL; either way a
-   registered food facility, which bears on the 3PL questionnaire (§12.9) and on the FDA posture.
-8. **The SKU standard's label semantics.** Labels are now printed by us from the roaster's artwork,
-   so "SKUs are handed to a roaster for label printing" and the per-size `Label <size>` flag need
-   rewriting; the argument that a SKU carries no shelf segment is unchanged and still right.
-9. **A lot is a bulk bag.** §13.9's lot model gains the fact that the roast date is recorded by us at
-   repack from the bulk bag's marking, and that one bulk bag yields several retail sizes.
+1. **Hero H1** - "Exactly as the roaster sealed it... in Italy." (`templates/index.liquid`), plus
+   the comment block above it recording how the line was settled, which must not keep describing a
+   line that no longer exists.
+2. **Meta description** - "sold exactly as the roaster sealed it" (`layout/theme.liquid`,
+   `ci_meta_desc`, which also feeds the Open Graph and Twitter descriptions).
+3. **The three beats under the hero** - review all three against the new model. "Slow boats age
+   the beans" survives; "We fly it in" may need the repack step; the "how it works" comment
+   (roaster seals, we fly, you grind) is rewritten with them.
+4. **Our model** - "They are the masters of roasting and packaging - we are the means of getting
+   their coffee to you, unchanged." We package now.
+5. **Founder story** - "bring their coffee here, unchanged. Just Italy, roasted into a bean."
+   Review only: "unchanged" is still true of the roast, which is what the sentence is about.
+6. **About, Our company** - "We import; we never interfere. Each roaster's coffee reaches you
+   exactly as they roast and seal it - nothing re-roasted, re-ground, or re-bagged."
+7. **Promise page, shipping** - "in the roaster's own sealed bags".
+8. **FAQ** - "No. We import and curate; the roasters roast. We never roast, blend, or repackage."
+   Rewrite, and add the question the new model raises: who packs the bag, and what is on it (roaster,
+   coffee, roast date, lot, "Imported and repacked by Crema Italia").
+9. **FAQ, freshness** - "Every bag carries its roast date, and every coffee on our shelves shows the
+   roast date of the oldest bag we hold". Still true; verify the wording survives the v1.24 decision
+   on where the clock starts, and change nothing if it does.
+10. **Journal teaser, Brewing** - "We sell whole bean because that is what our roasters seal".
+    Whole bean becomes our choice and the sentence has to give our reason.
+11. **Five roaster blurbs** in `ci-catalog.json` - "Whole bean, valve-sealed, unchanged." and
+    Gardelli's "They reach you exactly as Gardelli sealed them: whole bean, in valve bags, nothing
+    repackaged."
+12. **Two product `long` passages** - Gardelli Ethiopia "Imported whole bean in Gardelli's
+    valve-sealed bag"; the Geisha's "when this pallet is gone it may not return" (there is no pallet).
+13. **The photography brief** in the template comment for the product-shot slot, which asks for
+    "one of OUR roasters' sealed bags" - it becomes our bag carrying their label.
 
-Bulk-model, on the branch. Published through `crema-std-publish` as v1.24, both touched renders
-regenerated and delivered.
+## B. POC_Bulk_v3 - the size model
 
-## B. POC_Bulk_v2 - the copy and promise surfaces
+14. **100 g as a consumer size** on every coffee: a fourth entry in each `sizes` array with a price,
+    the product page's "Bag size" pills (four pills must still hold one row at 375, the POC15
+    constraint), and the price denominator. The pricing figure is a v1.24 placeholder like every
+    other number before launch.
+15. **Roccia subscription sizes** - the page says "Bag sizes 250 g, 500 g, and 1 kg" and the
+    subscription toggle offers the same; both follow whatever v1.24 decides about 100 g on
+    subscription.
+16. **Sorpresa and the home shelf card** - "three 100 g bags" remains true for a collection; what
+    changes is any implication that 100 g exists only inside one. Review the Sorpresa page, the
+    shelf card and the collection's blurb and `long`; change only what implies the old rule.
+17. **Freshness display under repack** - the "Roasted on or after" floor and the Offerta band keep
+    their mechanism, since the roast date still comes from the roaster's marking. Verify by driving
+    after A ships; expected result is no change.
 
-Every sentence below is true under the sealed model and false under the bulk one. Rewritten only
-after A is published, so the storefront and the Standard cannot disagree on day one. Enumerated by
-grep on 2026-11-24, so the list is the theme's, not memory's.
+## C. Model-neutral builds - land on `main` first, merged forward
 
-10. **The hero line** - "Exactly as the roaster sealed it... in Italy." (`templates/index.liquid`,
-    and the long comment block above it that records how it was settled).
-11. **The meta description** in `layout/theme.liquid` - "sold exactly as the roaster sealed it".
-12. **The three beats under the hero** - check all three; "Slow boats age the beans." survives,
-    the "we fly it in" beat may need the repack step.
-13. **About, Our model** - "We import; we never interfere... nothing re-roasted, re-ground, or
-    re-bagged."
-14. **The Promise page** - "in the roaster's own sealed bags".
-15. **The FAQ** - "We never roast, blend, or repackage." and the freshness entry's "Every bag
-    carries its roast date" (still true, but the bag is now ours).
-16. **The grind guide's rationale** wherever it leans on the sealed bag.
-17. **Five roaster blurbs** in `ci-catalog.json` - "Whole bean, valve-sealed, unchanged." and
-    Gardelli's "nothing repackaged".
-18. **Two product `long` passages** - Gardelli Ethiopia "Imported whole bean in Gardelli's
-    valve-sealed bag" and the Geisha's "when this pallet is gone".
-19. **The photography brief** for the product-shot slot, which asks for "one of OUR roasters'
-    sealed bags" - it becomes our bag carrying their label.
-20. **The home shelf cards and Sorpresa copy** - anything stating 100 g exists only in collections.
+18. ~~The taste quiz aligned to the SCA Flavor Wheel.~~ Shipped as `POC_Bulk_v1` (`de70f61`).
+19. **The taste-profile match line.** On every card and product page: the gold state dot and
+    "Matches your taste profile." on its own line directly under the freshness strip (and under the
+    product-page title), shown whenever a profile exists and the coffee matches it, filter on or off;
+    nothing on a coffee that does not match, never a negative. One matching function shared with the
+    filter, sparse-combo relaxation included; binary, not graded. Decided 2026-11-24, not built.
 
-Bulk-model, on the branch. Ships as `POC_Bulk_v2`.
+## Not build items, recorded so they are not re-asked
 
-## C. POC_Bulk_v3 - the size, lot and label model
-
-21. **100 g in the size arrays and the price matrix** for every coffee, with the Roccia subscription
-    size rule (today 250 / 500 / 1 kg only) decided rather than inherited.
-22. **The lot record** as a bulk bag: roast date, lot, kilos received, sizes repacked from it.
-23. **The label model**: roaster artwork under licence, our FDA block, roast date and lot carried,
-    the SKU printed - what the pro-forma label audit in build spec §15.2 actually checks.
-24. **Wholesale** becomes trivial under bulk (a size, not a channel); the decision document in
-    `docs/wholesale/` should be re-read against the new model before anything is built.
-
-Bulk-model, on the branch.
-
-## D. Model-neutral - lands on `main`, merged forward
-
-25. ~~**The taste quiz aligned to the SCA Flavor Wheel.**~~ Shipped as `POC_Bulk_v1`
-    (`de70f61`, 2026-11-24).
-26. **The taste-profile match line.** On every card and product page: the gold state dot and
-    "Matches your taste profile." on its own line directly under the freshness strip, shown whenever
-    a profile exists and the coffee matches it, filter on or off (Steve: redundancy that teaches where
-    to look is cheap); nothing shown on a coffee that does not match, never a negative. One matching
-    function shared with the filter, sparse-combo relaxation included; binary, not graded. Decided
-    2026-11-24, not built.
-27. **The Italian descriptor list** for the Product Onboarding form, drawn from the SCA's own Italian
-    edition of the wheel (confirmed to exist, 2026-11-24) and checked by Lucia. A document, not a
-    theme change; gated on obtaining that edition.
-
-## Already done
-
-- The live coming-soon page no longer claims "never repackaged by us" - Steve's replacement
-  wording pushed to the live theme 2026-11-17 (`881327a`).
-- `main` frozen at tag `poc33-sealed`, branch opened, POC33 theme renamed to the Sealed Reference,
-  deploy skill taught two lines (2026-11-23).
-- POC31 and POC32 pruned on Steve's go (2026-11-24); the sealed line is the Sealed Reference alone.
+- The lot record as a bulk bag and the label model: not storefront surfaces (build spec §0 - the POC
+  models only what we write production code for). The POC's per-product `roast_date` is adequate.
+- The SKU standard's label-flag semantics, the Italian descriptor list, who repacks, the 3PL
+  questionnaire, wholesale: Standards and operations, tracked in the Decisions sheet.
