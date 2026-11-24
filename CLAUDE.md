@@ -4450,8 +4450,9 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   **Two fixture-shape notes, not defects:** medium + Dark & spiced + full caffeine returns zero coffees
   (the only medium spiced fixture is the decaf, and it returned zero before too); and driving the matrix
   in one page session carries `activeTaste.roast` into the "Surprise me" row, pre-existing and the same
-  contamination trap POC16 recorded. **Still to confirm:** that the SCA publishes an Italian edition of
-  the wheel, so the roaster list can be issued against official terms rather than our translation.
+  contamination trap POC16 recorded. **The SCA publishes an Italian edition of the wheel (Steve,
+  2026-11-24)**, so the roaster list is issued against official terms rather than our translation;
+  the remaining step is to obtain that edition and have Lucia check the Italian list against it.
 
 ---
 

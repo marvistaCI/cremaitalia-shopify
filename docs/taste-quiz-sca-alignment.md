@@ -78,8 +78,9 @@ up to five, the same limit the SCA form uses. The list we offer:
 - Spices: cinnamon, clove, nutmeg, anise, pepper
 - Roasted: pipe tobacco, tobacco, brown roast, smoky, grain, malt
 
-The SCA publishes the wheel in translation; we will supply the list in Italian against the
-official terms, not our own translation, once we have confirmed the Italian edition.
+The SCA publishes the wheel in Italian (confirmed by Steve, 2026-11-24), so the list will be
+supplied to roasters in Italian against the SCA's own terms, not our translation. Lucia, when you
+review the Italian list, please check it against that edition rather than translating from this note.
 
 **3. Caffeine.** Regular or decaffeinated.
 

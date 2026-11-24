@@ -1914,8 +1914,9 @@ scattered across the Roaster Guide.
    reading if they measure it, which we band ourselves; **descriptors**, tick every one that applies
    from the closed list of SCA Flavor Wheel terms, **up to five**, the limit the SCA's own Descriptive
    Assessment form uses - the list is the `terms` arrays of `FLAVOR_BUCKETS` in `ci-storefront.js`,
-   to be issued in Italian against the SCA's own translated wheel, not ours, once the Italian edition
-   is confirmed; and **caffeine**, regular or decaffeinated. The roaster never sees our three customer
+   to be issued in Italian against the SCA's own Italian edition of the wheel (it exists - Steve,
+   2026-11-24), never our translation, with Lucia checking the list against that edition before it
+   reaches a roaster; and **caffeine**, regular or decaffeinated. The roaster never sees our three customer
    buckets; they are our grouping of the wheel and can be redrawn without re-asking anyone. Defect
    terms are not on the list, so they cannot be ticked. The descriptors become both the filter
    facets and the tasting-note pills on the product page, so the roaster is describing their own
