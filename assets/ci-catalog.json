@@ -2,6 +2,7 @@
   "_meta": {
     "note": "POC3 baked-in test dataset. Single source of truth for the storefront preview. NOT wired to live Shopify products. When the production store is built, this is replaced by real {{ product }} / {{ collection }} objects + crema_italia.* metafields. See CLAUDE.md.",
     "poc_rating_note": "FIXTURE DATA - POC ONLY. Named poc_rating so a grep for the production 'reviews.' namespace never hits it, and one grep for poc_ finds everything that must go. Shape mirrors Shopify's standard review data 1:1 so production is a data-source swap: rating -> reviews.rating, rating_count -> reviews.rating_count, product_reviews[] -> reviews.product_reviews (metaobject fields). Store Operating Standards 13.7: no fabricated rating may ever appear on the live store.",
+    "descriptors_note": "TASTE MODEL (2026-11-24). Each coffee carries descriptors[]: up to five terms from the SCA / World Coffee Research Coffee Taster's Flavor Wheel, as a roaster would tick them on the Product Onboarding form. The customer-facing flavor buckets (fruit / sweet / spiced), the note pills, the roast display string and a collection's facets are all DERIVED from these in ci-storefront.js (FLAVOR_BUCKETS) - there is no stored flavor or roast_level field any more, so the data cannot disagree with itself. A collection carries includes[] (its composition) and no descriptors of its own. PROD: crema_italia.tasting_notes (list) supplied by the roaster; see production_build_spec.md 13.2 and 15.2.",
     "rules_note": "Commercial rule values are NOT held here. They live in theme settings (config/settings_schema.json + settings_data.json), are read by Liquid as settings.* and by JS as window.CI_RULES, and can be changed without a code deploy. founding_member_cap, freshness_window_days and currency used to sit in this block and were never read by anything, while the values were hardcoded in markup - which is worse than not having them, because the data looked authoritative. Review A finding A3."
   },
   "roasters": [
@@ -93,7 +94,7 @@
       "portrait_cls": "r",
       "portrait_style": "background:linear-gradient(135deg,#1a2a3a,#3a5a6a);color:var(--ci-crema-light)",
       "label": "Val d'Orcia",
-      "blurb": "The decaf that started Crema Italia - walnut, dried fig, cocoa.",
+      "blurb": "The decaf that started Crema Italia - prune, cinnamon, chocolate.",
       "bio": [
         "A small Sienese roastery in the Val d'Orcia, as much a part of the landscape as the cypress rows. Their decaf is the cup that started Crema Italia - proof that decaffeinated need not mean diminished.",
         "We import their sugarcane-decaf year-round and a house blend. Whole bean, valve-sealed, unchanged."
@@ -113,15 +114,13 @@
       "shelf": "roccia",
       "region": "emilia",
       "roast": "light",
-      "flavor": "fruit",
       "caffeine": "full",
       "origin": "Ethiopia, Yirgacheffe",
       "process": "Natural",
-      "roast_level": "Light",
-      "notes": [
+      "descriptors": [
         "Jasmine",
         "Peach",
-        "Bergamot"
+        "Black tea"
       ],
       "roast_date": "2026-06-20",
       "best_by": "2026-08-19",
@@ -144,8 +143,8 @@
         "cls": "p",
         "label": "Gardelli · Ethiopia"
       },
-      "blurb": "Jasmine, peach, bergamot. Natural process.",
-      "long": "A natural-process Yirgacheffe roasted light to keep its perfume intact - jasmine and bergamot up top, ripe peach underneath. Imported whole bean in Gardelli's valve-sealed bag.",
+      "blurb": "Jasmine, peach, black tea. Natural process.",
+      "long": "A natural-process Yirgacheffe roasted light to keep its perfume intact - jasmine and black tea up top, ripe peach underneath. Imported whole bean in Gardelli's valve-sealed bag.",
       "brewing": "Excellent as filter or in a moka pot.",
       "poc_rating": {
         "rating": {
@@ -204,13 +203,11 @@
       "shelf": "roccia",
       "region": "emilia",
       "roast": "light",
-      "flavor": "fruit",
       "caffeine": "full",
       "origin": "Rwanda, Western Province",
       "process": "Washed",
-      "roast_level": "Light",
-      "notes": [
-        "Red currant",
+      "descriptors": [
+        "Raspberry",
         "Black tea",
         "Lime"
       ],
@@ -235,7 +232,7 @@
         "cls": "r",
         "label": "Gardelli · Rwanda"
       },
-      "blurb": "Red currant, black tea, lime. Washed.",
+      "blurb": "Raspberry, black tea, lime. Washed.",
       "long": "A washed Rwandan from the hills of Nyamasheke, roasted light and clean. Sparkling acidity, red-fruit clarity, a black-tea finish.",
       "brewing": "Best as pour-over or filter."
     },
@@ -247,15 +244,13 @@
       "shelf": "roccia",
       "region": "toscana",
       "roast": "medium",
-      "flavor": "sweet",
       "caffeine": "full",
       "origin": "Guatemala, Huehuetenango",
       "process": "Washed",
-      "roast_level": "Medium",
-      "notes": [
+      "descriptors": [
         "Brown sugar",
-        "Dried apricot",
-        "Almond"
+        "Almond",
+        "Apple"
       ],
       "roast_date": "2026-06-18",
       "best_by": "2026-08-17",
@@ -278,8 +273,8 @@
         "cls": "r",
         "label": "La Sosta · Guatemala"
       },
-      "blurb": "Brown sugar, dried apricot, almond.",
-      "long": "A washed Huehuetenango roasted to a classic Florentine medium - brown sugar and almond, with a dried-apricot sweetness that suits a moka pot or an espresso machine.",
+      "blurb": "Brown sugar, almond, apple.",
+      "long": "A washed Huehuetenango roasted to a classic Florentine medium - brown sugar and almond, with a crisp apple sweetness that suits a moka pot or an espresso machine.",
       "brewing": "Built for moka and espresso.",
       "poc_rating": {
         "rating": {
@@ -328,15 +323,13 @@
       "shelf": "roccia",
       "region": "toscana",
       "roast": "medium",
-      "flavor": "sweet",
       "caffeine": "full",
       "origin": "Brazil, Cerrado Mineiro",
       "process": "Natural",
-      "roast_level": "Medium",
-      "notes": [
+      "descriptors": [
         "Peanut",
-        "Cocoa",
-        "Caramel"
+        "Chocolate",
+        "Caramelized"
       ],
       "roast_date": "2026-06-17",
       "best_by": "2026-08-16",
@@ -359,7 +352,7 @@
         "cls": "p",
         "label": "La Sosta · Brasile"
       },
-      "blurb": "Peanut, cocoa, caramel. Natural.",
+      "blurb": "Peanut, chocolate, caramel. Natural.",
       "long": "A natural Cerrado for the everyday cup - roasted, sweet, and low in acidity. The dependable house espresso.",
       "brewing": "Ideal for espresso and moka."
     },
@@ -371,15 +364,13 @@
       "shelf": "roccia",
       "region": "toscana",
       "roast": "dark",
-      "flavor": "sweet",
       "caffeine": "full",
       "origin": "Colombia, Antioquia",
       "process": "Washed",
-      "roast_level": "Dark",
-      "notes": [
-        "Milk chocolate",
+      "descriptors": [
+        "Chocolate",
         "Hazelnut",
-        "Caramel"
+        "Caramelized"
       ],
       "roast_date": "2026-06-16",
       "best_by": "2026-08-15",
@@ -398,8 +389,8 @@
         "cls": "p",
         "label": "Fusari · Colombia"
       },
-      "blurb": "Milk chocolate, hazelnut, caramel.",
-      "long": "A washed Antioquia roasted dark in the Tuscan bar tradition - milk chocolate and hazelnut, a caramel sweetness, almost no edge. Nonna's espresso.",
+      "blurb": "Chocolate, hazelnut, caramel.",
+      "long": "A washed Antioquia roasted dark in the Tuscan bar tradition - chocolate and hazelnut, a caramel sweetness, almost no edge. Nonna's espresso.",
       "brewing": "Made for espresso and moka."
     },
     {
@@ -410,15 +401,13 @@
       "shelf": "roccia",
       "region": "toscana",
       "roast": "dark",
-      "flavor": "terroir",
       "caffeine": "full",
       "origin": "India, Malabar Coast",
       "process": "Monsooned",
-      "roast_level": "Dark",
-      "notes": [
+      "descriptors": [
         "Dark chocolate",
         "Pipe tobacco",
-        "Baking spice"
+        "Clove"
       ],
       "roast_date": "2026-06-14",
       "best_by": "2026-08-13",
@@ -437,7 +426,7 @@
         "cls": "r",
         "label": "Fusari · India"
       },
-      "blurb": "Dark chocolate, pipe tobacco, baking spice.",
+      "blurb": "Dark chocolate, pipe tobacco, clove.",
       "long": "A monsooned Malabar - low acidity, full body, a savoury depth of tobacco and spice. A winter espresso with character.",
       "brewing": "Espresso and moka.",
       "poc_rating": {
@@ -479,14 +468,12 @@
       "shelf": "roccia",
       "region": "toscana",
       "roast": "medium",
-      "flavor": "sweet",
       "caffeine": "full",
       "origin": "Brazil, Daterra Estate",
       "process": "Pulped natural",
-      "roast_level": "Medium",
-      "notes": [
+      "descriptors": [
         "Hazelnut",
-        "Milk chocolate",
+        "Chocolate",
         "Brown sugar"
       ],
       "roast_date": "2026-06-13",
@@ -510,7 +497,7 @@
         "cls": "p",
         "label": "GCB · Brasile"
       },
-      "blurb": "Hazelnut, milk chocolate, brown sugar.",
+      "blurb": "Hazelnut, chocolate, brown sugar.",
       "long": "A pulped-natural Daterra roasted medium - clean, sweet, and comforting. The brothers' take on a crowd-pleasing everyday bean.",
       "brewing": "Espresso, moka, or filter."
     },
@@ -522,15 +509,13 @@
       "shelf": "roccia",
       "region": "toscana",
       "roast": "medium",
-      "flavor": "terroir",
       "caffeine": "decaf",
       "origin": "Colombia",
       "process": "Sugarcane (EA) decaffeination",
-      "roast_level": "Medium",
-      "notes": [
-        "Walnut",
-        "Dried fig",
-        "Cocoa"
+      "descriptors": [
+        "Prune",
+        "Cinnamon",
+        "Chocolate"
       ],
       "roast_date": "2026-06-15",
       "best_by": "2026-08-14",
@@ -550,8 +535,8 @@
         "style": "background:linear-gradient(135deg,#1a2a3a,#3a5a6a)",
         "label": "Val d'Orcia Decaf"
       },
-      "blurb": "Walnut, dried fig, cocoa. The cup that started Crema Italia.",
-      "long": "A sugarcane-process decaf from Colombia, roasted medium - walnut, dried fig, and cocoa, with none of the flatness decaf is unfairly known for. The cup that started Crema Italia.",
+      "blurb": "Prune, cinnamon, chocolate. The cup that started Crema Italia.",
+      "long": "A sugarcane-process decaf from Colombia, roasted medium - prune, cinnamon, and chocolate, with none of the flatness decaf is unfairly known for. The cup that started Crema Italia.",
       "brewing": "Lovely as an evening espresso or moka."
     },
     {
@@ -562,15 +547,13 @@
       "shelf": "roccia",
       "region": "toscana",
       "roast": "medium",
-      "flavor": "sweet",
       "caffeine": "full",
       "origin": "Blend - Brazil, Ethiopia, India",
       "process": "Blend",
-      "roast_level": "Medium",
-      "notes": [
-        "Cocoa",
-        "Toasted almond",
-        "Caramel"
+      "descriptors": [
+        "Chocolate",
+        "Almond",
+        "Caramelized"
       ],
       "roast_date": "2026-06-12",
       "best_by": "2026-08-11",
@@ -594,8 +577,8 @@
         "style": "background:linear-gradient(135deg,#2a1a12,#6B4A38)",
         "label": "Val d'Orcia · Classica"
       },
-      "blurb": "Cocoa, toasted almond, caramel. A signature blend.",
-      "long": "The roastery's signature blend - Brazilian body, a touch of Ethiopian lift, Indian depth. Cocoa and toasted almond, built for the bar cup.",
+      "blurb": "Chocolate, almond, caramel. A signature blend.",
+      "long": "The roastery's signature blend - Brazilian body, a touch of Ethiopian lift, Indian depth. Chocolate and almond, built for the bar cup.",
       "brewing": "Espresso and moka."
     },
     {
@@ -617,8 +600,7 @@
       ],
       "origin": "Three roasters, three regions",
       "process": "Curator's selection",
-      "roast_level": "Mixed",
-      "notes": [
+      "includes": [
         "Our choice",
         "Three 100 g bags",
         "Printed tasting card"
@@ -653,14 +635,12 @@
       "shelf": "selezione",
       "region": "emilia",
       "roast": "light",
-      "flavor": "fruit",
       "caffeine": "full",
       "origin": "Panama, Volcán - Finca Deborah",
       "process": "Washed",
-      "roast_level": "Light",
-      "notes": [
+      "descriptors": [
         "Chamomile",
-        "White peach",
+        "Peach",
         "Jasmine"
       ],
       "roast_date": "2026-06-21",
@@ -680,8 +660,8 @@
         "label": "Gardelli · Geisha"
       },
       "scarcity": "This shipment only",
-      "blurb": "Chamomile, white peach, jasmine. Panama micro-lot.",
-      "long": "A washed Geisha from Finca Deborah, high on the Volcán slopes - chamomile, white peach, jasmine. A micro-lot we secured a few kilos of; when this pallet is gone it may not return.",
+      "blurb": "Chamomile, peach, jasmine. Panama micro-lot.",
+      "long": "A washed Geisha from Finca Deborah, high on the Volcán slopes - chamomile, peach, jasmine. A micro-lot we secured a few kilos of; when this pallet is gone it may not return.",
       "brewing": "Reserve it for pour-over, where the florals carry."
     },
     {
@@ -692,15 +672,14 @@
       "shelf": "selezione",
       "region": "toscana",
       "roast": "medium",
-      "flavor": "sweet",
       "caffeine": "full",
       "origin": "Blend - seasonal",
       "process": "Blend",
-      "roast_level": "Medium",
-      "notes": [
-        "Panettone",
-        "Candied orange",
-        "Hazelnut"
+      "descriptors": [
+        "Orange",
+        "Hazelnut",
+        "Honey",
+        "Vanilla"
       ],
       "roast_date": "2026-06-10",
       "best_by": "2026-08-09",
@@ -719,8 +698,8 @@
         "label": "La Sosta · Natale"
       },
       "scarcity": "Seasonal",
-      "blurb": "Panettone, candied orange, hazelnut. Holiday micro-lot.",
-      "long": "La Sosta's holiday blend - warm, sweet, and spiced, the cup that tastes like panettone on the table. A seasonal Selezione micro-lot.",
+      "blurb": "Orange, hazelnut, honey, vanilla. Holiday micro-lot.",
+      "long": "La Sosta's holiday blend - warm and sweet, the cup that tastes like panettone on the table. A seasonal Selezione micro-lot.",
       "brewing": "Espresso or moka, alongside something sweet."
     },
     {
@@ -731,15 +710,13 @@
       "shelf": "offerta",
       "region": "toscana",
       "roast": "dark",
-      "flavor": "terroir",
       "caffeine": "full",
       "origin": "Blend",
       "process": "Blend",
-      "roast_level": "Dark",
-      "notes": [
-        "Chocolate",
-        "Walnut",
-        "Dried fig"
+      "descriptors": [
+        "Dark chocolate",
+        "Raisin",
+        "Brown roast"
       ],
       "roast_date": "2026-05-30",
       "best_by": "2026-07-29",
@@ -757,7 +734,7 @@
         "style": "background:linear-gradient(135deg,#3a3028,#7a6a58)",
         "label": "GCB · La Dolce Vita"
       },
-      "blurb": "Chocolate, walnut, dried fig.",
+      "blurb": "Dark chocolate, raisin, brown roast.",
       "long": "A dark house blend that reached its Offerta threshold - still good coffee, still inside a real freshness window, priced down honestly. Sold as-is.",
       "brewing": "Espresso and moka.",
       "poc_rating": {

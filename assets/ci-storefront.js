@@ -96,13 +96,79 @@
     // the render layer can format them to the Standard.
   }
 
-  var FLAVOR_LABEL = { fruit: 'Fruit & Floral', sweet: 'Sweet & Chocolate', terroir: 'Bold & Spiced', any: '' };
-  // Info-only descriptors shown under the selected Flavor filter (curator-assigned tags).
-  var FLAVOR_DESC = {
-    fruit: 'Citrus, berry, stone fruit, jasmine, bergamot, black tea.',
-    sweet: 'Milk or dark chocolate, hazelnut, caramel, brown sugar, almond.',
-    terroir: 'Pipe tobacco, baking spice, toasted grain, dried fig or raisin, walnut, cedar.'
+  // SCA-ALIGNED TASTE MODEL (Steve, 2026-11-24). The roaster supplies, per coffee, a short list
+  // of descriptors from the SCA / World Coffee Research Coffee Taster's Flavor Wheel - the same
+  // check-all-that-apply vocabulary the SCA's own Descriptive Assessment (SCA 103) uses. The
+  // three customer-facing buckets below are OUR grouping of those wheel terms, held in this one
+  // table and nowhere else: a product's buckets, its note pills, the hint under every quiz card
+  // and filter pill, and the bucket labels are all derived from it, so the words a customer sees
+  // are always words a roaster can tick, and re-drawing a bucket never means re-asking a roaster.
+  // Order within a bucket is editorial: the first five terms are the hint copy. Defect terms on
+  // the wheel (ashy, acrid, musty, papery, vegetative...) are deliberately absent, so they can
+  // never be ticked and can never match a card. Roast is NOT on the wheel; it stays its own
+  // facet and the quiz describes it through acidity and body, never flavor words, so Q1 and Q2
+  // stop repeating each other. See docs/taste-quiz-sca-alignment.md and
+  // production_build_spec.md 13.2 / 15.2.
+  var FLAVOR_BUCKETS = {
+    fruit:  { label: 'Fruit & flowers',    terms: ['Jasmine', 'Black tea', 'Peach', 'Raspberry', 'Orange', 'Rose', 'Chamomile', 'Blackberry', 'Blueberry', 'Strawberry', 'Cherry', 'Pear', 'Apple', 'Grape', 'Pomegranate', 'Pineapple', 'Coconut', 'Lemon', 'Lime', 'Grapefruit', 'Winey'] },
+    sweet:  { label: 'Sweet & chocolatey', terms: ['Caramelized', 'Honey', 'Hazelnut', 'Almond', 'Chocolate', 'Brown sugar', 'Molasses', 'Maple syrup', 'Vanilla', 'Peanut'] },
+    spiced: { label: 'Dark & spiced',      terms: ['Pipe tobacco', 'Cinnamon', 'Clove', 'Raisin', 'Dark chocolate', 'Prune', 'Nutmeg', 'Anise', 'Pepper', 'Tobacco', 'Brown roast', 'Smoky', 'Grain', 'Malt'] }
   };
+  var FLAVOR_ORDER = ['fruit', 'sweet', 'spiced'];
+  var FLAVOR_LABEL = { any: '' };
+  var DESCRIPTOR_BUCKET = {}; // lowercased wheel term -> bucket key
+  FLAVOR_ORDER.forEach(function (b) {
+    FLAVOR_LABEL[b] = FLAVOR_BUCKETS[b].label;
+    FLAVOR_BUCKETS[b].terms.forEach(function (t) { DESCRIPTOR_BUCKET[t.toLowerCase()] = b; });
+  });
+  // Hint copy under a quiz card or filter pill: the bucket's first five terms, sentence-cased.
+  // Derived, so a hint can never name a word that is not in the table (bergamot, cedar and
+  // dried fig used to, in a third hand-written table that nobody checked against the wheel).
+  function flavorHint(b) {
+    var t = (FLAVOR_BUCKETS[b] || { terms: [] }).terms.slice(0, 5);
+    if (!t.length) return '';
+    return t.map(function (x, i) { return i ? x.toLowerCase() : x; }).join(', ') + '.';
+  }
+  // The descriptors a product carries. A collection has none of its own: it takes the union of
+  // its components' ("the box takes on the flavor groups of every coffee inside").
+  function productDescriptors(p) {
+    if (!p) return [];
+    if (Array.isArray(p.component_handles) && p.component_handles.length) {
+      var out = [];
+      p.component_handles.forEach(function (h) {
+        ((byHandle[h] && byHandle[h].descriptors) || []).forEach(function (d) { if (out.indexOf(d) === -1) out.push(d); });
+      });
+      return out;
+    }
+    return p.descriptors || [];
+  }
+  // A product's buckets, derived from its descriptors, in FLAVOR_ORDER. A coffee may sit in more
+  // than one. Unknown terms are ignored rather than guessed: a term outside the table is a data
+  // defect to fix at the source, not a fourth bucket.
+  function productFlavors(p) {
+    var seen = {};
+    productDescriptors(p).forEach(function (d) { var b = DESCRIPTOR_BUCKET[String(d).toLowerCase()]; if (b) seen[b] = true; });
+    return FLAVOR_ORDER.filter(function (b) { return seen[b]; });
+  }
+  var ROAST_LABEL = { light: 'Light', medium: 'Medium', dark: 'Dark' };
+  // Roast display string, derived from the facet. roast_level used to be stored beside roast as
+  // a second copy of the same fact (Review B's stored-twice table); a collection reads "Mixed".
+  function roastLabel(p) {
+    var f = productFacets(p).roast.filter(Boolean);
+    if (!f.length) return '';
+    return f.length > 1 ? 'Mixed' : (ROAST_LABEL[f[0]] || '');
+  }
+  // Fill every data-flavor-hint span from the table and hide any Q1 roast card no public coffee
+  // can satisfy (the regions' "as we grow" gating applied to roast). Runs after the catalog loads.
+  function renderTasteCopy() {
+    document.querySelectorAll('[data-flavor-hint]').forEach(function (el) { el.textContent = flavorHint(el.getAttribute('data-flavor-hint')); });
+    var have = {};
+    (CATALOG.products || []).forEach(function (p) { if (isCoffee(p) && isPublic(p) && p.roast) have[p.roast] = true; });
+    document.querySelectorAll('.quiz-opt[data-roast]').forEach(function (el) {
+      var r = el.getAttribute('data-roast');
+      el.style.display = (r === 'any' || have[r]) ? '' : 'none';
+    });
+  }
   var SHELF_BADGE = {
     // POC30 item 5: badges lead with the English function, the Italian name second - the
     // same English-first rule as the nav, kept short because a badge is read while scanning.
@@ -118,7 +184,7 @@
   };
 
   // Quiz-outcome persona matrix — single source of truth for result-screen naming.
-  // Keyed by tuple (Q1 roast: light/medium/dark/any, Q2 flavor-or-'skip') so a future
+  // Keyed by tuple (Q1 roast: light/medium/dark/any, Q2 flavor fruit/sweet/spiced-or-'skip') so a future
   // Q3 can fold in as a third key without restructuring. "any" is "Surprise me" on
   // Q1 — a real declaration of no roast preference, not an exception, so it's a full
   // row rather than a special-cased branch (see docs/POC_v4_change_list.md). "sparse"
@@ -130,30 +196,29 @@
       skip:    { persona: 'The Minimalist' },
       fruit:   { persona: 'The Purist' },
       sweet:   { persona: 'The Gentle Sweet' },
-      terroir: { persona: 'The Maverick', sparse: true }
+      spiced:  { persona: 'The Maverick', sparse: true }
     },
     medium: {
       skip:    { persona: 'The Steady Hand' },
       fruit:   { persona: 'The Romantic' },
       sweet:   { persona: 'The Classicist' },
-      terroir: { persona: 'The Old Soul' }
+      spiced:  { persona: 'The Old Soul' }
     },
     dark:   {
       skip:    { persona: 'The Traditionalist' },
       fruit:   { persona: 'The Contrarian', sparse: true },
       sweet:   { persona: 'The Indulgent' },
-      terroir: { persona: 'The Devotee' }
+      spiced:  { persona: 'The Devotee' }
     },
     // No roast preference declared ("Surprise me"). Names aren't part of Steve's
-    // original spec — picked to echo each flavor card's own descriptor copy
-    // (Fruit & Flowers: "coffee as a perfume"; Bold & Spiced: "a sense of where it
-    // came from") so they read as a family with the rest. Flag if you want these
-    // renamed.
+    // original spec — picked in 2026-07 to echo the flavor cards' then-copy ("coffee as a
+    // perfume"; "a sense of where it came from"), copy since replaced by SCA wheel terms. The
+    // names still read as a family with the rest. Flag if you want these renamed.
     any: {
       skip:    { persona: 'The Open Palate' },
       fruit:   { persona: 'The Perfumer' },
       sweet:   { persona: 'The Sweet Tooth' },
-      terroir: { persona: 'The Wanderer' }
+      spiced:  { persona: 'The Wanderer' }
     }
   };
   var SUBHEAD_ROAST_ONLY = "You know your roast; we'll help you find your flavor.";
@@ -314,8 +379,8 @@
     if (!p.roaster) return esc(p.roaster_label || 'Crema Italia curated selection');
     var r = roasterByHandle[p.roaster];
     var town = r ? r.town : '';
-    var taste = p.caffeine === 'decaf' ? 'Decaf' : (FLAVOR_LABEL[p.flavor] || '');
-    return [town, p.roast_level, taste].filter(Boolean).map(esc).join(' · ');
+    var taste = p.caffeine === 'decaf' ? 'Decaf' : productFlavors(p).map(function (b) { return FLAVOR_LABEL[b]; }).join(' / ');
+    return [town, roastLabel(p), taste].filter(Boolean).map(esc).join(' · ');
   }
 
   // ---------- card renderers ----------
@@ -337,11 +402,11 @@
       return {
         region: uniq(comps.map(function (c) { return c.region; })),
         roast: uniq(comps.map(function (c) { return c.roast; })),
-        flavor: uniq(comps.map(function (c) { return c.flavor; })),
+        flavor: productFlavors(p),
         caffeine: uniq(comps.map(function (c) { return c.caffeine; }))
       };
     }
-    return { region: [p.region], roast: [p.roast], flavor: [p.flavor], caffeine: [p.caffeine] };
+    return { region: [p.region], roast: [p.roast], flavor: productFlavors(p), caffeine: [p.caffeine] };
   }
   // Membership test for a comma-joined data-attribute (multi-value facet).
   function inFacet(csv, val) { return !!csv && csv.split(',').indexOf(val) !== -1; }
@@ -795,13 +860,14 @@
         '</div></div>';
     }
 
-    var notePills = (p.notes || []).map(function (n) { return '<span class="pill" style="cursor:default">' + esc(n) + '</span>'; }).join('');
+    // Pills: a coffee's SCA descriptors (the roaster's own words); a collection's composition note.
+    var notePills = ((p.includes && p.includes.length) ? p.includes : productDescriptors(p)).map(function (n) { return '<span class="pill" style="cursor:default">' + esc(n) + '</span>'; }).join('');
     var roasterLine = p.roaster
       ? '<button class="back-btn" style="margin:0 0 1rem" onclick="openRoaster(\'' + p.roaster + '\')">by ' + esc((roasterByHandle[p.roaster] || {}).name) + '</button>'
       : '<div class="rn" style="margin:.25rem 0 1rem">' + esc(p.roaster_label || 'Crema Italia curated selection') + '</div>';
 
     var meta = '';
-    if (p.origin) meta += '<p class="prose" style="max-width:none">Origin: ' + esc(p.origin) + (p.process ? ' · ' + esc(p.process) + ' process' : '') + (p.roast_level ? ' · ' + esc(p.roast_level) + ' roast.' : '') + '</p>';
+    if (p.origin) meta += '<p class="prose" style="max-width:none">Origin: ' + esc(p.origin) + (p.process ? ' · ' + esc(p.process) + ' process' : '') + (roastLabel(p) ? ' · ' + esc(roastLabel(p)) + ' roast.' : '') + '</p>';
     // FRESHNESS DISPLAY. We do not show a best-by date: it is roast_date plus the window, so showing
     // both stated one fact twice and pointed the reader at a deadline rather than at freshness.
     //
@@ -1167,7 +1233,7 @@
   }
   function updateConsoleFlavorDesc() {
     var el = $('tc-flavor-desc'); if (!el) return;
-    var d = FLAVOR_DESC[activeTaste.flavor];
+    var d = flavorHint(activeTaste.flavor);
     if (d) { el.textContent = d; el.classList.add('show'); } else { el.textContent = ''; el.classList.remove('show'); }
   }
   // Apply the console edits as an EPHEMERAL filter — applied now, NOT saved to the profile.
@@ -1264,7 +1330,7 @@
   window.showQuizResult = function () {
     var lbl = {
       roast: { light: 'Light Roast', medium: 'Medium Roast', dark: 'Dark Roast', any: 'Any Roast' },
-      flavor: { fruit: 'Fruit & Floral', sweet: 'Sweet & Chocolate', terroir: 'Bold & Spiced' },
+      flavor: FLAVOR_LABEL,
       caffeine: { full: 'Caffeinated', decaf: 'Decaf', both: 'Both' }
     };
     var tags = [];
@@ -1909,6 +1975,7 @@
       (CATALOG.roasters || []).forEach(function (r) { roasterByHandle[r.handle] = r; });
       (CATALOG.people || []).forEach(function (pn) { peopleById[pn.id] = pn; });
       renderAll();
+      renderTasteCopy();
       renderCart();
       // Catalog-driven grids are built here, so stamp keyboard affordances after them.
       if (window.markKeyboardActivable) window.markKeyboardActivable();

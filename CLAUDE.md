@@ -4433,6 +4433,51 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   moved and no storefront copy changed. **The coordinator will now read the branch**, since it reads the
   checkout's working tree; its RENDER_TRUST md5 comparisons are unaffected because no render moved.
 
+- 2026-11-24 — **The taste quiz aligned to the SCA Flavor Wheel, and the roaster's tasting notes
+  become the only taste data a coffee carries. Landed on `main`, merged forward, deployed on the bulk
+  line as `POC_Bulk_v1`.** Ledger: `docs/POC_Bulk_v1_change_list.md`; plain-English companion written
+  first for Lucia to explain to roasters: `docs/taste-quiz-sca-alignment.md`. Steve asked whether the
+  quiz's taste words agreed with the SCA tasting vocabulary. Graded against the SCA / World Coffee
+  Research Coffee Taster's Flavor Wheel, which the SCA's current cupping standard (SCA 103, Descriptive
+  Assessment) uses as a check-all-that-apply list, they mostly did - about 14 of 18 descriptors were
+  wheel terms and the three-bucket structure was sound - but "Bold & spiced" straddled four wheel
+  categories behind an intensity word, Q1's roast hints were flavor words that repeated Q2, and four
+  descriptors (bergamot, dried fig, walnut, milk chocolate) were not on the wheel at all.
+  **The structural change is the durable one.** A coffee's filter bucket (`flavor`) and its tasting-note
+  pills (`notes`) were two unrelated hand-typed fields, so nothing stopped them disagreeing and nothing
+  tied either to what a roaster could be asked for. Now a coffee carries **one field, `descriptors[]`,
+  up to five Flavor Wheel terms**, exactly what the roaster ticks on the Product Onboarding form (build
+  spec §15.2), and **one lookup table, `FLAVOR_BUCKETS`**, derives everything from it: the buckets (a
+  coffee may sit in two), the pills, the hint under every quiz card and console pill (the bucket's first
+  five terms, so a hint can never name a word that is not in the table), the labels, and a collection's
+  facets as the union of its components'. **The roaster never sees our three buckets**, so a bucket can
+  be redrawn without re-asking anyone. `terroir` became `spiced`; one label set in sentence case (Fruit
+  & flowers / Sweet & chocolatey / Dark & spiced) replaced two drifted tables that disagreed with the
+  quiz cards; `roast_level` went the way of Review B's stored-twice table and is derived. **Q1 describes
+  roast through acidity and body, never flavor** - Steve kept Q1 because it is the one sentence an
+  American buyer can say about their taste and it carries the acidity axis; his call was that acidity
+  appears as a benefit ("low acidity") on the Dark card and as "brighter" and "lively" on Light, never
+  as "more acidic", which reads as a warning to a US shopper. Each Q1 card is gated on a public coffee
+  actually carrying that roast, the regions' "as we grow" pattern. **Nine blurbs and six long passages
+  moved with the descriptors**, because the POC26 convention is that a blurb restates its notes, and
+  leaving them would have recreated the card-versus-detail contradiction that batch fixed.
+  **Where it landed, and why that amended a day-old rule.** The 2026-11-23 freeze said "do not commit
+  to `main` while the branch is live", written as if everything from here on were bulk work. This change
+  is model-neutral and Steve wants it on both lines, so it landed on `main` and was merged forward -
+  the alternative, commit on the branch and cherry-pick back, makes two commits of one change. The
+  callout now says model work never lands on `main`, model-neutral work lands there first and flows
+  forward, and the point of return is the tag. Deployed and looked at once, on the bulk line; the
+  sealed line's theme stays at the Sealed Reference.
+  **Verified** by driving all sixteen persona cells and the decaf override through the real handlers,
+  the ribbon count tracking the grid, the hints rendering from the table, and zero occurrences in the
+  rendered DOM of the old labels, the old key, or any retired non-wheel word; `theme check` at the
+  documented baseline (9 / 0 / 0 new); looked at Q2 at desktop and Q1 plus a two-bucket card at 375.
+  **Two fixture-shape notes, not defects:** medium + Dark & spiced + full caffeine returns zero coffees
+  (the only medium spiced fixture is the decaf, and it returned zero before too); and driving the matrix
+  in one page session carries `activeTaste.roast` into the "Surprise me" row, pre-existing and the same
+  contamination trap POC16 recorded. **Still to confirm:** that the SCA publishes an Italian edition of
+  the wheel, so the roaster list can be issued against official terms rather than our translation.
+
 ---
 
 ## 10. Open questions / TODO
@@ -4440,13 +4485,19 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 **▶ CURRENT STATE — POC33 (deployed + pull-and-diff proved 2026-10-23) — read this first
 when resuming.**
 
-> **▶ MAIN IS FROZEN HERE (Steve, 2026-11-23) — tag `poc33-sealed`.** This commit is the last on
-> `main` for the sealed-bag model: POC33 is the point of return should the business revert to "just
-> as the roaster sealed it". **All work on the bulk-import model happens on branch `poc-bulk`**,
-> whose themes are named `Crema Italia POC_Bulk_v<N> Preview` and whose state block lives in that
-> branch's copy of this file. Do not commit to `main` while the branch is live; if the bulk model
-> wins, `main` fast-forwards to the branch; if the sealed model returns, the branch is abandoned and
-> this commit is still current. The POC33 preview theme is renamed `Crema Italia POC33 Sealed
+> **▶ MAIN IS FROZEN FOR MODEL WORK (Steve, 2026-11-23; amended 2026-11-24) — tag `poc33-sealed`.**
+> The tag marks `main`'s last sealed-bag-model state: POC33 is the point of return should the
+> business revert to "just as the roaster sealed it". **All work on the bulk-import model happens on
+> branch `poc-bulk`**, whose themes are named `Crema Italia POC_Bulk_v<N> Preview` and whose state
+> block lives in that branch's copy of this file. **Model-NEUTRAL changes - things wanted on both
+> lines, the 2026-11-24 SCA quiz alignment being the first - land on `main` first and are merged
+> forward into `poc-bulk`**, never committed on the branch and cherry-picked back (two commits of one
+> change drift the first time one is amended). So the point of return is the **tag**, not the branch
+> tip; `main` still fast-forwards to the branch if the bulk model wins, because the branch always
+> contains `main`; and if the sealed model returns, the branch is abandoned and `main`'s tip is the
+> sealed site plus every model-neutral improvement since. A model-neutral change is deployed and
+> looked at ONCE, on the bulk line, since the files are identical on both; the sealed line's theme
+> stays at the Sealed Reference and `main` carries the commit for whenever that line is next built. The POC33 preview theme is renamed `Crema Italia POC33 Sealed
 > Reference` so the deploy skill's prune can never select it. Reasoning: §9 2026-11-17 (bulk model).
 
 **▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — no POC_Bulk theme deployed yet.**

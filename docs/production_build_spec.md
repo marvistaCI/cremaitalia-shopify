@@ -1259,13 +1259,12 @@ These are not metafields. Do not invent `crema_italia.*` keys for them.
 
 | POC key | Metafield | Type | Coverage | Note |
 |---|---|---|---|---|
-| `roast` | `crema_italia.roast` | single-line, defined value set | 12/17 | The **facet**: `light` / `medium` / `dark` |
-| `flavor` | `crema_italia.flavor` | single-line, defined value set | 12/17 | `fruit` / `sweet` / `bold` |
+| `roast` | `crema_italia.roast` | single-line, defined value set | 12/17 | The **facet**: `light` / `medium` / `dark`. Roast is not on the Flavor Wheel, so it stays its own facet; the roaster states it directly, or gives an Agtron reading we band ourselves (§15.2). The display string derives from it (`roastLabel()`, "Mixed" for a collection) |
+| `descriptors` | `crema_italia.tasting_notes` | list.single_line, **closed value set: SCA Flavor Wheel terms** | 12/17 | Supplied by the roaster at Product Onboarding (§15.2), up to five, as the SCA's own Descriptive Assessment ticks them. **The only taste data stored.** The customer buckets (`fruit` / `sweet` / `spiced`), the note pills, and the hint copy under every quiz card and filter pill all derive from it through ONE lookup table (`FLAVOR_BUCKETS` in the POC; a theme setting or metaobject in production). Replaced the separate `flavor` facet and free-text `notes` on 2026-11-24, which had let a product's bucket and its pills disagree and let non-wheel words (bergamot, cedar) into the copy. See `docs/taste-quiz-sca-alignment.md` |
 | `caffeine` | `crema_italia.caffeine` | single-line, defined value set | 12/17 | `full` / `decaf` |
 | `region` | `crema_italia.region` | single-line, defined value set | 12/17 | Italian roasting region; roaster-level in the Standard, inherited by SKUs |
 | `origin` | `crema_italia.origin` | single-line | 13/17 | Growing origin, e.g. *Ethiopia, Yirgacheffe* |
 | `process` | `crema_italia.process` | single-line | 13/17 | *Natural* / *Washed* |
-| `notes` | `crema_italia.tasting_notes` | list.single_line | 13/17 | Drives the note pills |
 | `roast_date` | on the **lot** metaobject, not the product | date | 12/17 | **Per lot — see §13.9.** The POC stores it per product because it never models two lots of one coffee. Drives freshness, the displayed roast range, and the Offerta transition |
 | `long` | `crema_italia.description_long` | multi-line | 13/17 | The "About this coffee" prose |
 | `brewing` | `crema_italia.brewing` | multi-line | 13/17 | **A per-coffee brewing hint only** - "Reserve it for pour-over, where the florals carry". **Never store policy.** The roaster supplies this (Roaster Guide, "SKU back-story"), and a roaster has no reason to write our whole-bean rule. See the note below. |
@@ -1380,7 +1379,7 @@ disagree — the same defect Review A found in `_meta` and the two 60s.
 | Stored in the POC | Derived in production from |
 |---|---|
 | `display_title` — *"Gardelli - Ethiopia Bombe"* | `roaster.label` + `product.title`. **Not `roaster.name`** — that is *"Gardelli Specialty Coffee"*, which is why `label` exists and is the one display string worth storing |
-| `roast_level` — *"Light"* | `crema_italia.roast` (`light`) |
+| `roast_level` — *"Light"* | `crema_italia.roast` (`light`). **Closed in the POC 2026-11-24:** the field is gone and `roastLabel()` derives it, so this row is now history rather than a pending derivation |
 | `components` — *"Gardelli Ethiopia, La Sosta…"* | the `component_handles` product references |
 | `roaster.region_label` — *"Forlì · Emilia-Romagna"* | `roaster.town` + the display name for `roaster.region` (the facet is `emilia`, so a region needs its own label lookup — one place, not per roaster) |
 | `roaster.find` — *"Forlì, Emilia-Romagna · gardellicoffee.com"* | `town` + `region` + `website` |
@@ -1910,6 +1909,18 @@ scattered across the Roaster Guide.
 1. **Roaster proposes a SKU.** The guide already specifies the payload under *"SKU back-story
    (mandatory)"*: name and tagline, origin, varietal, process, roast level, 3-6 tasting notes,
    back-story, brewing methods, and two or three high-resolution photographs.
+   **The taste fields are SCA vocabulary, not free text (Steve, 2026-11-24).** Three fields, all
+   closed: **roast degree** as one of light / medium / dark, or the roaster's Agtron (roast colour)
+   reading if they measure it, which we band ourselves; **descriptors**, tick every one that applies
+   from the closed list of SCA Flavor Wheel terms, **up to five**, the limit the SCA's own Descriptive
+   Assessment form uses - the list is the `terms` arrays of `FLAVOR_BUCKETS` in `ci-storefront.js`,
+   to be issued in Italian against the SCA's own translated wheel, not ours, once the Italian edition
+   is confirmed; and **caffeine**, regular or decaffeinated. The roaster never sees our three customer
+   buckets; they are our grouping of the wheel and can be redrawn without re-asking anyone. Defect
+   terms are not on the list, so they cannot be ticked. The descriptors become both the filter
+   facets and the tasting-note pills on the product page, so the roaster is describing their own
+   coffee to the customer in standard terms. Plain-English version for Lucia and the roasters:
+   `docs/taste-quiz-sca-alignment.md`.
 2. **Crema Italia reviews and accepts.** No criteria are written down. Flavored coffee is already
    excluded; decaf is permitted with the method declared.
 3. **Crema Italia assigns the SKU code** - `TRRRPPPPSS` (§13.9). The roaster never invents it.

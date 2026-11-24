@@ -3,6 +3,8 @@
   "Edit profile". Pills stage changes into the active taste; the footer (Apply /
   Save my changes) only appears once a change is made. Apply = ephemeral (not saved),
   Save my changes = persist to the profile. Behaviour lives in ci-storefront.js.
+  Flavor pill labels must match FLAVOR_BUCKETS there (one label set: Fruit & flowers /
+  Sweet & chocolatey / Dark & spiced); the hint under the selected pill is derived from it.
 {%- endcomment -%}
 <div class="modal-overlay" id="taste-console-modal">
   <div class="modal taste-console-modal">
@@ -18,9 +20,9 @@
       </div></div>
       <div class="filter-group"><div class="filter-label">Flavor</div><div class="filter-pills">
         <span class="pill" onclick="consoleTaste(this,'flavor','all')">Any</span>
-        <span class="pill" onclick="consoleTaste(this,'flavor','fruit')">Fruit &amp; Floral</span>
-        <span class="pill" onclick="consoleTaste(this,'flavor','sweet')">Sweet &amp; Chocolate</span>
-        <span class="pill" onclick="consoleTaste(this,'flavor','terroir')">Bold &amp; Spiced</span>
+        <span class="pill" onclick="consoleTaste(this,'flavor','fruit')">Fruit &amp; flowers</span>
+        <span class="pill" onclick="consoleTaste(this,'flavor','sweet')">Sweet &amp; chocolatey</span>
+        <span class="pill" onclick="consoleTaste(this,'flavor','spiced')">Dark &amp; spiced</span>
       </div><div class="flavor-desc" id="tc-flavor-desc"></div></div>
       <div class="filter-group"><div class="filter-label">Caffeine</div><div class="filter-pills">
         <span class="pill" onclick="consoleTaste(this,'caffeine','all')">Any</span>
