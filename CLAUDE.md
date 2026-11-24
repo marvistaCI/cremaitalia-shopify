@@ -4518,6 +4518,8 @@ when resuming.**
 > Store Operating Standards v1.24 (a supply-chain and packaging section, and the 100 g, repack wording,
 > freshness-under-repack, whole-bean rationale, cadence and who-repacks decisions) **before** any
 > storefront copy; then the copy-and-promise surfaces as their own batch; then the lot and label model.
+> **The full planned-changes list for this line is `docs/POC_Bulk_plan.md`** (consolidated 2026-11-24);
+> strike items there as they ship, and keep state here.
 >
 > **What POC_Bulk_v1 is (2026-11-24):** the SCA-aligned taste quiz - a model-neutral change built on
 > `main` (commit `de70f61`) and merged forward (`10709d2`), deployed once here because the files are
