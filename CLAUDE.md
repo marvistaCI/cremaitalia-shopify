@@ -4530,7 +4530,11 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   changed:** product descriptors with sealed wording, which are demo data (Steve); the historical
   hero narratives in the template comments. Verified by driving every rewritten surface and sweeping
   the rendered DOM for six sealed-model phrases (zero), copy rules checked, `theme check` at baseline,
-  looked at at desktop and 375.
+  looked at at desktop and 375. **Same day, Steve changed two beats after reviewing the deploy** -
+  beat 1 leads "Our roasters are chosen for their artisan quality." (the roasters as subject, the
+  person the shorter hero gave up; the active-voice form was offered and he kept his wording) and
+  beat 2's line reads "Freshness matters; slow boats age the beans." (freshness had lost its name
+  above the fold when the headline changed). v3 refreshed in place.
 
 ---
 

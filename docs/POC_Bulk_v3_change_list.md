@@ -71,3 +71,17 @@ because under repack "unchanged" reads as a claim about the bag.
   register.
 - `theme check` at the documented baseline (9 / 0 / 0 new).
 - Looked at: the hero at desktop and 375.
+
+
+## Addendum, same day: the two beats (Steve)
+
+Steve reviewed the deployed v3 and changed two of the three beats under the hero; the theme was
+refreshed in place rather than minted as v4, since it still holds exactly what this ledger describes.
+
+- Beat 1 lead: "Chosen for their artisan quality." -> **"Our roasters are chosen for their artisan
+  quality."** The roasters become the subject, restoring the person the shorter hero gave up. Offered
+  the active form ("We choose our roasters...", the POC30 voice); Steve kept his wording.
+- Beat 2 line: "Slow boats age the beans." -> **"Freshness matters; slow boats age the beans."**
+  With "Freshly roasted" gone from the headline, freshness had no name above the fold, only its
+  mechanism. The semicolon is within the copy rules (the ban is on em-dashes).
+- Beat 3 unchanged.
