@@ -511,6 +511,13 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 /* ---- freshness + badges ---- */
 .freshness{display:inline-flex;align-items:center;gap:.3rem;font-size:.78rem;font-weight:600;color:var(--ci-green);background:rgba(14,122,58,.08);padding:.2rem .5rem;border-radius:3px}
 .fw{color:var(--ci-red);background:rgba(200,52,43,.08)}
+/* Taste match line (2026-11-24): the ribbon's gold state dot and one sentence, on its own line under
+   the freshness strip on cards and the detail page - a separate container from the strip so green
+   keeps meaning fresh. Shown only when a profile exists and the coffee matches it; the [hidden]
+   rule must beat display:flex or the attribute does nothing. Text token is the AA sibling of gold. */
+.match-line{display:flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:600;color:var(--ci-crema-text);margin-top:.45rem}
+.match-line[hidden]{display:none}
+.ml-dot{width:9px;height:9px;border-radius:50%;background:var(--ci-crema);box-shadow:0 0 0 3px rgba(184,131,72,.25);flex-shrink:0}
 .po{text-decoration:line-through;color:var(--ci-mute-text);font-size:.85rem;margin-right:.25rem}
 /* POC30 item 7: "with your subscription" after the live subscription price on the product page. */
 .pd-sub-note{font-family:var(--ci-font-body);font-size:.85rem;font-weight:400;color:var(--ci-mute-text)}

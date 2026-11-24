@@ -410,6 +410,44 @@
   }
   // Membership test for a comma-joined data-attribute (multi-value facet).
   function inFacet(csv, val) { return !!csv && csv.split(',').indexOf(val) !== -1; }
+  // ONE taste predicate for the filter AND the match line (Steve, 2026-11-24). `f` is any object
+  // carrying comma-joined roast/flavor/caffeine strings - a card's dataset or productFacetsCsv(p) -
+  // and `t` is a taste with 'all' or one value per axis. Both consumers stay on this function so
+  // "Matches your taste profile" and "Apply profile" can never disagree about a coffee.
+  function tasteMatches(f, t) {
+    return (t.roast === 'all' || inFacet(f.roast, t.roast)) &&
+      (t.flavor === 'all' || inFacet(f.flavor, t.flavor)) &&
+      (t.caffeine === 'all' || inFacet(f.caffeine, t.caffeine));
+  }
+  function productFacetsCsv(p) {
+    var f = productFacets(p);
+    return { roast: f.roast.join(','), flavor: f.flavor.join(','), caffeine: f.caffeine.join(',') };
+  }
+  // TASTE MATCH LINE (Steve, 2026-11-24). On a coffee's card and its detail page, directly under
+  // the freshness strip, whenever a profile exists and the coffee matches it - filter on or off.
+  // Redundant while the filter is on, and kept anyway: a marker that is always in the same place
+  // teaches where to look. Never a negative - a coffee that does not match shows nothing. A profile
+  // with no constraint on any axis ("Surprise me" + skipped flavor + both caffeines) says nothing
+  // about taste, so it marks nothing rather than everything. Binary, never graded. Matches against
+  // the SAVED profile, not an ephemeral console edit, because the sentence says "profile".
+  function matchesProfile(p) {
+    if (!savedTaste || !isCoffee(p)) return false;
+    if (savedTaste.roast === 'all' && savedTaste.flavor === 'all' && savedTaste.caffeine === 'all') return false;
+    return tasteMatches(productFacetsCsv(p), savedTaste);
+  }
+  function matchLine(p) {
+    return '<div class="match-line" data-match="' + esc(p.handle) + '"' + (matchesProfile(p) ? '' : ' hidden') +
+      '><span class="ml-dot" aria-hidden="true"></span>Matches your taste profile.</div>';
+  }
+  // Re-evaluate every rendered match line against the current profile. Called from updateRibbon(),
+  // which already runs on every page change and every profile change, so a line can never lag the
+  // profile that produced it.
+  function updateMatchLines() {
+    document.querySelectorAll('.match-line[data-match]').forEach(function (el) {
+      var p = byHandle[el.getAttribute('data-match')];
+      el.hidden = !(p && matchesProfile(p));
+    });
+  }
   function productCard(p) {
     var badge = SHELF_BADGE[p.shelf] || { cls: '', tag: '' };
     var f = productFacets(p);
@@ -428,6 +466,7 @@
         bomCue +
         '<p>' + esc(p.blurb) + '</p>' +
         freshnessCell(p) +
+        matchLine(p) +
       '</div>' +
       '<div class="card-footer"><span class="cp">' + priceCell(p) + '</span><span class="csz">' + esc(sizesLine(p)) + '</span></div>' +
       '</div>';
@@ -892,6 +931,7 @@
       var floor = roastFloorLabel(p);
       if (floor) meta += '<div class="freshness" style="margin:.5rem 0">Roasted on or after ' + esc(floor) + '</div>';
     }
+    meta += matchLine(p);
 
     var components = p.components ? '<p class="prose" style="max-width:none;margin-top:.5rem"><strong>In the box:</strong> ' + p.components.map(esc).join(' · ') + '. Printed tasting card included.</p>' : '';
 
@@ -1193,6 +1233,7 @@
     else { pendingSaveProfile = true; openSignin(); }
   };
   function updateRibbon(pageName) {
+    updateMatchLines();
     var r = $('taste-ribbon'); if (!r) return;
     var show = !!savedTaste && SHOP_PAGES.indexOf(pageName) !== -1;
     r.classList.toggle('ribbon-visible', show);
@@ -1262,11 +1303,7 @@
     var t = filterOn ? activeTaste : ALL_TASTE;
     var cards = document.querySelectorAll('#' + gridId + ' .product-card');
     for (var i = 0; i < cards.length; i++) {
-      var d = cards[i].dataset;
-      var show =
-        (t.roast === 'all' || inFacet(d.roast, t.roast)) &&
-        (t.flavor === 'all' || inFacet(d.flavor, t.flavor)) &&
-        (t.caffeine === 'all' || inFacet(d.caffeine, t.caffeine));
+      var show = tasteMatches(cards[i].dataset, t);
       cards[i].style.display = show ? '' : 'none';
     }
   }
@@ -1291,9 +1328,7 @@
       var show =
         (activeRegion === 'all' || inFacet(d.region, activeRegion)) &&
         (activeShelf === 'all' || d.shelf === activeShelf) &&
-        (t.roast === 'all' || inFacet(d.roast, t.roast)) &&
-        (t.flavor === 'all' || inFacet(d.flavor, t.flavor)) &&
-        (t.caffeine === 'all' || inFacet(d.caffeine, t.caffeine));
+        tasteMatches(d, t);
       c.style.display = show ? '' : 'none';
       if (show) visible++;
     }
