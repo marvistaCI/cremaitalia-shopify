@@ -37,7 +37,7 @@
     Note the POC is a single-document SPA, so template.name is always 'index' and the first
     branch always wins here. The other two are for production, where real templates exist.
   {%- endcomment -%}
-  {%- assign ci_meta_desc = 'Freshly roasted in Italy, air-freighted whole bean, and sold exactly as the roaster sealed it. Coffee from a small, named group of Italian artisan roasters.' -%}
+  {%- assign ci_meta_desc = 'Freshly roasted in Italy, flown to Florida, and sealed into fresh bags shortly after landing, the roast untouched. Coffee from a small, named group of Italian artisan roasters.' -%}
   {%- if template.name == 'index' -%}
     <meta name="description" content="{{ ci_meta_desc | escape }}">
   {%- elsif page_description -%}

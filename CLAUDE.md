@@ -4507,6 +4507,31 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   matches through its components; accessories render no line; looked at on desktop, product page and
   375. `theme check` at the documented baseline.
 
+- 2026-11-24 — **POC_Bulk_v3: the storefront stops claiming we ship the bag the roaster filled.
+  First bulk-model copy batch, on the branch only.** Ledger: `docs/POC_Bulk_v3_change_list.md`.
+  Steve opened the v2 preview and found the hero still reading "Exactly as the roaster sealed it"
+  on a theme named Bulk - accurate to what had been built (v1 and v2 were model-neutral), and an odd
+  thing to hand anyone. Section A of the plan had been gated on Standard v1.24; the way out was that
+  the one decision the core claim depends on was already taken, in the coming-soon paragraph Steve
+  wrote and pushed live on 2026-11-17, so every sentence here derives from it and v1.24 records the
+  sentences rather than the storefront waiting for the rule. **The hero is "Exactly as roasted in
+  Italy."** Offered *Exactly as the roaster roasted it... in Italy* as the minimal edit; **Steve caught
+  the roaster/roasted echo as a redundancy** - it was already in the coming-soon paragraph, hidden by
+  a long sentence, and a six-word headline does not hide it. The chosen line is the factual claim as
+  fact, keeps Italy as a place (POC21), and gives up only the person, restored by the first beat
+  directly beneath. *Exactly as the roaster intended* was offered to keep the person and declined:
+  intent is a claim about a mind, roasting is a claim about a process, and the process is what we can
+  prove. Two lines at both widths, 47px desktop and 31.5px at 375, the shorter line buying type size
+  as POC21 predicted. **Nine other sites** moved: the meta description, Our model ("masters of
+  roasting and packaging" - we package now), About, the Promise page, the "Do you roast" FAQ answer
+  plus a new "What is on the bag?" entry carrying the letter's imported-and-repacked wording, the
+  Brewing teaser (whole bean is our choice now and the sentence gives our reason), and three comment
+  blocks. "Unchanged" became "the roast untouched" wherever it sat next to a shipping verb. **Not
+  changed:** product descriptors with sealed wording, which are demo data (Steve); the historical
+  hero narratives in the template comments. Verified by driving every rewritten surface and sweeping
+  the rendered DOM for six sealed-model phrases (zero), copy rules checked, `theme check` at baseline,
+  looked at at desktop and 375.
+
 ---
 
 ## 10. Open questions / TODO
