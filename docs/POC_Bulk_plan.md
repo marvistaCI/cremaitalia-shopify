@@ -15,31 +15,35 @@ coming-soon page already carries his wording for the core claim and is the seed.
 Every line below was found by grep on 2026-11-24, not remembered. Line numbers are as of commit
 `de00823` and will drift; the quoted text is the anchor.
 
-## A. Next copy batch - every place the storefront claims we ship the bag the roaster filled
+## A. The copy batch - every place the storefront claims we ship the bag the roaster filled
 
-1. **Hero H1** - "Exactly as the roaster sealed it... in Italy." (`templates/index.liquid`), plus
+**Shipped as `POC_Bulk_v3` (2026-11-24)**, from the coming-soon wording rather than waiting for v1.24 - see
+`docs/POC_Bulk_v3_change_list.md`. Items 1-4, 6-8, 10 and 13 rewritten; 5 and 9 reviewed and left as true;
+11 shipped in v2; 12 dropped. v1.24 now records the sentences the storefront uses.
+
+1. ~~Hero H1~~ (v3) - "Exactly as the roaster sealed it... in Italy." (`templates/index.liquid`), plus
    the comment block above it recording how the line was settled, which must not keep describing a
    line that no longer exists.
-2. **Meta description and the share description** - "sold exactly as the roaster sealed it" in
+2. ~~Meta description and the share description~~ (v3) - "sold exactly as the roaster sealed it" in
    `ci_meta_desc`, and the separate `ci_og_desc` that the Open Graph and Twitter tags carry
    (`layout/theme.liquid`); two strings, both to be checked.
 3. **The three beats under the hero** - review all three against the new model. "Slow boats age
    the beans" survives; "We fly it in" may need the repack step; the "how it works" comment
    (roaster seals, we fly, you grind) is rewritten with them.
-4. **Our model** - "They are the masters of roasting and packaging - we are the means of getting
+4. ~~Our model~~ (v3) - "They are the masters of roasting and packaging - we are the means of getting
    their coffee to you, unchanged." We package now.
 5. **Founder story** - "bring their coffee here, unchanged. Just Italy, roasted into a bean."
    Review only: "unchanged" is still true of the roast, which is what the sentence is about.
-6. **About, Our company** - "We import; we never interfere. Each roaster's coffee reaches you
+6. ~~About, Our company~~ (v3) - "We import; we never interfere. Each roaster's coffee reaches you
    exactly as they roast and seal it - nothing re-roasted, re-ground, or re-bagged."
-7. **Promise page, shipping** - "in the roaster's own sealed bags".
-8. **FAQ** - "No. We import and curate; the roasters roast. We never roast, blend, or repackage."
+7. ~~Promise page, shipping~~ (v3) - "in the roaster's own sealed bags".
+8. ~~FAQ~~ (v3) - "No. We import and curate; the roasters roast. We never roast, blend, or repackage."
    Rewrite, and add the question the new model raises: who packs the bag, and what is on it (roaster,
    coffee, roast date, lot, "Imported and repacked by Crema Italia").
 9. **FAQ, freshness** - "Every bag carries its roast date, and every coffee on our shelves shows the
    roast date of the oldest bag we hold". Still true; verify the wording survives the v1.24 decision
    on where the clock starts, and change nothing if it does.
-10. **Journal teaser, Brewing** - "We sell whole bean because that is what our roasters seal".
+10. ~~Journal teaser, Brewing~~ (v3) - "We sell whole bean because that is what our roasters seal".
     Whole bean becomes our choice and the sentence has to give our reason.
 11. ~~**Five roaster blurbs** in `ci-catalog.json`~~ **Shipped as `POC_Bulk_v2` (2026-11-24).** Was: - "Whole bean, valve-sealed, unchanged." and
     Gardelli's "nothing repackaged." **Scoped to a deletion, not a rewrite (Steve, 2026-11-24):**
@@ -48,7 +52,7 @@ Every line below was found by grep on 2026-11-24, not remembered. Line numbers a
 12. ~~Two product `long` passages (Gardelli Ethiopia's valve-sealed bag; the Geisha's pallet).~~
     **Dropped (Steve, 2026-11-24): product descriptors are invented demo data and are written by
     the roaster in production. Not a build item.**
-13. **The photography brief** in the template comment for the product-shot slot, which asks for
+13. ~~The photography brief~~ (v3) in the template comment for the product-shot slot, which asks for
     "one of OUR roasters' sealed bags" - it becomes our bag carrying their label.
 
 ## B. Size model batch
