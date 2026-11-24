@@ -4562,7 +4562,6 @@ when resuming.**
 | **Frozen point of return (sealed line)** | "Crema Italia POC33 Sealed Reference" | `185329090729` |
 | **Newest bulk preview** | "Crema Italia POC_Bulk_v3 Preview" | `185996378281` |
 | Prior bulk preview | "Crema Italia POC_Bulk_v2 Preview" | `185996279977` |
-| Prior bulk preview | "Crema Italia POC_Bulk_v1 Preview" | `185989595305` |
 
 > Themes on this line are named `Crema Italia POC_Bulk_v<N> Preview`, change lists are
 > `docs/POC_Bulk_v<N>_change_list.md`, the cap is three per line, and the upstream for the unpushed
@@ -4581,8 +4580,9 @@ when resuming.**
 > coming-soon paragraph Steve pushed live on 2026-11-17. Commit `358e62d`. Proved by pull-and-diff:
 > both sides 40 files, zero mismatches after normalising line endings, exactly one theme of that
 > name, every rewritten sentence asserted on the pulled files. `theme check` 9 / 0 / 0 new. **The
-> bulk line is now AT the cap of three** (v1, v2, v3): the next deploy on this line prunes v1 on
-> Steve's explicit go by name and id. Preview:
+> bulk line holds v2 and v3** - v1 (`185989595305`) was pruned 2026-11-24 on Steve's explicit go by
+> name and id, asserted against live JSON in the same run as the delete; its batch is `de70f61` on
+> `main` and is redeployable. Preview:
 > `https://crema-italia.myshopify.com?preview_theme_id=185996378281` - open it in a real browser.
 > Ledger: `docs/POC_Bulk_v3_change_list.md`.
 >
@@ -4605,9 +4605,8 @@ when resuming.**
 > theme of that name, and the batch content asserted on the pulled files (`FLAVOR_BUCKETS`, twelve
 > `descriptors` arrays, no `terroir`, the acidity copy on Q1, three `data-flavor-hint` hooks, five
 > `Dark & spiced` region rows). `theme check` 9 / 0 / 0 new. No prune: one preview on this line, two
-> plus the Sealed Reference on the sealed line, both under the cap. Preview:
-> `https://crema-italia.myshopify.com?preview_theme_id=185989595305` - open it in a real browser.
-> Ledger: `docs/POC_Bulk_v1_change_list.md`.
+> plus the Sealed Reference on the sealed line, both under the cap. **Pruned 2026-11-24** (its theme
+> id is gone; the batch is `de70f61` on `main`). Ledger: `docs/POC_Bulk_v1_change_list.md`.
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
 > `docs/POC*_change_list.md` banners, and any "NEXT: deploy…" line are **historical narrative** —
