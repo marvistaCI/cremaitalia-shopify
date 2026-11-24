@@ -4481,6 +4481,32 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   2026-11-24)**, so the roaster list is issued against official terms rather than our translation;
   the remaining step is to obtain that edition and have Lucia check the Italian list against it.
 
+- 2026-11-24 — **The taste-profile match line built, and a sentence deleted that no model could
+  carry. On `main`, merged forward, deployed as `POC_Bulk_v2`.** Ledger:
+  `docs/POC_Bulk_v2_change_list.md`. Steve asked what a customer who takes the quiz and then chooses
+  "Show me everything" is shown about which coffees match. Nothing, beyond the ribbon. **Now: the
+  ribbon's gold state dot and "Matches your taste profile." on its own line under the freshness strip,
+  on every coffee card and the product page.** Three of his calls shaped it, each better than what I
+  proposed. He wanted a small bean with a hover tooltip; the bean was argued off (every tile is
+  coffee, and Brand Standards §3.5 forbids bean motifs) but **his instinct to say it in words beat my
+  tooltip** - visible text needs no hover, which touch does not have, and reads to a screen reader.
+  He proposed appending it to the green strip; kept as the stack he described but as two containers,
+  because green means fresh for everyone and a match is personal. And **shown whenever a profile
+  exists and the coffee matches, filter on or off** - I had argued filter-off only; his answer, that a
+  marker which comes and goes is harder to learn than one always in the same place, is right. Never a
+  negative, binary not graded, and a no-constraint profile marks nothing rather than everything.
+  **The durable code change is one predicate**: `tasteMatches()` is now the single taste test, called
+  by both filter loops and by the marker, where the three-axis test had been inlined twice before. A
+  third copy would have been the two-homes defect this log keeps recording. Lines re-evaluate from
+  `updateRibbon()`, which already runs on every page and profile change. **Also:** "Whole bean,
+  valve-sealed, unchanged." deleted from five roaster bios - a claim about **our** process in a field
+  the **roaster** fills in production, so no model could carry it; a deletion, not a rewrite, needing
+  nothing from v1.24. Product descriptors with sealed-model wording are demo data and out of scope
+  (Steve). **Verified** by driving: with the filter on, 6 of 6 visible cards carry the line; off, 12
+  visible and the same 6 carry it; no profile and the no-constraint profile, zero; the collection
+  matches through its components; accessories render no line; looked at on desktop, product page and
+  375. `theme check` at the documented baseline.
+
 ---
 
 ## 10. Open questions / TODO
