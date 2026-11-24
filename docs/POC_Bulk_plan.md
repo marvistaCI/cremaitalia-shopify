@@ -20,8 +20,9 @@ Every line below was found by grep on 2026-11-24, not remembered. Line numbers a
 1. **Hero H1** - "Exactly as the roaster sealed it... in Italy." (`templates/index.liquid`), plus
    the comment block above it recording how the line was settled, which must not keep describing a
    line that no longer exists.
-2. **Meta description** - "sold exactly as the roaster sealed it" (`layout/theme.liquid`,
-   `ci_meta_desc`, which also feeds the Open Graph and Twitter descriptions).
+2. **Meta description and the share description** - "sold exactly as the roaster sealed it" in
+   `ci_meta_desc`, and the separate `ci_og_desc` that the Open Graph and Twitter tags carry
+   (`layout/theme.liquid`); two strings, both to be checked.
 3. **The three beats under the hero** - review all three against the new model. "Slow boats age
    the beans" survives; "We fly it in" may need the repack step; the "how it works" comment
    (roaster seals, we fly, you grind) is rewritten with them.
