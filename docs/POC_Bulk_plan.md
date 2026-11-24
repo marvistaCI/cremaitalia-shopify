@@ -42,10 +42,12 @@ Every line below was found by grep on 2026-11-24, not remembered. Line numbers a
 10. **Journal teaser, Brewing** - "We sell whole bean because that is what our roasters seal".
     Whole bean becomes our choice and the sentence has to give our reason.
 11. **Five roaster blurbs** in `ci-catalog.json` - "Whole bean, valve-sealed, unchanged." and
-    Gardelli's "They reach you exactly as Gardelli sealed them: whole bean, in valve bags, nothing
-    repackaged."
-12. **Two product `long` passages** - Gardelli Ethiopia "Imported whole bean in Gardelli's
-    valve-sealed bag"; the Geisha's "when this pallet is gone it may not return" (there is no pallet).
+    Gardelli's "nothing repackaged." **Scoped to a deletion, not a rewrite (Steve, 2026-11-24):**
+    the sentence is a claim about OUR process sitting in a field the ROASTER fills in production, so
+    no model can carry it there. Remove the sentence; nothing replaces it. No v1.24 dependency.
+12. ~~Two product `long` passages (Gardelli Ethiopia's valve-sealed bag; the Geisha's pallet).~~
+    **Dropped (Steve, 2026-11-24): product descriptors are invented demo data and are written by
+    the roaster in production. Not a build item.**
 13. **The photography brief** in the template comment for the product-shot slot, which asks for
     "one of OUR roasters' sealed bags" - it becomes our bag carrying their label.
 
