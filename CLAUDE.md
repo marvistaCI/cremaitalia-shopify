@@ -4435,7 +4435,7 @@ Add a one-line note here whenever a meaningful decision is made. Format:
 
 - 2026-11-24 — **The taste quiz aligned to the SCA Flavor Wheel, and the roaster's tasting notes
   become the only taste data a coffee carries. Landed on `main`, merged forward, deployed on the bulk
-  line as `POC_Bulk_v1`.** Ledger: `docs/POC_Bulk_v1_change_list.md`; plain-English companion written
+  line as `POC_Bulk_v1` (theme `185989595305`).** Ledger: `docs/POC_Bulk_v1_change_list.md`; plain-English companion written
   first for Lucia to explain to roasters: `docs/taste-quiz-sca-alignment.md`. Steve asked whether the
   quiz's taste words agreed with the SCA tasting vocabulary. Graded against the SCA / World Coffee
   Research Coffee Taster's Flavor Wheel, which the SCA's current cupping standard (SCA 103, Descriptive
@@ -4500,7 +4500,7 @@ when resuming.**
 > stays at the Sealed Reference and `main` carries the commit for whenever that line is next built. The POC33 preview theme is renamed `Crema Italia POC33 Sealed
 > Reference` so the deploy skill's prune can never select it. Reasoning: §9 2026-11-17 (bulk model).
 
-**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — no POC_Bulk theme deployed yet.**
+**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — POC_Bulk_v1 deployed + pull-and-diff proved 2026-11-24.**
 
 | What | Theme | Id |
 |---|---|---|
@@ -4508,7 +4508,7 @@ when resuming.**
 | **Frozen point of return (sealed line)** | "Crema Italia POC33 Sealed Reference" | `185329090729` |
 | Sealed line, superseded, prune pending Steve's go | "Crema Italia POC32 Preview" | `152388894889` |
 | Sealed line, superseded, prune pending Steve's go | "Crema Italia POC31 Preview" | `152372117673` |
-| **Newest bulk preview** | none yet | - |
+| **Newest bulk preview** | "Crema Italia POC_Bulk_v1 Preview" | `185989595305` |
 
 > Themes on this line are named `Crema Italia POC_Bulk_v<N> Preview`, change lists are
 > `docs/POC_Bulk_v<N>_change_list.md`, the cap is three per line, and the upstream for the unpushed
@@ -4516,7 +4516,19 @@ when resuming.**
 > and is kept as the reference for what the bulk line departs from. **Order of work on this line:**
 > Store Operating Standards v1.24 (a supply-chain and packaging section, and the 100 g, repack wording,
 > freshness-under-repack, whole-bean rationale, cadence and who-repacks decisions) **before** any
-> storefront copy; then `POC_Bulk_v1` as copy-and-promise surfaces only; then the lot and label model.
+> storefront copy; then the copy-and-promise surfaces as their own batch; then the lot and label model.
+>
+> **What POC_Bulk_v1 is (2026-11-24):** the SCA-aligned taste quiz - a model-neutral change built on
+> `main` (commit `de70f61`) and merged forward (`10709d2`), deployed once here because the files are
+> identical on both lines. It took the `v1` slot ahead of the copy-and-promise batch the order of work
+> above had pencilled in; that batch is now `POC_Bulk_v2`, and nothing about the order changes. Proved
+> by pull-and-diff: both sides 40 files, zero mismatches after normalising line endings, exactly one
+> theme of that name, and the batch content asserted on the pulled files (`FLAVOR_BUCKETS`, twelve
+> `descriptors` arrays, no `terroir`, the acidity copy on Q1, three `data-flavor-hint` hooks, five
+> `Dark & spiced` region rows). `theme check` 9 / 0 / 0 new. No prune: one preview on this line, two
+> plus the Sealed Reference on the sealed line, both under the cap. Preview:
+> `https://crema-italia.myshopify.com?preview_theme_id=185989595305` - open it in a real browser.
+> Ledger: `docs/POC_Bulk_v1_change_list.md`.
 
 > **THIS BLOCK IS THE ONLY AUTHORITATIVE STATEMENT OF DEPLOYMENT STATE IN THIS REPO.** §9 entries,
 > `docs/POC*_change_list.md` banners, and any "NEXT: deploy…" line are **historical narrative** —
