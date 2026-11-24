@@ -4554,13 +4554,14 @@ when resuming.**
 > stays at the Sealed Reference and `main` carries the commit for whenever that line is next built. The POC33 preview theme is renamed `Crema Italia POC33 Sealed
 > Reference` so the deploy skill's prune can never select it. Reasoning: §9 2026-11-17 (bulk model).
 
-**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — POC_Bulk_v2 deployed + pull-and-diff proved 2026-11-24.**
+**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — POC_Bulk_v3 deployed + pull-and-diff proved 2026-11-24.**
 
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
 | **Frozen point of return (sealed line)** | "Crema Italia POC33 Sealed Reference" | `185329090729` |
-| **Newest bulk preview** | "Crema Italia POC_Bulk_v2 Preview" | `185996279977` |
+| **Newest bulk preview** | "Crema Italia POC_Bulk_v3 Preview" | `185996378281` |
+| Prior bulk preview | "Crema Italia POC_Bulk_v2 Preview" | `185996279977` |
 | Prior bulk preview | "Crema Italia POC_Bulk_v1 Preview" | `185989595305` |
 
 > Themes on this line are named `Crema Italia POC_Bulk_v<N> Preview`, change lists are
@@ -4573,7 +4574,19 @@ when resuming.**
 > **The full planned-changes list for this line is `docs/POC_Bulk_plan.md`** (consolidated 2026-11-24);
 > strike items there as they ship, and keep state here.
 >
-> **What POC_Bulk_v2 is (2026-11-24):** the taste-profile match line (the ribbon's gold dot and
+> **What POC_Bulk_v3 is (2026-11-24):** the first bulk-model copy batch, on the branch only. The
+> hero reads **"Exactly as roasted in Italy."** and the meta description, Our model, About, the
+> Promise page, the "Do you roast" FAQ answer, a new "What is on the bag?" entry and the Brewing
+> teaser no longer claim we ship the bag the roaster filled - every sentence derived from the
+> coming-soon paragraph Steve pushed live on 2026-11-17. Commit `358e62d`. Proved by pull-and-diff:
+> both sides 40 files, zero mismatches after normalising line endings, exactly one theme of that
+> name, every rewritten sentence asserted on the pulled files. `theme check` 9 / 0 / 0 new. **The
+> bulk line is now AT the cap of three** (v1, v2, v3): the next deploy on this line prunes v1 on
+> Steve's explicit go by name and id. Preview:
+> `https://crema-italia.myshopify.com?preview_theme_id=185996378281` - open it in a real browser.
+> Ledger: `docs/POC_Bulk_v3_change_list.md`.
+>
+> **What POC_Bulk_v2 was (2026-11-24):** the taste-profile match line (the ribbon's gold dot and
 > "Matches your taste profile." under the freshness strip on every coffee card and the product page,
 > whenever a saved profile exists and the coffee matches it, filter on or off; one shared
 > `tasteMatches()` predicate for the filter and the marker) plus the deletion of our process
