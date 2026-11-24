@@ -15,7 +15,7 @@ coming-soon page already carries his wording for the core claim and is the seed.
 Every line below was found by grep on 2026-11-24, not remembered. Line numbers are as of commit
 `de00823` and will drift; the quoted text is the anchor.
 
-## A. POC_Bulk_v2 - every place the storefront claims we ship the bag the roaster filled
+## A. Next copy batch - every place the storefront claims we ship the bag the roaster filled
 
 1. **Hero H1** - "Exactly as the roaster sealed it... in Italy." (`templates/index.liquid`), plus
    the comment block above it recording how the line was settled, which must not keep describing a
@@ -41,7 +41,7 @@ Every line below was found by grep on 2026-11-24, not remembered. Line numbers a
    on where the clock starts, and change nothing if it does.
 10. **Journal teaser, Brewing** - "We sell whole bean because that is what our roasters seal".
     Whole bean becomes our choice and the sentence has to give our reason.
-11. **Five roaster blurbs** in `ci-catalog.json` - "Whole bean, valve-sealed, unchanged." and
+11. ~~**Five roaster blurbs** in `ci-catalog.json`~~ **Shipped as `POC_Bulk_v2` (2026-11-24).** Was: - "Whole bean, valve-sealed, unchanged." and
     Gardelli's "nothing repackaged." **Scoped to a deletion, not a rewrite (Steve, 2026-11-24):**
     the sentence is a claim about OUR process sitting in a field the ROASTER fills in production, so
     no model can carry it there. Remove the sentence; nothing replaces it. No v1.24 dependency.
@@ -51,7 +51,7 @@ Every line below was found by grep on 2026-11-24, not remembered. Line numbers a
 13. **The photography brief** in the template comment for the product-shot slot, which asks for
     "one of OUR roasters' sealed bags" - it becomes our bag carrying their label.
 
-## B. POC_Bulk_v3 - the size model
+## B. Size model batch
 
 14. **100 g as a consumer size** on every coffee: a fourth entry in each `sizes` array with a price,
     the product page's "Bag size" pills (four pills must still hold one row at 375, the POC15
@@ -70,7 +70,7 @@ Every line below was found by grep on 2026-11-24, not remembered. Line numbers a
 ## C. Model-neutral builds - land on `main` first, merged forward
 
 18. ~~The taste quiz aligned to the SCA Flavor Wheel.~~ Shipped as `POC_Bulk_v1` (`de70f61`).
-19. **The taste-profile match line.** On every card and product page: the gold state dot and
+19. ~~**The taste-profile match line.**~~ **Shipped as `POC_Bulk_v2` (2026-11-24).** Was: On every card and product page: the gold state dot and
     "Matches your taste profile." on its own line directly under the freshness strip (and under the
     product-page title), shown whenever a profile exists and the coffee matches it, filter on or off;
     nothing on a coffee that does not match, never a negative. One matching function shared with the
