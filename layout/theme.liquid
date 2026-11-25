@@ -64,7 +64,11 @@
     Organization JSON-LD, which this theme still has none of.
   {%- endcomment -%}
   {%- assign ci_og_title = 'Crema Italia - Freshly roasted in Italy' -%}
-  {%- assign ci_og_desc = 'Whole-bean coffee from a small, named group of artisan Italian roasters. Air-freighted so it reaches you weeks from the roast date, not months.' -%}
+  {%- comment -%} 2026-11-25: the share description is the page description, one variable, so the
+      two cannot drift. This line used to carry its own sentence, written for POC14 and never
+      touched again, and it was still promising "weeks from the roast date, not months" three
+      months after POC21 retired that claim from the hero as not reliably true. {%- endcomment -%}
+  {%- assign ci_og_desc = ci_meta_desc -%}
   {%- comment -%} asset_url returns a protocol-relative //host/... path; OG scrapers need an
       absolute one. The conditional keeps this correct if Shopify ever returns absolute. {%- endcomment -%}
   {%- assign ci_asset = 'ci-og-image.png' | asset_url -%}
