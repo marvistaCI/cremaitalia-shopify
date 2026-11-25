@@ -4480,6 +4480,29 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   matches through its components; accessories render no line; looked at on desktop, product page and
   375. `theme check` at the documented baseline.
 
+- 2026-11-25 — **The four legal policies re-applied from HTML sources through the Admin API, and the
+  paste retired.** Steve: *"The formatting of the Shipping Policy page is messed up. What happened and
+  what needs to be done to fix it and not break it again."* Fetched, not read off the admin: all three
+  pasted policies (shipping, refund, terms) had **every hard-wrapped source line as a forced break**
+  (17 / 13 / 22 of them) and **every heading set as body copy**, because `ready-to-paste.md` carried the
+  text wrapped at ~85 characters and Shopify's editor keeps a newline as a `<br>` and cannot tell a
+  heading from a line. Refund and terms were worse than shipping, each wrapped line its own
+  `<div><span>`, so they were pasted from somewhere else again; same cause. **The paste was the fragile
+  step, so it is gone:** `docs/legal/policies/*.html` is the source (real `<h2>`, one `<p>` per
+  paragraph, no wrapping), `docs/legal/apply_policies.py` sets each policy through `shopPolicyUpdate`
+  and then **fetches the public page and asserts** heading count, zero stray `<br>`, zero paste
+  residue - the theme's source / apply / prove ritual applied to policies. All four applied and
+  verified OK; looked at in the browser. **Found on the way and fixed in the same pass:** the live
+  Shipping Policy still said *"Your coffee ships in the roaster's own sealed bag... We do not
+  repackage"*, the sealed model, contradicting the coming-soon page on the same site since
+  2026-11-17; now the coming-soon wording. Two tooling notes: the CLI store connector refuses the
+  alias at the OAuth callback and wants the **permanent domain** `br1qrr-tt.myshopify.com`; and on
+  Windows a multi-line query or JSON body passed inline to `store execute` arrives mangled
+  (*"--query flag value is empty"*), so the script uses `--query-file` / `--variable-file`. The
+  pasted text blocks in `ready-to-paste.md` are replaced by pointers so each policy has one home.
+  **Not changed:** the live theme's policy-page CSS gives paragraphs no spacing, which the headings
+  now make visible; a small `crema-italia.css` item for Steve's go, since it is a live push.
+
 ---
 
 ## 10. Open questions / TODO
