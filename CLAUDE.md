@@ -4632,6 +4632,20 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   computes 16px paragraph margins and 24px h2s with nothing injected. Recorded on `poc-bulk`, whose
   copy of this file is the one kept current; `main`'s §10 live-theme note still reads 2026-11-17.
 
+- 2026-11-25 — **Header and footer links were dead on a policy page, and the mock was the cause.**
+  Steve opened Returns from the POC footer and found only Shipping and Returns worked from there. A
+  policy page is a separate document that Shopify renders inside the POC's layout, so the chrome is
+  present but none of the SPA's `.page` sections are, and every `showPage()` died silently; the
+  policy links are real hrefs, which is why they worked. Hidden until POC22 put policy links in the
+  footer, the first way to leave the home document inside the POC's chrome. Fix: off the SPA
+  document `showPage()` routes to `/` with the page in the hash and `initHashEntry()` opens it on
+  arrival and clears the hash; a mistyped name on the SPA itself still does nothing. Not carried to
+  production, where every page has its own URL. Model-neutral, `main` `cef0a14`, merged forward
+  (the branch's copy of the file differs; the merge was clean). Driven on the dev server from three
+  policy pages and on the real preview after the push. **POC_Bulk_v4 refreshed in place** and
+  re-proved by pull-and-diff: 40 files both sides, zero mismatches, the guard and `initHashEntry`
+  asserted on the pulled file. `theme check` 9 / 0 / 0 new. Ledger: `docs/POC_Bulk_v4_change_list.md`.
+
 ---
 
 ## 10. Open questions / TODO
@@ -4654,7 +4668,7 @@ when resuming.**
 > stays at the Sealed Reference and `main` carries the commit for whenever that line is next built. The POC33 preview theme is renamed `Crema Italia POC33 Sealed
 > Reference` so the deploy skill's prune can never select it. Reasoning: §9 2026-11-17 (bulk model).
 
-**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — POC_Bulk_v4 deployed + pull-and-diff proved 2026-11-24; refreshed in place with the founder story and About rewrites 2026-11-25 (re-proved).**
+**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — POC_Bulk_v4 deployed + pull-and-diff proved 2026-11-24; refreshed in place with the founder story, the About rewrites and the policy-page link fix 2026-11-25 (re-proved).**
 
 | What | Theme | Id |
 |---|---|---|
@@ -4679,7 +4693,9 @@ when resuming.**
 > hero shortened to **"Roasted in Italy."** (Steve). Branch only. **Refreshed in place 2026-11-25** with
 > the founder story rewrite (model-neutral, `main` `25eb305`, merged forward), re-proved by pull-and-diff;
 > and again the same day with the About page rewrite (company paragraphs on the branch, `d74d7ea`;
-> founder lives on `main`, `32b7185`), re-proved.
+> founder lives on `main`, `32b7185`), re-proved; and a third time with the policy-page link fix
+> (`main` `cef0a14`, merged forward: header and footer links route home from a `/policies/*` page
+> instead of dying), re-proved.
 > Proved by pull-and-diff: both sides
 > 40 files, zero mismatches after normalising line endings, exactly one theme of that name, the
 > hero, strip, slide array and CSS asserted on the pulled files. `theme check` 9 / 0 / 0 new. **The

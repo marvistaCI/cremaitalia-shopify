@@ -101,3 +101,23 @@ was merged forward. Code changed only punctuation: his en dashes became spaced h
 no-em-dash rule, and the Life six clause gained a dash. v4 refreshed in place and re-proved by
 pull-and-diff (40 files, zero mismatches, both blocks asserted on the pulled file). Looked at on the
 dev server at desktop. `theme check` 9 / 0 / 0 new.
+
+## Addendum, 2026-11-25: header and footer links die on a policy page (Steve)
+
+Steve opened the Returns policy from the POC footer and found that Shipping and Returns worked
+from there but every other footer link was dead. Cause: a policy page is a separate document that
+Shopify renders inside the POC's `layout/theme.liquid`, so the header and footer are present but
+none of the SPA's `.page` sections are, and `showPage()` had nothing to show. The policy links
+work because they are real hrefs. It never showed before POC22 put policy links in the footer,
+since until then there was no way to leave the home document inside the POC's chrome. Fix, in
+`assets/ci-storefront.js`: when the document holds zero `.page` elements, `showPage()` sends the
+browser to `/` with the page named in the hash (`/#page=about`; `home` goes to `/` alone), and a new
+`initHashEntry()`, run after the catalog loads beside `initOfferEntry()`, opens that page and drops
+the hash so a reload or a copied URL does not re-open it. The zero-`.page` test keeps a mistyped
+name on the SPA itself from bouncing the visitor home (checked: it still does nothing, as before).
+Not carried to production, where every page has its own URL and these are ordinary links.
+Model-neutral: `main` (`cef0a14`), merged forward; the branch's own copy of the file differs and
+the merge was clean. Verified by driving the dev server from three policy pages: footer About,
+header Roasters (grid rendered on arrival), the logo to home; and on the real v4 preview after the
+push. v4 refreshed in place and re-proved by pull-and-diff (40 files, zero mismatches,
+`initHashEntry` and the guard asserted on the pulled file). `theme check` 9 / 0 / 0 new.
