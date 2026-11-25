@@ -107,8 +107,8 @@ Each slot keeps its full brief in a `PROD:` comment beside the `<img>` in
 | ~~2 — founder portrait~~ | ~~`ci-temp-lp2.jpg`~~ → `ci-founder-caffe.jpg` | 4:5, 960x1200 | **DELIVERED in POC33 (2026-10-20).** Steve at an Italian bar counter, cup in hand, machine and barista behind him, candid, not looking at the lens - the brief, met. His own photograph; source `Operations\People\Steve Roberts\Standing in caffe.jpeg` (1600x1200, the largest copy that exists - the phone original was not recovered), cut from the right edge, exposure +8%, no saturation change, then **retouched by Steve**: levelled by a degree or so and the sunglasses hanging from his collar removed with an AI fill (`Standing in caffe_sunglasses_removed.jpg`, 900x1131, trimmed to 900x1125). Face softening was discussed and declined - at ~100 px across on the page it buys nothing and risks the processed look Brand Standards §3.5 rules out. The cap carries a car maker's badge; judged incidental and left as shot (Steve, 2026-10-20) - it is a cap he bought and wore, not a product claim. **Not** a `ci-temp-*` stand-in. |
 | 3 — the roaster visit | ~~`ci-temp-lp3.jpg`~~ → `ci-roaster-visit.jpg` | 3:2, 1200x800 | **FILLED in POC33 (2026-10-20), CONSENT-GATED.** Steve in a roasting room with the roaster and a fellow visitor, tasting cup and sheet in hand, hopper and ducting overhead - under the Our model copy it illustrates "we go and visit" directly. Source `Operations\People\Steve Roberts\Visiting a Roaster.jpeg` (1200x1600, phone original not yet recovered - this is the one photo worth having at full size); the 3:2 band from row 340 ends **above** the roaster's branded bag, so nothing in frame names the roastery and no blur was needed. **Cannot go public until two consents exist:** the roaster (who has not yet agreed to import, so her face on our page before she signs costs the negotiation more than it earns) and the visitor at the left (a private individual; Steve holds her contact). Italian portrait right requires both. Fallback if the visitor declines: the same band cropped from x=200, visitor out - kept beside the session scripts, not in the theme, because in it the roaster looks out of frame at nobody. **Not** a `ci-temp-*` stand-in: it is the right picture, waiting on permission rather than on a reshoot. |
 
-**The product shot the slot was briefed for is still owed.** One of OUR roasters' sealed valve
-bags, label readable, loose beans alongside, 3:2. It was gated on a roaster signing (we have no
+**The product shot the slot was briefed for is still owed.** Under the bulk model (2026-11-24)
+it is one of our own bags carrying a roaster's label, label readable, loose beans alongside, 3:2. It was gated on a roaster signing (we have no
 bags of our own to photograph) and still is. When it exists it wants a slot of its own near the
 shelves rather than displacing the visit photo - the first audit's "no product anywhere on the
 landing page" remains open until then.
@@ -126,12 +126,39 @@ text label (`{"cls":"p","label":"Gardelli · Ethiopia"}` in `assets/ci-catalog.j
 The PDP gallery mechanism is built and working (arrows, tap-halves, swipe, thumbnail strip,
 looping) — it is waiting on content, not code.
 
-Per SKU, the gallery expects three slides: **front / back / label close-up**.
+Per SKU, the gallery expects three slides, **product only** (Steve, 2026-11-24, under the bulk
+model - the beans are repacked in Florida into our bag carrying the roaster's label):
+
+| Slide | Brief |
+|---|---|
+| 1 - our bag, front | The bag the buyer receives: our valved retail bag with the roaster's label on it. 1:1, same light and ground for every SKU so the shelf reads as one shelf. |
+| 2 - label close-up | The label, on the bag, close enough to read: the roaster's name, the specific coffee, the roast date, and the imported-and-repacked line. Shoot a bag whose printed roast date will not be read as the live one: either a date that is obviously a sample, or framed so the date field is present but the digits are not legible. The page renders the real date from the lot record directly beneath (POC26 rule: time-varying facts belong in fields, never in copy or pictures). |
+| 3 - loose beans | A small pour of the beans on a neutral ground, roast colour true (daylight, no warm cast): the one thing a photo tells a buyer that the words cannot. |
+
+"Back of bag" was dropped: under repack the back is ours and says nothing the label close-up does
+not. The repack story itself (their bulk bag, our label, our bag) is told once, on the Promise page -
+see 2b - not in every gallery.
 
 This is the largest single volume of work in this file and it is gated on something outside our
 control: **the roasters have not signed yet**, so there are no real SKUs to photograph. See
 [POC11_change_list.md](docs/POC11_change_list.md) §0 — the catalog is fixture data, and no review
 may draw conclusions about it.
+
+## 2b. The repack story on the Promise page - three placeholder slots (2026-11-24)
+
+Under the Promise page's "Freshness window", a three-frame strip headed "From their roastery to
+your bag". It is the only place on the site that shows the process; product galleries show the
+product. Three 1:1 slots, `.repack-strip .photo-slot` in `templates/index.liquid`.
+
+| Slot | Brief |
+|---|---|
+| 1 - the roaster's bulk bag | A sealed valved bulk bag (2.5 to 20 kg) as it arrives from Italy, the roaster's own marking visible. **Per roaster, not per lot, and the marking present but NOT legible** - a readable roast date or lot number baked into a photograph is a time-varying fact in an image, one click from the real date the lot record renders. Frame to the bag and the roaster's mark; let the handwriting or stamp read as handwriting, not as digits. |
+| 2 - the label we affix | The printed label alone or being applied: the roaster's artwork, their name, the coffee, the roast date field, the imported-and-repacked line. Same legibility rule for the date. |
+| 3 - our bag | The finished retail bag, sealed, label on, the same bag as gallery slide 1. |
+
+One roaster's sequence serves the whole page; it does not change per coffee. Needs a signed roaster
+(for the bulk bag and the artwork) and our own bag stock, so it is gated on the same two things as
+section 2.
 
 ## 3. Roaster portraits and brand logos — none exists
 

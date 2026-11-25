@@ -4539,6 +4539,29 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   had been a confession since POC11 because it set the first-person register; the paragraph's own
   last line supplies the word. Model-neutral, on `main`, merged forward, v3 refreshed again.
 
+- 2026-11-24 — **POC_Bulk_v4: what the gallery shows when we repack, and the hero gets plainer.**
+  Ledger: `docs/POC_Bulk_v4_change_list.md`. Steve asked what the product gallery should show under
+  the bulk model and proposed three frames per product: the roaster's original bag, the label we
+  affix, our bag. **Answered differently, on his go: the gallery shows the thing the buyer
+  receives** - our bag, the label close-up (the "What is on the bag?" FAQ made visible), loose beans
+  (roast colour, the one thing a photo says that words cannot) - and **the repack story is told once**,
+  as a three-frame strip on the Promise page under the freshness window: their bulk bag, our label,
+  your bag. The bulk bag is a 2.5 to 20 kg sack the customer never receives; leading a product
+  gallery with it would have reintroduced the confusion v3 removed from the copy, and fifteen
+  galleries each retelling the process is the e-commerce habit of saying everything on every page.
+  "Back of bag" dropped: under repack the back is ours. **The caution worth keeping, now in the
+  photography briefs:** a legible roast date or lot number in a photograph is a time-varying fact in
+  an image, one click from the real date the lot record renders - POC26 in picture form - so the
+  bulk-bag frame is per roaster with the marking present but not readable, and the label close-up
+  keeps its date field present but its digits illegible. All six shots are placeholders with briefs
+  (`docs/photography-todo.md` 2 and 2b). **Hero: "Roasted in Italy."** - Steve, mid-build: "Exactly
+  as roasted in Italy" tried too hard; the nothing-altered claim it carried now sits directly beneath
+  in the beat and in Our model. Third hero line of the day, and the template comment records all
+  three so the reasoning survives. **One layout trap, measured:** three square slots overflowed 375
+  by ~70px because a grid item's default minimum width is its content; `min-width:0` plus a text-tall
+  box below 480 fixed it (right edge 359 of 375, nothing clipped). Verified by driving the gallery,
+  the strip and the hero at both widths and looking at all three.
+
 ---
 
 ## 10. Open questions / TODO

@@ -51,7 +51,11 @@
     </video>
     <div class="hero-media-scrim" aria-hidden="true"></div>
     {%- comment -%}
-      Hero line, 2026-11-24 (Steve): "Exactly as roasted in Italy." The bulk-import model
+      Hero line, 2026-11-24 later the same day (Steve): "Roasted in Italy." - "Exactly as roasted
+      in Italy" tried too hard. The "nothing altered" claim that "Exactly as" carried now lives in
+      the beat directly beneath ("Freshness matters; slow boats age the beans") and in Our model,
+      so the headline no longer has to do that work. Earlier the same day it was "Exactly as
+      roasted in Italy." The bulk-import model
       (CLAUDE.md 9, 2026-11-17) repacks the beans in Florida, so "sealed it" became false; the
       only false word in the line was the one that had to go. "Exactly as the roaster roasted
       it" was the coming-soon page's own phrasing and Steve caught the roaster/roasted echo as a
@@ -72,7 +76,7 @@
       no-em-dash rule prescribes: a sentence trailing into a sequenced next thought. The reveal
       is the point. "in&nbsp;Italy" is glued so the closing beat never orphans.
     {%- endcomment -%}
-    <div class="hero-media-inner"><h1>Exactly as roasted in&nbsp;Italy.</h1></div>
+    <div class="hero-media-inner"><h1>Roasted in&nbsp;Italy.</h1></div>
   </div>
   <div class="hero"><div class="hero-inner">
     {%- comment -%}
@@ -826,6 +830,20 @@
       <p>If a bag arrives damaged, tell us and we will replace it.</p>
       <h3>Freshness window</h3>
       <p>We airfreight coffee freshly roasted in Italy, seal it into fresh bags shortly after it lands, and ship it to you with ample time to enjoy. Every bag carries its roast date, and no bag sells from our shelves once that date is older than {{ settings.freshness_window_days }} days.</p>
+      <!-- THE REPACK STORY, TOLD ONCE (Steve, 2026-11-24: "product-only gallery"). Three placeholder
+           slots: the roaster's bulk bag, the label we affix, our bag. This is the only place on the
+           site that shows the process; product galleries show the product (our bag, the label
+           close-up, loose beans). PROD: replace each .photo-slot with a 1:1 <img>. BRIEFS and one
+           caution live in docs/photography-todo.md section 2b: the bulk-bag frame is PER ROASTER,
+           not per lot, with the roaster's marking present but NOT legible - a readable roast date
+           or lot number baked into a photograph is a time-varying fact in an image, one click from
+           the real date the lot record renders (the POC26 contradiction in picture form). -->
+      <p class="eyebrow" style="margin-top:1.25rem">From their roastery to your bag</p>
+      <div class="repack-strip" role="list" aria-label="From their roastery to your bag">
+        <div class="photo-slot" role="listitem"><span class="ph-k">1</span><strong>The roaster&rsquo;s bulk bag</strong><span>Sealed and marked in Italy</span></div>
+        <div class="photo-slot" role="listitem"><span class="ph-k">2</span><strong>The label we affix</strong><span>Roaster, coffee, roast date</span></div>
+        <div class="photo-slot" role="listitem"><span class="ph-k">3</span><strong>Your bag</strong><span>Sealed in Florida, shortly after landing</span></div>
+      </div>
       <h3>Our no-waste pledge</h3>
       <p>We set a higher standard for freshness than most, because we want you to taste what the roaster intended. Coffee older than our selling window is still good coffee, and under our no-waste pledge it goes to other good uses, including charitable donations.</p>
     </div>

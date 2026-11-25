@@ -836,7 +836,15 @@
   // the image, arrows, and a thumbnail strip — all drive the same main image, looping.
   var pdSlides = [], pdIdx = 0;
   function pdGalleryHtml(p) {
-    pdSlides = [p.img ? p.img.label : p.title, 'Back of bag', 'Label close-up'];
+    // PRODUCT-ONLY GALLERY (Steve, 2026-11-24): three slides that show the thing the buyer
+    // receives - our bag, front; the label close-up (roaster, coffee, roast date, the
+    // imported-and-repacked line: the "What is on the bag?" FAQ made visible); loose beans, the
+    // one thing a photo tells a buyer that words cannot (roast colour). The repack story - the
+    // roaster's bulk bag, our label, our bag - is told ONCE, on the Promise page, not here:
+    // fifteen galleries each retelling the process is the e-commerce habit of saying everything
+    // on every page. "Back of bag" was dropped: under repack the back is ours and says nothing
+    // the label close-up does not. Briefs in docs/photography-todo.md section 2.
+    pdSlides = [p.img ? p.img.label : p.title, 'Label close-up', 'Loose beans'];
     pdIdx = 0;
     var thumbs = pdSlides.map(function (s, i) {
       return '<button class="pd-gthumb' + (i === 0 ? ' active' : '') + '" onclick="pdGalleryTo(' + i + ')" aria-label="Photo ' + (i + 1) + '">' + esc(s) + '</button>';

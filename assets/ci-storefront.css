@@ -242,6 +242,18 @@ nav button.active{color:var(--ci-crema-text);font-weight:600}
 /* The wide band sits outside .ci-main so it can run the full content width, like .taste-ribbon */
 .photo-wide{aspect-ratio:3/2;max-width:72ch;margin-top:1.5rem}
 .photo-portrait{aspect-ratio:4/5}
+/* Promise page, the repack story told once (2026-11-24): three square slots in a row - the
+   roaster's bulk bag, our label, our bag. Three-up even on phones (each ~100px at 375) because
+   the sequence IS the content; stacked, it stops reading as a sequence. */
+.repack-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;max-width:72ch;margin:1rem 0 1.5rem}
+.repack-strip .photo-slot{aspect-ratio:1;padding:.75rem;gap:.3rem;min-width:0}
+/* Phones: a grid item's default min-width is its content, so three squares overflowed 375 by
+   ~70px (measured). min-width:0 lets them shrink; below 480 the square gives way to a text-tall
+   box, because ~106px squares cannot hold three lines of label. */
+@media(max-width:480px){.repack-strip{gap:.5rem}.repack-strip .photo-slot{aspect-ratio:auto;min-height:7rem;padding:.6rem .4rem}}
+.repack-strip .photo-slot strong{font-size:.82rem;color:var(--ci-espresso);line-height:1.25}
+.repack-strip .photo-slot span{font-size:.72rem;color:var(--ci-mute-text);line-height:1.3}
+.repack-strip .ph-k{font-family:var(--ci-font-display);font-size:1.1rem;color:var(--ci-crema-text)}
 /* Story runs text-beside-photo on desktop and stacks on phones. align-items:start keeps the
    photo from stretching to the prose's full height. */
 .story-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:2rem;align-items:start}
