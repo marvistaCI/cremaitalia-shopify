@@ -87,3 +87,17 @@ home page. Bulk-model copy, branch only. v4 refreshed in place and re-proved by 
 files, zero mismatches, the sentence asserted on the pulled file). The same sentence sits on the
 coming-soon page (`templates/password.liquid`, `live-theme/templates/index.liquid`), live on
 cremaitalia.com, and was NOT changed: that is a live push and waits for Steve's go.
+
+## Addendum, 2026-11-25: the About page, in Steve's words
+
+Two blocks on the About page rewritten from Steve's draft. **Our company**, the two paragraphs
+above the Three P's: a Florida based company; import, store, ship; "authentic Italian roasted
+coffee ... just as if you were there, in Italy"; and the repack sentence ("we repack and seal them
+into fresh, conveniently sized, vented, re-sealable bags"). Bulk-model copy, so it is on the branch
+only (`d74d7ea`). The Three P's were not in his draft and are unchanged. **Our founder**, the six
+lives: shorter per life, "phased out of music", "(Travelling, I discovered espresso in Italy.)",
+"Beyond retirement - Crema Italia is formed." Model-neutral, so it landed on `main` (`32b7185`) and
+was merged forward. Code changed only punctuation: his en dashes became spaced hyphens under the
+no-em-dash rule, and the Life six clause gained a dash. v4 refreshed in place and re-proved by
+pull-and-diff (40 files, zero mismatches, both blocks asserted on the pulled file). Looked at on the
+dev server at desktop. `theme check` 9 / 0 / 0 new.

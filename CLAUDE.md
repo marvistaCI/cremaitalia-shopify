@@ -4584,6 +4584,16 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   classifier, then verified on the public page (HTTP 200, new wording present, old absent) and by
   pulling the theme back (13 files, both templates identical to the repo). Merged forward.
 
+- 2026-11-25 — **The About page in Steve's words: the company paragraphs and the six lives.** Two
+  blocks rewritten from his draft, split by model. The **company** paragraphs carry the repack sentence
+  ("we repack and seal them into fresh, conveniently sized, vented, re-sealable bags"), so they are
+  bulk-model copy and live on the branch only (`d74d7ea`); the Three P's beneath them were not in his
+  draft and are unchanged. The **founder lives** are model-neutral and landed on `main` (`32b7185`),
+  merged forward. Code changed punctuation only: en dashes to spaced hyphens under the no-em-dash rule,
+  and a dash in "Beyond retirement - Crema Italia is formed". **POC_Bulk_v4 (`185998803113`) refreshed
+  in place** and re-proved by pull-and-diff (40 files, zero mismatches, both blocks asserted on the
+  pulled file). Looked at on the dev server. `theme check` 9 / 0 / 0 new.
+
 ---
 
 ## 10. Open questions / TODO
@@ -4606,7 +4616,7 @@ when resuming.**
 > stays at the Sealed Reference and `main` carries the commit for whenever that line is next built. The POC33 preview theme is renamed `Crema Italia POC33 Sealed
 > Reference` so the deploy skill's prune can never select it. Reasoning: §9 2026-11-17 (bulk model).
 
-**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — POC_Bulk_v4 deployed + pull-and-diff proved 2026-11-24; refreshed in place with the founder story rewrite 2026-11-25 (re-proved).**
+**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — POC_Bulk_v4 deployed + pull-and-diff proved 2026-11-24; refreshed in place with the founder story and About rewrites 2026-11-25 (re-proved).**
 
 | What | Theme | Id |
 |---|---|---|
@@ -4629,7 +4639,9 @@ when resuming.**
 > **What POC_Bulk_v4 is (2026-11-24):** the product-only gallery (our bag / label close-up / loose
 > beans), the repack story told once as a three-slot placeholder strip on the Promise page, and the
 > hero shortened to **"Roasted in Italy."** (Steve). Branch only. **Refreshed in place 2026-11-25** with
-> the founder story rewrite (model-neutral, `main` `25eb305`, merged forward), re-proved by pull-and-diff.
+> the founder story rewrite (model-neutral, `main` `25eb305`, merged forward), re-proved by pull-and-diff;
+> and again the same day with the About page rewrite (company paragraphs on the branch, `d74d7ea`;
+> founder lives on `main`, `32b7185`), re-proved.
 > Proved by pull-and-diff: both sides
 > 40 files, zero mismatches after normalising line endings, exactly one theme of that name, the
 > hero, strip, slide array and CSS asserted on the pulled files. `theme check` 9 / 0 / 0 new. **The
