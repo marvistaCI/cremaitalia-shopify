@@ -4616,6 +4616,22 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   **Not changed:** the live theme's policy-page CSS gives paragraphs no spacing, which the headings
   now make visible; a small `crema-italia.css` item for Steve's go, since it is a live push.
 
+- 2026-11-25 — **The policy pages styled on the live theme, and pushed live (Steve's go).** With real
+  headings in place, the four `/policies/*` pages showed what the paste had hidden: the coming-soon
+  stylesheet's global reset strips every margin and the theme had never styled these pages, which
+  Shopify renders itself with no template of ours, so h2s and paragraphs sat flush. A scoped
+  `.shopify-policy__*` block in `assets/crema-italia.css`: 72ch measure (Brand Standards long-form),
+  h1 at the brand H1 scale rather than the hero's, h2 held at exactly 24px because Crema Gold on cream
+  is 3.1:1 and passes only as large text, paragraph and list spacing. Previewed by injecting the same
+  rules into the live page and looking (desktop; 375px checked for overflow by DOM, none). Commit
+  `63852aa` on `main`, merged forward. **Pushed to the live theme** after `theme list` and the unpushed
+  check, scoped `--only assets/crema-italia.css --allow-live`; the classifier did not block. Proved two
+  ways: the theme pulled back holds 13 files with the stylesheet identical to the repo after
+  normalising line endings, and the public stylesheet the policy page links (HTTP 200, served
+  minified by the CDN) carries all seven policy selectors; a fresh load of the live Shipping Policy
+  computes 16px paragraph margins and 24px h2s with nothing injected. Recorded on `poc-bulk`, whose
+  copy of this file is the one kept current; `main`'s §10 live-theme note still reads 2026-11-17.
+
 ---
 
 ## 10. Open questions / TODO
@@ -4733,7 +4749,13 @@ when resuming.**
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
 | **Sealed line, frozen point of return** | "Crema Italia POC33 Sealed Reference" (renamed from POC33 Preview 2026-11-23) | `185329090729` |
 
-> **The live theme is current as of 2026-11-25.** Commit **`43ef26a`** (one word in the coming-soon
+> **The live theme is current as of 2026-11-25.** Commit **`63852aa`** (a scoped policy-page block in
+> `assets/crema-italia.css` so the Shopify-rendered `/policies/*` pages get heading and paragraph
+> spacing) was pushed scoped to `150557294761` with `--only assets/crema-italia.css --allow-live` and
+> **verified on the public site**: the stylesheet the policy pages link serves the block, the pulled-back
+> theme holds 13 files with the file identical to the repo, and a fresh load of the live Shipping Policy
+> computes the new margins. The four policies themselves are admin data, applied the same day from
+> `docs/legal/policies/*.html` by `docs/legal/apply_policies.py` (§9 2026-11-25). Before that: commit **`43ef26a`** (one word in the coming-soon
 > paragraph: "the roast date on every bag", not "every one", in `templates/password.liquid` and
 > `live-theme/templates/index.liquid`, matching the POC home page) was pushed scoped to `150557294761`
 > with the two established `--only ... --allow-live` pushes and **verified on the public page**: a
