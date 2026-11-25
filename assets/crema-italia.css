@@ -494,6 +494,35 @@ a:focus-visible {
   display: none !important;
 }
 
+/* ── 11b. Policy Pages (/policies/*) ────────────────────── */
+/* Shopify renders the four legal policies itself - this theme has no
+   policy template - inside .page-wrapper, so this file is the only styling
+   they get. The reset in §2 strips every margin, and nothing below restored
+   them for these pages: once the policies carried real headings
+   (2026-11-25) the h2s and paragraphs sat flush against each other.
+   Measure is the Brand Standards long-form 72ch. H2 is held at exactly
+   1.5rem (24px) because Crema Gold on cream is 3.1:1 and passes only as
+   large text; do not shrink it. Content comes from Settings > Policies via
+   docs/legal/apply_policies.py, never from this theme. */
+.shopify-policy__container {
+  width: 100%;
+  max-width: 72ch;
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 4rem) 1.5rem clamp(3rem, 8vw, 5rem);
+}
+.shopify-policy__title h1 {
+  font-size: clamp(1.9rem, 4vw, 2.5rem);
+  margin-bottom: 2rem;
+}
+.shopify-policy__body h2 {
+  font-size: 1.5rem;
+  margin: 2.25rem 0 0.6rem;
+}
+.shopify-policy__body h2:first-child { margin-top: 0; }
+.shopify-policy__body p  { margin: 0 0 1rem; }
+.shopify-policy__body ul { margin: 0 0 1rem 1.25rem; }
+.shopify-policy__body li { margin-bottom: 0.5rem; line-height: 1.65; }
+
 /* ── 12. Mobile Responsiveness ───────────────────────────── */
 
 @media (max-width: 640px) {
