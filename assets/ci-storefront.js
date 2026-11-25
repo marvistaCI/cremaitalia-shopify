@@ -511,6 +511,16 @@
     var pages = document.querySelectorAll('.page');
     for (var i = 0; i < pages.length; i++) pages[i].classList.remove('active');
     var t = $('page-' + name);
+    // POC_Bulk_v4 (2026-11-25): a policy page (/policies/*) is a separate document that Shopify
+    // renders inside this layout, so the header and footer are present but none of the .page
+    // sections are - every showPage() from there used to die silently. Off the SPA document,
+    // route home with the page named in the hash; initHashEntry() opens it on arrival. The
+    // zero-.page test keeps a mistyped name on the SPA itself from bouncing the visitor home.
+    // PROD: not carried - every page has its own URL there and these links are ordinary hrefs.
+    if (!t && !document.querySelector('.page')) {
+      window.location.href = name === 'home' ? '/' : '/#page=' + name;
+      return;
+    }
     if (t) { t.classList.add('active'); window.scrollTo(0, 0); }
     var navBtns = document.querySelectorAll('nav button[id^="nav-"]');
     for (var j = 0; j < navBtns.length; j++) navBtns[j].classList.remove('active');
@@ -2023,6 +2033,7 @@
       // Catalog-driven grids are built here, so stamp keyboard affordances after them.
       if (window.markKeyboardActivable) window.markKeyboardActivable();
       initOfferEntry();
+      initHashEntry();
     }).catch(function (err) { console.error('Catalog load failed', err); });
   }
 
@@ -2041,6 +2052,15 @@
     m.setAttribute('name', 'robots'); m.setAttribute('content', 'noindex, nofollow');
     document.head.appendChild(m);
     showPage('offerta');
+  }
+
+  // Arrival from a policy page (see the guard in showPage): open the page named in the hash,
+  // then drop the hash so a reload or a copied URL does not re-open it.
+  function initHashEntry() {
+    var m = /^#page=([a-z-]+)$/.exec(window.location.hash || '');
+    if (!m) return;
+    if (window.history && history.replaceState) history.replaceState(null, '', window.location.pathname + window.location.search);
+    showPage(m[1]);
   }
 
   // ---------- footer email capture (MOCKED - added 2026-08-18) ----------
