@@ -4534,7 +4534,10 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   beat 1 leads "Our roasters are chosen for their artisan quality." (the roasters as subject, the
   person the shorter hero gave up; the active-voice form was offered and he kept his wording) and
   beat 2's line reads "Freshness matters; slow boats age the beans." (freshness had lost its name
-  above the fold when the headline changed). v3 refreshed in place.
+  above the fold when the headline changed). v3 refreshed in place. **And the founder story heading
+  is "An inspiration."** - Steve: "I don't like confession - it's not a sin to love espresso." It
+  had been a confession since POC11 because it set the first-person register; the paragraph's own
+  last line supplies the word. Model-neutral, on `main`, merged forward, v3 refreshed again.
 
 ---
 

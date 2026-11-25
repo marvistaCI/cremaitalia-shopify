@@ -85,3 +85,11 @@ refreshed in place rather than minted as v4, since it still holds exactly what t
   With "Freshly roasted" gone from the headline, freshness had no name above the fold, only its
   mechanism. The semicolon is within the copy rules (the ban is on em-dashes).
 - Beat 3 unchanged.
+
+## Addendum, same day: the founder story heading (Steve)
+
+"A confession." -> **"An inspiration."** Steve: it is not a sin to love espresso. The heading had
+been "A full confession." (POC11) then "A confession." (POC31), kept because it set the first-person
+register; the paragraph ends "That shot was the inspiration", so the heading now uses the story's own
+word. Model-neutral, so it landed on `main` (`see git log`) and merged forward; v3 refreshed in place and
+re-proved by pull-and-diff.
