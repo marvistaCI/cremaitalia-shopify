@@ -79,3 +79,11 @@ Model-neutral, so it landed on `main` (`25eb305`) and was merged forward (`aa223
 in place and re-proved by pull-and-diff (40 files, zero mismatches, the new story asserted on the
 pulled file). Looked at on the dev server at desktop (three paragraphs beside the portrait, the
 signature below) and at 375. `theme check` 9 / 0 / 0 new.
+
+## Addendum, 2026-11-25: one word in Our model (Steve)
+
+"the roast date on every one" -> "the roast date on every bag" in the Our model paragraph on the
+home page. Bulk-model copy, branch only. v4 refreshed in place and re-proved by pull-and-diff (40
+files, zero mismatches, the sentence asserted on the pulled file). The same sentence sits on the
+coming-soon page (`templates/password.liquid`, `live-theme/templates/index.liquid`), live on
+cremaitalia.com, and was NOT changed: that is a live push and waits for Steve's go.
