@@ -1,5 +1,14 @@
 # Legal pages — status, decisions, and the deltas for v2
 
+> **How the policies are applied (2026-11-25).** Source: `docs/legal/policies/*.html`, one file per
+> policy, real `<h2>` headings and one `<p>` per paragraph, no manual line wrapping. Apply:
+> `py docs/legal/apply_policies.py` (Admin API `shopPolicyUpdate` through the CLI store connector,
+> authorised once against the permanent domain `br1qrr-tt.myshopify.com`). Prove:
+> `py docs/legal/apply_policies.py --verify` fetches each public page and checks heading count, no
+> stray `<br>`, no paste residue, no sealed-model sentence. **Never paste again** - the 2026-08-22
+> paste put all three policies live with a forced break at every wrapped line and the headings as
+> body copy, found 2026-11-25. Privacy is not in the script: still Shopify's generated policy.
+
 **The draft policy text already exists and is not in this repo.** It is
 `Legal\Crema_Italia_Shopify_Legal_Pages_Setup_v1.docx` in OneDrive, written by Cowork on 2026-08-20:
 an admin walkthrough plus full drafts of all four policies, each line traced to a Project Brief
