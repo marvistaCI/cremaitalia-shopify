@@ -4551,7 +4551,18 @@ when resuming.**
 | Prior preview | "Crema Italia POC32 Preview" | `152388894889` |
 | Prior preview | "Crema Italia POC31 Preview" | `152372117673` |
 
-> **The live theme is current as of 2026-11-17.** Commit **`881327a`** (coming-soon copy: the
+> **The live theme is current as of 2026-11-25.** Commit **`63852aa`** (a scoped policy-page block in
+> `assets/crema-italia.css` so the Shopify-rendered `/policies/*` pages get heading and paragraph
+> spacing) was pushed scoped to `150557294761` with `--only assets/crema-italia.css --allow-live` and
+> **verified on the public site**: the stylesheet the policy pages link serves the block, the pulled-back
+> theme holds 13 files with the file identical to the repo, and a fresh load of the live Shipping Policy
+> computes the new margins. The four policies themselves are admin data, applied the same day from
+> `docs/legal/policies/*.html` by `docs/legal/apply_policies.py` (§9 2026-11-25). Before that: commit **`43ef26a`** (one word in the coming-soon
+> paragraph: "the roast date on every bag", not "every one", in `templates/password.liquid` and
+> `live-theme/templates/index.liquid`, matching the POC home page) was pushed scoped to `150557294761`
+> with the two established `--only ... --allow-live` pushes and **verified on the public page**: a
+> cookie-less fetch returned HTTP 200 with the new wording and zero of the old; both files pulled back
+> identical to the repo; 13 files on the theme. Before that: commit **`881327a`** (coming-soon copy: the
 > sealed-model clause "never re-roasted, ground, or repackaged by us" replaced with Steve's unaltered-roast
 > and repacking sentences, in `templates/password.liquid` and `live-theme/templates/index.liquid`) was
 > pushed scoped to `150557294761` with the two established `--only ... --allow-live` pushes and
