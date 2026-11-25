@@ -59,3 +59,23 @@ hero lines so the reasoning survives.
 - The strip at 375 after the fix: three columns, no horizontal overflow, no clipped text.
 - `theme check` at the documented baseline (9 / 0 / 0 new); `node --check` clean.
 - Looked at: the strip at desktop and 375, the hero at 375.
+
+## Addendum, 2026-11-25: the founder story rewritten (Steve)
+
+Steve rewrote the three-paragraph story in his own words; Code fixed three typos and one
+preposition and changed nothing else. New: a fuel-stop beat (a good espresso at an Autogrill is the
+thing only someone who has been there says), "Back in Florida" as a real place where "Home again"
+was not, and a closing line, "I hope you'll find a roast to fall in love with here", that bookends
+the opener and echoes the hero CTA. "Unchanged" is gone, which the bulk model needed. 154 words,
+up from 133.
+
+**The decaf is out, on Steve's call and against Code's advice.** Code argued it was the story's
+best specific (even the decaf beat the cupboard; the store sells a decaf and the quiz has a caffeine
+axis; it is first person and it happened) and offered "a bag of decaf beans, of all things" as the
+one-phrase alternative. Steve's concern was that coffee snobs dismiss decaf and the word would stop
+them reading. The bag is now "a bag of beans". Both sides are recorded in the template comment.
+
+Model-neutral, so it landed on `main` (`25eb305`) and was merged forward (`aa22358`); v4 refreshed
+in place and re-proved by pull-and-diff (40 files, zero mismatches, the new story asserted on the
+pulled file). Looked at on the dev server at desktop (three paragraphs beside the portrait, the
+signature below) and at 375. `theme check` 9 / 0 / 0 new.

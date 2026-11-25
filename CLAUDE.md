@@ -4562,6 +4562,19 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   box below 480 fixed it (right edge 359 of 375, nothing clipped). Verified by driving the gallery,
   the strip and the hero at both widths and looking at all three.
 
+- 2026-11-25 — **The founder story rewritten in Steve's words, and the decaf is out.** Steve asked whether
+  to keep the decaf, since coffee snobs dismiss it. Code argued to keep it: it was the story's best
+  specific (even the decaf beat the "Italian espresso" in the cupboard), the store sells a decaf and the
+  quiz has a caffeine axis, and the story is first person and it happened; "a bag of decaf beans, of all
+  things" was offered as the one-phrase fix. **Steve's call: out.** The bag is now "a bag of beans",
+  and both sides are recorded in the template comment so the choice is not re-litigated. The rewrite
+  adds the fuel-stop beat and "Back in Florida", drops "unchanged" (the sealed-model word), and closes
+  on "I hope you'll find a roast to fall in love with here", which bookends the opener and echoes the
+  hero CTA; Code fixed three typos and one preposition and changed nothing else. 154 words. Model-neutral:
+  `main` (`25eb305`), merged forward (`aa22358`), **POC_Bulk_v4 (`185998803113`) refreshed in place** and
+  re-proved by pull-and-diff (40 files, zero mismatches, the story asserted on the pulled file). Looked at
+  at desktop and 375. `theme check` 9 / 0 / 0 new.
+
 ---
 
 ## 10. Open questions / TODO
@@ -4584,7 +4597,7 @@ when resuming.**
 > stays at the Sealed Reference and `main` carries the commit for whenever that line is next built. The POC33 preview theme is renamed `Crema Italia POC33 Sealed
 > Reference` so the deploy skill's prune can never select it. Reasoning: §9 2026-11-17 (bulk model).
 
-**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — POC_Bulk_v4 deployed + pull-and-diff proved 2026-11-24.**
+**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — POC_Bulk_v4 deployed + pull-and-diff proved 2026-11-24; refreshed in place with the founder story rewrite 2026-11-25 (re-proved).**
 
 | What | Theme | Id |
 |---|---|---|
@@ -4606,7 +4619,9 @@ when resuming.**
 >
 > **What POC_Bulk_v4 is (2026-11-24):** the product-only gallery (our bag / label close-up / loose
 > beans), the repack story told once as a three-slot placeholder strip on the Promise page, and the
-> hero shortened to **"Roasted in Italy."** (Steve). Branch only. Proved by pull-and-diff: both sides
+> hero shortened to **"Roasted in Italy."** (Steve). Branch only. **Refreshed in place 2026-11-25** with
+> the founder story rewrite (model-neutral, `main` `25eb305`, merged forward), re-proved by pull-and-diff.
+> Proved by pull-and-diff: both sides
 > 40 files, zero mismatches after normalising line endings, exactly one theme of that name, the
 > hero, strip, slide array and CSS asserted on the pulled files. `theme check` 9 / 0 / 0 new. **The
 > bulk line is AT the cap of three** (v2, v3, v4): the next deploy prunes v2 on Steve's explicit go
