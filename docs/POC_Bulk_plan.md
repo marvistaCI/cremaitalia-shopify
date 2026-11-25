@@ -80,6 +80,13 @@ Every line below was found by grep on 2026-11-24, not remembered. Line numbers a
     nothing on a coffee that does not match, never a negative. One matching function shared with the
     filter, sparse-combo relaxation included; binary, not graded. Decided 2026-11-24, not built.
 
+## Shipped without being a plan item
+
+- **The product gallery under repack and the repack story on the Promise page** - raised and built
+  the same day (POC_Bulk_v4, 2026-11-24): gallery = our bag / label close-up / loose beans; the
+  bulk bag, the label and our bag as a three-frame strip told once on Promise. Briefs in
+  `docs/photography-todo.md` 2 and 2b. Recorded here so it is not re-asked.
+
 ## Not build items, recorded so they are not re-asked
 
 - The lot record as a bulk bag and the label model: not storefront surfaces (build spec §0 - the POC

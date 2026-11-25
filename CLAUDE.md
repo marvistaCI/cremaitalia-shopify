@@ -4584,13 +4584,14 @@ when resuming.**
 > stays at the Sealed Reference and `main` carries the commit for whenever that line is next built. The POC33 preview theme is renamed `Crema Italia POC33 Sealed
 > Reference` so the deploy skill's prune can never select it. Reasoning: §9 2026-11-17 (bulk model).
 
-**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — POC_Bulk_v3 deployed + pull-and-diff proved 2026-11-24.**
+**▶ BULK LINE — branch `poc-bulk` (opened 2026-11-23) — POC_Bulk_v4 deployed + pull-and-diff proved 2026-11-24.**
 
 | What | Theme | Id |
 |---|---|---|
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
 | **Frozen point of return (sealed line)** | "Crema Italia POC33 Sealed Reference" | `185329090729` |
-| **Newest bulk preview** | "Crema Italia POC_Bulk_v3 Preview" | `185996378281` |
+| **Newest bulk preview** | "Crema Italia POC_Bulk_v4 Preview" | `185998803113` |
+| Prior bulk preview | "Crema Italia POC_Bulk_v3 Preview" | `185996378281` |
 | Prior bulk preview | "Crema Italia POC_Bulk_v2 Preview" | `185996279977` |
 
 > Themes on this line are named `Crema Italia POC_Bulk_v<N> Preview`, change lists are
@@ -4603,7 +4604,16 @@ when resuming.**
 > **The full planned-changes list for this line is `docs/POC_Bulk_plan.md`** (consolidated 2026-11-24);
 > strike items there as they ship, and keep state here.
 >
-> **What POC_Bulk_v3 is (2026-11-24):** the first bulk-model copy batch, on the branch only. The
+> **What POC_Bulk_v4 is (2026-11-24):** the product-only gallery (our bag / label close-up / loose
+> beans), the repack story told once as a three-slot placeholder strip on the Promise page, and the
+> hero shortened to **"Roasted in Italy."** (Steve). Branch only. Proved by pull-and-diff: both sides
+> 40 files, zero mismatches after normalising line endings, exactly one theme of that name, the
+> hero, strip, slide array and CSS asserted on the pulled files. `theme check` 9 / 0 / 0 new. **The
+> bulk line is AT the cap of three** (v2, v3, v4): the next deploy prunes v2 on Steve's explicit go
+> by name and id. Preview: `https://crema-italia.myshopify.com?preview_theme_id=185998803113` -
+> open it in a real browser. Ledger: `docs/POC_Bulk_v4_change_list.md`.
+>
+> **What POC_Bulk_v3 was (2026-11-24):** the first bulk-model copy batch, on the branch only. The
 > hero reads **"Exactly as roasted in Italy."** and the meta description, Our model, About, the
 > Promise page, the "Do you roast" FAQ answer, a new "What is on the bag?" entry and the Brewing
 > teaser no longer claim we ship the bag the roaster filled - every sentence derived from the
