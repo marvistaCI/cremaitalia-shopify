@@ -4575,6 +4575,15 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   re-proved by pull-and-diff (40 files, zero mismatches, the story asserted on the pulled file). Looked at
   at desktop and 375. `theme check` 9 / 0 / 0 new.
 
+- 2026-11-25 — **One word, three surfaces: "the roast date on every bag."** Steve asked for "every one"
+  to become "every bag" in the Our model paragraph on the POC home page. The same sentence, his from
+  2026-11-17, is also the live coming-soon copy in `templates/password.liquid` and
+  `live-theme/templates/index.liquid`. The POC change went out on the branch (`4669d85`, v4 refreshed in
+  place and re-proved); the coming-soon pair was changed on `main` (`43ef26a`) on Steve's explicit go and
+  **pushed to the live theme** with the two scoped `--allow-live` pushes, neither blocked by the
+  classifier, then verified on the public page (HTTP 200, new wording present, old absent) and by
+  pulling the theme back (13 files, both templates identical to the repo). Merged forward.
+
 ---
 
 ## 10. Open questions / TODO
@@ -4690,7 +4699,12 @@ when resuming.**
 | **Live (published)** | `crema-italia-coming-soon-theme` | `150557294761` |
 | **Sealed line, frozen point of return** | "Crema Italia POC33 Sealed Reference" (renamed from POC33 Preview 2026-11-23) | `185329090729` |
 
-> **The live theme is current as of 2026-11-17.** Commit **`881327a`** (coming-soon copy: the
+> **The live theme is current as of 2026-11-25.** Commit **`43ef26a`** (one word in the coming-soon
+> paragraph: "the roast date on every bag", not "every one", in `templates/password.liquid` and
+> `live-theme/templates/index.liquid`, matching the POC home page) was pushed scoped to `150557294761`
+> with the two established `--only ... --allow-live` pushes and **verified on the public page**: a
+> cookie-less fetch returned HTTP 200 with the new wording and zero of the old; both files pulled back
+> identical to the repo; 13 files on the theme. Before that: commit **`881327a`** (coming-soon copy: the
 > sealed-model clause "never re-roasted, ground, or repackaged by us" replaced with Steve's unaltered-roast
 > and repacking sentences, in `templates/password.liquid` and `live-theme/templates/index.liquid`) was
 > pushed scoped to `150557294761` with the two established `--only ... --allow-live` pushes and
