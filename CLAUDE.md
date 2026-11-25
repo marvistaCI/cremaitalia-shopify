@@ -4646,6 +4646,24 @@ Add a one-line note here whenever a meaningful decision is made. Format:
   re-proved by pull-and-diff: 40 files both sides, zero mismatches, the guard and `initHashEntry`
   asserted on the pulled file. `theme check` 9 / 0 / 0 new. Ledger: `docs/POC_Bulk_v4_change_list.md`.
 
+- 2026-11-25 — **Brand-promise review of the published POC_Bulk_v4: the rules pass, five sentences
+  still spoke the sealed model, all fixed.** Steve asked for a review before closing the task. Every
+  page's rendered text was dumped from the deployed preview and swept, with the catalog copy, against
+  the sealed-model vocabulary and every written copy rule; home, product and Promise looked at by eye.
+  **Clean:** zero exclamation marks, zero em-dashes outside the regions map, none of the banned
+  register, "Tour" only as a SKU name, no charity named, Offerta nowhere public. **Found:** the
+  share description (`og:description`) still promised *"weeks from the roast date, not months"* -
+  retired from the hero in POC21 and never from the tag anyone sharing the site would see; it now
+  **reuses the meta description** so the two cannot drift. "Unchanged" on the Regions page, "when
+  they sealed the bag" in the FAQ, "about every six weeks" on Subscriptions (cadence is a v1.24
+  decision, so the footnote now states none) and "the bags we import" on roaster pages are gone.
+  Model-neutral fixes on `main` (`518d02b`), bulk-only wording on the branch (`2d7886f`). **Worth
+  keeping:** the sealed model survived in exactly the places nobody reads on the page - a meta tag, a
+  footnote, an eyebrow, the one page reachable only from Shop - which is where a vocabulary change
+  always survives; sweep the rendered text, not the pages you remember. v4 refreshed in place,
+  pull-and-diff proved (40 files, zero mismatches), sweep re-run on the deployed preview: zero hits.
+  Ledger: `docs/POC_Bulk_v4_change_list.md`.
+
 ---
 
 ## 10. Open questions / TODO
@@ -4695,7 +4713,9 @@ when resuming.**
 > and again the same day with the About page rewrite (company paragraphs on the branch, `d74d7ea`;
 > founder lives on `main`, `32b7185`), re-proved; and a third time with the policy-page link fix
 > (`main` `cef0a14`, merged forward: header and footer links route home from a `/policies/*` page
-> instead of dying), re-proved.
+> instead of dying), re-proved; and a fourth time after the brand-promise review (`main` `518d02b`,
+> branch `2d7886f`: five sealed-model sentences gone, the share description now the meta
+> description), re-proved and re-swept.
 > Proved by pull-and-diff: both sides
 > 40 files, zero mismatches after normalising line endings, exactly one theme of that name, the
 > hero, strip, slide array and CSS asserted on the pulled files. `theme check` 9 / 0 / 0 new. **The

@@ -121,3 +121,38 @@ the merge was clean. Verified by driving the dev server from three policy pages:
 header Roasters (grid rendered on arrival), the logo to home; and on the real v4 preview after the
 push. v4 refreshed in place and re-proved by pull-and-diff (40 files, zero mismatches,
 `initHashEntry` and the guard asserted on the pulled file). `theme check` 9 / 0 / 0 new.
+
+## Addendum, 2026-11-25: brand-promise review of the deployed v4, and five sentences fixed
+
+Steve asked for a review of the published v4 for brand promise, language and tone before closing
+the task. Method: every `.page`, the header, footer, ribbon and three modals dumped as rendered text
+from the deployed preview (plus one coffee, the collection, an accessory, the Offerta product, a
+roaster and a person page opened through the real handlers), and the catalog copy swept in the repo,
+against regexes for the sealed-model vocabulary, em and en dashes, exclamation marks, the banned
+register, "Tour" as a term, a named charity, retired freshness terms and ISO dates; then the home,
+product and Promise pages looked at. **Passed:** zero exclamation marks, zero em-dashes outside the
+regions map (documented exception, POC9), zero ISO dates, none of the banned register ("exclusive"
+twice in its literal sense), "Tour" only as the SKU name, no charity, no "peak flavor" or our own
+"best by", Offerta nowhere public, labels consistent across header, home and shelf pages. **Five
+sentences still carried the sealed model or a retired promise**, all off the home page:
+1. `og:description` / `twitter:description` (`layout/theme.liquid`) still read *"Air-freighted so it
+   reaches you weeks from the roast date, not months"* - the claim POC21 retired from the hero as
+   not reliably true, written for POC14 and never touched since. Now `ci_og_desc = ci_meta_desc`:
+   one variable, so the share text and the page description cannot drift again. Model-neutral,
+   `main` `518d02b`.
+2. Regions page: *"bring their coffee to you unchanged"* -> *"the roast untouched"* (the word
+   Steve dropped from the founder story as the sealed-model word). Branch, `2d7886f`.
+3. FAQ "How fresh is the coffee?": *"...the roaster intended when they sealed the bag"* -> ends at
+   *"intended"*. Branch.
+4. Subscriptions footnote: *"about every six weeks"* -> *"in regular shipments"* - the pallet
+   cadence the invitation letter moved away from; cadence under the bulk model is a v1.24 decision
+   still open, so the sentence now states none. Branch.
+5. Roaster pages: eyebrow *"The bags we import"* -> *"The coffees we import"*, and Gardelli's bio
+   tail *"...of Gardelli's bags"* -> *"coffees"*; true under either model, `main`.
+**Noted, not changed:** "Roasters' premium and seasonal offerings" on three surfaces (Steve's shelf
+copy since POC3, not on the banned list, the loudest word on the site); and the Gardelli Ethiopia
+`long` still says *"Imported whole bean in Gardelli's valve-sealed bag"* - demo data by Steve's
+2026-11-24 ruling, the one fixture line that contradicts the model. v4 refreshed in place and
+re-proved by pull-and-diff (40 files, zero mismatches, all five asserted on the pulled files), then
+the sweep re-run on the deployed preview: zero hits, `og:description` equal to the meta description.
+`theme check` 9 / 0 / 0 new.
